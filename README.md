@@ -25,7 +25,7 @@ You can use any layer without the others. Most readers will start with the manua
 
 **Just the manual.** Clone, read, done.
 ```bash
-git clone https://github.com/<your-user>/claude-code-operators-manual.git
+git clone https://github.com/TimTGelhard/claude-code-operators-manual.git
 ```
 
 **Manual + templates for a new project.** Clone, then copy templates into each project:
