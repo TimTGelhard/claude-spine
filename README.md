@@ -213,3 +213,19 @@ The manual is a living document, but stable in the principles. Mechanics shift; 
 - Your personal preferences → `~/.claude/CLAUDE.md` (global) and memory system.
 
 This manual stays in its lane: how to operate Claude Code well as an advanced user.
+
+---
+
+## Contributing
+
+Single-maintainer, opinionated repo. Fork freely — adapt the manual, templates, and global setup to your own workflow without asking.
+
+- **Issues** welcome for: factual errors, broken links, outdated Claude Code mechanics, install steps that don't work on a clean machine.
+- **PRs** welcome for the same — clear fixes get merged.
+- **Larger reframes / new chapters / opinion changes** are unlikely to land; this reflects how *I* work. Better to fork and shape it to yours.
+
+---
+
+## License
+
+MIT — see [`LICENSE`](LICENSE).
