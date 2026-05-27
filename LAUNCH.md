@@ -41,7 +41,7 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 | L5 | Clean-room install on fresh VM / Docker | L7 (launch gate) | done (2026-05-27) |
 | L6 | CHANGELOG.md + archive v1 root files + repo URL verify | L7 polish | done (2026-05-27) |
 | L7 | Launch assets — domain, landing page, demo, waitlist signup | nothing — launches | not started |
-| L8 | Tim's personal migration | — | unblocked after L1+L2 |
+| L8 | Tim's personal migration | — | done (2026-05-27) — restart + /onboard + fresh-session verify pending Tim |
 
 Dependency graph: `L0 → L7`. `L1 → L8 → ...`. `L2 → L8 → ...`. `L4 + L5 → L7 confidence (not strict blocker)`. `L3, L6 can land anytime`.
 
@@ -407,6 +407,39 @@ Both fit one small PR post-launch (~10 lines combined). Not rolling into L6 beca
 
 **Definition of done:** Tim is on the spine; his old global is backed up to `~/.claude-backup-<ts>/`; the legacy `op-manual-*` skills are gone from `~/.claude/skills/`; he can dismiss this CLAUDE.md as obsolete.
 
+### L8 notes (2026-05-27)
+
+**Scope executed in this session (steps 1–5):**
+
+- Belt-and-braces backups taken at `~/.claude/CLAUDE.md.pre-spine` and `~/.claude/skills.pre-spine/` before any install.sh action. install.sh's own backup landed at `~/.claude-backup-20260527-200745/.claude/` (full snapshot: `CLAUDE.md` 19854 bytes, `settings.json` 3317 bytes, `skills/` containing all four legacy `op-manual-*` dirs, `hooks/block-env-staging.sh`).
+- `./install.sh --opinionated --dry-run` confirmed the legacy cleanup step removes all four `op-manual-*` dirs and the 18 `op-*` symlinks + 5 commands are queued correctly. Real run completed in one pass — exit 0, no surprises.
+- Edited `~/.claude/CLAUDE.md`:
+  - Title placeholder filled: `# Global CLAUDE.md — Build Box`.
+  - Two-paragraph intro replaces the `{{ONE OR TWO LINES…}}` block with the three personal bits the spec calls out: "Solo founder. This machine builds client websites (Solvero Digital, Dutch tradespeople) and MVP apps." + "Scraping / lead-gen lives on a separate Windows machine — skip that context." + Focus statement.
+  - Client websites stack line updated to `**Client websites (Solvero / Hostinger)**: … Dutch locale (\`lang="nl"\`, Dutch date / phone / postcode). …` — the third personal bit.
+  - Two template-author meta-instruction blocks stripped (the 4-line `> Heavy variant — kitchen-sink …` at the top + the `> Edit this section to match the stacks you actually use.` line above Stack defaults) — both became stale once the copy was personalized. Logged as an open issue for install.sh polish, see below.
+
+**DoD verification:**
+
+- `grep '{{' ~/.claude/CLAUDE.md` → no placeholders remain.
+- `ls ~/.claude/skills/` → 18 entries, all `op-*`; zero `op-manual-*` survivors.
+- `ls ~/.claude/commands/` → 5 spine commands (`add-skill`, `curate`, `onboard`, `refresh-bucket`, `suggest`) + `refine.md` which pre-existed and was correctly untouched.
+- `jq '.effortLevel, .autoCompactWindow' ~/.claude/settings.json` → `"high"` / `180000` (the L3 defaults).
+- `readlink ~/.claude/skills/op-onboard` → resolves to the spine; reading through the symlink returns the live `op-onboard/SKILL.md` content. New `op-*` skills are visible in this session's skill list — confirms the symlinks resolve at session-start in subsequent sessions too.
+- `~/.claude-backup-20260527-200745/.claude/` carries the full pre-install snapshot; `~/.claude/CLAUDE.md.pre-spine` + `~/.claude/skills.pre-spine/` carry the belt-and-braces copies.
+
+**What still needs Tim to finish (steps 6–8 of the L8 spec):**
+
+1. Restart Claude Code so the new global + skills load in a fresh session.
+2. Run `/onboard` — confirms `~/.claude/claude-spine-profile.md` is created. Optionally `/onboard --deep` later.
+3. Verify in a fresh session: *"What's in my global CLAUDE.md?"* should match the file above; *"List the op-* skills loaded."* should return 18, no `op-manual-*` survivors; trigger one or two on purpose (e.g., ask about anti-patterns → fires `op-anti-patterns`).
+
+This session can't restart itself, and `/onboard` is interactive — both are deliberately out of reach. Everything mechanical is committed.
+
+**Belt-and-braces cleanup:** once Tim's confident in the new setup, he can `rm ~/.claude/CLAUDE.md.pre-spine` and `rm -rf ~/.claude/skills.pre-spine` to clear the manual backups. The `~/.claude-backup-20260527-200745/` snapshot is the canonical restore point and should stay until next month at least.
+
+**Out of scope, not done in this phase:** the running session's CLAUDE.md context is the *old* file (loaded at session start) — that's expected and unchangeable mid-session. No code lift to update this session's behavior; the only side effect is the new `op-*` skills are now visible in this session's skill list since the harness re-scans `~/.claude/skills/` continuously.
+
 ---
 
 ## Operating rules for execution sessions
@@ -427,7 +460,7 @@ When you're picking up a phase:
 
 ## Open issues caught mid-phase
 
-(Empty — to be appended as phases land.)
+**Opinionated template ships with template-author meta-instructions that go stale after install (caught during L8, 2026-05-27).** The 4-line `> Heavy variant — kitchen-sink …` block at the top and the `> Edit this section to match the stacks you actually use.` hint above Stack defaults are written for someone manually copying the template. install.sh handles the copy, so these become noise in the user's runtime file. Fix: strip both during the opinionated install (`render` step in install.sh already handles `{{SPINE_DIR}}` for the neutral template; add a sed pass for the opinionated path that removes those two blocks). Pairs naturally with the two L5-filed cosmetic divergences (`cmp -s` skip before backup; gate "linked:" / "wrote:" echoes by `[ "$DRY_RUN" -eq 0 ]`) — one ~20-line polish PR post-launch. Workaround in L8: stripped both manually from Tim's copy.
 
 ---
 
