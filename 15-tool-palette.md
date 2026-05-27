@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/tools/`](chapters/tools/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 15 — Tool palette: which tool when
 
 Claude Code has many tools. Picking the right one isn't optional — it's how you control context cost, latency, and correctness.

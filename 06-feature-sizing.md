@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 location: [`chapters/workflow/06-feature-sizing.md`](chapters/workflow/06-feature-sizing.md).
+> Content here is preserved for cross-reference until v2 launch.
+
 # 06 — Feature sizing: how much fits in one session
 
 The core rule: **one session = one feature.** Not one app, not five small features, not "the whole dashboard." Pick a slice, do it, ship it, start fresh.

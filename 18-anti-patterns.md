@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/anti-patterns/`](chapters/anti-patterns/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 18 — Anti-patterns: the explicit "never do this" reference
 
 A scannable catalog. When in doubt, check here first. Each entry: the anti-pattern, why it fails, what to do instead.

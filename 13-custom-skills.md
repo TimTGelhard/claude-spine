@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/persistence/`](chapters/persistence/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 13 — Custom skills: writing your own
 
 Chapter 12 covered what skills are and when to use them. This chapter is the *deep* version: how to actually write good ones.

@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/foundations/`](chapters/foundations/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 04 — Models and economics
 
 Picking the right model and mode for the task. Relevant because you're on Max 20x — generous, but not infinite, and quality varies meaningfully across models.

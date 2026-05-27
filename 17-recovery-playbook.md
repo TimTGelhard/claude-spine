@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/recovery/`](chapters/recovery/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 17 — Recovery playbook: when things go wrong
 
 The chapter you re-read at 2am when nothing is working. Triage, then act.

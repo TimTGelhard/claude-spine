@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/workflow/`](chapters/workflow/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 05 — Workflow: from idea to shipped
 
 The seven-stage project process. Each stage has a clear goal, deliverable, and exit condition.

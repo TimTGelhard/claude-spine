@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 location: [`chapters/foundations/02-context-budget.md`](chapters/foundations/02-context-budget.md).
+> Content here is preserved for cross-reference until v2 launch.
+
 # 02 — The truth about the 1M context window
 
 ## What the number actually means

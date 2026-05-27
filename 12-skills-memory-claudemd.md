@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/persistence/`](chapters/persistence/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 12 — Skills, memory, and CLAUDE.md: the three persistence layers
 
 Claude Code has three different mechanisms for "remembering things between sessions." They look similar but behave very differently. Using the wrong one is a common mistake.

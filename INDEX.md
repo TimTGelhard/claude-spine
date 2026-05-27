@@ -2,7 +2,7 @@
 
 **Purpose:** topic → atomic-file map. Read by Claude when no `op-*` skill fires but the task is manual territory. Also the human table of contents.
 
-**Status:** skeleton — most files don't exist yet. Phases 1–5 populate them. See `RECONSTRUCTION.md` for current progress.
+**Status:** complete — every atomic file referenced below is written. Personalization rows (`chapters/personalization/19a–e`) shipped in Phase 8. See `RECONSTRUCTION.md` for the phase log.
 
 **How to use this file (as Claude):** find the topic that matches the user's task; read only the listed atomic file(s). Don't load whole folders. If no row matches, let `op-bucket-router` read `bucket/INDEX.md` and pick a match from the user's personal library. If still no match, ask the user.
 
@@ -166,8 +166,8 @@ Then skim the rest. Re-read targeted files when stuck.
 
 ---
 
-## Until v2 is complete
+## v1 chapters at repo root
 
-The original 18 numbered chapters still live at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) and are the **authoritative source** until each phase atomizes them. If you can't find an atomic file referenced above, fall back to the original chapter.
+The original 18 numbered chapters at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) are **deprecated stubs** — each carries a header pointing at its v2 atomic version in `chapters/<topic>/`. Body text is preserved for cross-reference; load the atomic files for new work.
 
-Progress: see `RECONSTRUCTION.md`.
+Phase log: see `RECONSTRUCTION.md`.

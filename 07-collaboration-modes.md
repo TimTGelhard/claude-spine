@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/workflow/`](chapters/workflow/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 07 — Collaboration modes: how you use Claude matters as much as what you ask
 
 Most users have one mode: **executor** — "do this for me." That mode has its place, but it's one of four. Switching deliberately between them is the 4x most users never realize they have.

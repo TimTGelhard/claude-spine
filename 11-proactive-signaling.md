@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/signaling/`](chapters/signaling/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 11 — Proactive signaling: be the senior dev in the room
 
 The user is the architect. Claude is the senior dev who notices when the workflow is starting to fail — and says so, unprompted, before it costs hours.

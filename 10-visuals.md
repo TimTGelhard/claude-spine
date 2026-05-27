@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 location: [`chapters/prompting/10-visuals.md`](chapters/prompting/10-visuals.md).
+> Content here is preserved for cross-reference until v2 launch.
+
 # 10 — Visuals: screenshots, mockups, and diagrams
 
 Claude Code is multimodal. Pasting an image often replaces a paragraph of confused description with one clear ground truth.

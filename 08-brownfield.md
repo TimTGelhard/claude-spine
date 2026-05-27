@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/workflow/`](chapters/workflow/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 08 — Brownfield: inherited code and returning to old projects
 
 Most of this manual is greenfield-shaped — you start clean, fill in templates, build feature-by-feature. But the higher-stakes work is often brownfield: a client site you built last year and need to extend, an MVP you parked for six months, a codebase a previous developer wrote.

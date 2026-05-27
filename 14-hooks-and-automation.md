@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/persistence/`](chapters/persistence/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 14 — Hooks and automation
 
 The most underused leverage in Claude Code. Hooks let you wire actions to events — automatically running typecheck after a TypeScript edit, blocking commits without a smoke test, formatting on save, notifying when a long build finishes. Set them up once, then stop thinking about them.

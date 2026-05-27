@@ -4,13 +4,13 @@
 
 For people already running real Claude Code sessions on real projects who want their workflow to stop leaking quality. Not a tutorial — a discipline manual + an installable harness that wires it into `~/.claude/`.
 
-> **Status: v2 reconstruction in progress.** Phases 0 through 6c are done — atomized chapters, 14 `op-*` skills, neutral + opinionated globals, `install.sh`, and the `op-onboard` personalization interview all ship. Phase 6.5 (the personal skill-bucket router) is next. See [`RECONSTRUCTION.md`](RECONSTRUCTION.md) for the live phase tracker. The pre-v2 manual (single-file chapters `01-…` through `18-…` at the repo root) is still the authoritative source until every phase atomizes it.
+> **Status: v2 reconstruction nearing completion.** All atomic chapters, 18 `op-*` skills, neutral + opinionated globals, `install.sh`, the `/onboard` personalization interview, and the full capture/curate bucket loop are shipped. Pre-launch cleanup is in flight; Phase 7 (demo + launch) is next. See [`RECONSTRUCTION.md`](RECONSTRUCTION.md) for the live phase tracker. The original 18 single-file chapters at the repo root are deprecated stubs pointing at their v2 atomic versions in `chapters/`.
 
 ---
 
 ## What you get
 
-- **14 `op-*` skills** that load only when relevant. Each one is a router that points Claude at the atomic chapter for the question — never the whole folder. See `skills/core/`.
+- **18 `op-*` skills** that load only when relevant. Each one is a router that points Claude at the atomic chapter for the question — never the whole folder. See `skills/core/`.
 - **~70 atomic chapters** (<150 lines each), one concept per file, organized by topic (foundations, workflow, prompting, signaling, persistence, tools, subagents, recovery, anti-patterns). Indexed by [`INDEX.md`](INDEX.md).
 - **Personalization layer** — a profile (`/onboard`) that calibrates Claude to you, plus a capture/curate loop that grows your personal bucket as patterns emerge. See [Personalization](#personalization) below.
 - **Empty personal bucket** (`bucket/`). Ships empty by design — your skill and chapter library grows one curated addition at a time. No pre-seeded "popular skills" trap.
@@ -41,7 +41,7 @@ Existing `~/.claude/` files are backed up to `~/.claude-backup-<timestamp>/` bef
 1. **Restart Claude Code** so it picks up the new global, skills, and slash commands.
 2. **Run `/onboard`** — the 5-question essentials interview. Takes ~2 minutes. Profile is written to `~/.claude/claude-spine-profile.md`.
 3. **Optional:** `/onboard --deep` for the full ~15-question interview (stack details, signal preferences, output format, risk tolerance). Run now or later — Claude offers it at the end of essentials.
-4. **Verify:** start a session and ask *"List the op-* skills loaded"* — you should see all 14. Ask *"What's in my global CLAUDE.md?"* — should match the variant you installed.
+4. **Verify:** start a session and ask *"List the op-* skills loaded"* — you should see all 18. Ask *"What's in my global CLAUDE.md?"* — should match the variant you installed.
 
 ---
 
@@ -51,7 +51,7 @@ claude-spine uses a **stub + spine** architecture:
 
 - `~/.claude/CLAUDE.md` is a thin stub (~25 lines) that points at the spine and the profile. Identity + pointers, nothing more.
 - The spine (this repo) holds all the operating discipline as atomic markdown files.
-- The 14 `op-*` skills route Claude to the right atomic file *only when needed* — descriptions are the trigger; bodies stay small (~40–50 lines).
+- The 18 `op-*` skills route Claude to the right atomic file *only when needed* — descriptions are the trigger; bodies stay small (~40–60 lines).
 - The profile file calibrates which defaults the spine's chapters should apply for *this user*.
 
 Net effect: every session starts lean. Claude loads heavy content on-demand, filtered by your profile. The same machine can serve five projects without polluting any one session with the others' context.
@@ -109,7 +109,7 @@ claude-spine/
 │   ├── recovery/                # when quality drops mid-session
 │   └── anti-patterns/           # explicit "never do this"
 ├── skills/
-│   └── core/                    # the 14 op-* skills (shipped + maintained)
+│   └── core/                    # the 18 op-* skills (shipped + maintained)
 ├── bucket/                      # YOUR personal library — ships empty by design
 ├── templates/                   # per-project docs you copy and adapt
 └── global/
@@ -136,7 +136,7 @@ claude-spine/
 
 Single-maintainer, opinionated repo. Issues and small PRs welcome for: factual errors, broken links, outdated Claude Code mechanics, install steps that don't work on a clean machine.
 
-Larger reframes are unlikely to land — this reflects how *one operator* works. Fork freely and shape it to yours.
+Larger reframes are unlikely to land — this reflects how *one operator* works. Fork freely and shape it to yours. Details in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 
 ---
 

@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/subagents/`](chapters/subagents/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 16 — Subagents: when to delegate, when to do it yourself
 
 Subagents are the single biggest underused lever for keeping main-conversation context clean.

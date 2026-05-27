@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/foundations/`](chapters/foundations/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 03 — Limits: what Claude can't do well
 
 Knowing the limits saves you from realizing mid-project that your approach was doomed. This is the most important file to internalize before committing to a serious build.

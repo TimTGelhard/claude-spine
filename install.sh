@@ -80,6 +80,22 @@ case "$(uname -s)" in
     ;;
 esac
 
+# Env-leak hook needs jq to parse Claude Code's hook input. Without it the hook
+# silently no-ops on the very command it exists to block. Fail before we touch
+# anything if jq is missing and the hook install isn't explicitly skipped.
+if [ "$SKIP_HOOK" -eq 0 ] && ! command -v jq >/dev/null 2>&1; then
+  echo "ERROR: jq is required for the env-leak hook (\`global/hooks/block-env-staging.sh\`)." >&2
+  echo "       Without jq the hook silently fails on \`git add .env\` — the exact thing" >&2
+  echo "       it's meant to prevent." >&2
+  echo >&2
+  echo "       Install jq, then re-run:" >&2
+  echo "         macOS:  brew install jq" >&2
+  echo "         Linux:  apt-get install jq    (or your distro's equivalent)" >&2
+  echo >&2
+  echo "       Or skip the hook explicitly: ./install.sh --skip-hook" >&2
+  exit 1
+fi
+
 if [ "$DRY_RUN" -eq 1 ]; then
   echo "DRY RUN — no changes will be made."
 fi
@@ -277,11 +293,6 @@ if [ "$SKIP_HOOK" -eq 0 ]; then
   run cp "$SPINE_DIR/global/hooks/block-env-staging.sh" "$DEST"
   run chmod +x "$DEST"
   echo "  wrote: $DEST"
-  if ! command -v jq >/dev/null 2>&1; then
-    echo "  WARNING: jq is not installed — the hook needs it."
-    echo "           macOS:  brew install jq"
-    echo "           Linux:  apt-get install jq   (or your distro's equivalent)"
-  fi
   echo
 else
   echo "==> skipping env-leak hook (--skip-hook)"

@@ -1,3 +1,7 @@
+> **DEPRECATED — v1 single-file chapter.**
+> v2 atomic version: see [`chapters/prompting/`](chapters/prompting/) — split into smaller, independently-loadable files.
+> Content here is preserved for cross-reference until v2 launch.
+
 # 09 — Prompting: getting good output the first time
 
 The lever with the highest ROI for output quality. A 2-minute investment in a better prompt regularly saves 30 minutes of rework.
