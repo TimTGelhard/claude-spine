@@ -15,6 +15,7 @@ If you only want the spine's chapters and templates without touching `~/.claude/
 | `settings.json` | `~/.claude/settings.json` | Permissions allowlist (so common commands don't prompt), env-file guard hook wiring, plugin enablement, default mode + theme. |
 | `hooks/block-env-staging.sh` | `~/.claude/hooks/block-env-staging.sh` | Blocks `git add .env*` as defence-in-depth against secret leaks. Wired via `settings.json`. |
 | `../skills/core/op-*` | `~/.claude/skills/op-*` (symlinked) | The core `op-*` skills. Symlinks so `git pull` in the spine updates them instantly. |
+| `commands/*.md` | `~/.claude/commands/*.md` (symlinked) | Slash commands shipped by the spine — currently `/onboard` (personal-profile interview). |
 | (the spine itself) | `~/.claude-spine` (symlinked) | A symlink so skill files can use `~/.claude-spine/...` paths regardless of where you cloned. |
 
 ## Install
@@ -36,6 +37,7 @@ Existing `~/.claude/CLAUDE.md`, `settings.json`, and `~/.claude/hooks/block-env-
 | `--opinionated` | Install the heavy founder-flavored template instead of the neutral stub. |
 | `--skip-global` | Don't touch `~/.claude/CLAUDE.md`. |
 | `--skip-skills` | Don't create skill symlinks. |
+| `--skip-commands` | Don't symlink slash commands into `~/.claude/commands/`. |
 | `--skip-settings` | Don't overwrite `~/.claude/settings.json`. |
 | `--skip-hook` | Don't install the env-leak hook. |
 | `--dry-run` | Print what would happen; change nothing. |
@@ -43,8 +45,9 @@ Existing `~/.claude/CLAUDE.md`, `settings.json`, and `~/.claude/hooks/block-env-
 ### After install
 
 1. **Restart Claude Code.** Close open sessions and start fresh.
-2. **If you installed the opinionated variant:** open `~/.claude/CLAUDE.md` and fill in the `{{placeholders}}` — name, intro line, stack defaults if they don't match yours.
-3. **Review `~/.claude/settings.json`** — the allowlist is opinionated:
+2. **Run the onboarding interview.** First session will trigger `op-onboard` automatically when it notices no profile exists. Or invoke it yourself: `/onboard` for the 5-question essentials, `/onboard --deep` for the full ~15-question interview. The profile is written to `~/.claude/claude-spine-profile.md` and read every session afterward.
+3. **If you installed the opinionated variant:** open `~/.claude/CLAUDE.md` and fill in the `{{placeholders}}` — name, intro line, stack defaults if they don't match yours.
+4. **Review `~/.claude/settings.json`** — the allowlist is opinionated:
    - **WebFetch allowlist** pre-approves `docs.anthropic.com`, `nextjs.org`, `supabase.com`, `vercel.com`, `tailwindcss.com`, etc. Add your own framework's docs domain; remove any you'll never use.
    - **Bash allowlist** pre-approves `supabase`, `vercel`, `gh`, `lighthouse`, etc. Trim what you don't use; add `bundler`, `cargo`, `go`, etc. for your stack.
    - **enabledPlugins** — five plugins from the official marketplace. Disable any you don't want.
@@ -68,7 +71,7 @@ Then:
 List the op-* skills loaded.
 ```
 
-Should show `op-foundations`, `op-workflow`, `op-collaboration-modes`, `op-brownfield`, `op-prompting`, `op-visuals`, `op-signaling`, `op-persistence`, `op-hooks`, `op-tools`, `op-subagents`, `op-recovery`, `op-anti-patterns`.
+Should show all 14 core skills: `op-foundations`, `op-workflow`, `op-collaboration-modes`, `op-brownfield`, `op-prompting`, `op-visuals`, `op-signaling`, `op-persistence`, `op-hooks`, `op-tools`, `op-subagents`, `op-recovery`, `op-anti-patterns`, `op-onboard`.
 
 Also verify the env-leak hook is wired:
 
@@ -94,6 +97,8 @@ The spine chapters (especially `chapters/persistence/12b-claudemd.md` and `chapt
 ```bash
 rm ~/.claude/CLAUDE.md ~/.claude/settings.json ~/.claude/hooks/block-env-staging.sh
 rm -rf ~/.claude/skills/op-*
+rm ~/.claude/commands/onboard.md   # add any other claude-spine commands here as they ship
+rm ~/.claude/claude-spine-profile.md   # the personal profile, if you want a clean slate
 rm ~/.claude-spine   # only if it's a symlink — `ls -la ~/.claude-spine` to check
 # Restore your backup:
 # cp -a ~/.claude-backup-YYYYMMDD-HHMMSS/.claude/. ~/.claude/

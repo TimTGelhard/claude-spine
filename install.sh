@@ -9,6 +9,7 @@
 #   ./install.sh --opinionated       # the heavy founder-flavored template instead
 #   ./install.sh --skip-global       # skip ~/.claude/CLAUDE.md
 #   ./install.sh --skip-skills       # skip skill symlinks
+#   ./install.sh --skip-commands     # skip slash-command symlinks
 #   ./install.sh --skip-settings     # skip ~/.claude/settings.json
 #   ./install.sh --skip-hook         # skip the env-leak hook
 #   ./install.sh --dry-run           # print actions, change nothing
@@ -35,6 +36,7 @@ SPINE_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd -P)"
 OPINIONATED=0
 SKIP_GLOBAL=0
 SKIP_SKILLS=0
+SKIP_COMMANDS=0
 SKIP_SETTINGS=0
 SKIP_HOOK=0
 DRY_RUN=0
@@ -44,11 +46,12 @@ for arg in "$@"; do
     --opinionated) OPINIONATED=1 ;;
     --skip-global) SKIP_GLOBAL=1 ;;
     --skip-skills) SKIP_SKILLS=1 ;;
+    --skip-commands) SKIP_COMMANDS=1 ;;
     --skip-settings) SKIP_SETTINGS=1 ;;
     --skip-hook) SKIP_HOOK=1 ;;
     --dry-run) DRY_RUN=1 ;;
     -h|--help)
-      sed -n '2,16p' "$0"
+      sed -n '2,17p' "$0"
       exit 0
       ;;
     *)
@@ -183,7 +186,30 @@ else
   echo
 fi
 
-# ---------- 3. global CLAUDE.md ----------
+# ---------- 3. slash commands ----------
+
+if [ "$SKIP_COMMANDS" -eq 0 ]; then
+  if [ -d "$SPINE_DIR/global/commands" ]; then
+    echo "==> linking slash commands into ~/.claude/commands/"
+    ensure_dir "$CLAUDE_DIR/commands"
+    found=0
+    for cmd_file in "$SPINE_DIR"/global/commands/*.md; do
+      [ -f "$cmd_file" ] || continue
+      found=1
+      cmd_name="$(basename "$cmd_file")"
+      symlink_force "$cmd_file" "$CLAUDE_DIR/commands/$cmd_name"
+    done
+    if [ "$found" -eq 0 ]; then
+      echo "  (no commands found in $SPINE_DIR/global/commands)"
+    fi
+    echo
+  fi
+else
+  echo "==> skipping slash commands (--skip-commands)"
+  echo
+fi
+
+# ---------- 4. global CLAUDE.md ----------
 
 if [ "$SKIP_GLOBAL" -eq 0 ]; then
   if [ "$OPINIONATED" -eq 1 ]; then
@@ -222,7 +248,7 @@ else
   echo
 fi
 
-# ---------- 4. settings.json ----------
+# ---------- 5. settings.json ----------
 
 if [ "$SKIP_SETTINGS" -eq 0 ]; then
   echo "==> installing settings.json"
@@ -239,7 +265,7 @@ else
   echo
 fi
 
-# ---------- 5. env-leak hook ----------
+# ---------- 6. env-leak hook ----------
 
 if [ "$SKIP_HOOK" -eq 0 ]; then
   echo "==> installing env-leak hook"

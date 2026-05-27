@@ -24,7 +24,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 
 ## Current phase
 
-**Phase 6b — install.sh + variants + templates audit — done** (2026-05-27). Phase 6 was too large for one session (5+ deliverables); split into 6a / 6b / 6c.
+**Phase 6c — `op-onboard` skill + slash command + README rewrite — done** (2026-05-27). Phase 6 was too large for one session (5+ deliverables); split into 6a / 6b / 6c.
 
 **Phase 6a (done 2026-05-27):**
 - Phase 5 work committed.
@@ -38,7 +38,15 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 - `global/INSTALL.md` rewritten to document install.sh + both variants + verification + uninstall.
 - Templates audit complete. Decision: **light neutralization**, not abstract placeholders. Each template got a one-line "Example uses Next.js + Supabase + quote-management" header note so a Django/Go/Rails user understands the structure is stack-agnostic even though the filled-in examples aren't. SESSION_STARTER.md needed no change (already stack-agnostic). The templates are intentionally opinionated — they ARE the filled-in example users edit; abstract placeholders would have weakened them.
 
-**Phase 6c (next):** build `op-onboard` skill (hybrid interview: 5 essentials up front, opt-in deep ~15-question follow-up via `/onboard --deep`) + rewrite README as public-facing entry point.
+**Phase 6c (done 2026-05-27):**
+- `skills/core/op-onboard/` shipped — SKILL.md (router, 43 lines incl. frontmatter), `questions-essential.md` (the 5 essentials with full phrasing + option sets), `questions-deep.md` (~10 follow-ups grouped A–F), `profile-template.md` (the exact layout the profile file must follow). Auto-fires when `~/.claude/claude-spine-profile.md` is missing; re-runnable via `/onboard` (essentials) and `/onboard --deep` (full).
+- `global/commands/onboard.md` slash command added. `install.sh` updated: new section "3. slash commands" symlinks `global/commands/*.md` → `~/.claude/commands/*.md`; new `--skip-commands` flag; sections renumbered (3→4 global, 4→5 settings, 5→6 hook).
+- `global/INSTALL.md` updated — new commands row in the install table, new `--skip-commands` flag, step-2 mention of running `/onboard` after restart, op-onboard added to the verify list (14 skills now), uninstall block adds the commands + profile cleanup lines.
+- README rewritten as public-facing v2 entry point (129 lines, down from 235). Structure: tagline + v2 status banner → what you get (5 bullets) → install (one block) → first session (4 steps including `/onboard`) → architecture (stub + spine) → human read-order → folder tour → what's NOT here → contributing/license. The v1 layered-explanation, manual TOC, and triage table are gone — their content lives in INDEX.md and the atomic chapters now.
+
+**Next:** Phase 6.5 — `op-bucket-router`, `op-add-skill`, bucket INDEX regeneration.
+
+**Phase 6b (done 2026-05-27):**
 
 ---
 
@@ -56,7 +64,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
   4. Is anything load-bearing only when read with another piece? If yes, those belong in one file.
 
   If the answer to 1–3 is yes and 4 is no → split. Otherwise keep as one file regardless of size. A 200-line file on one tight topic beats five 40-line files that always get read together.
-- **Skill body cap:** 40 lines. Skills are routers, not content.
+- **Skill body cap:** 55 lines (revised 2026-05-27 in Phase 6c). Original cap was 40; in practice every router needs frontmatter + one-line path-resolution note + index table + how-to-use + common triggers + sibling skills, and clean writing lands at 40–50 lines. Skills covering more than one source chapter (e.g., `op-workflow` covers ch 05 + 06) reach 52 cleanly. The cap exists to keep skills as *routers*, not content — none of the 14 core skills have crossed into content territory. If a skill body needs more than ~55 lines, the extra material is content and should move to an adjacent file in the skill folder (see `op-onboard` for the pattern: SKILL.md routes to `questions-essential.md` / `questions-deep.md` / `profile-template.md`, all loaded on-demand).
 - **Atomic file cap:** 150 lines. A hard ceiling, not a decision rule — if you'd exceed it, the content is almost certainly load-bearing for multiple distinct questions and the decomposition rule above will tell you where the seams are. If it doesn't, leave the file at 150+ rather than splitting on a fake seam.
 - **Naming (locked 2026-05-27):** the public name is **`claude-spine`**. Tagline: "The spine of every Claude Code project." Local folder, GitHub repo, all internal references rename together in Phase 6. Current folder `claude-op-manual` and remote `claude-code-operators-manual` are both pre-rename names — don't update them yet.
 - **Onboarding mechanic (re-locked 2026-05-27):** both mechanisms — `op-onboard` auto-fires when no profile file exists; `/onboard` slash command re-runs / edits the profile. The interview is **deep, not shallow** — this profile is meant to last across all of the user's projects long-term, so the upfront cost is justified. Target ~15–25 questions, branching by experience level. Captured dimensions (designed in Phase 6):
@@ -85,7 +93,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 | 5 | Recovery + anti-patterns — `chapters/recovery/`, `chapters/anti-patterns/` + skills | **done (2026-05-27)** |
 | 6a | Structural cleanup — commit Phase 5, sweep hardcoded paths to `~/.claude-spine/`, back-fill cross-references, lock install + onboarding decisions | **done (2026-05-27)** |
 | 6b | `install.sh` + neutral global template + opinionated example + templates audit | **done (2026-05-27)** |
-| 6c | `op-onboard` skill (hybrid interview) + README rewrite | not started |
+| 6c | `op-onboard` skill (hybrid interview) + README rewrite | **done (2026-05-27)** |
 | 6.5 | Skill bucket — `op-bucket-router`, `op-add-skill`, bucket INDEX regeneration. **Note:** Phase 8 promotes the bucket to top-level `bucket/` (was `skills/bucket/`). Coordinate folder structure between 6.5 and 8. | not started |
 | 7 | Demo + launch — end-to-end dry-run, video script outline, launch checklist | not started |
 | 8 | Personalization + self-evolution loop — `op-suggest`, `op-curate`, `bucket/SUGGESTIONS.md`, `bucket/chapters/`, personalization chapter. **Full plan: `PERSONALIZATION.md`.** Splits into sub-phases 8a–8e (one per session). | not started |
@@ -221,6 +229,11 @@ This table grows as each phase lands. Each new file added here when it's written
 | `chapters/anti-patterns/18-meta-patterns.md` | 18 | 5 | written 2026-05-27 (absorbed cross-catalog TL;DR) |
 | `skills/core/op-recovery/SKILL.md` | new (supersedes recovery half of `op-manual-recovery`) | 5 | written 2026-05-27 |
 | `skills/core/op-anti-patterns/SKILL.md` | new (supersedes anti-pattern half of `op-manual-recovery`) | 5 | written 2026-05-27 |
+| `skills/core/op-onboard/SKILL.md` | new | 6c | written 2026-05-27 |
+| `skills/core/op-onboard/questions-essential.md` | new | 6c | written 2026-05-27 |
+| `skills/core/op-onboard/questions-deep.md` | new | 6c | written 2026-05-27 |
+| `skills/core/op-onboard/profile-template.md` | new | 6c | written 2026-05-27 |
+| `global/commands/onboard.md` | new | 6c | written 2026-05-27 |
 
 ---
 
@@ -256,13 +269,14 @@ To be resolved in their phase.
 
 - Public landing page / docs site for v1, or GitHub README only? (Phase 7.)
 - Domain registration for `claudespine.dev` / `.com` — desirable for the launch/video, not blocking. (Phase 7.)
-- **Skill body line-cap creep.** All 13 core skills are over the 40-line cap (range 34–52 after the Phase 6a path-note insert; the cap was already breached before the insert). Most are 1–6 lines over; `op-workflow` is at 52. Decide in 6b/6c whether to tighten the cap, prune the bodies, or accept the new normal. The cap exists to keep skills as routers, not content — none of these skills crossed into "content" territory, so accepting a slightly higher ceiling (45?) may be the right move.
 
 (Resolved 2026-05-27: repo name → `claude-spine`; onboarding → auto-fire + slash command; bucket sharing → no sharing model at all; bucket index → `skills/bucket/INDEX.md`, auto-maintained.)
 
 (Resolved 2026-05-27, pre-Phase-6 audit: install architecture → stub + spine; rename `claude-op-manual` → `claude-spine` is **done** — folder is now `/Users/macbook/claude-spine/`.)
 
 (Resolved 2026-05-27, Phase 6a: skill installation → **symlink** (`~/.claude/skills/op-*` → `<spine>/skills/core/op-*`); interview depth → **hybrid** (5 essentials up front + opt-in `/onboard --deep` for the full ~15-question set); cross-reference back-fill **complete**; hardcoded path sweep **complete** — all skills now use `~/.claude-spine/...` paths.)
+
+(Resolved 2026-05-27, Phase 6c: **skill body cap raised from 40 → 55 lines.** All 14 core skills fit — range 34–52, op-onboard at 43. The cap exists to keep skills as routers; none crossed into content territory. When a skill needs more than 55 lines, extra material goes in adjacent files loaded on-demand — `op-onboard` is the reference pattern.)
 
 ---
 
@@ -328,6 +342,17 @@ This replaces the earlier hard-coded `/Users/macbook/claude-op-manual/...` paths
 - **17 cross-references back-filled.** Files swept: `02-context-budget`, `01c-failure-modes`, `04b-plan-and-fast-mode`, `03a-hard-limits` (foundations); `05b`, `05d`, `05f`, `07a`, `07b`, `07d` (workflow); `11b`, `11c`, `11e` (signaling). All point at correct atomic files now. Cross-reference back-fill open question **closed**.
 - **Skill body line-cap broken across all 13 skills.** Pre-existing condition (most were over 40 before the path-note insert). New open question added for 6b/6c to decide cap revision vs body prune.
 - **Phase 6a touched no chapter content.** Only path strings and cross-reference link targets. Voice/structure/decomposition unchanged. This is structural cleanup work, not new content.
+
+### Phase 6c notes (2026-05-27)
+
+- **`op-onboard` is a multi-file skill, not a single SKILL.md.** SKILL.md is the router (49 lines: mode-selection table → adjacent-files table → how-to-run → rules → post-interview message). Question banks and the profile-file layout live in `questions-essential.md`, `questions-deep.md`, `profile-template.md` — Claude loads them on-demand only when the skill fires. This is the pattern future complex skills should follow: if SKILL.md needs more than 50 lines, the content is operational data, not routing, and belongs adjacent.
+- **Interview is one-question-at-a-time via `AskUserQuestion`.** Each question has 2–4 pre-defined options; the tool auto-adds "Other" for free-text. Multi-select used for comfort/lean-in areas, stacks-to-avoid, and active-signal preferences. No question walls — the whole point of the hybrid model is essentials don't scare new users and deep is opt-in.
+- **Profile file is `~/.claude/claude-spine-profile.md`** with a fixed 6-section structure (Developer profile, Stack preferences, Project context, Working style, Output format, Risk + safety) plus optional Notes. Unfilled deep sections render as `(unfilled — run /onboard --deep to capture)` — leaves a visible trail of what's missing. Strict structure so future tooling can parse it.
+- **`/onboard` slash command** lives in `global/commands/onboard.md` with frontmatter (`description`, `argument-hint: [--deep]`). The command file references `$ARGUMENTS` so Claude reads `--deep` and routes accordingly — no arg-parsing logic in SKILL.md itself. `install.sh` was extended with a new section 3 to symlink `global/commands/*.md` into `~/.claude/commands/` and a matching `--skip-commands` flag. Sections 4/5/6 renumbered from 3/4/5.
+- **`global/INSTALL.md` updated** alongside install.sh to document the new commands row + `--skip-commands` flag + step-2 mention of `/onboard` after restart + 14 skills (not 13) in the verify list + uninstall additions for commands and profile.
+- **README rewritten from 235 → 129 lines.** Old README described v1 architecture (root-level chapters, copy-paste install, layered manual/templates/global story). New README leads with the v2 status banner, then five "what you get" bullets, install + first-session + how-it-works + read-order + folder tour + what's-NOT-here + contributing. INDEX.md is now the manual TOC; triage table lives in `chapters/recovery/17a-failure-triage.md`. The README's job shrank to *entry point* — get them installed, oriented, and reading.
+- **Skill body cap raised to 55** (was 40). All 14 skills fit — range 34–52, op-onboard at 43, op-workflow at 52 (legitimately wider because it covers ch 05 + 06). New rule: if you need more than 55, extract to adjacent files. See Architecture section above.
+- **No chapter content touched.** Phase 6c was skill + global + README — exactly the planned scope, no drift.
 
 ### Phase 6b notes (2026-05-27)
 
