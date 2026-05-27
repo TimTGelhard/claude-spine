@@ -57,7 +57,7 @@
 | Teaching Claude unfamiliar code | `chapters/workflow/08c-teaching-unfamiliar.md` | 08 | written |
 | Rewriting legacy | `chapters/workflow/08d-rewrites.md` | 08 | written |
 
-**Plan-driven workflow wiring.** The planning pass (chapters 05h–05j) fires via the `op-prepare` skill, invoked by `/prep`. Per-session execution is carried by `/session-start` and `/session-end`. See [`global/commands/`](global/commands/) for the command definitions and [`README.md` § Slash commands](README.md#slash-commands) for the public surface.
+**Plan-driven workflow wiring.** The planning pass (chapters 05h–05j) fires via the `op-prepare` skill, invoked by `/prep`. Per-session execution is **ambient by default** — the `op-spine-active` skill auto-loads scope at cold-start, the `spine-writeback.sh` Stop hook traces per-turn heartbeats, and `/done` is the explicit close-session command. The legacy gated path (`/session-start` + `/session-end`) remains for regulated / paired-review work. See [`global/commands/`](global/commands/) for the command definitions and [`README.md` § Slash commands](README.md#slash-commands) for the public surface.
 
 ## Prompting — how to interact
 
@@ -173,6 +173,6 @@ Then skim the rest. Re-read targeted files when stuck.
 
 ## v1 chapters at repo root
 
-The original 18 numbered chapters at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) are **deprecated stubs** — each carries a header pointing at its v2 atomic version in `chapters/<topic>/`. Body text is preserved for cross-reference; load the atomic files for new work.
+The original 18 numbered chapters at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) are now **one-line redirect stubs** — each points at its v2 atomic version in `chapters/<topic>/` and at the archived body in [`docs/v1-archive/`](docs/v1-archive/). External links to the root paths still resolve; loaders looking for the actual content should follow either pointer.
 
 Phase log: see `RECONSTRUCTION.md`.

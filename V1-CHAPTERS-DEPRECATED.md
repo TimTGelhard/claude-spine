@@ -1,6 +1,6 @@
 # v1 chapters — deprecation index
 
-The 18 numbered chapters at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) are **v1 stubs**, kept for external-link preservation. New work should read the v2 atomic files in [`chapters/`](chapters/) (the router map is [`INDEX.md`](INDEX.md)).
+The 18 numbered chapters at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) are now **one-line redirect stubs**, kept at root for external-link preservation. The full v1 bodies live in [`docs/v1-archive/`](docs/v1-archive/) for cross-reference. New work should read the v2 atomic files in [`chapters/`](chapters/) (the router map is [`INDEX.md`](INDEX.md)).
 
 This file is the inverse of [`INDEX.md`](INDEX.md): the router groups files by topic; this file groups them by *source* v1 chapter so an old link can find its new home in one step.
 
@@ -8,7 +8,7 @@ This file is the inverse of [`INDEX.md`](INDEX.md): the router groups files by t
 
 v2 organizes content by *the question being answered*, not by chapter number. A single v1 chapter typically held 3–5 distinct concepts that lived together because the original drafting batched them; v2 splits each chapter on real seams (the [decomposition rule](RECONSTRUCTION.md#architecture-frozen-decisions)) so Claude loads one slice per task instead of an entire chapter.
 
-The v1 files aren't deleted because external links — blog posts, gists, agent prompts, bookmarks — may already point at them. Each v1 file now carries a one-line deprecation header pointing at the v2 location, plus a link back to this index.
+The v1 files aren't deleted because external links — blog posts, gists, agent prompts, bookmarks — may already point at them. Each root stub carries a pointer to the v2 location, the archived body in `docs/v1-archive/`, and a link back to this index.
 
 ## v1 → v2 map
 
