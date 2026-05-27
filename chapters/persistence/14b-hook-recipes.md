@@ -52,6 +52,8 @@ If you have zero hooks today, this minimum set pays back immediately:
 
 Total setup: ~15 minutes via `update-config`. Pays back daily.
 
+If you're on **claude-spine**, items 4 and 5 ship default-on (`block-env-commit.sh` + `notify-long-task.sh`), and item 1 plus an auto-formatter ship default-off as opt-ins through `/onboard --deep` (the Hook tuning pass writes them to `~/.claude/settings.json` after explicit Y/n approval — see `skills/core/op-onboard/SKILL.md` `## Hook tuning (deep mode only)`). That leaves item 2 (block-on-typecheck-fail) and item 3 (read-only allowlist) for `update-config` to wire when you're ready.
+
 ## Project-level hooks (ship with the repo)
 
 For client-site work especially:

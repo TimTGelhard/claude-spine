@@ -203,4 +203,13 @@ Options (single-select):
 
 If the user adds anything, append a `## Notes` section to the profile with their text verbatim. Otherwise omit the section.
 
-Finish by telling the user: file path, that Claude reads it every session, and that they can hand-edit anytime.
+## Then — Hook tuning (writes to settings.json, not the profile)
+
+Once the profile is rewritten, run the **Hook tuning** pass defined in
+`SKILL.md` (`## Hook tuning (deep mode only)`). It asks two more opt-in
+questions — auto-typecheck after edits and auto-format after edits — and
+writes the matching hooks to `~/.claude/settings.json` on approval. Those
+questions live alongside the writeback logic in SKILL.md, not here, because
+the answers affect settings.json rather than the personal profile.
+
+Finish by emitting the handoff message (SKILL.md `## After writing the profile — the handoff`).

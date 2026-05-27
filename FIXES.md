@@ -2,11 +2,12 @@
 
 > **Status as of 2026-05-28:** All six pillars (1, 2, 3, 4, 5, 6) + the
 > HIGH/MEDIUM drift sweep + M4 have shipped — Pillar 1 Session 1 + Pillars
-> 2/4/5/6 landed in `[0.10.0]`; Pillar 1 Sessions 2 + 3 and Pillar 3 (all
-> five P3.X items) land in the next `[Unreleased]` block. The open queue at
-> this point is **P4.4** (landing-page screenshot + profile example,
-> post-launch content work), **P6.4 + P6.5** (opt-in onboard-deep hooks,
-> waiting on a deeper onboard-deep extension), and the LOW items L2–L8 (the
+> 2/4/5/6 (P6.1–P6.3) landed in `[0.10.0]`; Pillar 1 Sessions 2 + 3, Pillar 3
+> (all five P3.X items), and **Pillar 6 P6.4 + P6.5** (opt-in onboard-deep
+> hooks — typecheck-after-edit and format-on-save, default-off, wired through
+> the new deep-onboard Hook tuning pass) land in the next `[Unreleased]`
+> block. The open queue at this point is **P4.4** (landing-page screenshot +
+> profile example, post-launch content work) and the LOW items L2–L8 (the
 > file itself recommends folding most of these into a single post-launch
 > trim pass; see Suggested apply order at the bottom).
 > Each shipped item below has a `**[shipped …]**` annotation; unfixed items
@@ -35,7 +36,7 @@
 - `.md` files under `chapters/`: **81** (Pillar 1 added `chapters/personalization/19f-subscription-aware.md`)
 - Onboarding questions: **7 essential + 13 deep = 7–20 total** (Pillar 1.2 split Q5 into Q5a + Q5b)
 - Slash commands under `global/commands/`: **9** (`/onboard`, `/prep`, `/done`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket`, `/spine`, `/hooks`)
-- Hooks under `global/hooks/`: **4** (`block-env-staging.sh`, `block-env-commit.sh`, `notify-long-task.sh`, `spine-writeback.sh`)
+- Hooks under `global/hooks/`: **6** (`block-env-staging.sh`, `block-env-commit.sh`, `notify-long-task.sh`, `spine-writeback.sh`, plus two default-off opt-ins added by P6.4/P6.5: `typecheck-after-edit.sh`, `format-on-save.sh`)
 
 Anywhere a doc claims numbers different from the above and is making a
 *current-state* claim (as opposed to historical/changelog narrative), it's wrong.
@@ -558,14 +559,28 @@ Slash-command count 8 → 9.
 
 #### P6.4 [P2] — Opt-in `typecheck-after-edit` via onboard deep mode
 
-Add to `skills/core/op-onboard/questions-deep.md`: *"Auto-typecheck after
-`.ts`/`.py` edits? (Y/n)"* If yes, write the hook to `~/.claude/settings.json`
-post-onboard.
+**[shipped 2026-05-28 — landed in `[Unreleased]`]** Implementation departs
+slightly from the FIXES sketch — the question lives in
+`skills/core/op-onboard/SKILL.md` (`## Hook tuning (deep mode only)`), not in
+`questions-deep.md`, because the answer writes to settings.json rather than
+the personal profile (same architectural split as the existing
+"Subscription-based settings tuning" step). `questions-deep.md` carries a
+cross-reference at the end so the interview ordering remains obvious. The
+hook itself ships as `global/hooks/typecheck-after-edit.sh` — default-off,
+advisory only (exit 0 always), surfaces only errors mentioning the edited
+file. 11-case test fixture under `tests/hooks/`.
 
 #### P6.5 [P2] — Opt-in `format-on-save` via onboard deep mode
 
-Same pattern as P6.4. Stack-specific (prettier/black/gofmt); auto-detect from
-`package.json` / `pyproject.toml` / `go.mod` and offer the matching formatter.
+**[shipped 2026-05-28 — landed in `[Unreleased]`]** Same Hook-tuning pass as
+P6.4 (asked back-to-back in deep mode). The hook
+(`global/hooks/format-on-save.sh`) walks up from the edited file to detect
+the formatter: Prettier (package.json + `node_modules/.bin/prettier` or PATH
+`prettier`), Black (pyproject.toml with `[tool.black]` + PATH `black`),
+gofmt (go.mod), rustfmt (Cargo.toml). Silent skip when a project doesn't have
+its formatter configured — the hook doesn't impose a style on projects that
+haven't asked for one. 12-case test fixture under `tests/hooks/` uses PATH
+shims so it doesn't depend on any real formatter being installed.
 
 ---
 
@@ -616,10 +631,15 @@ Same pattern as P6.4. Stack-specific (prettier/black/gofmt); auto-detect from
     a tuning note — the cue-phrase set in `spine-writeback.sh` and the
     long-session thresholds (30 turns / 2h) are easy to adjust once real
     sessions reveal misses or false positives.
-11. **Pillar 6 — opt-in hooks via onboard** (P6.4, P6.5). Needs the deep
-    onboard flow extension first.
+11. **Pillar 6 — opt-in hooks via onboard** (P6.4, P6.5). **Shipped 2026-05-28
+    — landed in `[Unreleased]`.** Pulled forward into pre-launch; the
+    "deeper onboard-deep extension" caveat was resolved by adding a `## Hook
+    tuning (deep mode only)` pass to `op-onboard/SKILL.md` parallel to the
+    existing "Subscription-based settings tuning" step. Two new
+    `global/hooks/*.sh` scripts ship default-off; the settings.json entry
+    (written only on opt-in via `/onboard --deep`) is the on/off gate.
 12. **L1–L5** — original deferred items per prior decisions.
 
 **Estimated totals:**
-- Pre-launch (drift + pillars 4, 1, 2, 5, 6 partial): ~1-2 working days.
-- Post-launch: ~half-day + opt-in extensions as needed.
+- Pre-launch (drift + pillars 4, 1, 2, 5, 6, and Pillar 3 + Pillar 6 P6.4/P6.5 pulled forward): ~1-2 working days. Shipped 2026-05-27 → 2026-05-28.
+- Post-launch (now only L1–L5 trim pass and P4.4 content work): ~half-day, content-pending.

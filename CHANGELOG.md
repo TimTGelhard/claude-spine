@@ -59,6 +59,40 @@ FIXES.md originally tagged Pillar 3 as post-launch ("needs real-user signal on w
 - Long-session counter increments on every Stop event, not only file-changing turns, so a 30-turn conversational session still trips it.
 - macOS `awk`, `sed`, and `grep` compatibility verified (`bash -n` clean). The hook uses bash-specific features (here-strings, `${var:0:N}` substring); shebang is `#!/usr/bin/env bash`.
 
+### Pillar 6 — Opt-in onboard-deep hooks (P6.4 + P6.5)
+
+Pillar 6 in `[0.10.0]` shipped three default-on items (block-env-commit, notify-long-task, `/hooks`) and left P6.4/P6.5 deferred behind a "needs deeper onboard-deep extension" caveat. This entry closes that gap. The extension is: deep mode now ends with a two-prompt **Hook tuning** pass that can write PostToolUse hooks (typecheck-after-edit, format-on-save) into `~/.claude/settings.json` with the same Apply/Skip discipline as the existing subscription-based settings tune. Both hooks ship pre-built under `global/hooks/` and are symlinked by `install.sh`; the settings.json entry is the on/off gate. Default-off; opt-in only via `/onboard --deep`.
+
+The hooks are deliberately advisory (never block edits), narrowly scoped (only fire on `Edit|Write|MultiEdit`), and silent when their preconditions aren't met (no tsconfig in the tree → no typecheck; no `[tool.black]` → no Black). The goal is "match the project's existing discipline on each edit", not "impose a style on every project".
+
+#### Added
+
+- `global/hooks/typecheck-after-edit.sh` — PostToolUse hook (default-off). Reads `tool_input.file_path` from stdin; for `.ts`/`.tsx` walks up to the nearest `tsconfig.json` and runs `tsc --noEmit --incremental -p <tsconfig>` (prefers project-local `node_modules/.bin/tsc`, falls back to PATH); surfaces only errors mentioning the edited file (project-wide noise predates the edit and is suppressed). For `.py` runs `python -m py_compile` (syntax-only — fast). Failures go to stderr; the hook exits 0 always (advisory, never blocks).
+- `global/hooks/format-on-save.sh` — PostToolUse hook (default-off). Detects the formatter from the project's config files walking up from the edited file: Prettier (`package.json` with `node_modules/.bin/prettier` or PATH `prettier`), Black (`pyproject.toml` with `[tool.black]` + PATH `black`), gofmt (`go.mod` + PATH `gofmt`), rustfmt (`Cargo.toml` + PATH `rustfmt`). Silent skip when the project doesn't have a formatter configured. Exit 0 always.
+- `tests/hooks/test-typecheck-after-edit.sh` — 11-case fixture. PATH-shims `tsc` so the test doesn't require a real TypeScript install; covers TS-error-mentioning-edited-file (surfaces), TS-error-elsewhere (suppressed), TS-clean (silent), TS-no-tsc-on-PATH (silent), TS-no-tsconfig-in-tree (silent), Python syntax error (surfaces), Python clean (silent), `.md` ignored (silent), and three input edge cases (empty stdin, missing `file_path`, file_path pointing at non-existent file).
+- `tests/hooks/test-format-on-save.sh` — 12-case fixture. PATH-shims each formatter via marker-touching scripts so we can assert which one ran without depending on real installs. Covers local prettier wins over global, global prettier fallback, `.ts` without `package.json` (silent), `.py` with `[tool.black]` (formats), `.py` without `[tool.black]` (silent even with shim), `.py` with `[tool.black]` but no black binary (silent), `.go` + `go.mod` (gofmt runs), `.rs` + `Cargo.toml` (rustfmt runs), `.xyz` (silent), and three input edge cases.
+
+#### Changed
+
+- `skills/core/op-onboard/SKILL.md`:
+  - **`## Hook tuning (deep mode only)`** — new ~140-line section parallel to "Subscription-based settings tuning". Defines the per-hook pre-flight (read settings.json → skip if missing → skip if hook already wired → check `PostToolUse` shape), the two questions G1 + G2 with their plain-English explanation blocks, the writing logic (Case A: full insert when no `PostToolUse` exists; Cases B/C: hand-edit fallback when the existing block isn't a shape this skill owns), and the hand-edit fallback message verbatim.
+  - **Mode selection bullet 3** — adds "+ 2 opt-in hook prompts" to the `/onboard --deep` description.
+  - **Adjacent files table** — `questions-deep.md` row notes the 2 hook prompts live in SKILL.md.
+  - **"How to run the interview" step list** — new step 6 ("If deep ran: run the Hook tuning pass"). Old step 6 becomes 7.
+  - **"Write surface is allow-listed" rule** — expanded from "two keys" to "two write surfaces": (1) the two settings keys, (2) the `hooks.PostToolUse` block under matcher `Edit|Write|MultiEdit` containing only the two spine-named scripts. Explicit per-run approval required for both surfaces.
+  - **Handoff template** — new `Opt-in hooks:` line in the "Here's what just happened" block with five state variants (both on / typecheck on / format on / declined both / already configured); deep-profile skipped-branch text mentions the 2 hook prompts.
+- `skills/core/op-onboard/questions-deep.md` — new `## Then — Hook tuning (writes to settings.json, not the profile)` cross-reference section after the optional Notes follow-up, pointing at SKILL.md `## Hook tuning (deep mode only)`. Explains *why* those two questions live in SKILL.md and not here (they affect settings.json, not the personal profile).
+- `skills/core/op-onboard/questions-essential.md` — the deep-interview offer text now mentions the 2 opt-in hook prompts ("Want to answer 13 more questions … Plus two optional opt-ins at the end for auto-typecheck and auto-format hooks").
+- `chapters/personalization/19b-profile-and-onboarding.md` — new "Hook tuning (2 opt-in prompts at the end of deep, writes to settings.json — not the profile)" section under "What it captures"; "How to run it" table row for `/onboard --deep` mentions the 2 prompts; TL;DR bullet acknowledges them.
+- `FIXES.md` — status header drops P6.4 + P6.5 from the open queue (open queue now: P4.4 + L2–L8 only); P6.4 and P6.5 entries annotated `[shipped 2026-05-28 — landed in [Unreleased]]`; Live counts on disk updated (hooks 4 → 6); Suggested apply order item 11 annotated done.
+
+#### Implementation notes
+
+- **Default-off is the contract.** Both hooks ship as files in `global/hooks/` and get symlinked into `~/.claude/hooks/` by `install.sh`, but the `settings.json` entry is the on/off gate. A fresh install has the scripts on disk and inert; only `/onboard --deep` (or hand-editing settings.json) wires them.
+- **Advisory, never blocking.** Both hooks `exit 0` unconditionally — failures go to stderr but the edit always stands. `set -uo pipefail` (NOT `set -e`) so a parse failure exits silently rather than blocking Claude.
+- **Fail-fast on settings.json format drift.** The skill's allow-listed Edit targets the canonical pre-PostToolUse block shape; if a user reformatted settings.json the Edit doesn't match and the skill falls to the hand-edit fallback rather than retrying with looser matching. Matches the discipline of the subscription-tune writer.
+- **Pillar 6 P6.4/P6.5 closes the FIXES.md open queue except P4.4 (post-launch content) and L2–L8 (post-launch trim pass).**
+
 ### Still pending pre-launch
 
 - **L4c** — token-efficiency benchmark (spine-on vs spine-off) for demo numbers.

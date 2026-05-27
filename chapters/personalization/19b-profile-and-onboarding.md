@@ -50,6 +50,15 @@ Captured up front, written immediately. The deep section headings are still in t
 
 Daily Claude usage and cost sensitivity, comfort/lean-in areas, secondary stack and avoid list, team/scale context, active signal preferences, output format details, risk tolerance, optional free-text notes. Branches off the essentials — won't repeat questions you already answered.
 
+**Hook tuning (2 opt-in prompts at the end of deep, writes to settings.json — not the profile):**
+
+After the deep questions are saved, `op-onboard` offers two PostToolUse hooks that ship default-off:
+
+- **Auto-typecheck after edits.** Runs `tsc --noEmit` on `.ts`/`.tsx` and `python -m py_compile` on `.py` after each edit. Errors surface in the next turn; the hook never blocks the edit.
+- **Auto-format after edits.** Runs Prettier / Black / gofmt / rustfmt on edited files when the project has that formatter configured. Silent when not.
+
+Both are opt-in only via `/onboard --deep`; default-off otherwise. Each adds one PostToolUse entry to `~/.claude/settings.json` under matcher `Edit|Write|MultiEdit`. To remove, hand-edit `settings.json`. See chapter [14b](../persistence/14b-hook-recipes.md) for the underlying hook recipes and `op-onboard`'s `## Hook tuning (deep mode only)` for the exact writeback flow.
+
 ## How to run it
 
 | Trigger | Behavior |
@@ -57,7 +66,7 @@ Daily Claude usage and cost sensitivity, comfort/lean-in areas, secondary stack 
 | Profile file missing | `op-welcome` emits a one-block greeting pointing the user at `/onboard`. `op-onboard` does **not** auto-launch the interview. |
 | `/onboard` (no profile) | Runs essentials; offers deep at the end |
 | `/onboard` (profile present) | Re-runs essentials only; shows current values, asks which to change |
-| `/onboard --deep` | Runs the 13 deep questions (after essentials if profile is missing) |
+| `/onboard --deep` | Runs the 13 deep questions (after essentials if profile is missing), then 2 opt-in hook prompts |
 | "Change my push-back to spar with me" | Direct edit to the matching section; no interview |
 | Hand-editing the file | Always fine — plain markdown, strict structure |
 
@@ -96,7 +105,7 @@ More specific wins. Security rules apply at every level — the profile cannot w
 
 - Profile lives at `~/.claude/claude-spine-profile.md`, outside the spine, survives reinstalls.
 - Seven fixed sections, machine-parseable; hand-editing fine, don't rename headings.
-- Essentials first run (7 Qs), deep opt-in (13 more), re-runnable via `/onboard` and `/onboard --deep`.
+- Essentials first run (7 Qs), deep opt-in (13 more + 2 opt-in hook prompts that touch settings.json, not the profile), re-runnable via `/onboard` and `/onboard --deep`.
 - `op-welcome` owns the first-run greeting; `op-onboard` runs the interview only on explicit invocation.
 - Re-run when something about *you* shifts long-term. Don't re-run for session-level noise.
 - Profile is who-you-are; the bucket is what-you've-added. The suggestion loop doesn't touch the profile.

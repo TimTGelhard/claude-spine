@@ -123,7 +123,7 @@ Options (single-select):
 
 3. **Then ask about the deep interview:**
 
-   Question: **"Want to answer 13 more questions so I can tailor things further? You can also do this later."**
+   Question: **"Want to answer 13 more questions so I can tailor things further? Plus two optional opt-ins at the end for auto-typecheck and auto-format hooks. You can also do this later."**
    Header: `Continue?`
 
    Options (single-select):
@@ -131,5 +131,5 @@ Options (single-select):
    - **Not now — I'll run `/onboard --deep` later**
    - **No, I'm good with the basics**
 
-   If "Yes, keep going now" → load `questions-deep.md`.
+   If "Yes, keep going now" → load `questions-deep.md`. After the deep questions are saved, also run the **Hook tuning** pass defined in `SKILL.md` (G1 + G2 opt-in prompts for `~/.claude/settings.json` hooks).
    If "Not now" or "No, I'm good with the basics" → leave deep sections in the profile as `(unfilled — run /onboard --deep to capture)`. Tell the user the essentials are saved, where to find the file, and whether settings.json was tuned or skipped.
