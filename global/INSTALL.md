@@ -52,10 +52,10 @@ If you previously had the v1 `op-manual-*` skills installed, they're backed up a
 3. **If you installed the opinionated variant:** open `~/.claude/CLAUDE.md` and fill in the `{{placeholders}}` — name, intro line, stack defaults if they don't match yours.
 4. **Review `~/.claude/settings.json`** — the allowlist is opinionated:
    - **WebFetch allowlist** pre-approves `docs.anthropic.com`, `nextjs.org`, `supabase.com`, `vercel.com`, `tailwindcss.com`, etc. Add your own framework's docs domain; remove any you'll never use.
-   - **Bash allowlist** pre-approves `supabase`, `vercel`, `gh`, `lighthouse`, etc. Trim what you don't use; add `bundler`, `cargo`, `go`, etc. for your stack.
+   - **Bash allowlist** is opinionated for TS / Next.js / Supabase / Vercel stacks — pre-approves `supabase`, `vercel`, `gh`, `lighthouse`, etc. Remove what you don't use; add `bundler`, `cargo`, `go`, etc. for your stack.
    - **enabledPlugins** — five plugins from the official marketplace. Disable any you don't want.
-   - **effortLevel** is `xhigh` (quality over speed). Lower to `high` or `medium` for faster, cheaper turns.
-   - **autoCompactWindow** is `800000` (auto-compact fires at 800K tokens). Tighten if compaction is too aggressive.
+   - **effortLevel** is `high` (opinionated but Pro-plan-safe). Raise to `xhigh` for deepest reasoning on Max 20x; lower to `medium` for faster, cheaper turns. See "Tuning for Max 20x / 1M context" below.
+   - **autoCompactWindow** is `180000` (auto-compact fires at 180K tokens — sized for 200K-context models). Raise to `800000` if you have a 1M-context model. Same section below.
 
 ### Verify
 
@@ -83,6 +83,22 @@ echo '{"tool_input":{"command":"git add .env"}}' | ~/.claude/hooks/block-env-sta
 ```
 
 Should return a `deny` decision. If it errors, install `jq` (`brew install jq` on macOS).
+
+## Tuning for Max 20x / 1M context
+
+The shipped defaults — `effortLevel: "high"` and `autoCompactWindow: 180000` — assume **Anthropic Pro plan on a 200K-context model**. Opinionated, but not aggressive on budget.
+
+If you're on **Max 20x** and/or using a **1M-context model** (Opus 4.7 1M, Sonnet 4.6 1M), raise both in `~/.claude/settings.json`:
+
+```json
+"effortLevel": "xhigh",
+"autoCompactWindow": 800000,
+```
+
+- `xhigh` runs Claude with the deepest reasoning — best for hard multi-file refactors and architecture work. Burns Pro budget fast; pays off on Max.
+- `autoCompactWindow: 800000` defers auto-compaction until 800K tokens, exploiting the 1M window. Wasted on a 200K model — the window itself will force compaction sooner.
+
+Restart Claude Code after changing.
 
 ## Customizing further
 

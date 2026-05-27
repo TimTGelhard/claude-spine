@@ -122,8 +122,8 @@
     "playwright@claude-plugins-official": true,
     "vercel@claude-plugins-official": true
   },
-  "effortLevel": "xhigh",
-  "autoCompactWindow": 800000,
+  "effortLevel": "high",
+  "autoCompactWindow": 180000,
   "theme": "dark",
   "skipAutoPermissionPrompt": true
 }

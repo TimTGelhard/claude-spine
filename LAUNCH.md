@@ -35,7 +35,7 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 | L0 | Decide community/sharing story (no code, README + bucket/README touched) | L7 (waitlist messaging) | not started |
 | L1 | Self-consistency sweep (circular refs, stale skill cross-refs, naming) | L8 (Tim migration), L7 (launch) | done (2026-05-27) |
 | L2 | install.sh legacy `op-manual-*` cutover + `/uninstall` | L8 (Tim migration), L7 (launch) | done (2026-05-27) |
-| L3 | settings.json default tuning (effortLevel, autoCompactWindow) | nothing | not started |
+| L3 | settings.json default tuning (effortLevel, autoCompactWindow) | nothing | done (2026-05-27) |
 | L4 | Testing harness — skill-trigger benchmarks + hook test fixture | L7 confidence | not started |
 | L5 | Clean-room install on fresh VM / Docker | L7 (launch gate) | not started |
 | L6 | CHANGELOG.md + archive v1 root files + repo URL verify | L7 polish | not started |
@@ -160,6 +160,22 @@ Also: there's no scripted uninstall. `global/INSTALL.md` documents the manual st
 3. While here: review the `permissions.allow` list. Some entries are Tim-specific (Supabase, Vercel, Lighthouse). Consider splitting into a `permissions.allow.base` set everyone gets and a `permissions.allow.stack-specific` block users uncomment. Defer if it's a lot — note in this phase and roll into L6.
 
 **Definition of done:** A Pro-plan user installing fresh doesn't unknowingly opt into expensive defaults.
+
+### L3 notes (2026-05-27)
+
+**Decisions made (Tim):**
+- Path picked: **moderate opinionated** — `effortLevel: "high"`, `autoCompactWindow: 180000`. Rejected the minimalist "remove both keys" path because the spine *is* opinionated; shipping no defaults defeats the point of a curated global. Rejected keeping the aggressive `xhigh` + `800000` because Pro-plan installers would burn budget without knowing why.
+- Permissions cleanup: **light** — kept the existing `permissions.allow` list intact (no Tim-specific entries removed). One-line tweak to INSTALL.md flags the Bash allowlist as stack-opinionated (TS / Next.js / Supabase / Vercel) so users know what to trim. The deeper split into `base` vs `stack-specific` blocks isn't supported by `settings.json` schema (JSON has no comments, no nested permission keys) — deferred indefinitely, not rolled to L6.
+
+**Scope of edits actually done:**
+- `global/settings.json` — `effortLevel: xhigh` → `high`; `autoCompactWindow: 800000` → `180000`.
+- `global/INSTALL.md` — updated the two settings-review bullets (effortLevel + autoCompactWindow lines) to describe the new defaults and point at the new tuning section. Updated the Bash allowlist bullet to flag it as stack-opinionated. Added new top-level `## Tuning for Max 20x / 1M context` section between `## Install`'s last subsection and `## Customizing further`, showing the exact JSON to paste and why each key changes.
+
+**DoD verification:**
+- `cat global/settings.json | grep -E '"effortLevel"|"autoCompactWindow"'` returns `"effortLevel": "high"` and `"autoCompactWindow": 180000` — a Pro-plan installer no longer opts into `xhigh` or 800K by default.
+- INSTALL.md's `## Tuning for Max 20x / 1M context` section gives Max users the exact two-key opt-up in one paste.
+
+**Out of scope, not done in this phase:** the `permissions.allow` split into base + stack-specific blocks (schema doesn't support; no follow-up needed). The `claude-spine-profile.md` integration with effortLevel (could let `/onboard` set effortLevel based on the user's "Anthropic plan" answer) — interesting but post-launch, not L3.
 
 ---
 
