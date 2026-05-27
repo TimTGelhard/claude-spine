@@ -1,6 +1,6 @@
 ---
 name: op-collaboration-modes
-description: Use when deciding how to engage Claude for a task — whether to just say "build this" (executor), ask for an independent audit (reviewer), ask Claude to explain unfamiliar code before changing it (explainer), or get 2-3 design options with tradeoffs (planner). Also use when shifting modes mid-session (plan → build → review). Routes to chapter 07 (collaboration modes) of the Claude Code Operator's Manual.
+description: Use when deciding how to engage Claude for a task — whether to just say "build this" (executor), ask for an independent audit (reviewer), ask Claude to explain unfamiliar code before changing it (explainer), or get 2-3 design options with tradeoffs (planner). Also use when shifting modes mid-session (plan → build → review). Routes to chapter 07 (collaboration modes) of claude-spine.
 ---
 
 # op-collaboration-modes — executor / reviewer / explainer / planner

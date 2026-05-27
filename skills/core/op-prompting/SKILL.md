@@ -1,6 +1,6 @@
 ---
 name: op-prompting
-description: Use when writing or improving a prompt, deciding how to phrase a request to Claude Code, structuring a non-trivial task (CONTEXT/TASK/CONSTRAINTS/EXAMPLES/OUTPUT), iterating after a wrong first output, or picking a high-leverage prompt pattern (orientation, challenge-me, small-fix, what's-broken, explain-it-to-me). Routes to chapter 09 of the Claude Code Operator's Manual.
+description: Use when writing or improving a prompt, deciding how to phrase a request to Claude Code, structuring a non-trivial task (CONTEXT/TASK/CONSTRAINTS/EXAMPLES/OUTPUT), iterating after a wrong first output, or picking a high-leverage prompt pattern (orientation, challenge-me, small-fix, what's-broken, explain-it-to-me). Routes to chapter 09 (prompting) of claude-spine.
 ---
 
 # op-prompting — getting good output the first time

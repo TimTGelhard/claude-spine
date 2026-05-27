@@ -1,6 +1,6 @@
 ---
 name: op-subagents
-description: Use when deciding whether to delegate to a subagent (Agent tool) vs do work inline, writing a subagent prompt, picking an agent type (general-purpose / Explore / Plan / custom), running parallel or background agents, designing a custom subagent in ~/.claude/agents/, or evaluating whether an orchestrator-with-specialists pattern fits the task. Routes to chapter 16 of the Claude Code Operator's Manual.
+description: Use when deciding whether to delegate to a subagent (Agent tool) vs do work inline, writing a subagent prompt, picking an agent type (general-purpose / Explore / Plan / custom), running parallel or background agents, designing a custom subagent in ~/.claude/agents/, or evaluating whether an orchestrator-with-specialists pattern fits the task. Routes to chapter 16 (subagents) of claude-spine.
 ---
 
 # op-subagents — when to delegate
@@ -36,4 +36,4 @@ The biggest underused lever for keeping main-conversation context clean. Routes 
 
 - `Agent` tool mechanics (calling shape, options) → `op-tools` 15e.
 - Skill-creator for writing custom subagent frontmatter → use the `/skill-creator` slash command.
-- Recovery when a subagent returned junk → `op-manual-recovery` (chapter 17).
+- Recovery when a subagent returned junk → `op-recovery` (chapter 17).

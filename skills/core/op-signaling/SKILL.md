@@ -1,6 +1,6 @@
 ---
 name: op-signaling
-description: Use when Claude should interrupt with a proactive signal (context filling, scope creep, drift, missed verification, end-of-session), when the user proposes extending Claude's own setup (skills/hooks/agents/MCPs/CLAUDE.md additions — meta-scope), when asking "why didn't you flag X earlier", or when calibrating how often to signal. Routes to chapter 11 of the Claude Code Operator's Manual.
+description: Use when Claude should interrupt with a proactive signal (context filling, scope creep, drift, missed verification, end-of-session), when the user proposes extending Claude's own setup (skills/hooks/agents/MCPs/CLAUDE.md additions — meta-scope), when asking "why didn't you flag X earlier", or when calibrating how often to signal. Routes to chapter 11 (proactive signaling) of claude-spine.
 ---
 
 # op-signaling — be the senior dev, not the order-taker
@@ -40,4 +40,4 @@ This skill is read by Claude itself when about to (or failing to) signal. It's a
 ## Sibling skills
 
 - Where signaling sits in the loop → `op-foundations` (01b three levers, 01c failure modes).
-- Recovery when a signal *did* fire and the session is degrading → `op-manual-recovery` (chapter 17).
+- Recovery when a signal *did* fire and the session is degrading → `op-recovery` (chapter 17).

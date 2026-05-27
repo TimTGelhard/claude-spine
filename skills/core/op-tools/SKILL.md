@@ -1,6 +1,6 @@
 ---
 name: op-tools
-description: Use when choosing which Claude Code tool fits a task (Read/Edit/Write, Bash, grep, Agent, plan mode, TaskCreate, WebFetch, MCP, slash commands), debugging "should this be Bash or a dedicated tool", deciding when to background a long-running command, picking between grep and Agent(Explore) for a search, or auditing loaded MCPs for cost. Routes to chapter 15 of the Claude Code Operator's Manual.
+description: Use when choosing which Claude Code tool fits a task (Read/Edit/Write, Bash, grep, Agent, plan mode, TaskCreate, WebFetch, MCP, slash commands), debugging "should this be Bash or a dedicated tool", deciding when to background a long-running command, picking between grep and Agent(Explore) for a search, or auditing loaded MCPs for cost. Routes to chapter 15 (tool palette) of claude-spine.
 ---
 
 # op-tools — which tool when

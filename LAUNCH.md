@@ -33,7 +33,7 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 | Phase | Scope | Blocks | Status |
 |---|---|---|---|
 | L0 | Decide community/sharing story (no code, README + bucket/README touched) | L7 (waitlist messaging) | not started |
-| L1 | Self-consistency sweep (circular refs, stale skill cross-refs, naming) | L8 (Tim migration), L7 (launch) | not started |
+| L1 | Self-consistency sweep (circular refs, stale skill cross-refs, naming) | L8 (Tim migration), L7 (launch) | done (2026-05-27) |
 | L2 | install.sh legacy `op-manual-*` cutover + `/uninstall` | L8 (Tim migration), L7 (launch) | not started |
 | L3 | settings.json default tuning (effortLevel, autoCompactWindow) | nothing | not started |
 | L4 | Testing harness — skill-trigger benchmarks + hook test fixture | L7 confidence | not started |
@@ -86,6 +86,21 @@ Dependency graph: `L0 → L7`. `L1 → L8 → ...`. `L2 → L8 → ...`. `L4 + L
 **Definition of done:** `grep -r "op-manual-" skills/` returns nothing in new skills (RECONSTRUCTION.md and historical notes excepted). `grep -r "Claude Code Operator's Manual"` returns only historical notes. Chapters 18f and 04c are self-contained for a neutral-stub user.
 
 **Open question for this phase:** templates skill. The opinionated CLAUDE.md still mentions `~/.claude-spine/templates/`, which is correct, but there's no `op-templates` skill listed in INDEX.md. The legacy `op-manual-templates` is what currently routes to the templates folder. Confirm during the session whether one of the new core skills handles this (likely `op-persistence` covers project docs) or whether a separate `op-templates` skill is missing from the 18.
+
+### L1 notes (2026-05-27)
+
+**Resolved open question:** no new `op-templates` skill needed. `op-persistence`'s description already lists "project doc" as a covered persistence layer, and templates are static reference artifacts (no chapter content to route to). Fix was to replace the dangling `op-manual-templates` references in `op-persistence/SKILL.md` with direct pointers to `~/.claude-spine/templates/` and to enumerate the available templates inline. The 18-skill count is preserved.
+
+**Scope of edits actually done:**
+- `chapters/anti-patterns/18f-security.md` — rewritten to be self-contained. Added 6 missing forbidden-list items (hardcoded secrets, SQL injection, eval/Function on user input, JWTs in localStorage, RLS disabled on user-data tables, CORS `*` on user-data routes) in the existing "fails because / instead" format. Switched TL;DR self-reference (was: "the forbidden list in your global CLAUDE.md is the authoritative checklist"; now: "this catalog is the authoritative checklist").
+- `chapters/foundations/04c-budget-and-cost.md` — line 68 now points to chapter 18f instead of "the security section of your global CLAUDE.md".
+- Skill cross-references swept: `op-manual-recovery` → `op-recovery` in `op-subagents/SKILL.md` and `op-signaling/SKILL.md`; `op-manual-templates` → direct template-folder pointer in `op-persistence/SKILL.md` (two occurrences).
+- Naming holdover swept: `Claude Code Operator's Manual` → `claude-spine` across all 14 affected skill descriptions. Pattern was uniform: "Routes to chapter X of the Claude Code Operator's Manual." → "Routes to chapter X (name) of claude-spine." Added the chapter name in parentheses where it was missing (op-anti-patterns, op-hooks, op-prompting, op-tools, op-visuals) so cold-read users see what the chapter is about without opening it.
+- `EXPLAINER.md` and v1 root `13-custom-skills.md` were called out in the launch doc but contained no actual holdovers — already clean.
+
+**DoD verification:** `grep -r "op-manual-" skills/` returns nothing. `grep -r "Claude Code Operator's Manual" .` returns only `LAUNCH.md` (this file) and `RECONSTRUCTION.md` (historical), as expected.
+
+**Out of scope, not done in this phase:** the opinionated CLAUDE.md template still carries its own forbidden list — left in place per the launch doc's guidance ("the user's runtime checklist"). 18f is now the authoritative spine version; the opinionated copy is a deliberate, redundant runtime shortcut for users who want it inline.
 
 ---
 

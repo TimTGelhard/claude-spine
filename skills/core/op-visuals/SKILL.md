@@ -1,6 +1,6 @@
 ---
 name: op-visuals
-description: Use when deciding whether to paste a screenshot vs text, sharing a UI bug or design reference with Claude, writing ASCII or Mermaid diagrams in project docs, sketching a UI mockup before a build session, or handling mobile / cross-platform visual comparisons. Routes to chapter 10 of the Claude Code Operator's Manual.
+description: Use when deciding whether to paste a screenshot vs text, sharing a UI bug or design reference with Claude, writing ASCII or Mermaid diagrams in project docs, sketching a UI mockup before a build session, or handling mobile / cross-platform visual comparisons. Routes to chapter 10 (visuals) of claude-spine.
 ---
 
 # op-visuals — screenshots, mockups, diagrams

@@ -1,6 +1,6 @@
 ---
 name: op-workflow
-description: Use when starting a new project from scratch, scoping what to build before opening Claude Code, planning the prep / architecture / build / harden / ship sequence, sizing a feature for one session, choosing how to break a too-big feature, or deciding whether the current scope fits in one terminal. Routes to chapters 05 (the 7-stage workflow) and 06 (feature sizing) of the Claude Code Operator's Manual.
+description: Use when starting a new project from scratch, scoping what to build before opening Claude Code, planning the prep / architecture / build / harden / ship sequence, sizing a feature for one session, choosing how to break a too-big feature, or deciding whether the current scope fits in one terminal. Routes to chapters 05 (the 7-stage workflow) and 06 (feature sizing) of claude-spine.
 ---
 
 # op-workflow — the 7-stage project workflow + feature sizing

@@ -1,6 +1,6 @@
 ---
 name: op-persistence
-description: Use when deciding where Claude should remember something (CLAUDE.md / skill / memory / project doc), writing or editing a CLAUDE.md file, authoring a custom skill, designing a skill's trigger description, choosing between skill / hook / CLAUDE.md for "always do X" behavior, or auditing a personal skill library for rot. Routes to chapters 12 and 13 of the Claude Code Operator's Manual.
+description: Use when deciding where Claude should remember something (CLAUDE.md / skill / memory / project doc), writing or editing a CLAUDE.md file, authoring a custom skill, designing a skill's trigger description, choosing between skill / hook / CLAUDE.md for "always do X" behavior, or auditing a personal skill library for rot. Routes to chapters 12 and 13 (persistence) of claude-spine.
 ---
 
 # op-persistence — CLAUDE.md, skills, and memory
@@ -26,7 +26,7 @@ The three layers that persist between sessions. Routes here pick exactly one fil
 1. Pick the file that matches the *question*, not the topic. "Where should I put X?" → 12a. "How do I word the description?" → 13b.
 2. Don't load multiple files unless the user is asking a cross-cutting question.
 3. If the user wants automatic behavior (always run X after Y) → that's hooks, not persistence → switch to `op-hooks`.
-4. If the user's question is about a project doc (PROGRESS.md, DECISIONS.md, etc.) → that's `op-manual-templates`, not persistence.
+4. If the user's question is about a project doc (PROGRESS.md, DECISIONS.md, etc.) → copy a template from `~/.claude-spine/templates/` (PROGRESS.md, DECISIONS.md, FEATURES.md, ARCHITECTURE.md, PROJECT_BRIEF.md, SMOKE_TESTS.md, DEPLOY.md, SESSION_STARTER.md, CLAUDE.md) into the project's `docs/`.
 
 ## Common triggers
 
@@ -40,5 +40,5 @@ The three layers that persist between sessions. Routes here pick exactly one fil
 ## Sibling skills
 
 - Automatic event-driven behavior → `op-hooks` (settings.json + hooks).
-- Project docs (PROGRESS.md, DECISIONS.md) → `op-manual-templates`.
+- Project docs (PROGRESS.md, DECISIONS.md, etc.) → copy from `~/.claude-spine/templates/`.
 - When skills should fire as part of proactive workflow signals → `op-signaling`.

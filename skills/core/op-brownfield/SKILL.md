@@ -1,6 +1,6 @@
 ---
 name: op-brownfield
-description: Use when entering a codebase you didn't build, returning to your own project after months away, inheriting client code, extending a site months after launch, or about to modify code where you couldn't answer "what does this file do" in one sentence. Covers the discovery sequence, safe first changes, teaching Claude an unfamiliar codebase, and when a rewrite is the right answer. Routes to chapter 08 (brownfield) of the Claude Code Operator's Manual.
+description: Use when entering a codebase you didn't build, returning to your own project after months away, inheriting client code, extending a site months after launch, or about to modify code where you couldn't answer "what does this file do" in one sentence. Covers the discovery sequence, safe first changes, teaching Claude an unfamiliar codebase, and when a rewrite is the right answer. Routes to chapter 08 (brownfield) of claude-spine.
 ---
 
 # op-brownfield — inherited code and returning to old projects

@@ -1,6 +1,6 @@
 ---
 name: op-foundations
-description: Use when asking how Claude Code actually works under the hood, how the LLM loop and tools combine, what the three levers (context / scope / verification) are, why quality drops mid-session (drift / dilution / hallucination), how the 1M context window degrades before it fills, when to start a fresh terminal, what Claude genuinely can't do, which project types fit, which model (Opus / Sonnet / Haiku) to pick, when plan mode or fast mode is worth it, or how plan budgets and context cost work. Routes to the foundations chapters (01–04) of the Claude Code Operator's Manual.
+description: Use when asking how Claude Code actually works under the hood, how the LLM loop and tools combine, what the three levers (context / scope / verification) are, why quality drops mid-session (drift / dilution / hallucination), how the 1M context window degrades before it fills, when to start a fresh terminal, what Claude genuinely can't do, which project types fit, which model (Opus / Sonnet / Haiku) to pick, when plan mode or fast mode is worth it, or how plan budgets and context cost work. Routes to the foundations chapters (01–04) of claude-spine.
 ---
 
 # op-foundations — foundations of Claude Code

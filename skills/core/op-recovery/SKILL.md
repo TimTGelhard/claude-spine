@@ -1,6 +1,6 @@
 ---
 name: op-recovery
-description: Use when workflow quality is dropping mid-session, Claude is contradicting itself, hallucinating file paths or API names, drifting from earlier constraints, when each fix introduces a new bug, when the user says "are you sure", "you said the opposite earlier", "this isn't working", "you're going in circles", "I don't recognize this code", when a deploy broke production, a migration failed mid-flight, secrets leaked, or auth/RLS may be exposing user data. Routes to chapter 17 (recovery playbook) of the Claude Code Operator's Manual.
+description: Use when workflow quality is dropping mid-session, Claude is contradicting itself, hallucinating file paths or API names, drifting from earlier constraints, when each fix introduces a new bug, when the user says "are you sure", "you said the opposite earlier", "this isn't working", "you're going in circles", "I don't recognize this code", when a deploy broke production, a migration failed mid-flight, secrets leaked, or auth/RLS may be exposing user data. Routes to chapter 17 (recovery playbook) of claude-spine.
 ---
 
 # op-recovery — diagnose, then act

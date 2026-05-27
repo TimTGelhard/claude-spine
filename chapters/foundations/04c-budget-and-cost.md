@@ -65,7 +65,7 @@ If you're building an app that *calls Claude*, that's the API, not Claude Code. 
 - **Use prompt caching** for any prompt re-sent 3+ times. Massive savings.
 - **Set `max_tokens` explicitly.** Don't let runaway responses burn tokens.
 - **System prompts for role**, user messages for input. Don't mash everything into user.
-- **Key never reaches the browser or device.** Server-only. See the security section of your global `CLAUDE.md`.
+- **Key never reaches the browser or device.** Server-only. See chapter 18f (security anti-patterns) for the full catalog.
 
 ## TL;DR
 
