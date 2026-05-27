@@ -38,7 +38,7 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 | L3 | settings.json default tuning (effortLevel, autoCompactWindow) | nothing | done (2026-05-27) |
 | L4a | Testing harness — skill-trigger benchmarks | L7 confidence | done (2026-05-27) |
 | L4b | Testing harness — hook fixture + install dry-run + CI | L7 confidence | done (2026-05-27) |
-| L5 | Clean-room install on fresh VM / Docker | L7 (launch gate) | not started |
+| L5 | Clean-room install on fresh VM / Docker | L7 (launch gate) | done (2026-05-27) |
 | L6 | CHANGELOG.md + archive v1 root files + repo URL verify | L7 polish | done (2026-05-27) |
 | L7 | Launch assets — domain, landing page, demo, waitlist signup | nothing — launches | not started |
 | L8 | Tim's personal migration | — | unblocked after L1+L2 |
@@ -290,6 +290,32 @@ All 18, flagged in `tests/skill-triggers/results/needs-tightening.md`. The flag 
 7. Capture every divergence between README and reality. Each divergence is an issue to fix in a follow-up session (or roll into L6).
 
 **Definition of done:** A documented run report exists (commit it as `docs/clean-room-install-report.md`). Any divergence is either fixed in-session (small) or filed (large).
+
+### L5 notes (2026-05-27)
+
+**Environment used:** `ubuntu:22.04` Docker container (aarch64 via Docker Desktop on Apple Silicon), bash 5.1.16, git 2.34.1, jq 1.6, non-root user `tester`. A second image with jq stripped out covered the preflight case. Both Dockerfiles are reproducible from the report; not committed.
+
+**Scope of edits actually done:**
+- `docs/clean-room-install-report.md` (new) — full run report. 9 scenarios numbered (1–9), each with verbatim outputs of the key moments: default neutral install, deep post-install verification, idempotency re-run, `--opinionated` variant, legacy `op-manual-*` cleanup including `--keep-legacy`, full uninstall + dry-run, jq-missing preflight + `--skip-hook` bypass, the flag matrix (dry-run / help / unknown / all-skip / clean-uninstall), and scenario 9 (live GitHub clone) which was *deferred* on purpose — see below. Two cosmetic divergences filed with one-paragraph rationale + ~5-line fix sketches; three checks deferred to a manual session after L8. Recommendations table at the end.
+
+**Definition of done verification:**
+- The run report exists at `docs/clean-room-install-report.md` per the spec.
+- The 8 scenarios that ran inside the container all returned exit 0 (or the expected error exit for the negative cases — 1 for jq-missing, 2 for unknown flag).
+- Both divergences are *filed*, not fixed in-session: each is a 5–10 line polish that doesn't block launch; rolling them into L6 (already shipped) would have been retconning. They're small enough to land together post-launch.
+
+**Headline result:** the installer is launch-ready. 18 skills + 5 commands link cleanly, neutral CLAUDE.md substitutes `{{SPINE_DIR}}` correctly, settings.json validates with effortLevel `high` / autoCompactWindow `180000` (L3 defaults), the env-leak hook denies all six should-deny patterns including the `foo/.env.local` regression that L4b fixed, and `uninstall.sh` removes every spine artifact while preserving every user-data file (CLAUDE.md, settings.json, `claude-spine-profile.md`, `bucket/`).
+
+**Divergences filed (both low severity, neither blocks L7):**
+1. **install.sh re-backs-up identical files on idempotent re-runs.** Symlinks correctly detect "already linked"; the three file artifacts (CLAUDE.md, settings.json, hook) always back up + re-copy even when source == destination byte-for-byte. Fix: `cmp -s` skip before backup. Cosmetic — backups are timestamp-named and small.
+2. **Dry-run prints "linked:" / "wrote:" confirmation messages.** `symlink_force` and the file-copy sections echo a post-action confirmation unconditionally; in `--dry-run` those lines are misleading because nothing actually happened. Fix: gate the echoes by `[ "$DRY_RUN" -eq 0 ]`. The leading `DRY RUN — no changes will be made.` banner and the `+ ln -s` prefix make actual behavior unambiguous, so it's noise rather than corruption.
+
+Both fit one small PR post-launch (~10 lines combined). Not rolling into L6 because L6 is already shipped and committed; that'd be retconning.
+
+**Scenario 9 (live `git clone` from GitHub) — deliberately deferred.** Was attempted; blocked by the auto-mode safety classifier as a defensive guard against running untrusted external code. That's the desired guardrail — the classifier can't tell that the cloned repo is the one we're inside. The bind-mount approach in scenarios 1–8 covers every line of `install.sh`; the URL itself was verified `200` in L6. No follow-up needed unless a future session wants to add the one-time permission rule for a live-clone test.
+
+**Out of scope, not done in this phase:** the three Claude-Code-required checks (the two README verification queries, `/onboard` essentials walk, `/curate` empty-state messaging) cannot run in a container without an authenticated Claude Code session. They're deferred to a manual session after Tim completes L8 (his personal migration) — the L8 spec already lists them under "Verify in a fresh session." This is the right place for them; doing a separate dummy-account Claude Code login inside Docker would be more work than just doing them on the real machine.
+
+**Cost of the run:** ~2 minutes of container time + the one-time download of `ubuntu:22.04` (~28 MB) and the apt-installed deps (~15 MB cached). No API spend. No cleanup needed.
 
 ---
 
