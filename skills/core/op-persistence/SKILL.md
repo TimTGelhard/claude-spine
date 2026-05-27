@@ -1,6 +1,6 @@
 ---
 name: op-persistence
-description: Use when deciding where Claude should remember something (CLAUDE.md / skill / memory / project doc), writing or editing a CLAUDE.md file, authoring a custom skill, designing a skill's trigger description, choosing between skill / hook / CLAUDE.md for "always do X" behavior, or auditing a personal skill library for rot. Routes to chapters 12 and 13 (persistence) of claude-spine.
+description: Use when deciding *where* a behavior or rule should persist across sessions — CLAUDE.md vs custom skill vs memory vs project doc vs hook. Fires on phrases like "should this go in a skill or CLAUDE.md?", "where do I save this rule?", "I keep telling Claude X every session — where should it live?", or when authoring a CLAUDE.md, drafting a skill or its trigger description, fixing a skill that isn't firing, or auditing a stale skill library. NOT for code-level persistence (localStorage, Redis, database schemas, session state). Routes to chapters 12 and 13 of claude-spine; body branches into the sub-tasks once routed.
 ---
 
 # op-persistence — CLAUDE.md, skills, and memory
