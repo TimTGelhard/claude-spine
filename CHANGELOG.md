@@ -68,7 +68,7 @@ Remaining gates before public launch (tracked in [`LAUNCH.md`](LAUNCH.md)):
 - **L4c** — token-efficiency benchmark (spine-on vs spine-off) for demo numbers.
 - **L7a / L7c / L7d / L7e** — landing-page hardening (built CSS, OG image, waitlist wiring), demo recording, public launch.
 
-Internal cleanup tracked in [`docs/JANITOR.md`](docs/JANITOR.md): `PERSONALIZATION.md` retirement, `EXPLAINER.md` pricing-language reframe, and the deferred `install.sh` polish from L4c.
+Internal drift tracked in [`FIXES.md`](FIXES.md) (the prior 2026-05-27 pre-launch sweep is archived at [`docs/archive/JANITOR-2026-05.md`](docs/archive/JANITOR-2026-05.md); its `PERSONALIZATION.md` retirement and `EXPLAINER.md` pricing-language reframe items have shipped, only the deferred `install.sh` polish from L4c remains).
 
 ---
 

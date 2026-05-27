@@ -518,6 +518,13 @@ Captured 2026-05-27 from a ship-readiness audit. **Status as of 2026-05-27 clean
 
 ---
 
+## Post-Phase-8 planning docs — archived
+
+- **L10 ambient workflow refactor** (`op-spine-active` + Stop-hook writeback + `/done`): planning doc archived to [`docs/archive/PLAN-AMBIENT-WORKFLOW-2026-05.md`](docs/archive/PLAN-AMBIENT-WORKFLOW-2026-05.md). Shipped as the L10 + L10.1 entries in `CHANGELOG.md` `[Unreleased]`. The live mechanics live in `skills/core/op-spine-active/`, `global/hooks/spine-writeback.sh`, `global/commands/done.md`, and `chapters/workflow/05j-cold-start-protocol.md`.
+- **First internal janitor pass** (pre-launch sweep, 2026-05-27): archived to [`docs/archive/JANITOR-2026-05.md`](docs/archive/JANITOR-2026-05.md). Current drift catalog moved to [`FIXES.md`](FIXES.md) at repo root.
+
+---
+
 ## Critical context for cold-read sessions
 
 - The plan file is canonical. This RECONSTRUCTION.md is the running state of executing that plan.
