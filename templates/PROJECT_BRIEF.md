@@ -1,6 +1,8 @@
 # Project Brief — <PROJECT NAME>
 
 > Fill in before opening Claude Code. If you can't answer these, you're not ready to build.
+>
+> _Examples below pull from a quote-management SaaS for tradespeople — replace with your own domain. The questions are domain-agnostic._
 
 ## What is this?
 One paragraph. What we're building, what it does, what makes it worth existing.

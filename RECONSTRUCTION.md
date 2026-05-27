@@ -24,16 +24,21 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 
 ## Current phase
 
-**Phase 6a — Structural cleanup — done** (2026-05-27). Phase 6 was too large for one session (5+ deliverables); split into 6a / 6b / 6c.
+**Phase 6b — install.sh + variants + templates audit — done** (2026-05-27). Phase 6 was too large for one session (5+ deliverables); split into 6a / 6b / 6c.
 
-**Phase 6a (done):**
+**Phase 6a (done 2026-05-27):**
 - Phase 5 work committed.
 - All 13 core skill bodies path-swept: `/Users/macbook/claude-op-manual/` → `~/.claude-spine/`. Each skill now carries a one-line note explaining the convention.
 - Cross-reference back-fill complete: 17 stale `../../<N>-<chapter>.md` links across foundations, workflow, and signaling files now point at the correct atomic targets. The "Cross-reference back-fill" open question is **closed**.
 
-**Phase 6b (next):** write `install.sh` (symlinks `~/.claude/skills/op-*` → `<spine>/skills/core/op-*`; ensures `~/.claude-spine` resolves to spine clone) + neutralize `global/CLAUDE.md.template` into `global/neutral/` (the thin stub per locked architecture) + move founder-flavored version to `global/opinionated/` + ship `templates/` audit (founder-specific examples → neutralize).
+**Phase 6b (done 2026-05-27):**
+- `install.sh` shipped at repo root. Symlinks `~/.claude/skills/op-*` → `<spine>/skills/core/op-*`, ensures `~/.claude-spine` resolves to the spine clone, installs `settings.json` + env-leak hook, renders the global stub (substituting `{{SPINE_DIR}}`). Idempotent. Backs up overwritten files to `~/.claude-backup-<timestamp>/`. Flags: `--opinionated`, `--skip-global|skills|settings|hook`, `--dry-run`. Windows path warns to use WSL.
+- `global/neutral/CLAUDE.md.template` written — thin stub (~20 lines) per locked architecture. Identity, spine path, INDEX.md pointer, profile file reference, override hierarchy.
+- `global/opinionated/CLAUDE.md.template` — the founder-flavored heavy template moved here via `git mv`. `{{MANUAL_DIR}}` placeholders renamed to `~/.claude-spine` paths; old root-level chapter references (e.g., `06-feature-sizing.md`) re-pointed at the new atomic files (e.g., `~/.claude-spine/chapters/workflow/06-feature-sizing.md`). Header note added explaining this is the heavy variant.
+- `global/INSTALL.md` rewritten to document install.sh + both variants + verification + uninstall.
+- Templates audit complete. Decision: **light neutralization**, not abstract placeholders. Each template got a one-line "Example uses Next.js + Supabase + quote-management" header note so a Django/Go/Rails user understands the structure is stack-agnostic even though the filled-in examples aren't. SESSION_STARTER.md needed no change (already stack-agnostic). The templates are intentionally opinionated — they ARE the filled-in example users edit; abstract placeholders would have weakened them.
 
-**Phase 6c (after 6b):** build `op-onboard` skill (hybrid interview: 5 essentials up front, opt-in deep ~15-question follow-up via `/onboard --deep`) + rewrite README as public-facing entry point.
+**Phase 6c (next):** build `op-onboard` skill (hybrid interview: 5 essentials up front, opt-in deep ~15-question follow-up via `/onboard --deep`) + rewrite README as public-facing entry point.
 
 ---
 
@@ -79,7 +84,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 | 4 | Persistence + tools — `chapters/persistence/`, `chapters/tools/`, `chapters/subagents/` + skills. **Includes the ch 13 thesis revision.** | **done (2026-05-27)** |
 | 5 | Recovery + anti-patterns — `chapters/recovery/`, `chapters/anti-patterns/` + skills | **done (2026-05-27)** |
 | 6a | Structural cleanup — commit Phase 5, sweep hardcoded paths to `~/.claude-spine/`, back-fill cross-references, lock install + onboarding decisions | **done (2026-05-27)** |
-| 6b | `install.sh` + neutral global template + opinionated example + templates audit | not started |
+| 6b | `install.sh` + neutral global template + opinionated example + templates audit | **done (2026-05-27)** |
 | 6c | `op-onboard` skill (hybrid interview) + README rewrite | not started |
 | 6.5 | Skill bucket — `op-bucket-router`, `op-add-skill`, bucket INDEX regeneration. **Note:** Phase 8 promotes the bucket to top-level `bucket/` (was `skills/bucket/`). Coordinate folder structure between 6.5 and 8. | not started |
 | 7 | Demo + launch — end-to-end dry-run, video script outline, launch checklist | not started |
@@ -323,6 +328,19 @@ This replaces the earlier hard-coded `/Users/macbook/claude-op-manual/...` paths
 - **17 cross-references back-filled.** Files swept: `02-context-budget`, `01c-failure-modes`, `04b-plan-and-fast-mode`, `03a-hard-limits` (foundations); `05b`, `05d`, `05f`, `07a`, `07b`, `07d` (workflow); `11b`, `11c`, `11e` (signaling). All point at correct atomic files now. Cross-reference back-fill open question **closed**.
 - **Skill body line-cap broken across all 13 skills.** Pre-existing condition (most were over 40 before the path-note insert). New open question added for 6b/6c to decide cap revision vs body prune.
 - **Phase 6a touched no chapter content.** Only path strings and cross-reference link targets. Voice/structure/decomposition unchanged. This is structural cleanup work, not new content.
+
+### Phase 6b notes (2026-05-27)
+
+- **`install.sh` lives at the repo root.** Self-locates the spine via `${BASH_SOURCE[0]}` resolution, so it works whether the user clones to `~/.claude-spine/`, `~/dev/claude-spine/`, or anywhere else. It then creates a `~/.claude-spine` symlink pointing at the real clone so all the skills' `~/.claude-spine/...` paths resolve consistently. Idempotent: re-running detects existing correct symlinks and is a no-op for those; non-symlink files get backed up to `~/.claude-backup-<timestamp>/`.
+- **Default install = neutral stub.** `./install.sh` (no args) installs the thin stub. `./install.sh --opinionated` installs the heavy template instead. This matches the locked architecture decision: neutral is the default, opinionated is the opt-in example.
+- **`{{SPINE_DIR}}` is substituted at install time** via `sed` against the template before writing. Only used in the neutral stub; the opinionated template uses `~/.claude-spine` directly (since it was already hand-written with that convention).
+- **Skill symlinks back at `~/.claude/skills/op-*`** because Claude Code only auto-loads skills from there. `git pull` in the spine clone propagates to all installed skills instantly with no re-install.
+- **Windows path:** install.sh detects `MINGW*/MSYS*/CYGWIN*` and bails with a message pointing at WSL. Real Windows support (with `mklink /J` junction-points or copy-on-update) deferred to a future phase if anyone asks.
+- **Granular skip flags** (`--skip-global|skills|settings|hook`) allow partial installs — useful when iterating on the installer itself or for users who only want the skills, not the global rewrite. `--dry-run` prints the exact actions without touching the filesystem; verified working before the real run.
+- **`global/CLAUDE.md.template` moved to `global/opinionated/CLAUDE.md.template`** via `git mv` (history preserved). Inside it: `{{MANUAL_DIR}}` placeholders (~5 occurrences) rewritten to `~/.claude-spine/...`; old root-level chapter references (`06-feature-sizing.md`, `02-context-window-truth.md`, `16-subagents.md`, `17-recovery-playbook.md`, `11-proactive-signaling.md`, `18-anti-patterns.md`) re-pointed at the new atomic files in `chapters/<topic>/`. Header note added to signal "this is the heavy variant."
+- **`global/INSTALL.md` rewritten** to document the install.sh path + both variants + verification queries + uninstall. The earlier copy-paste instructions are gone — `install.sh` does the same thing more safely (backups, idempotency, dry-run).
+- **Templates audit: light neutralization.** Each template got a one-line header note explaining that the example domain (Next.js + Supabase + quote-management for tradespeople) is concrete by design and the structure is stack-agnostic. SESSION_STARTER.md needed no change. Rejected: abstract placeholders (would have weakened the templates as filled-in demos); a templates/neutral/ + templates/opinionated/ split (YAGNI for v1, users will heavily edit anyway).
+- **Skill body line-cap open question still pending.** Phase 6b didn't touch skill bodies. 6c can revisit when adding `op-onboard`.
 
 ---
 

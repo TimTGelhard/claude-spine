@@ -2,6 +2,8 @@
 
 > Live status. Update at the end of every session.
 > Claude reads this at the start of every new session.
+>
+> _Example features (quote creation, PDF export, Stripe) come from a Next.js + Supabase quote-management app. Replace with your features — the structure (working / in-progress / next / blockers / log) is domain-agnostic._
 
 ## Current state
 

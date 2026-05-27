@@ -3,6 +3,8 @@
 > The backlog. What's left to build, sized by sessions, ordered by priority.
 > Distinct from `PROGRESS.md` (which is current state).
 > Update at the end of each session: tick what's done, add what got discovered.
+>
+> _Example backlog rows (Quote list, PDF generation, Stripe) come from a Next.js + Supabase quote-management app. Replace with your features — the legend and sizing rules are domain-agnostic._
 
 ## How to use
 

@@ -1,109 +1,100 @@
 # Global Claude Code setup — install guide
 
-This folder is the "global upgrade" — a curated `~/.claude/` setup distilled from real solo-founder / MVP / agency work. It's opinionated and battle-tested, but everything here is yours to edit.
+This folder is the "global upgrade" — a curated `~/.claude/` setup. There are two variants:
 
-> If you only want the manual chapters and templates, skip this folder. The manual works without any global config.
+- **`neutral/`** — a thin stub (~20 lines). Identity + pointer to the spine. The spine's `op-*` skills load discipline on-demand. **Recommended default.**
+- **`opinionated/`** — a heavy, kitchen-sink CLAUDE.md (~260 lines) with stack defaults, security rules, verification gates, and stop conditions all baked in up front. Good if you want everything stated explicitly in the global rather than loaded on demand.
 
-## What you get
+If you only want the spine's chapters and templates without touching `~/.claude/`, you can skip this folder entirely.
+
+## What gets installed
 
 | File | Installs to | What it does |
 |------|-------------|--------------|
-| `CLAUDE.md.template` | `~/.claude/CLAUDE.md` | Global instructions every Claude Code session loads. Sets tone, scope discipline, security baseline, verification rules, stop conditions. |
-| `settings.json` | `~/.claude/settings.json` | Permissions allowlist (so common commands don't prompt), env-file guard hook, plugin enablement, default mode + theme. |
-| `hooks/block-env-staging.sh` | `~/.claude/hooks/block-env-staging.sh` | Blocks `git add .env*` as defence-in-depth against secret leaks. Wired up via `settings.json`. |
+| `neutral/CLAUDE.md.template` (default) or `opinionated/CLAUDE.md.template` (with `--opinionated`) | `~/.claude/CLAUDE.md` | Global instructions every Claude Code session loads. |
+| `settings.json` | `~/.claude/settings.json` | Permissions allowlist (so common commands don't prompt), env-file guard hook wiring, plugin enablement, default mode + theme. |
+| `hooks/block-env-staging.sh` | `~/.claude/hooks/block-env-staging.sh` | Blocks `git add .env*` as defence-in-depth against secret leaks. Wired via `settings.json`. |
+| `../skills/core/op-*` | `~/.claude/skills/op-*` (symlinked) | The core `op-*` skills. Symlinks so `git pull` in the spine updates them instantly. |
+| (the spine itself) | `~/.claude-spine` (symlinked) | A symlink so skill files can use `~/.claude-spine/...` paths regardless of where you cloned. |
 
-## Before you install
+## Install
 
-These files will overwrite existing files in `~/.claude/`. If you already have a `CLAUDE.md` or `settings.json`, **back them up first**:
-
-```bash
-mkdir -p ~/.claude-backup-$(date +%Y%m%d)
-cp -r ~/.claude/CLAUDE.md ~/.claude/settings.json ~/.claude/hooks ~/.claude-backup-$(date +%Y%m%d)/ 2>/dev/null || true
-```
-
-## Install — step by step
-
-From the repo root (`claude-code-operators-manual/`):
-
-### 1. CLAUDE.md — the personal one
+From the spine root:
 
 ```bash
-mkdir -p ~/.claude
-cp global/CLAUDE.md.template ~/.claude/CLAUDE.md
+./install.sh                  # neutral global stub (default)
+./install.sh --opinionated    # heavy template instead
+./install.sh --dry-run        # show what would happen, change nothing
 ```
 
-Now **open `~/.claude/CLAUDE.md`** and fill in:
+Existing `~/.claude/CLAUDE.md`, `settings.json`, and `~/.claude/hooks/block-env-staging.sh` are backed up to `~/.claude-backup-<timestamp>/` before being overwritten. The installer is idempotent — re-running it updates the symlinks and re-installs `settings.json` + hook + global stub from the spine.
 
-- `{{YOUR NAME OR BUILD BOX}}` in the H1 — your handle, machine name, whatever.
-- The intro paragraph with `{{ONE OR TWO LINES ABOUT YOU AND THIS MACHINE}}` — what kind of work this machine does.
-- All `{{MANUAL_DIR}}` placeholders — replace with the absolute path where you cloned this repo (e.g. `/Users/yourname/dev/claude-code-operators-manual`).
-- The **Stack defaults** section — the defaults assume a Next.js + Supabase + Vercel + Expo solo-builder. If you ship Django, Rails, Go, or anything else, rewrite this section. The discipline above and below it is stack-agnostic.
+### Flags
 
-Quick sed for the manual path (macOS / Linux):
+| Flag | Effect |
+|------|--------|
+| `--opinionated` | Install the heavy founder-flavored template instead of the neutral stub. |
+| `--skip-global` | Don't touch `~/.claude/CLAUDE.md`. |
+| `--skip-skills` | Don't create skill symlinks. |
+| `--skip-settings` | Don't overwrite `~/.claude/settings.json`. |
+| `--skip-hook` | Don't install the env-leak hook. |
+| `--dry-run` | Print what would happen; change nothing. |
 
-```bash
-sed -i.bak "s|{{MANUAL_DIR}}|$(pwd)|g" ~/.claude/CLAUDE.md && rm ~/.claude/CLAUDE.md.bak
+### After install
+
+1. **Restart Claude Code.** Close open sessions and start fresh.
+2. **If you installed the opinionated variant:** open `~/.claude/CLAUDE.md` and fill in the `{{placeholders}}` — name, intro line, stack defaults if they don't match yours.
+3. **Review `~/.claude/settings.json`** — the allowlist is opinionated:
+   - **WebFetch allowlist** pre-approves `docs.anthropic.com`, `nextjs.org`, `supabase.com`, `vercel.com`, `tailwindcss.com`, etc. Add your own framework's docs domain; remove any you'll never use.
+   - **Bash allowlist** pre-approves `supabase`, `vercel`, `gh`, `lighthouse`, etc. Trim what you don't use; add `bundler`, `cargo`, `go`, etc. for your stack.
+   - **enabledPlugins** — five plugins from the official marketplace. Disable any you don't want.
+   - **effortLevel** is `xhigh` (quality over speed). Lower to `high` or `medium` for faster, cheaper turns.
+   - **autoCompactWindow** is `800000` (auto-compact fires at 800K tokens). Tighten if compaction is too aggressive.
+
+### Verify
+
+In a fresh session, ask:
+
+```
+What's in my global CLAUDE.md? Summarize the section headings.
 ```
 
-### 2. settings.json — permissions, hooks, plugins
+For the neutral stub, expect a short list (Where to look, Personalization, Project-level rules, Override hierarchy).
+For the opinionated variant, expect a long list (Always-on, How to work with me, Decisions, First touch, Workflow operating model, Proactive signaling, Code output, Verification, ...).
 
-```bash
-cp global/settings.json ~/.claude/settings.json
+Then:
+
+```
+List the op-* skills loaded.
 ```
 
-Then look it over. Defaults that may not match you:
+Should show `op-foundations`, `op-workflow`, `op-collaboration-modes`, `op-brownfield`, `op-prompting`, `op-visuals`, `op-signaling`, `op-persistence`, `op-hooks`, `op-tools`, `op-subagents`, `op-recovery`, `op-anti-patterns`.
 
-- **WebFetch allowlist** — pre-approves `docs.anthropic.com`, `nextjs.org`, `supabase.com`, `vercel.com`, `tailwindcss.com`, etc. Add your own framework's docs domain; remove any you'll never use.
-- **Bash allowlist** — pre-approves `supabase`, `vercel`, `gh`, `lighthouse`, etc. Trim what you don't use; add `bundler`, `cargo`, `go`, etc. for your stack.
-- **enabledPlugins** — five plugins from the official marketplace. Disable any you don't want. They install on first use; you don't need to install them upfront.
-- **effortLevel** — `xhigh` favors quality over speed. Lower to `high` or `medium` if you want faster, cheaper turns.
-- **autoCompactWindow** — `800000` means auto-compact fires at 800K tokens (out of 1M). Tighten if you find compaction is too aggressive.
-
-### 3. The env-file guard hook
-
-```bash
-mkdir -p ~/.claude/hooks
-cp global/hooks/block-env-staging.sh ~/.claude/hooks/
-chmod +x ~/.claude/hooks/block-env-staging.sh
-```
-
-Verify it's wired:
+Also verify the env-leak hook is wired:
 
 ```bash
 echo '{"tool_input":{"command":"git add .env"}}' | ~/.claude/hooks/block-env-staging.sh
 ```
 
-Should return a `deny` decision. If it errors, install `jq` (`brew install jq`).
+Should return a `deny` decision. If it errors, install `jq` (`brew install jq` on macOS).
 
-### 4. Restart Claude Code
+## Customizing further
 
-Close any open sessions and start fresh. New sessions will load your global `CLAUDE.md` and apply the settings.
-
-## Verify
-
-After install, open Claude Code and ask:
-
-```
-What's in my global CLAUDE.md? Summarise the section headings.
-```
-
-Claude should reply with the section list (How to work with me, Decisions, First touch, Workflow operating model, etc.). If it can't see them, the file isn't being loaded — check the path.
-
-## Customising further
-
-The shipped `CLAUDE.md` is opinionated for solo-founder / MVP / client work in TS / Next / Supabase. The structure is the point — keep the sections, rewrite the contents:
+The opinionated `CLAUDE.md.template` is opinionated for solo-founder / MVP / agency work in TS / Next.js / Supabase. The structure is the point — keep the sections, rewrite the contents:
 
 - **Stack defaults** → your actual stack
 - **Stop conditions** → add anything your domain demands (HIPAA boundaries, payment ledger writes, etc.)
 - **Anthropic API** → reflects defaults that work today; verify the model IDs are current when you read this
 - **Forbidden** list → add to, don't remove
 
-The manual chapters (especially `12-skills-memory-claudemd.md` and `18-anti-patterns.md`) explain the *why* behind these choices and what each section is for.
+The spine chapters (especially `chapters/persistence/12b-claudemd.md` and `chapters/anti-patterns/`) explain the *why* behind these choices.
 
 ## Uninstall
 
 ```bash
 rm ~/.claude/CLAUDE.md ~/.claude/settings.json ~/.claude/hooks/block-env-staging.sh
-# Restore your backup if you made one:
-# cp ~/.claude-backup-YYYYMMDD/* ~/.claude/
+rm -rf ~/.claude/skills/op-*
+rm ~/.claude-spine   # only if it's a symlink — `ls -la ~/.claude-spine` to check
+# Restore your backup:
+# cp -a ~/.claude-backup-YYYYMMDD-HHMMSS/.claude/. ~/.claude/
 ```

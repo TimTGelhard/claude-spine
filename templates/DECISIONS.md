@@ -3,6 +3,8 @@
 > Lightweight ADR (Architecture Decision Record).
 > One entry per non-obvious choice. The point is **why**, not what.
 > Once you write one, don't edit it — write a new entry that supersedes if you change your mind.
+>
+> _Example entries lean on a Next.js + Supabase + tradespeople-quote-management context. Replace with your own decisions — the ADR shape (Context / Decision / Alternatives / Consequences) is domain-agnostic._
 
 ---
 

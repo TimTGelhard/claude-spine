@@ -2,6 +2,8 @@
 
 > The source of truth Claude reads at the start of every feature session.
 > Update this when architecture changes. Don't let it drift.
+>
+> _Example uses Next.js + Supabase + Stripe + a quote-management domain. Swap for your stack and entities — the section structure (stack, topology, data model, security boundaries, scaling, open questions) is stack-agnostic._
 
 ## Stack
 

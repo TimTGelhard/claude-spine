@@ -1,0 +1,25 @@
+# Global CLAUDE.md
+
+> Thin stub. Loaded into every Claude Code session on this machine.
+> Heavy content (workflow, signaling, anti-patterns, tools, security) lives in the spine and is loaded on-demand by the `op-*` skills.
+
+This machine uses **claude-spine**. Your local clone lives at `{{SPINE_DIR}}` (also reachable at `~/.claude-spine/`).
+
+## Where to look
+
+When a task needs general operating discipline (workflow, prompting, signaling, recovery, tools, anti-patterns), the `op-*` skills will fire and route to the right atomic file in `~/.claude-spine/chapters/`. If no skill fires but the task is clearly manual territory, consult `~/.claude-spine/INDEX.md` and read only the matching file — don't load the whole folder.
+
+## Personalization
+
+User-specific calibration (experience level, stack preferences, working style, push-back intensity, verbosity) lives in `~/.claude/claude-spine-profile.md`. Read it at the start of every session — it overrides defaults in the spine's chapters. If the file doesn't exist, the `op-onboard` skill will offer to create it.
+
+## Project-level rules
+
+Project-level `.claude/CLAUDE.md` files add stack and domain context. Read them first when entering a project — they override anything in the spine for that project.
+
+## Override hierarchy
+
+1. Project-level `.claude/CLAUDE.md` (most specific).
+2. `~/.claude/claude-spine-profile.md` (this user's calibration).
+3. Spine chapters loaded by skills (the operating discipline).
+4. This file (identity + pointers only).

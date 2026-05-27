@@ -2,6 +2,8 @@
 
 > The 3-5 critical user flows that MUST work before any deploy.
 > Walk these manually before declaring anything done.
+>
+> _Example flows (signup, dashboard, quote creation, RLS check) come from a Next.js + Supabase quote-management app. Replace with your critical paths — the structure (one flow per section, status legend, steps + expected outcome) is domain-agnostic._
 
 ## How to use
 

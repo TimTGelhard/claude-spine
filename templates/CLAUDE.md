@@ -3,6 +3,8 @@
 > Project-level instructions. Lives at project root (or `.claude/CLAUDE.md`).
 > Loaded into Claude's context every session. Keep tight — 50-150 lines max.
 > Global rules from `~/.claude/CLAUDE.md` still apply. This file only adds project-specific stuff.
+>
+> _Example uses a Next.js + Supabase quote-management app as the concrete domain. Swap stack, project layout, and domain for yours — the section headings and the discipline are stack-agnostic._
 
 ## What this is
 

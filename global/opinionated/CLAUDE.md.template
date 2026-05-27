@@ -1,7 +1,8 @@
 # Global CLAUDE.md — {{YOUR NAME OR BUILD BOX}}
 
-> Template — copy to `~/.claude/CLAUDE.md` and fill the `{{placeholders}}`.
-> This file is loaded into every Claude Code session on this machine.
+> Heavy variant — the kitchen-sink CLAUDE.md. Discipline, stack opinions, and security rules all baked in up front.
+> Prefer the lightweight stub in `global/neutral/` if you'd rather load discipline on-demand from the spine.
+> Copy to `~/.claude/CLAUDE.md` and fill the `{{placeholders}}`. Loaded into every Claude Code session on this machine.
 > Project-level `.claude/CLAUDE.md` can add to these rules (never weaken security).
 
 {{ONE OR TWO LINES ABOUT YOU AND THIS MACHINE.}}
@@ -18,7 +19,7 @@ These are the ones I most often regret you forgetting. If something below confli
 5. **One session = one feature.** Fresh terminal between features. Context is a budget, not bandwidth.
 6. **Security is non-negotiable** (full list below). Quick filter: privileged keys never reach the client. RLS on every table from day 1. `.env*` gitignored. `catch (e) {}` is banned.
 7. **Slash commands first.** `/code-review`, `/verify`, `/security-review`, `/ultrareview` beat ad-hoc work.
-8. **Don't invent project docs.** Standard project docs (CLAUDE.md, PROGRESS.md, DECISIONS.md, FEATURES.md, ARCHITECTURE.md, PROJECT_BRIEF.md, SMOKE_TESTS.md, DEPLOY.md, SESSION_STARTER.md) have templates at `{{MANUAL_DIR}}/templates/`. Copy and adapt — never invent `TODO.md` / `NOTES.md` / `ROADMAP.md` alternatives.
+8. **Don't invent project docs.** Standard project docs (CLAUDE.md, PROGRESS.md, DECISIONS.md, FEATURES.md, ARCHITECTURE.md, PROJECT_BRIEF.md, SMOKE_TESTS.md, DEPLOY.md, SESSION_STARTER.md) have templates at `~/.claude-spine/templates/`. Copy and adapt — never invent `TODO.md` / `NOTES.md` / `ROADMAP.md` alternatives.
 
 ## How to work with me
 
@@ -62,18 +63,18 @@ Five minutes of orientation beats confident suggestions that contradict the proj
 
 ## Workflow operating model
 
-A universal Claude Code workflow manual lives at `{{MANUAL_DIR}}` (wherever you cloned `claude-code-operators-manual`). Read-only reference. Consult when planning sessions, recovering from failures, or onboarding into a new project type. The triage table in its `README.md` points to the right chapter when stuck.
+The universal Claude Code spine (workflow, signaling, anti-patterns, tools, persistence) lives at `~/.claude-spine/` — read-only reference. The `op-*` skills route to the matching atomic file in `~/.claude-spine/chapters/`. If no skill fires but the task is clearly manual territory, consult `~/.claude-spine/INDEX.md` and read only the matching file.
 
-Rules that apply every session (not duplicated elsewhere, see manual for depth):
+Rules that apply every session (not duplicated elsewhere, see spine for depth):
 
-- **One session = one feature.** Open a fresh terminal between features. The 1M context window is for going *deep* on one slice, not *wide* across many. Don't carry one session forward through multiple features even if it feels fine. See `06-feature-sizing.md`.
-- **Context is a budget, not bandwidth.** Don't load the whole codebase "for context." Load the slice for the current task. Use subagents for broad search to keep main context clean. See `02-context-window-truth.md`, `16-subagents.md`.
-- **Diagnose the failure mode before fixing.** Drift (forgot earlier constraint → restart), dilution (too much loaded → trim), hallucination (confident wrong claims → verify each before trusting). See `17-recovery-playbook.md`.
+- **One session = one feature.** Open a fresh terminal between features. The 1M context window is for going *deep* on one slice, not *wide* across many. Don't carry one session forward through multiple features even if it feels fine. See `~/.claude-spine/chapters/workflow/06-feature-sizing.md`.
+- **Context is a budget, not bandwidth.** Don't load the whole codebase "for context." Load the slice for the current task. Use subagents for broad search to keep main context clean. See `~/.claude-spine/chapters/foundations/02-context-budget.md`, `~/.claude-spine/chapters/subagents/16a-when-to-delegate.md`.
+- **Diagnose the failure mode before fixing.** Drift (forgot earlier constraint → restart), dilution (too much loaded → trim), hallucination (confident wrong claims → verify each before trusting). See `~/.claude-spine/chapters/recovery/17a-failure-triage.md`.
 - **Plan mode** for anything touching >3 files or with an architectural choice. Skip for one-file fixes.
 - **End each non-trivial session** by updating the relevant project docs (`PROGRESS.md` always; `DECISIONS.md`, `FEATURES.md` when applicable) before committing. Persistence > re-derivation next session.
 - **Slash commands first.** When the user asks for a review, verification, or security audit, reach for the slash command (`/code-review`, `/verify`, `/security-review`, `/ultrareview`) before doing the work manually. These are Anthropic-tested and catch more than ad-hoc approaches. See chapter 15 for the full tier list.
 
-Templates in `{{MANUAL_DIR}}/templates/` go into a project's `docs/`. When those project docs exist, they are the project's source of truth — treat them as authoritative over assumptions.
+Templates in `~/.claude-spine/templates/` go into a project's `docs/`. When those project docs exist, they are the project's source of truth — treat them as authoritative over assumptions.
 
 ## Proactive signaling — be the senior dev, not the order-taker
 
@@ -106,7 +107,7 @@ In reviewer mode, the senior-dev job is to:
 
 The trap to avoid: meta-scope creep. When I propose extending the manual / writing skills / adding agents / installing MCPs / changing CLAUDE.md, the manual's own rules still apply. The rules don't pause because the topic is the manual itself.
 
-Full pattern in `{{MANUAL_DIR}}/11-proactive-signaling.md` (meta-scope signals section) and `{{MANUAL_DIR}}/18-anti-patterns.md` (meta anti-patterns section).
+Full pattern in `~/.claude-spine/chapters/signaling/11e-meta-scope.md` and `~/.claude-spine/chapters/anti-patterns/18-meta-patterns.md`.
 
 ## Code output
 

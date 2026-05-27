@@ -2,6 +2,8 @@
 
 > The runbook. Step-by-step for every deploy, every time.
 > If a step is missing, add it after the deploy that revealed the gap.
+>
+> _Example commands assume Next.js on Vercel + Supabase Cloud. Replace with your hosting + DB + migration tooling — the runbook shape (envs / secrets / pre-deploy / deploy / post-deploy / rollback) is platform-agnostic._
 
 ## Environments
 
