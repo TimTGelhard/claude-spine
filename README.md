@@ -71,7 +71,7 @@ claude-spine uses a **stub + spine** architecture:
 
 - `~/.claude/CLAUDE.md` is a thin stub (~25 lines) that points at the spine and the profile. Identity + pointers, nothing more.
 - The spine (this repo) holds all the operating discipline as atomic markdown files.
-- The 19 `op-*` skills route Claude to the right atomic file *only when needed* — descriptions are the trigger; bodies stay small (~40–60 lines, with the planning-pass skill `op-prepare` an in-progress outlier).
+- The 19 `op-*` skills route Claude to the right atomic file *only when needed* — descriptions are the trigger; bodies stay small (~40–60 lines). Skills with a longer procedure (e.g. `op-prepare`, `op-curate`) split into a router `SKILL.md` + adjacent procedure file.
 - The profile file calibrates which defaults the spine's chapters should apply for *this user*.
 
 Net effect: every session starts lean. Claude loads heavy content on-demand, filtered by your profile. The same machine can serve five projects without polluting any one session with the others' context.

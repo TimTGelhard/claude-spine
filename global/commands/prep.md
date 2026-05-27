@@ -2,7 +2,7 @@
 description: Run the planning pass for a new project or a major new section. Walks brief → architecture → master plan → first section plan. Output is plan files only — no code.
 ---
 
-You are running the **planning pass** for a plan-driven project. Follow the procedure in the `op-prepare` skill.
+You are running the **planning pass** for a plan-driven project. Follow the procedure in the `op-prepare` skill — `~/.claude-spine/skills/core/op-prepare/SKILL.md` for the router, `~/.claude-spine/skills/core/op-prepare/procedure.md` for the step-by-step body.
 
 ## What to do
 
