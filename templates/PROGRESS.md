@@ -1,94 +1,57 @@
 # Progress — <PROJECT NAME>
 
-> Live status. Update at the end of every session.
-> Claude reads this at the start of every new session.
+> Live pointer to where work resumes. Updated at every `/session-end`.
+> Claude reads this first at every `/session-start`.
 >
-> _Example features (quote creation, PDF export, Stripe) come from a Next.js + Supabase quote-management app. Replace with your features — the structure (working / in-progress / next / blockers / log) is domain-agnostic._
+> This file does NOT inventory features (use `FEATURES.md`) or list every bug (use issues / `FEATURES.md`).
+> Its job is to answer: *what's the next session, what does it need, what's blocking it?*
 
-## Current state
+## Active section
 
-**Phase**: <Stage 0 Decide | Stage 1 Prep | Stage 2 Architect | Stage 3 Build | Stage 4 Integrate | Stage 5 Harden | Stage 6 Ship>
+- **Section**: `<section-name>` (from `docs/PROJECT_PLAN.md`)
+- **Plan file**: `docs/plans/<section-name>.md`
+- **Section status**: `in-progress | blocked | done`
 
-**Last updated**: YYYY-MM-DD
+## Active session
 
-## What's working
+- **Session**: `<N>` — `<one-line goal>`
+- **Status**: `pending | in-progress | blocked`
 
-Features that are built, verified, and committed. The smoke list passes for each.
+## Last session outcome
 
-- [x] Project scaffolding + first deploy
-- [x] Database schema v1 applied
-- [x] Email + Google login
-- [ ] Quote creation
-- [ ] Quote list
-- [ ] Quote PDF export
-- [ ] Stripe subscriptions
+(Filled by `/session-end`. One paragraph. What shipped, what carried over, what's notable.)
 
-## In progress
+_(no sessions run yet)_
 
-Whatever the current session is building. One item at a time.
+## Blockers
 
-- [ ] Quote list page — pagination + filter by status
+Things that stop the next session from starting. Empty = ready to go.
 
-## Up next
+- _(none)_
 
-The 2-3 features after the current one. Ordered.
+## Next session reading list
 
-1. Quote PDF export
-2. Send quote to customer (email)
-3. Mark quote accepted/rejected
+Copy of the next session entry's "Files to read" block. So a fresh Claude can orient in 30 seconds.
 
-## Blocked
-
-Things stuck waiting for something external.
-
-- [ ] Stripe live keys — waiting on KYC approval (submitted YYYY-MM-DD)
-
-## Known bugs / debt
-
-- Quote amount formatting doesn't handle very large numbers correctly.
-- Dashboard sort order resets on refresh.
-
-(Track these here OR in GitHub issues — pick one, don't fragment.)
-
-## Decisions made this session
-
-(Move to `DECISIONS.md` when finalized. Live notes here.)
-
-- Considered using server actions vs API routes for mutations. Going with server actions for forms, API routes only for webhooks.
-
-## Notes for next session
-
-What "future me" or future Claude needs to know to pick up.
-
-- The PDF generator is built but not wired to a route yet. File: `lib/server/pdf.ts`.
-- Need to verify RLS policy on `quotes` from a non-owner session — write that into smoke tests.
-
-## Next-session prompt
-
-Copy-paste this into the next Claude Code session to resume cleanly:
-
-```
-Read CLAUDE.md, docs/ARCHITECTURE.md, docs/PROGRESS.md, docs/FEATURES.md.
-
-Last session I built: <fill in>.
-This session goal: <fill in — usually the top ⬜ item in FEATURES.md>.
-
-Out of scope today: <fill in — explicit non-goals to keep scope tight>.
-
-Confirm you understand before we plan. Don't write code yet.
-```
-
-Keep this block updated at session-end. It's the bridge to next session — the most valuable 60 seconds of any session.
+- `docs/ARCHITECTURE.md`
+- `docs/plans/<section-name>.md`
+- `<file-1>`
+- `<file-2>`
 
 ---
 
-## Session log (optional, prune as it grows)
+## Session log
+
+Append-only. One line per session. Prune when it exceeds ~30 entries — move old entries to `docs/sessions-archive.md` if you want history.
 
 ### YYYY-MM-DD
-- Built quote creation form.
-- Discovered: zod schema needed `.coerce.number()` for the amount input.
-- Committed: <commit hash>.
+- _(no sessions yet)_
 
-### YYYY-MM-DD
-- Set up Supabase, RLS on all tables, deployed empty app to Vercel.
-- Smoke: empty app loads, login redirect works.
+---
+
+## Notes
+
+- For the project plan (sections + dependencies), see `docs/PROJECT_PLAN.md`.
+- For per-section detail (session entries with build steps + verify checks), see `docs/plans/<section-name>.md`.
+- For long-lived feature inventory, see `docs/FEATURES.md`.
+- For non-obvious decisions, see `docs/DECISIONS.md`.

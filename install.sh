@@ -13,6 +13,7 @@
 #   ./install.sh --skip-settings     # skip ~/.claude/settings.json
 #   ./install.sh --skip-hook         # skip the env-leak hook
 #   ./install.sh --keep-legacy       # don't remove pre-v2 op-manual-* skills
+#   ./install.sh --force-global      # overwrite ~/.claude/CLAUDE.md even if user-customized
 #   ./install.sh --dry-run           # print actions, change nothing
 #   ./install.sh -h | --help
 
@@ -41,6 +42,7 @@ SKIP_COMMANDS=0
 SKIP_SETTINGS=0
 SKIP_HOOK=0
 KEEP_LEGACY=0
+FORCE_GLOBAL=0
 DRY_RUN=0
 
 for arg in "$@"; do
@@ -52,6 +54,7 @@ for arg in "$@"; do
     --skip-settings) SKIP_SETTINGS=1 ;;
     --skip-hook) SKIP_HOOK=1 ;;
     --keep-legacy) KEEP_LEGACY=1 ;;
+    --force-global) FORCE_GLOBAL=1 ;;
     --dry-run) DRY_RUN=1 ;;
     -h|--help)
       sed -n '2,18p' "$0"
@@ -266,9 +269,11 @@ fi
 if [ "$SKIP_GLOBAL" -eq 0 ]; then
   if [ "$OPINIONATED" -eq 1 ]; then
     SRC_TEMPLATE="$SPINE_DIR/global/opinionated/CLAUDE.md.template"
+    OTHER_TEMPLATE="$SPINE_DIR/global/neutral/CLAUDE.md.template"
     VARIANT="opinionated"
   else
     SRC_TEMPLATE="$SPINE_DIR/global/neutral/CLAUDE.md.template"
+    OTHER_TEMPLATE="$SPINE_DIR/global/opinionated/CLAUDE.md.template"
     VARIANT="neutral"
   fi
   echo "==> installing global CLAUDE.md ($VARIANT variant)"
@@ -279,21 +284,44 @@ if [ "$SKIP_GLOBAL" -eq 0 ]; then
   fi
 
   DEST="$CLAUDE_DIR/CLAUDE.md"
-  if [ -e "$DEST" ] || [ -L "$DEST" ]; then
+
+  # Render each template to a temp file so we can detect an untouched prior install (safe to overwrite) vs a user-customized file (preserve unless --force-global).
+  RENDERED_TMP="$(mktemp)"
+  OTHER_TMP="$(mktemp)"
+  sed "s|{{SPINE_DIR}}|$SPINE_DIR|g" "$SRC_TEMPLATE" > "$RENDERED_TMP"
+  [ -f "$OTHER_TEMPLATE" ] && sed "s|{{SPINE_DIR}}|$SPINE_DIR|g" "$OTHER_TEMPLATE" > "$OTHER_TMP"
+
+  SHOULD_WRITE=1
+  if [ -e "$DEST" ] && [ "$FORCE_GLOBAL" -ne 1 ]; then
+    if cmp -s "$DEST" "$RENDERED_TMP"; then
+      echo "  unchanged: $DEST already matches the $VARIANT template — skipping"
+      SHOULD_WRITE=0
+    elif [ -s "$OTHER_TMP" ] && cmp -s "$DEST" "$OTHER_TMP"; then
+      echo "  variant swap: $DEST matches the untouched other variant — overwriting"
+      backup_path "$DEST"
+    else
+      echo "  preserved: $DEST appears user-customized — leaving it alone"
+      echo "             pass --force-global to overwrite (existing file will still be backed up first)"
+      SHOULD_WRITE=0
+    fi
+  elif [ -e "$DEST" ] || [ -L "$DEST" ]; then
     backup_path "$DEST"
   fi
 
-  if [ "$DRY_RUN" -eq 1 ]; then
-    echo "  + render $SRC_TEMPLATE → $DEST (substituting {{SPINE_DIR}})"
-  else
-    # Substitute {{SPINE_DIR}} with the resolved spine path.
-    sed "s|{{SPINE_DIR}}|$SPINE_DIR|g" "$SRC_TEMPLATE" > "$DEST"
-    echo "  wrote: $DEST"
-    if [ "$OPINIONATED" -eq 1 ]; then
-      echo "  NOTE: opinionated template has {{placeholders}} (name, intro, stack)."
-      echo "        Open $DEST and fill them in."
+  if [ "$SHOULD_WRITE" -eq 1 ]; then
+    if [ "$DRY_RUN" -eq 1 ]; then
+      echo "  + render $SRC_TEMPLATE → $DEST (substituting {{SPINE_DIR}})"
+    else
+      cat "$RENDERED_TMP" > "$DEST"
+      echo "  wrote: $DEST"
+      if [ "$OPINIONATED" -eq 1 ]; then
+        echo "  NOTE: opinionated template has {{placeholders}} (name, intro, stack)."
+        echo "        Open $DEST and fill them in."
+      fi
     fi
   fi
+
+  rm -f "$RENDERED_TMP" "$OTHER_TMP"
   echo
 else
   echo "==> skipping global CLAUDE.md (--skip-global)"

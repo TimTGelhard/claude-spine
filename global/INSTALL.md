@@ -15,7 +15,7 @@ If you only want the spine's chapters and templates without touching `~/.claude/
 | `settings.json` | `~/.claude/settings.json` | Permissions allowlist (so common commands don't prompt), env-file guard hook wiring, plugin enablement, default mode + theme. |
 | `hooks/block-env-staging.sh` | `~/.claude/hooks/block-env-staging.sh` | Blocks `git add .env*` as defence-in-depth against secret leaks. Wired via `settings.json`. |
 | `../skills/core/op-*` | `~/.claude/skills/op-*` (symlinked) | The core `op-*` skills. Symlinks so `git pull` in the spine updates them instantly. |
-| `commands/*.md` | `~/.claude/commands/*.md` (symlinked) | Slash commands shipped by the spine: `/onboard` (personal-profile interview), `/suggest` + `/curate` (suggestion-capture + review), `/add-skill` + `/refresh-bucket` (personal skill-library management). |
+| `commands/*.md` | `~/.claude/commands/*.md` (symlinked) | Slash commands shipped by the spine: `/onboard` (personal-profile interview), `/suggest` + `/curate` (suggestion-capture + review), `/add-skill` + `/refresh-bucket` (personal skill-library management), and the plan-driven trio `/prep` + `/session-start` + `/session-end` (multi-session planning + cold-start-resistant execution). |
 | (the spine itself) | `~/.claude-spine` (symlinked) | A symlink so skill files can use `~/.claude-spine/...` paths regardless of where you cloned. |
 
 ## Install
@@ -28,7 +28,7 @@ From the spine root:
 ./install.sh --dry-run        # show what would happen, change nothing
 ```
 
-Existing `~/.claude/CLAUDE.md`, `settings.json`, and `~/.claude/hooks/block-env-staging.sh` are backed up to `~/.claude-backup-<timestamp>/` before being overwritten. The installer is idempotent — re-running it updates the symlinks and re-installs `settings.json` + hook + global stub from the spine.
+`settings.json` and `~/.claude/hooks/block-env-staging.sh` are backed up to `~/.claude-backup-<timestamp>/` before being overwritten on every run. `~/.claude/CLAUDE.md` is treated more carefully: if its contents match an untouched shipped template (either variant) it gets overwritten with a backup; if it appears user-customized, it's **preserved** and the installer reports `preserved: ... appears user-customized`. Pass `--force-global` to overwrite anyway (the existing file is still backed up first). The installer is idempotent — re-running it updates the symlinks and re-installs `settings.json` + hook from the spine.
 
 If you previously had the v1 `op-manual-*` skills installed, they're backed up and removed during install so they don't double-fire alongside the v2 `op-*` set. Pass `--keep-legacy` to leave them in place (e.g. for an A/B session).
 
@@ -43,12 +43,30 @@ If you previously had the v1 `op-manual-*` skills installed, they're backed up a
 | `--skip-settings` | Don't overwrite `~/.claude/settings.json`. |
 | `--skip-hook` | Don't install the env-leak hook. |
 | `--keep-legacy` | Leave any pre-v2 `~/.claude/skills/op-manual-*` skills in place. By default they're backed up and removed because their trigger descriptions overlap with the v2 `op-*` set. |
+| `--force-global` | Overwrite `~/.claude/CLAUDE.md` even if it appears user-customized. Existing file is still backed up. Default: preserve user-customized content. |
 | `--dry-run` | Print what would happen; change nothing. |
 
 ### After install
 
 1. **Restart Claude Code.** Close open sessions and start fresh.
 2. **Run the onboarding interview.** First session will trigger `op-onboard` automatically when it notices no profile exists. Or invoke it yourself: `/onboard` for the 5-question essentials, `/onboard --deep` for the full ~15-question interview. The profile is written to `~/.claude/claude-spine-profile.md` and read every session afterward.
+
+#### Plan-driven workflow (recommended for new projects)
+
+The spine ships a plan-driven workflow that makes every session cold-start-resistant. The flow is:
+
+```
+new project:    init.sh  →  /prep  →  /session-start  →  build  →  /session-end  →  (close terminal)
+next session:                          /session-start  →  build  →  /session-end
+new section:                /prep <section>  →  /session-start  →  …
+```
+
+- **`./init.sh <project-path>`** — scaffolds `docs/` and `.claude/CLAUDE.md` in a project from spine templates. Idempotent — won't overwrite existing files. Run once per new project.
+- **`/prep`** — one planning session that produces `docs/PROJECT_BRIEF.md`, `docs/ARCHITECTURE.md`, `docs/PROJECT_PLAN.md`, `docs/plans/<section-1>.md`, and an initialized `docs/PROGRESS.md`. No code this session. Run once at project start, then `/prep <section-name>` to plan each subsequent section just-in-time.
+- **`/session-start`** — opens a fresh build session. Reads `PROGRESS.md` and the active session entry only (~1-2K tokens). Confirms scope with you. Refuses to write code until you say "yes / go / confirmed".
+- **`/session-end`** — walks the verify list, updates the section plan + `PROGRESS.md`, stages changes, suggests a commit message. The user reviews and commits.
+
+For projects that pre-date this workflow, the older `docs/SESSION_STARTER.md` paste-prompts still work — see that file for guidance on when to use which.
 3. **If you installed the opinionated variant:** open `~/.claude/CLAUDE.md` and fill in the `{{placeholders}}` — name, intro line, stack defaults if they don't match yours.
 4. **Review `~/.claude/settings.json`** — the allowlist is opinionated:
    - **WebFetch allowlist** pre-approves `docs.anthropic.com`, `nextjs.org`, `supabase.com`, `vercel.com`, `tailwindcss.com`, etc. Add your own framework's docs domain; remove any you'll never use.

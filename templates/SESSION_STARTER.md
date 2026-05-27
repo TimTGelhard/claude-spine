@@ -11,6 +11,23 @@ These prompts are *budget-aware* — they cost ~15-30K tokens up front, but they
 
 ---
 
+## Plan-driven projects: prefer `/session-start` and `/session-end`
+
+If this project has been planned with `/prep` (i.e. `docs/PROJECT_PLAN.md`, `docs/plans/<section>.md`, and a populated `docs/PROGRESS.md` exist), **use the slash commands instead of the paste-prompts below**:
+
+- `/session-start` — loads `PROGRESS.md` and the active session entry only (~1-2K tokens, not 15-30K), confirms scope, refuses to write code until you say "yes / go / confirmed".
+- `/session-end` — walks the verify list, updates section plan + `PROGRESS.md`, stages changes, suggests a commit message.
+
+The paste-prompts below are still the right tool for:
+
+- Projects that pre-date the plan-driven workflow (no `docs/plans/`).
+- One-off bug fixes or design sessions where a full plan would be overkill.
+- Resuming an old project where you need a wide orient before doing anything.
+
+If in doubt: if `docs/plans/` exists with files in it, use `/session-start`. Otherwise, pick a prompt below.
+
+---
+
 ## Prompt A — New feature session (most common)
 
 ```

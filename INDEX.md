@@ -49,6 +49,9 @@
 | Explainer mode | `chapters/workflow/07c-explainer-mode.md` | 07 | written |
 | Planner mode | `chapters/workflow/07d-planner-mode.md` | 07 | written |
 | Mode switching | `chapters/workflow/07-mode-switching.md` | 07 | written |
+| Multi-session planning hierarchy (brief → master plan → section plans → sessions) | `chapters/workflow/05h-multi-session-planning.md` | new | written |
+| Execution-plan anatomy (PROJECT_PLAN, SECTION_PLAN, session entry, PROGRESS shape) | `chapters/workflow/05i-execution-plan-anatomy.md` | new | written |
+| Cold-start protocol — 6 steps + 6 hard rules, the per-session contract | `chapters/workflow/05j-cold-start-protocol.md` | new | written |
 | Brownfield discovery sequence | `chapters/workflow/08a-discovery-sequence.md` | 08 | written |
 | Brownfield safety patterns | `chapters/workflow/08b-safety-patterns.md` | 08 | written |
 | Teaching Claude unfamiliar code | `chapters/workflow/08c-teaching-unfamiliar.md` | 08 | written |
