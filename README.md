@@ -12,8 +12,8 @@ For people already running real Claude Code sessions on real projects who want t
 
 - **14 `op-*` skills** that load only when relevant. Each one is a router that points Claude at the atomic chapter for the question — never the whole folder. See `skills/core/`.
 - **~70 atomic chapters** (<150 lines each), one concept per file, organized by topic (foundations, workflow, prompting, signaling, persistence, tools, subagents, recovery, anti-patterns). Indexed by [`INDEX.md`](INDEX.md).
-- **Personalization** — first-run interview captures your experience, stack, working style, push-back intensity, verbosity, and risk tolerance into `~/.claude/claude-spine-profile.md`. Claude reads it every session.
-- **Empty personal-skill bucket** (`skills/bucket/`). Ships empty by design — each user grows their own library over time. No pre-seeded "popular skills" trap.
+- **Personalization layer** — a profile (`/onboard`) that calibrates Claude to you, plus a capture/curate loop that grows your personal bucket as patterns emerge. See [Personalization](#personalization) below.
+- **Empty personal bucket** (`bucket/`). Ships empty by design — your skill and chapter library grows one curated addition at a time. No pre-seeded "popular skills" trap.
 - **Templates** (`templates/`) — `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `PROGRESS.md`, etc. Copy into each project's `docs/`; Claude maintains them across sessions.
 - **Neutral + opinionated global** (`global/`) — pick the thin stub (default) or the heavy founder-flavored template.
 - **One-shot installer** (`install.sh`) — symlinks everything into `~/.claude/`, idempotent, dry-runnable, backs up existing files.
@@ -58,6 +58,22 @@ Net effect: every session starts lean. Claude loads heavy content on-demand, fil
 
 ---
 
+## Personalization
+
+Two layers sit on top of the static spine:
+
+- **Profile** (`~/.claude/claude-spine-profile.md`) — written by `/onboard`. Captures who you are: experience level, primary stack, push-back intensity, verbosity, project type. Loaded every session via the global stub. Claude treats a senior backend engineer differently from a CS student.
+- **Bucket loop** (`bucket/`) — your personal skill and chapter library. Three slash commands wire it:
+  - During normal work, `op-suggest` captures high-signal moments (explicit user signal, 2+ same friction, end-of-session reflection, or `/suggest`) to `bucket/SUGGESTIONS.md`. One-line append, no task interruption.
+  - `/curate` walks pending entries one at a time, reads existing bucket files to surface overlap, proposes a diff, applies on your explicit approval. Files land under `bucket/skills/` or `bucket/chapters/`; `bucket/INDEX.md` and `bucket/CHANGELOG.md` update mechanically. `/curate --review-stale` walks old entries for prune-or-keep.
+  - Later sessions: when no core `op-*` skill matches, `op-bucket-router` reads `bucket/INDEX.md` and loads only the matching bucket file. The bucket helps the work without polluting unrelated sessions.
+
+Hard rules: `op-curate` refuses to touch `chapters/` or `skills/core/` — the spine stays read-only per user. Profile updates flow through `/onboard` only; the suggestion loop never edits the profile. `git pull` never touches `bucket/` or your profile — spine upgrades are conflict-free.
+
+Full mechanics: [`chapters/personalization/19a-overview.md`](chapters/personalization/19a-overview.md) → 19b–19e.
+
+---
+
 ## Read order (humans)
 
 If you want to read claude-spine, not just install it:
@@ -93,8 +109,8 @@ claude-spine/
 │   ├── recovery/                # when quality drops mid-session
 │   └── anti-patterns/           # explicit "never do this"
 ├── skills/
-│   ├── core/                    # the 14 op-* skills (shipped + maintained)
-│   └── bucket/                  # YOUR personal library — ships empty by design
+│   └── core/                    # the 14 op-* skills (shipped + maintained)
+├── bucket/                      # YOUR personal library — ships empty by design
 ├── templates/                   # per-project docs you copy and adapt
 └── global/
     ├── neutral/                 # default: thin stub

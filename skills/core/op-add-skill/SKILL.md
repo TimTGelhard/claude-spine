@@ -37,7 +37,7 @@ If none apply, say so plainly: "This sounds like a one-off — not worth a skill
    - Single-file (`bucket/skills/<name>.md`) — body is self-contained, no adjacent files needed.
    - Folder (`bucket/skills/<name>/SKILL.md`) — body needs templates, checklists, question banks. Mirrors `op-onboard` / `op-add-skill` itself.
 5. **Write the file** with the template's frontmatter + body filled in.
-6. **Append a row to `~/.claude-spine/bucket/INDEX.md`** above the `<!-- op-add-skill appends rows above this comment. -->` marker. Format: `| <trigger summary> | <relative path from bucket/> | <YYYY-MM-DD> |`.
+6. **Append a row to the Skills table in `~/.claude-spine/bucket/INDEX.md`** above the `<!-- op-add-skill appends rows above this comment. -->` marker. Format: `| <trigger summary> | <relative path from bucket/> | <YYYY-MM-DD> |`. If the Skills table body holds only the `_(no skills yet — ...)_` empty-marker row, **replace** that row instead of appending — the placeholder exists to make the table render before any real rows land.
 
 ## Rules
 

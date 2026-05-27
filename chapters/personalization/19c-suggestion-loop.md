@@ -81,9 +81,9 @@ This is the place where one-off frictions can still make it into the queue, *if*
 
 ## When the queue gets long
 
-`op-curate` proposes a curation session when 5+ entries are pending (default, tunable). You can also run `/curate` whenever. Queue length isn't a hard limit — `SUGGESTIONS.md` can hold dozens of entries — but past ~10 pending it's hard to see what's there. Run curation.
+You can `/curate` whenever. Past ~5 pending, schedule a session soon; past ~10 it should be this session — past that the queue stops being a queue and becomes a graveyard, which defeats the loop. The visibility cue is the user reading `SUGGESTIONS.md`, not Claude nagging.
 
-If you let the queue grow indefinitely, it stops being a queue and becomes a graveyard. That defeats the loop. Treat 5+ as "soon"; 10+ as "this session."
+v1 deliberately does *not* auto-propose curation when the queue crosses a threshold. The alternative — a recurring "queue has N pending — want to `/curate`?" nudge after every capture — was rejected during Phase 8e: it adds Claude-noise on every fire past the threshold, the file is right there for the user to look at, and any tuned threshold is a guess without real-user data. Post-launch usage may justify revisiting; speculative tuning now would violate the same anti-pattern this loop exists to fight ([13d](../persistence/13d-skill-anti-patterns.md)).
 
 ## TL;DR
 
