@@ -20,7 +20,7 @@ Concrete bullets defining "section complete". A non-developer could check these.
 
 ## Cross-session notes
 
-Discoveries from earlier sessions in this section that affect later sessions. Updated at session-end.
+Discoveries from earlier sessions in this section that affect later sessions. Updated at end-of-session.
 
 - (empty — fill as sessions run)
 

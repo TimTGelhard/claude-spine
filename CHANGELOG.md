@@ -12,7 +12,7 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ### L10 — Ambient workflow refactor
 
-Plan-driven workflow shifts from explicit ceremony (`/session-start` → `/session-end`) to an ambient default where boundary work happens automatically. Original goals (cold-start resistance, scope discipline, multi-session continuity) preserved; legacy commands kept as escape hatches.
+Plan-driven workflow shifts from explicit ceremony (`/session-start` → `/session-end`) to an ambient default where boundary work happens automatically. Original goals (cold-start resistance, scope discipline, multi-session continuity) preserved. Initial L10 kept the legacy commands as escape hatches; L10.1 (below) removed them once the ambient flow was confirmed sufficient.
 
 #### Added
 
@@ -29,6 +29,20 @@ Plan-driven workflow shifts from explicit ceremony (`/session-start` → `/sessi
 - `install.sh` — hook installer refactored to loop over `global/hooks/*.sh` (was hardcoded single-file). Picks up `spine-writeback.sh` automatically; future hooks land without installer changes.
 - `global/INSTALL.md` — "Plan-driven workflow" rewritten with ambient default; explicit-command flow moved to a "Power-user / explicit mode" subsection.
 - `README.md` — slash-commands table updated: `/done` added; `/session-start` + `/session-end` marked legacy; status blurb mentions ambient flow.
+
+### L10.1 — Legacy session commands removed
+
+Vibecoder default fully realized: no escape-hatch commands, no two-doors-to-one-room confusion. Plan mode (Shift+Tab Tab) is the recommended gate primitive for safety-critical sessions.
+
+#### Removed
+
+- `global/commands/session-start.md` — was the gated cold-start command. For safety-critical work that needs a code-gate, use Claude Code's built-in plan mode (Shift+Tab Tab) instead.
+- `global/commands/session-end.md` — was a pure alias for `/done` with no unique behavior.
+
+#### Changed
+
+- `chapters/workflow/05j-cold-start-protocol.md` — rewritten without the gated variant. Plan mode is the recommended gate primitive.
+- References to the removed commands dropped or replaced in: `chapters/workflow/05h-multi-session-planning.md`, `chapters/workflow/05i-execution-plan-anatomy.md`, `INDEX.md`, `README.md`, `global/INSTALL.md`, `global/commands/prep.md`, `global/commands/done.md`, `skills/core/op-spine-active/SKILL.md`, `skills/core/op-prepare/SKILL.md` + `procedure.md`, `templates/PROGRESS.md`, `templates/SECTION_PLAN.md`, `templates/SESSION_STARTER.md`, `init.sh`.
 
 ### Pre-launch gates
 

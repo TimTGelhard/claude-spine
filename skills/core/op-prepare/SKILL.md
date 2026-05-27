@@ -18,7 +18,7 @@ One dedicated planning session before any code. Output is plan files in `docs/`,
 ## When NOT to fire
 
 - User just wants to code now — push back once on the upfront cost; if still no, hand off to `op-workflow`.
-- Plans already exist and section work is mid-flight — the ambient `op-spine-active` (or legacy `/session-start`) carries the session.
+- Plans already exist and section work is mid-flight — the ambient `op-spine-active` skill carries the session.
 - Brownfield codebase the user hasn't explored — fire `op-brownfield` first; plan rewrites/extensions only after discovery.
 
 ## What to read first
@@ -43,12 +43,12 @@ These templates are the output shape — load as references when drafting:
 - Per-session execution: `op-workflow` (chapter 05d) — what each session does inside its scope.
 - Brownfield discovery before planning: `op-brownfield`.
 - Collaboration mode (planner / executor / reviewer): `op-collaboration-modes`.
-- After plans exist: ambient `op-spine-active` + `/done` (default) or `/session-start` + `/session-end` (legacy) carry the work.
+- After plans exist: ambient `op-spine-active` + `/done` carry the work.
 
 ## TL;DR
 
 - One dedicated planning session before any code.
 - Output: `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `PROJECT_PLAN.md`, first `SECTION_PLAN`, initialized `PROGRESS.md`.
 - Subsequent section plans are drafted just-in-time via `/prep <section-name>`, not all upfront.
-- Then per-session execution begins (ambient `op-spine-active` or legacy `/session-start`).
+- Then per-session execution begins (ambient `op-spine-active`).
 - Never write code in this skill — that's `op-workflow` + the cold-start protocol.

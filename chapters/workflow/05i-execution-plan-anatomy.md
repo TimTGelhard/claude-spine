@@ -28,7 +28,7 @@ Contains:
 
 - **Section name + goal** — one paragraph.
 - **Done criteria** — concrete bullets defining "section complete". 3-5 items.
-- **Cross-session notes** — discoveries from earlier sessions in this section that affect later ones. Updated at session-end.
+- **Cross-session notes** — discoveries from earlier sessions in this section that affect later ones. Updated at end-of-session.
 - **Section-level open questions** — things to decide before specific sessions.
 - **Sessions (1..N)** — each session entry has the structure below.
 
@@ -85,7 +85,7 @@ Template: `~/.claude-spine/templates/PROGRESS.md` (revised in this update).
 
 ## Maintaining plans over time
 
-- **End-of-session.** `/done` (legacy alias: `/session-end`; or manual writeback per [05j](05j-cold-start-protocol.md)) updates the session status, adds cross-session notes if anything was discovered, updates `PROGRESS.md`. The Stop hook `spine-writeback.sh` traces per-turn heartbeats during the session but never closes it.
+- **End-of-session.** `/done` (or manual writeback per [05j](05j-cold-start-protocol.md)) updates the session status, adds cross-session notes if anything was discovered, updates `PROGRESS.md`. The Stop hook `spine-writeback.sh` traces per-turn heartbeats during the session but never closes it.
 - **End-of-section.** Mark section `done` in `PROJECT_PLAN.md`, draft the next section's plan if it hasn't been drafted yet.
 - **Scope discovery.** When work emerges that wasn't planned: pause, propose a new section or new session, get approval, update the plan. Never bundle silently.
 - **Plans are not contracts.** When reality diverges, update the plan first, then continue. Never let plan and code drift apart silently — see [05j](05j-cold-start-protocol.md) "Hard rules".
@@ -95,7 +95,7 @@ Template: `~/.claude-spine/templates/PROGRESS.md` (revised in this update).
 - **Two-tier indirection** (project → section → session) means cold sessions read 1-2K tokens, not 10-15K.
 - **Status flows upward** — session done → section status → project status — without re-deriving from git history or commit messages.
 - **Cross-session notes prevent re-discovery** — what session 1 learned about the auth schema is captured for session 2, not re-derived.
-- **Templates keep entries uniform** — the `op-spine-active` skill (and the legacy `/session-start`) knows exactly where to look in any session entry, regardless of which section.
+- **Templates keep entries uniform** — the `op-spine-active` skill knows exactly where to look in any session entry, regardless of which section.
 
 ## TL;DR
 

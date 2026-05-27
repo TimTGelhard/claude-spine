@@ -57,7 +57,7 @@
 | Teaching Claude unfamiliar code | `chapters/workflow/08c-teaching-unfamiliar.md` | 08 | written |
 | Rewriting legacy | `chapters/workflow/08d-rewrites.md` | 08 | written |
 
-**Plan-driven workflow wiring.** The planning pass (chapters 05h–05j) fires via the `op-prepare` skill, invoked by `/prep`. Per-session execution is **ambient by default** — the `op-spine-active` skill auto-loads scope at cold-start, the `spine-writeback.sh` Stop hook traces per-turn heartbeats, and `/done` is the explicit close-session command. The legacy gated path (`/session-start` + `/session-end`) remains for regulated / paired-review work. See [`global/commands/`](global/commands/) for the command definitions and [`README.md` § Slash commands](README.md#slash-commands) for the public surface.
+**Plan-driven workflow wiring.** The planning pass (chapters 05h–05j) fires via the `op-prepare` skill, invoked by `/prep`. Per-session execution is fully ambient — the `op-spine-active` skill auto-loads scope at cold-start, the `spine-writeback.sh` Stop hook traces per-turn heartbeats, and `/done` is the explicit close-session command. For safety-critical sessions wanting a code-gate, use Claude Code's built-in plan mode (Shift+Tab Tab). See [`global/commands/`](global/commands/) for the command definitions and [`README.md` § Slash commands](README.md#slash-commands) for the public surface.
 
 ## Prompting — how to interact
 

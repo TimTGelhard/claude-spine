@@ -110,7 +110,7 @@ Report concisely:
 - `docs/PROJECT_PLAN.md` — drafted with N sections
 - `docs/plans/<section-1>.md` — drafted with M sessions
 - `docs/PROGRESS.md` — initialized, pointing at section 1 session 1
-- Next step: user reviews. Push back welcomed before any code. When ready, open Claude in the project (ambient `op-spine-active` will load scope) or `/session-start` for the gated path.
+- Next step: user reviews. Push back welcomed before any code. When ready, open Claude in the project — the ambient `op-spine-active` skill loads scope and proceeds.
 
 ## When to draft subsequent section plans
 

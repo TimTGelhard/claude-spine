@@ -33,7 +33,7 @@ You are running the **planning pass** for a plan-driven project. Follow the proc
 
 9. **Initialize `docs/PROGRESS.md`** — pointer at section 1, session 1. Use `~/.claude-spine/templates/PROGRESS.md`.
 
-10. **Hand back** with a 5-line summary: what was drafted, total section count, session count for section 1, next step (user review, then `/session-start`).
+10. **Hand back** with a 5-line summary: what was drafted, total section count, session count for section 1, next step (user reviews the plan; opening Claude in the project will auto-load scope via `op-spine-active`).
 
 ## Argument variant
 
@@ -51,4 +51,4 @@ If invoked as `/prep <section-name>` (e.g., `/prep billing`), and `PROJECT_PLAN.
 - **Surface tradeoffs.** Per global CLAUDE.md, never silently pick architectural options.
 - **Product shape before stack.** Never ask "which library / dependency?" while the platform (mobile / web / desktop / CLI / local file) is still ambiguous. Step 4 first.
 
-When you're done, the user reviews. Then `/session-start` begins the first build session.
+When you're done, the user reviews. Then they just open Claude in the project — the `op-spine-active` skill auto-loads scope and begins the first build session.

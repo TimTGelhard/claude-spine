@@ -4,7 +4,7 @@ description: Explicitly mark the active session done. Walks the verify checklist
 
 You are **closing the active build session** explicitly. The Stop hook `spine-writeback.sh` only logs per-turn heartbeats — it does NOT advance the PROGRESS pointer. This command does.
 
-Follow the writeback protocol from `~/.claude-spine/chapters/workflow/05j-cold-start-protocol.md` (Step 6). `/session-end` is the legacy alias for this command.
+Follow the writeback protocol from `~/.claude-spine/chapters/workflow/05j-cold-start-protocol.md` (Step 6).
 
 ## What to do
 
@@ -95,5 +95,4 @@ Tell the user:
 
 - **Ambient cold-start counterpart**: `op-spine-active` skill (auto-loads scope at the start of each conversation).
 - **Per-turn writeback**: `spine-writeback.sh` Stop hook (logs heartbeats only — never advances PROGRESS).
-- **Legacy alias**: `/session-end` runs the same protocol; kept for users who built muscle memory around it.
 - **Pre-`/done` planning**: `/prep <section-name>` plans the next section just-in-time when the current one finishes.

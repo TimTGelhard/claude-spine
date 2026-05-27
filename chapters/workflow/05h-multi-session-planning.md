@@ -54,7 +54,7 @@ One dedicated session, before any code. Output is the plan files, nothing else.
 
 | Old approach | Plan-driven approach |
 |---|---|
-| Paste a 6-paragraph orientation prompt every session | The `op-spine-active` skill auto-loads the active session plan (or `/session-start` if you want a gate) |
+| Paste a 6-paragraph orientation prompt every session | The `op-spine-active` skill auto-loads the active session plan |
 | Re-explain "where we are" verbally each session | Pointer in `PROGRESS.md` → section plan → session entry |
 | Decide scope at the start of every session | Scope decided once, in the section plan, before code |
 | End-of-session: update `PROGRESS.md` from memory | `/done` updates the section plan + `PROGRESS.md` pointer; the Stop hook `spine-writeback.sh` traces work in between |

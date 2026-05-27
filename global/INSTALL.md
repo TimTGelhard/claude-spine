@@ -15,7 +15,7 @@ If you only want the spine's chapters and templates without touching `~/.claude/
 | `settings.json` | `~/.claude/settings.json` | Permissions allowlist (so common commands don't prompt), env-file guard hook wiring, plugin enablement, default mode + theme. |
 | `hooks/*.sh` | `~/.claude/hooks/*.sh` | `block-env-staging.sh` blocks `git add .env*` as defence-in-depth against secret leaks. `spine-writeback.sh` is a Stop hook that logs a per-turn heartbeat in plan-driven projects. Both wired via `settings.json`. |
 | `../skills/core/op-*` | `~/.claude/skills/op-*` (symlinked) | The core `op-*` skills. Symlinks so `git pull` in the spine updates them instantly. |
-| `commands/*.md` | `~/.claude/commands/*.md` (symlinked) | Slash commands shipped by the spine: `/onboard` (personal-profile interview), `/suggest` + `/curate` (suggestion-capture + review), `/add-skill` + `/refresh-bucket` (personal skill-library management), the plan-driven flow `/prep` + `/done` (planning + session writeback), and the legacy `/session-start` + `/session-end` for explicit-gate workflows. |
+| `commands/*.md` | `~/.claude/commands/*.md` (symlinked) | Slash commands shipped by the spine: `/onboard` (personal-profile interview), `/suggest` + `/curate` (suggestion-capture + review), `/add-skill` + `/refresh-bucket` (personal skill-library management), and the plan-driven flow `/prep` + `/done` (planning + session writeback). |
 | (the spine itself) | `~/.claude-spine` (symlinked) | A symlink so skill files can use `~/.claude-spine/...` paths regardless of where you cloned. |
 
 ## Install
@@ -68,18 +68,9 @@ How the ambient default works:
 - **`spine-writeback.sh`** — Stop hook wired via `settings.json`. After every assistant turn, appends a one-line heartbeat to the active section's `## Session log` block recording which files changed. Idempotent (skips repeats), silent no-op outside plan-driven dirs, never blocks Claude on failure.
 - **`/done`** — explicit session-complete. Walks the verify list, rolls up heartbeats into one PROGRESS.md log entry, advances the PROGRESS pointer, stages doc changes, suggests a commit message. You review the diff and commit.
 
-##### Power-user / explicit mode
+##### Need a hard code-gate?
 
-If you need a hard "no code until you confirm" gate (regulated work, paired review, safety-critical changes), use the legacy gated commands instead:
-
-```
-/session-start  →  confirm scope  →  build  →  /session-end
-```
-
-- **`/session-start`** — same orientation as the ambient `op-spine-active` skill, but **refuses to call `Edit`/`Write` until you say "yes / go / confirmed"**.
-- **`/session-end`** — alias for `/done`. Same writeback protocol.
-
-Both flows can coexist in the same project; pick per session. The Stop hook keeps logging heartbeats either way.
+For safety-critical sessions (regulated work, paired review, anything where you want to read scope before any code), use Claude Code's built-in plan mode (Shift+Tab Tab). It refuses tool calls until you approve the plan — generic across all work, no separate command to memorize.
 
 For projects that pre-date this workflow, the older `docs/SESSION_STARTER.md` paste-prompts still work — see that file for guidance on when to use which.
 3. **If you installed the opinionated variant:** open `~/.claude/CLAUDE.md` and fill in the `{{placeholders}}` — name, intro line, stack defaults if they don't match yours.

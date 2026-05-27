@@ -11,12 +11,15 @@ These prompts are *budget-aware* — they cost ~15-30K tokens up front, but they
 
 ---
 
-## Plan-driven projects: prefer `/session-start` and `/session-end`
+## Plan-driven projects: the ambient flow handles cold-start
 
-If this project has been planned with `/prep` (i.e. `docs/PROJECT_PLAN.md`, `docs/plans/<section>.md`, and a populated `docs/PROGRESS.md` exist), **use the slash commands instead of the paste-prompts below**:
+If this project has been planned with `/prep` (i.e. `docs/PROJECT_PLAN.md`, `docs/plans/<section>.md`, and a populated `docs/PROGRESS.md` exist), **the paste-prompts below aren't needed** — just open Claude Code:
 
-- `/session-start` — loads `PROGRESS.md` and the active session entry only (~1-2K tokens, not 15-30K), confirms scope, refuses to write code until you say "yes / go / confirmed".
-- `/session-end` — walks the verify list, updates section plan + `PROGRESS.md`, stages changes, suggests a commit message.
+- The `op-spine-active` skill auto-loads `PROGRESS.md` + the active session entry (~1-2K tokens, not 15-30K), announces scope in 3-4 lines, and proceeds to build. No command to type.
+- The Stop hook `spine-writeback.sh` logs a per-turn heartbeat in the section file as you work.
+- `/done` walks the verify list, rolls up heartbeats, updates the section plan + `PROGRESS.md`, stages changes, suggests a commit message.
+
+For safety-critical sessions wanting a hard code-gate, use Claude Code's built-in plan mode (Shift+Tab Tab).
 
 The paste-prompts below are still the right tool for:
 
@@ -24,7 +27,7 @@ The paste-prompts below are still the right tool for:
 - One-off bug fixes or design sessions where a full plan would be overkill.
 - Resuming an old project where you need a wide orient before doing anything.
 
-If in doubt: if `docs/plans/` exists with files in it, use `/session-start`. Otherwise, pick a prompt below.
+If in doubt: if `docs/plans/` exists with files in it, the ambient skill has you covered. Otherwise, pick a prompt below.
 
 ---
 

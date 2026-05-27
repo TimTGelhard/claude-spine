@@ -1,20 +1,20 @@
 ---
 name: op-spine-active
-description: Auto-fires at the start of every conversation in a plan-driven project — a directory containing `docs/plans/` AND `docs/PROGRESS.md`. Silently loads the active session entry, announces scope in 3-4 lines, then proceeds to build per Option A (no "confirm scope?" gate). Ambient replacement for `/session-start`. If no plan exists or the active section file is missing, suggests `/prep`. Does NOT fire if scope has already been announced in this conversation, or if the user has explicitly invoked `/session-start`.
+description: Auto-fires at the start of every conversation in a plan-driven project — a directory containing `docs/plans/` AND `docs/PROGRESS.md`. Silently loads the active session entry, announces scope in 3-4 lines, then proceeds to build (no "confirm scope?" gate — the announcement IS the scope statement; the user interrupts if wrong). If no plan exists or the active section file is missing, suggests `/prep`. Does NOT fire if scope has already been announced in this conversation.
 ---
 
 # op-spine-active — ambient cold-start
 
-This is the ambient replacement for `/session-start`. Fires at the start of every conversation in a plan-driven project so the user doesn't have to type a command before each session.
+This skill makes plan-driven projects cold-start-resistant without any explicit command. Fires at the start of every conversation in a plan-driven project so the user just opens Claude and keeps working.
 
-Cold-start protocol reference: `~/.claude-spine/chapters/workflow/05j-cold-start-protocol.md`. This skill executes steps 1, 2, and 4 of that protocol (load orientation → announce → build) but skips step 2's *gate* — announcement only, no "confirm scope?" prompt.
+Cold-start protocol reference: `~/.claude-spine/chapters/workflow/05j-cold-start-protocol.md`. This skill executes steps 1, 2, and 4 of that protocol — announcement only, no gate. For safety-critical sessions wanting a hard "no code until I confirm" pause, use Claude Code's built-in plan mode (Shift+Tab Tab).
 
 ## When this fires
 
 - The current working directory has `docs/plans/` AND `docs/PROGRESS.md`.
 - This is the start of a conversation — no prior orientation announcement has happened.
 
-If you've already announced scope earlier in this conversation, or if the user invoked `/session-start` explicitly (the legacy gated flow), do not re-announce. Skip the skill body.
+If you've already announced scope earlier in this conversation, do not re-announce. Skip the skill body.
 
 ## What to do
 
@@ -45,13 +45,11 @@ In scope:        <files-to-write list>
 Out of scope:    <relevant exclusions from done-criteria>
 ```
 
-That's the announcement. Do NOT ask "confirm scope?" — this is the ambient default. The legacy gated flow lives in `/session-start`.
+That's the announcement. Do NOT ask "confirm scope?" — the announcement IS the scope statement; the user interrupts if it's wrong.
 
 ### Step 4 — Proceed to build
 
-Continue immediately to the session's build steps. The user interrupts if the announcement is wrong.
-
-Stay inside the scope list. If a needed change falls outside scope, pause and ask (per the cold-start protocol's hard rules).
+Continue immediately to the session's build steps. Stay inside the scope list. If a needed change falls outside scope, pause and ask (per the cold-start protocol's hard rules).
 
 ## Hard rules
 
@@ -60,20 +58,8 @@ Stay inside the scope list. If a needed change falls outside scope, pause and as
 3. **No claiming done without verification.** Walk the session's verify list before declaring done.
 4. **No editing the plan without saying so.** If the plan needs to change mid-session, surface it before editing.
 
-## Differences from `/session-start`
-
-The legacy `/session-start` is still available. Compare:
-
-| `/session-start` (legacy / power-user) | `op-spine-active` (ambient default) |
-|---|---|
-| User types the command to begin | Skill auto-fires |
-| Refuses code until "yes / go / confirmed" | Proceeds immediately; user interrupts if wrong |
-| Used in regulated / team contexts | Used in solo / MVP / vibecoder contexts |
-
-If the user invokes `/session-start` explicitly in the same conversation, defer to the gated flow — do not double-announce.
-
 ## Sibling skills
 
 - `op-prepare` — planning pass (creates the plan files this skill reads)
 - `op-workflow` — per-session execution discipline
-- `/done` — explicit session-complete bump (advance PROGRESS pointer + verify walk). Counterpart to this skill's ambient announcement.
+- `/done` — explicit session-complete (advance PROGRESS pointer + verify walk). Counterpart to this skill's ambient announcement.

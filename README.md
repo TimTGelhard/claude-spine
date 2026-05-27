@@ -4,7 +4,7 @@
 
 For people already running real Claude Code sessions on real projects who want their workflow to stop leaking quality. Not a tutorial — a discipline manual + an installable harness that wires it into `~/.claude/`.
 
-> **Status: v2 shipped; launch assets in flight.** All atomic chapters, the `op-*` skill set (now including the ambient `op-spine-active`), neutral + opinionated globals, `install.sh`, the `/onboard` personalization interview, the full capture/curate bucket loop, and the plan-driven workflow (ambient default: `/prep` → auto-cold-start → `/done`; legacy gated path via `/session-start` + `/session-end`) are shipped. See [`RECONSTRUCTION.md`](RECONSTRUCTION.md) for the build history and [`LAUNCH.md`](LAUNCH.md) for the launch gate tracker. The original 18 single-file chapters at the repo root are deprecated stubs pointing at their v2 atomic versions in `chapters/`.
+> **Status: v2 shipped; launch assets in flight.** All atomic chapters, the `op-*` skill set (now including the ambient `op-spine-active`), neutral + opinionated globals, `install.sh`, the `/onboard` personalization interview, the full capture/curate bucket loop, and the plan-driven workflow (`/prep` → ambient cold-start → `/done`) are shipped. See [`RECONSTRUCTION.md`](RECONSTRUCTION.md) for the build history and [`LAUNCH.md`](LAUNCH.md) for the launch gate tracker. The original 18 single-file chapters at the repo root are deprecated stubs pointing at their v2 atomic versions in `chapters/`.
 
 ---
 
@@ -47,21 +47,19 @@ Existing `~/.claude/` files are backed up to `~/.claude-backup-<timestamp>/` bef
 
 ## Slash commands
 
-Nine commands ship in `global/commands/`:
+Seven commands ship in `global/commands/`:
 
 | Command | What it does |
 |---|---|
 | `/onboard` | Five-question essentials interview (≈2 min). Writes `~/.claude/claude-spine-profile.md`. `--deep` for the full ~15-question pass. |
 | `/prep` | Planning pass for a new project or major new section. Step 0 auto-runs `init.sh` if `docs/` doesn't exist; then brief → architecture → first section plan. No code this session. |
-| `/done` | Close the active build session. Walks verify list, rolls up Stop-hook heartbeats, updates plan + `PROGRESS.md`, stages doc changes, suggests a commit message. Primary writeback in the ambient flow. |
-| `/session-start` | **Legacy / power-user.** Same orientation as the ambient `op-spine-active` skill but refuses code until you say "yes / go / confirmed". Use for regulated / paired-review work. |
-| `/session-end` | **Legacy alias for `/done`.** Same writeback protocol. |
+| `/done` | Close the active build session. Walks verify list, rolls up Stop-hook heartbeats, updates plan + `PROGRESS.md`, stages doc changes, suggests a commit message. The writeback command. |
 | `/suggest` | Capture a high-signal moment to `bucket/SUGGESTIONS.md`. Locked four-condition trigger. |
 | `/curate` | Review pending suggestions one-at-a-time; propose diff; apply on explicit approval. `--review-stale` walks old entries. |
 | `/add-skill` | Gated skill-creation for the personal bucket (3+-paste-in rule). |
 | `/refresh-bucket` | Rebuild `bucket/INDEX.md` from disk after manual file drops. |
 
-The ambient plan-driven flow is `/prep` → (open Claude; `op-spine-active` auto-loads scope) → build → `/done` ([chapters/workflow/05h–05j](chapters/workflow/05h-multi-session-planning.md)); a Stop hook (`spine-writeback.sh`) logs per-turn heartbeats in between. The legacy gated trio (`/prep` → `/session-start` → `/session-end`) still works for regulated / paired-review work. `/onboard`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket` carry personalization ([chapters/personalization/19a–19e](chapters/personalization/19a-overview.md)).
+The plan-driven flow is `/prep` → (open Claude; `op-spine-active` auto-loads scope) → build → `/done` ([chapters/workflow/05h–05j](chapters/workflow/05h-multi-session-planning.md)); a Stop hook (`spine-writeback.sh`) logs per-turn heartbeats in between. For safety-critical sessions wanting a code-gate, use Claude Code's built-in plan mode (Shift+Tab Tab). `/onboard`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket` carry personalization ([chapters/personalization/19a–19e](chapters/personalization/19a-overview.md)).
 
 ---
 

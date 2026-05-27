@@ -17,7 +17,8 @@
 # After running:
 #   1. Open the project in Claude Code.
 #   2. Run /prep to walk the planning pass.
-#   3. Then /session-start to begin the first session.
+#   3. Just keep working — the op-spine-active skill auto-loads scope
+#      at the start of every session, /done closes a session.
 
 set -euo pipefail
 
@@ -139,6 +140,6 @@ echo
 echo "Done."
 echo
 echo "Next steps in the project (Claude Code session):"
-echo "  1. /prep            — walk the planning pass"
-echo "  2. /session-start   — begin the first build session"
-echo "  3. /session-end     — writeback when the session is done"
+echo "  1. /prep   — walk the planning pass"
+echo "  2. (just keep working — op-spine-active auto-loads scope each session)"
+echo "  3. /done   — writeback when the session is done"

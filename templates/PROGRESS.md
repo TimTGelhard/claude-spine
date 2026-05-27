@@ -1,7 +1,7 @@
 # Progress — <PROJECT NAME>
 
-> Live pointer to where work resumes. Updated at every `/session-end`.
-> Claude reads this first at every `/session-start`.
+> Live pointer to where work resumes. Updated at every `/done`.
+> Claude reads this first at the start of every session (via the `op-spine-active` skill).
 >
 > This file does NOT inventory features (use `FEATURES.md`) or list every bug (use issues / `FEATURES.md`).
 > Its job is to answer: *what's the next session, what does it need, what's blocking it?*
@@ -19,7 +19,7 @@
 
 ## Last session outcome
 
-(Filled by `/session-end`. One paragraph. What shipped, what carried over, what's notable.)
+(Filled by `/done`. One paragraph. What shipped, what carried over, what's notable.)
 
 _(no sessions run yet)_
 
