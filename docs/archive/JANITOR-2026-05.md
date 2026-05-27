@@ -1,5 +1,7 @@
 # Janitor Report — claude-spine pre-launch sweep
 
+> **Archived 2026-05-27.** This was the first internal audit pass. Most items shipped (Step 1 `op-prepare` split, Step 2 PERSONALIZATION archive, Step 3 EXPLAINER pricing reframe, Step 4 link/path repairs, Step 6 v1-archive curation). Step 5 (`install.sh` polish) was deferred as a post-launch task. The current drift catalog lives in [`FIXES.md`](../../FIXES.md) at the repo root — read that for what's actively pending. Janitor reports are point-in-time audits, not living docs; this snapshot is kept for the audit trail.
+
 **Author:** janitor pass, 2026-05-27
 **Scope:** Find lazy logic, bad writing, stale references, dead files. Make this launch-ready and refined.
 **Status:** report only — nothing executed yet. Each item is tagged with a recommended action and a risk level.
@@ -203,7 +205,7 @@ This conflicts with:
 ```
 ## [Unreleased]
 
-Active roadmap in [`LAUNCH.md`](LAUNCH.md):
+Active roadmap in [`LAUNCH.md`](../../LAUNCH.md):
 
 - **L5** — clean-room install on a fresh VM/container (pre-launch validation gate)
 - **L7** — domain, landing page, demo video, waitlist (public launch)
@@ -220,7 +222,7 @@ Per `git log`:
 ```
 ## [Unreleased]
 
-Active roadmap in [`LAUNCH.md`](LAUNCH.md). Remaining gates before public launch:
+Active roadmap in [`LAUNCH.md`](../../LAUNCH.md). Remaining gates before public launch:
 
 - **L7a, L7c, L7d, L7e** — landing-page hardening (built CSS, OG image,
   waitlist wiring, copy polish) + demo recording.

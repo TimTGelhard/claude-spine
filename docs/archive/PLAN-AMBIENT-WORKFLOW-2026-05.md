@@ -1,5 +1,7 @@
 # Ambient Workflow Refactor — Build Plan
 
+> **Archived 2026-05-27.** This was the L10 planning document. The work has shipped — the live, as-built mechanic lives in [`skills/core/op-spine-active/SKILL.md`](../../skills/core/op-spine-active/SKILL.md), [`global/hooks/spine-writeback.sh`](../../global/hooks/spine-writeback.sh), [`global/commands/done.md`](../../global/commands/done.md), and [`chapters/workflow/05j-cold-start-protocol.md`](../../chapters/workflow/05j-cold-start-protocol.md). The release notes are in [`CHANGELOG.md`](../../CHANGELOG.md) under the `[Unreleased]` L10 / L10.1 entries. Kept here as the design audit trail for what was decided and why. **Do not rely on it as a current spec** — drift between the plan and ship is normal; the skill body and chapter 05j are authoritative.
+
 **Created:** 2026-05-27
 **Status:** Design agreed in conversation. Not yet built. Awaiting explicit "build it / go" from user before executor mode.
 **Cold-start friendly:** read this file top-to-bottom and you have full context. No need to re-litigate the design.
