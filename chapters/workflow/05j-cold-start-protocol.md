@@ -2,6 +2,10 @@
 
 The planning model only works if cold sessions follow the protocol. This chapter is the hard rules. If only one chapter is ever read by Claude in a plan-driven project, it should be this one.
 
+The protocol fires **ambiently by default** — the `op-spine-active` skill executes steps 1, 2, and 4 automatically at the start of every conversation in a plan-driven project (a directory with `docs/plans/` and `docs/PROGRESS.md`). The Stop hook `spine-writeback.sh` traces work mid-session by appending heartbeats to the section log after every turn. `/done` runs step 6 explicitly when the session is over. Between `/prep` and `/done`, the user types no commands — they just keep working.
+
+A **gated variant** — same protocol, plus a mandatory "yes / go / confirmed" pause before any code — is opt-in via `/session-start`. Use it for regulated work, paired review, or first runs where you want to read scope before code starts.
+
 ## The protocol (in order)
 
 Every fresh terminal in a plan-driven project runs these steps before writing a single line of code:
@@ -16,7 +20,7 @@ Every fresh terminal in a plan-driven project runs these steps before writing a 
 
 If `docs/plans/` doesn't exist or `PROGRESS.md` doesn't point at a session: **stop**. The project hasn't been planned. Tell the user to run `/prep` first.
 
-### 2. Confirm scope (mandatory)
+### 2. Announce scope
 
 Output to the user, in 4 lines:
 
@@ -27,9 +31,9 @@ In scope:        <files-to-write list, comma-separated>
 Out of scope:    <relevant exclusions from done-criteria>
 ```
 
-Then ask: **"Confirm scope before I start?"**
+**Ambient default:** the announcement IS the scope statement. Proceed straight to step 4. The user interrupts if anything is wrong — same protection as the gate, no extra turn.
 
-**Wait for explicit "yes / go / confirmed" before any `Edit`, `Write`, or state-mutating `Bash` command.** This is the hard rule. No coding without scope confirmation.
+**Gated variant (`/session-start`):** after the announcement, ask **"Confirm scope before I start?"** and wait for explicit "yes / go / confirmed" before any `Edit`, `Write`, or state-mutating `Bash`.
 
 ### 3. Plan-if-needed
 
@@ -38,6 +42,8 @@ If the session entry's build steps are vague (e.g., "implement X"), draft a 3-5 
 ### 4. Build
 
 Execute the session entry's build steps. Stay inside the scope list. If a needed change falls outside scope: stop, surface it, decide together whether to extend this session or capture it for a future one.
+
+The Stop hook fires after every assistant turn and appends a one-line heartbeat to `## Session log` in the section file. Heartbeats are a trace — they don't advance the PROGRESS pointer or close the session.
 
 ### 5. Verify
 
@@ -53,12 +59,12 @@ Before the terminal closes:
 - Stage changes (`git add` specific files, never `-A` or `.`).
 - Suggest a one-line imperative commit message. Do NOT commit unless the user says to.
 
-`/session-end` automates this. Prefer it over from-memory writes.
+`/done` automates this — rolls up the Stop-hook heartbeats and runs the writeback. `/session-end` is a legacy alias that runs the same protocol. Prefer either over from-memory writes.
 
 ## The hard rules (no exceptions for speed)
 
-1. **No code before scope confirmation.** If user says "just start coding," push back once: "We agreed the protocol — confirm scope first." If they insist, proceed but log `scope confirmation skipped` in `PROGRESS.md`.
-2. **No closing the terminal without writeback.** End-of-session updates are not optional. If user tries to close mid-session, write status `in-progress` with a one-line resume note.
+1. **Scope is announced before code.** The announcement (step 2) is mandatory in both modes — only the wait-for-yes differs. In gated mode, if the user says "just start coding," push back once: "We agreed the protocol — confirm scope first." If they insist, proceed but log `scope confirmation skipped` in `PROGRESS.md`.
+2. **No closing the terminal without writeback.** End-of-session updates are not optional. If the user closes mid-session, mark the session `in-progress` with a one-line resume note. Stop-hook heartbeats are a trace, not a substitute for `/done`.
 3. **No silent scope expansion.** If the session entry's scope list says files A, B, C — touching D requires a pause and explicit decision.
 4. **No claiming "done" without verification.** Walk the verify list, or name which checks weren't possible and why.
 5. **No editing the plan without saying so.** If the plan needs to change mid-session, say "I need to update the section plan because X" and update it before continuing.
@@ -69,7 +75,7 @@ Before the terminal closes:
 - **"I'll just check one thing in another section."** Context-leak. Stay in the active session — note the cross-section question for later.
 - **"This session is bigger than I thought."** Split it. Mark current session done at a clean break, draft a new session entry for the rest.
 - **"`PROGRESS.md` is out of date so I'll skip reading it."** No. Read it anyway. If stale, ask the user before proceeding — see [08a](08a-discovery-sequence.md) for brownfield discovery.
-- **"User wants to skip scope-confirm because they're in a hurry."** Flag the cost (drift risk). Comply if they insist. Log it.
+- **"Scope announcement is just ceremony, I'll skip it."** No — it's the only chance for the user to interrupt before code starts. Four lines, not four paragraphs. In ambient mode it lets the user catch a misread plan; in gated mode it also produces the audit trail.
 - **"Verify list is generic ('test it works'), so I'll skip."** No — say the verify list is vague and ask the user for the concrete check before claiming done.
 
 ## When a session deviates from its plan
@@ -82,15 +88,18 @@ Three outcomes are healthy:
 
 **Unhealthy:** scope creeps silently and the session "completes" with twice the planned changes. This is exactly what plan-driven sessions exist to prevent.
 
-## Slash commands that enforce the protocol
+## Mechanisms that enforce the protocol
 
-| Command | Step covered | What it does |
+| Mechanism | Steps covered | Mode |
 |---|---|---|
-| `/prep` | Pre-protocol (no plan yet) | Runs the planning pass — see [05h](05h-multi-session-planning.md) |
-| `/session-start` | Steps 1-2 | Loads active session entry, refuses code until scope is confirmed |
-| `/session-end` | Step 6 | Updates section plan + `PROGRESS.md`, stages changes, suggests commit message |
+| `op-spine-active` skill | 1, 2, 4 (start of session) | **Ambient default** — auto-fires on every conversation in a plan-driven dir |
+| `spine-writeback.sh` Stop hook | 4 (per-turn trace) | **Ambient default** — appends heartbeats; never advances PROGRESS |
+| `/done` | 6 (writeback) | **Ambient default** — rolls up heartbeats, advances PROGRESS, stages, suggests commit |
+| `/prep` | Pre-protocol (no plan yet) | Both modes — runs the planning pass; see [05h](05h-multi-session-planning.md) |
+| `/session-start` | 1, 2 with gate | Opt-in — refuses code until "yes / go / confirmed". For regulated / paired-review work |
+| `/session-end` | 6 | Legacy alias for `/done` |
 
-These commands close the gap between "we know the protocol" and "the protocol fires every time." Prefer them over from-memory rituals.
+These mechanisms close the gap between "we know the protocol" and "the protocol fires every time." Prefer them over from-memory rituals.
 
 ## What this protocol guarantees
 
@@ -106,7 +115,8 @@ The protocol is what makes the planning model robust. Skipping any step leaks on
 
 ## TL;DR
 
-- Every fresh session: load orientation → confirm scope → plan-if-needed → build → verify → writeback.
+- Every fresh session: load orientation → announce scope → plan-if-needed → build → verify → writeback.
+- **Ambient default:** `op-spine-active` runs steps 1-2 silently; the Stop hook traces step 4; `/done` runs step 6. No commands between `/prep` and `/done`.
+- **Gated variant:** `/session-start` adds a "yes / go / confirmed" pause before any code. Opt-in for regulated / paired-review work.
 - Six steps. Six hard rules. No exceptions for speed.
-- `/session-start` and `/session-end` make the protocol the default, not the exception.
 - If no plan exists: stop. Run `/prep` first.
