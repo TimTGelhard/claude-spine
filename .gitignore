@@ -1,5 +1,13 @@
 .DS_Store
+Thumbs.db
+desktop.ini
 *.swp
 *.swo
 .idea/
 .vscode/
+
+# Playwright MCP debug output (browser-automation traces + page snapshots)
+.playwright-mcp/
+
+# Root-only landing-page verification screenshots — commit reference images under docs/ instead
+/landing-*.png
