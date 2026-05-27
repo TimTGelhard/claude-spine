@@ -8,7 +8,7 @@ Time: 1–2 hours with Claude.
 
 1. Create the project directory, init git, push empty repo.
 2. Set up the stack — pick from your defaults (see [03c-project-fit.md](../foundations/03c-project-fit.md)).
-3. Write project-level `.claude/CLAUDE.md`. See [12-skills-memory-claudemd.md](../../12-skills-memory-claudemd.md).
+3. Write project-level `.claude/CLAUDE.md`. See [12b-claudemd.md](../persistence/12b-claudemd.md).
 4. Copy templates from the manual's `templates/` folder into the project's `docs/`:
    - `PROJECT_BRIEF.md` (from Stage 0)
    - `ARCHITECTURE.md` (fill in stack, sketch the data model — Stage 2 fills the rest)

@@ -37,7 +37,7 @@ The user shouldn't have to be the one tracking these — that's Claude's job as 
 - **Before declaring done** → name the missing verification (run the app, walk the smoke list, two-session RLS for auth changes).
 - **At natural stopping points** → prompt to commit + update `PROGRESS.md` / `DECISIONS.md` / `FEATURES.md`.
 
-These are recommendations, not refusals — the user can always say "continue anyway." But proactive signaling is the difference between a senior dev and an order-taker. Full detail in [11-proactive-signaling.md](../../11-proactive-signaling.md).
+These are recommendations, not refusals — the user can always say "continue anyway." But proactive signaling is the difference between a senior dev and an order-taker. Full detail in [11-overview.md](../signaling/11-overview.md).
 
 ## End-of-session updates
 

@@ -4,7 +4,7 @@ These don't get better with a smarter prompt. They're structural. Plan around th
 
 ## 1. Hold a giant project coherently in one session
 
-Even with 1M context, multi-week projects don't fit in one session — and they shouldn't. Quality degrades regardless of window size when there are too many decisions to keep consistent. Project = many sessions. See [06-feature-sizing.md](../../06-feature-sizing.md).
+Even with 1M context, multi-week projects don't fit in one session — and they shouldn't. Quality degrades regardless of window size when there are too many decisions to keep consistent. Project = many sessions. See [06-feature-sizing.md](../workflow/06-feature-sizing.md).
 
 ## 2. Know what's in your installed package versions
 
@@ -24,11 +24,11 @@ After compaction or in a new terminal, fine-grained decisions get lost. The only
 
 ## 6. Do creative product strategy
 
-Claude is solid at executing a defined product. It's mediocre at deciding what to build, what to charge for, who the user is. Those are your job. Stage 0 in [05-workflow.md](../../05-workflow.md).
+Claude is solid at executing a defined product. It's mediocre at deciding what to build, what to charge for, who the user is. Those are your job. Stage 0 in [05a-stage-0-decide.md](../workflow/05a-stage-0-decide.md).
 
 ## 7. Match your taste without examples
 
-"Make it modern" or "make it clean" gets generic, AI-default aesthetics. To get your taste, show examples (real apps, references, your existing brand) or set very specific design constraints. See [10-visuals.md](../../10-visuals.md).
+"Make it modern" or "make it clean" gets generic, AI-default aesthetics. To get your taste, show examples (real apps, references, your existing brand) or set very specific design constraints. See [10-visuals.md](../prompting/10-visuals.md).
 
 ## Related
 

@@ -6,7 +6,7 @@ The trap: when the user proposes *adding to the system*, executor mode kicks in 
 
 The rules apply to the manual itself.
 
-Foundation: [11-overview.md](11-overview.md). Underlying anti-patterns: [13-custom-skills.md](../../13-custom-skills.md), [16-subagents.md](../../16-subagents.md), [18-anti-patterns.md](../../18-anti-patterns.md).
+Foundation: [11-overview.md](11-overview.md). Underlying anti-patterns: [13d-skill-anti-patterns.md](../persistence/13d-skill-anti-patterns.md), [16a-when-to-delegate.md](../subagents/16a-when-to-delegate.md), [18-meta-patterns.md](../anti-patterns/18-meta-patterns.md).
 
 ## Trigger phrases — watch for these
 

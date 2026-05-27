@@ -7,13 +7,15 @@ description: Use when deciding whether to delegate to a subagent (Agent tool) vs
 
 The biggest underused lever for keeping main-conversation context clean. Routes here pick the file that matches the decision in front of you.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## Index
 
 | Question / situation | Atomic file |
 |---|---|
-| Should I delegate this or do it inline? How to brief a subagent? | `/Users/macbook/claude-op-manual/chapters/subagents/16a-when-to-delegate.md` |
-| Which agent type — general-purpose / Explore / Plan / custom? When write a custom subagent? Orchestrator trap? | `/Users/macbook/claude-op-manual/chapters/subagents/16b-agent-types.md` |
-| Parallel agents in one turn, background subagents, anti-patterns | `/Users/macbook/claude-op-manual/chapters/subagents/16c-parallel-and-background.md` |
+| Should I delegate this or do it inline? How to brief a subagent? | `~/.claude-spine/chapters/subagents/16a-when-to-delegate.md` |
+| Which agent type — general-purpose / Explore / Plan / custom? When write a custom subagent? Orchestrator trap? | `~/.claude-spine/chapters/subagents/16b-agent-types.md` |
+| Parallel agents in one turn, background subagents, anti-patterns | `~/.claude-spine/chapters/subagents/16c-parallel-and-background.md` |
 
 ## How to use
 

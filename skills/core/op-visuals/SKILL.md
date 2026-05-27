@@ -7,11 +7,13 @@ description: Use when deciding whether to paste a screenshot vs text, sharing a 
 
 Claude Code is multimodal. The discipline is knowing when an image replaces a paragraph and when text is strictly better.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## File
 
 | Question / situation | Atomic file |
 |---|---|
-| Should I screenshot this or paste text? How do I describe a UI bug? Mockups, ASCII vs Mermaid, mobile screenshots, before/after pairs. | `/Users/macbook/claude-op-manual/chapters/prompting/10-visuals.md` |
+| Should I screenshot this or paste text? How do I describe a UI bug? Mockups, ASCII vs Mermaid, mobile screenshots, before/after pairs. | `~/.claude-spine/chapters/prompting/10-visuals.md` |
 
 ## How to use
 

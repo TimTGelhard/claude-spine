@@ -7,24 +7,26 @@ description: Use when starting a new project from scratch, scoping what to build
 
 The manual has atomic files for each stage of the workflow and for sizing one feature to one session. Read ONLY the one that matches the current decision.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## Index — workflow stages (chapter 05)
 
 | Question / situation | Atomic file |
 |---|---|
-| What's the full 7-stage workflow? Where am I in it? | `/Users/macbook/claude-op-manual/chapters/workflow/05-overview.md` |
-| Stage 0 — Should I even build this? What's the brief? | `/Users/macbook/claude-op-manual/chapters/workflow/05a-stage-0-decide.md` |
-| Stage 1 — Project scaffolding, no feature code yet | `/Users/macbook/claude-op-manual/chapters/workflow/05b-stage-1-prep.md` |
-| Stage 2 — Architecture, schema, route shape | `/Users/macbook/claude-op-manual/chapters/workflow/05c-stage-2-architect.md` |
-| Stage 3 — Per-feature build session ritual | `/Users/macbook/claude-op-manual/chapters/workflow/05d-stage-3-build.md` |
-| Stage 4 — Integration session (every 3-5 features) | `/Users/macbook/claude-op-manual/chapters/workflow/05e-stage-4-integrate.md` |
-| Stage 5 — Hardening, completeness checklist, slash commands | `/Users/macbook/claude-op-manual/chapters/workflow/05f-stage-5-harden.md` |
-| Stage 6 — Ship sequence, security review, post-deploy smoke | `/Users/macbook/claude-op-manual/chapters/workflow/05g-stage-6-ship.md` |
+| What's the full 7-stage workflow? Where am I in it? | `~/.claude-spine/chapters/workflow/05-overview.md` |
+| Stage 0 — Should I even build this? What's the brief? | `~/.claude-spine/chapters/workflow/05a-stage-0-decide.md` |
+| Stage 1 — Project scaffolding, no feature code yet | `~/.claude-spine/chapters/workflow/05b-stage-1-prep.md` |
+| Stage 2 — Architecture, schema, route shape | `~/.claude-spine/chapters/workflow/05c-stage-2-architect.md` |
+| Stage 3 — Per-feature build session ritual | `~/.claude-spine/chapters/workflow/05d-stage-3-build.md` |
+| Stage 4 — Integration session (every 3-5 features) | `~/.claude-spine/chapters/workflow/05e-stage-4-integrate.md` |
+| Stage 5 — Hardening, completeness checklist, slash commands | `~/.claude-spine/chapters/workflow/05f-stage-5-harden.md` |
+| Stage 6 — Ship sequence, security review, post-deploy smoke | `~/.claude-spine/chapters/workflow/05g-stage-6-ship.md` |
 
 ## Index — feature sizing (chapter 06)
 
 | Question / situation | Atomic file |
 |---|---|
-| How much fits in one session? When am I oversized? How do I split? | `/Users/macbook/claude-op-manual/chapters/workflow/06-feature-sizing.md` |
+| How much fits in one session? When am I oversized? How do I split? | `~/.claude-spine/chapters/workflow/06-feature-sizing.md` |
 
 ## How to use
 

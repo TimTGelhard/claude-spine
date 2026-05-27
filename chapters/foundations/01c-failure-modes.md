@@ -44,5 +44,5 @@ The cost of a fresh terminal is small. The cost of letting drift compound is hou
 
 ## Where this connects
 
-- Recovery moves and the full triage table: see chapter 17 ([recovery playbook](../../17-recovery-playbook.md)).
-- Context-filling signals (the proxy for "you're heading into drift territory"): see chapter 11 ([proactive signaling](../../11-proactive-signaling.md)).
+- Recovery moves and the full triage table: [recovery playbook](../recovery/17a-failure-triage.md).
+- Context-filling signals (the proxy for "you're heading into drift territory"): [context signals](../signaling/11a-context-signals.md).

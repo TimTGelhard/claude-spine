@@ -39,7 +39,7 @@ For pure design conversations (no code to write yet), stay in planner mode witho
 
 ## The `Plan` subagent
 
-For architectural questions you want answered with full context-isolation, spawn the `Plan` subagent. It returns a structured plan with critical files identified and tradeoffs surfaced. See [16-subagents.md](../../16-subagents.md).
+For architectural questions you want answered with full context-isolation, spawn the `Plan` subagent. It returns a structured plan with critical files identified and tradeoffs surfaced. See [16b-agent-types.md](../subagents/16b-agent-types.md).
 
 ## Failure modes
 

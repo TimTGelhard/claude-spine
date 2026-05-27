@@ -7,17 +7,19 @@ description: Use when deciding where Claude should remember something (CLAUDE.md
 
 The three layers that persist between sessions. Routes here pick exactly one file — load only what you need.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## Index
 
 | Question / situation | Atomic file |
 |---|---|
-| Where does this thing go — CLAUDE.md / skill / memory / project doc? | `/Users/macbook/claude-op-manual/chapters/persistence/12a-three-layers-overview.md` |
-| Writing or editing CLAUDE.md (global or project)? | `/Users/macbook/claude-op-manual/chapters/persistence/12b-claudemd.md` |
-| Memory — what to save, what NOT to save, how Claude writes it | `/Users/macbook/claude-op-manual/chapters/persistence/12c-memory.md` |
-| What a skill is, mechanically — file shape, where to put it | `/Users/macbook/claude-op-manual/chapters/persistence/13a-skill-anatomy.md` |
-| Making a skill fire reliably — trigger description rules | `/Users/macbook/claude-op-manual/chapters/persistence/13b-trigger-descriptions.md` |
-| Picking a skill pattern — workflow / reference / persona | `/Users/macbook/claude-op-manual/chapters/persistence/13c-skill-design-patterns.md` |
-| Skill anti-patterns, library design (revised thesis), audit discipline | `/Users/macbook/claude-op-manual/chapters/persistence/13d-skill-anti-patterns.md` |
+| Where does this thing go — CLAUDE.md / skill / memory / project doc? | `~/.claude-spine/chapters/persistence/12a-three-layers-overview.md` |
+| Writing or editing CLAUDE.md (global or project)? | `~/.claude-spine/chapters/persistence/12b-claudemd.md` |
+| Memory — what to save, what NOT to save, how Claude writes it | `~/.claude-spine/chapters/persistence/12c-memory.md` |
+| What a skill is, mechanically — file shape, where to put it | `~/.claude-spine/chapters/persistence/13a-skill-anatomy.md` |
+| Making a skill fire reliably — trigger description rules | `~/.claude-spine/chapters/persistence/13b-trigger-descriptions.md` |
+| Picking a skill pattern — workflow / reference / persona | `~/.claude-spine/chapters/persistence/13c-skill-design-patterns.md` |
+| Skill anti-patterns, library design (revised thesis), audit discipline | `~/.claude-spine/chapters/persistence/13d-skill-anti-patterns.md` |
 
 ## How to use
 

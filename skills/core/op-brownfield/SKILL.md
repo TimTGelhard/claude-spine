@@ -7,14 +7,16 @@ description: Use when entering a codebase you didn't build, returning to your ow
 
 Greenfield's risk is over-engineering. Brownfield's risk is **breaking working code through ignorant changes.** Different discipline.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## Index
 
 | Question / situation | Atomic file |
 |---|---|
-| Where do I start in an unfamiliar codebase? Discovery sequence? | `/Users/macbook/claude-op-manual/chapters/workflow/08a-discovery-sequence.md` |
-| First-change patterns — how do I ease in safely? | `/Users/macbook/claude-op-manual/chapters/workflow/08b-safety-patterns.md` |
-| How do I orient Claude to a codebase it's never seen? | `/Users/macbook/claude-op-manual/chapters/workflow/08c-teaching-unfamiliar.md` |
-| Should I rewrite this or extend it? Brownfield anti-patterns? | `/Users/macbook/claude-op-manual/chapters/workflow/08d-rewrites.md` |
+| Where do I start in an unfamiliar codebase? Discovery sequence? | `~/.claude-spine/chapters/workflow/08a-discovery-sequence.md` |
+| First-change patterns — how do I ease in safely? | `~/.claude-spine/chapters/workflow/08b-safety-patterns.md` |
+| How do I orient Claude to a codebase it's never seen? | `~/.claude-spine/chapters/workflow/08c-teaching-unfamiliar.md` |
+| Should I rewrite this or extend it? Brownfield anti-patterns? | `~/.claude-spine/chapters/workflow/08d-rewrites.md` |
 
 ## How to use
 

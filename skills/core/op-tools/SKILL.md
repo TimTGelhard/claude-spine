@@ -7,20 +7,22 @@ description: Use when choosing which Claude Code tool fits a task (Read/Edit/Wri
 
 Picking the right tool isn't optional — it's how Claude controls context cost, latency, and correctness. Read ONE category file per task.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## Index
 
 | Question / situation | Atomic file |
 |---|---|
-| General principles, "choose between similar tools" table | `/Users/macbook/claude-op-manual/chapters/tools/15-selection-principles.md` |
-| Reading / editing / writing files (Read / Edit / Write / NotebookEdit) | `/Users/macbook/claude-op-manual/chapters/tools/15a-file-ops.md` |
-| Searching code (grep, find, Agent Explore) | `/Users/macbook/claude-op-manual/chapters/tools/15b-search.md` |
-| Running shell commands (Bash, Monitor, backgrounding) | `/Users/macbook/claude-op-manual/chapters/tools/15c-execution.md` |
-| Planning (plan mode) and in-session tracking (TaskCreate) | `/Users/macbook/claude-op-manual/chapters/tools/15d-planning.md` |
-| Delegating to a subagent (Agent tool mechanics) | `/Users/macbook/claude-op-manual/chapters/tools/15e-delegation.md` |
-| Scheduling work (ScheduleWakeup, /loop, /schedule, Cron) | `/Users/macbook/claude-op-manual/chapters/tools/15f-scheduling.md` |
-| Web access (WebFetch, WebSearch) | `/Users/macbook/claude-op-manual/chapters/tools/15g-web.md` |
-| MCP integrations (Chrome DevTools, Context7, Playwright, audit) | `/Users/macbook/claude-op-manual/chapters/tools/15h-mcp.md` |
-| Slash commands tier list and when to reach for them first | `/Users/macbook/claude-op-manual/chapters/tools/15i-slash-commands.md` |
+| General principles, "choose between similar tools" table | `~/.claude-spine/chapters/tools/15-selection-principles.md` |
+| Reading / editing / writing files (Read / Edit / Write / NotebookEdit) | `~/.claude-spine/chapters/tools/15a-file-ops.md` |
+| Searching code (grep, find, Agent Explore) | `~/.claude-spine/chapters/tools/15b-search.md` |
+| Running shell commands (Bash, Monitor, backgrounding) | `~/.claude-spine/chapters/tools/15c-execution.md` |
+| Planning (plan mode) and in-session tracking (TaskCreate) | `~/.claude-spine/chapters/tools/15d-planning.md` |
+| Delegating to a subagent (Agent tool mechanics) | `~/.claude-spine/chapters/tools/15e-delegation.md` |
+| Scheduling work (ScheduleWakeup, /loop, /schedule, Cron) | `~/.claude-spine/chapters/tools/15f-scheduling.md` |
+| Web access (WebFetch, WebSearch) | `~/.claude-spine/chapters/tools/15g-web.md` |
+| MCP integrations (Chrome DevTools, Context7, Playwright, audit) | `~/.claude-spine/chapters/tools/15h-mcp.md` |
+| Slash commands tier list and when to reach for them first | `~/.claude-spine/chapters/tools/15i-slash-commands.md` |
 
 ## How to use
 

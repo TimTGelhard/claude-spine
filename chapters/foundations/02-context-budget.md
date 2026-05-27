@@ -64,7 +64,7 @@ Don't start fresh when:
 
 1. **Front-load orientation.** First message or two: have Claude read `CLAUDE.md`, `ARCHITECTURE.md`, `PROGRESS.md`, `package.json`, and a few key files. After that, it has the project model loaded and you don't need to repeat.
 2. **Avoid `cat`-ing big files.** Use `Read` with `offset`/`limit`, or `grep` to pull only the lines that matter.
-3. **Delegate big reads to subagents.** A subagent's 500KB exploration returns as a 2KB summary in your main thread. See [16-subagents.md](../../16-subagents.md).
+3. **Delegate big reads to subagents.** A subagent's 500KB exploration returns as a 2KB summary in your main thread. See [16a-when-to-delegate.md](../subagents/16a-when-to-delegate.md).
 4. **Trim tool output.** When running tests, filter to failing tests. When grepping, scope tightly. Don't `npm install` with full verbose output if you can help it.
 5. **Reference, don't paste.** Instead of pasting a 200-line file into the prompt, tell Claude "read `app/api/route.ts`" — it lands in context the same way, and Claude can re-read precisely the part it needs.
 

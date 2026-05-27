@@ -7,15 +7,17 @@ description: Use when deciding how to engage Claude for a task — whether to ju
 
 Four ways to work with Claude. Most users default to executor. The 2x is adding planner; the 4x is adding reviewer for everything that matters.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## Index
 
 | Question / situation | Atomic file |
 |---|---|
-| When is executor mode the right choice? What's the failure mode? | `/Users/macbook/claude-op-manual/chapters/workflow/07a-executor-mode.md` |
-| How do I get an honest review? Why does fresh context matter? | `/Users/macbook/claude-op-manual/chapters/workflow/07b-reviewer-mode.md` |
-| About to modify code I don't understand — how do I have Claude teach me? | `/Users/macbook/claude-op-manual/chapters/workflow/07c-explainer-mode.md` |
-| Architectural / design question — how do I get options not opinions? | `/Users/macbook/claude-op-manual/chapters/workflow/07d-planner-mode.md` |
-| How do I shift modes within a session? Which mode for which situation? | `/Users/macbook/claude-op-manual/chapters/workflow/07-mode-switching.md` |
+| When is executor mode the right choice? What's the failure mode? | `~/.claude-spine/chapters/workflow/07a-executor-mode.md` |
+| How do I get an honest review? Why does fresh context matter? | `~/.claude-spine/chapters/workflow/07b-reviewer-mode.md` |
+| About to modify code I don't understand — how do I have Claude teach me? | `~/.claude-spine/chapters/workflow/07c-explainer-mode.md` |
+| Architectural / design question — how do I get options not opinions? | `~/.claude-spine/chapters/workflow/07d-planner-mode.md` |
+| How do I shift modes within a session? Which mode for which situation? | `~/.claude-spine/chapters/workflow/07-mode-switching.md` |
 
 ## How to use
 

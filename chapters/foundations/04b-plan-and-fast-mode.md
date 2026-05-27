@@ -46,4 +46,4 @@ If the plan is bad, fix the plan, not the code that comes out of executing a bad
 ## Related
 
 - Picking a model (Opus / Sonnet / Haiku): [04a-model-tiers.md](04a-model-tiers.md)
-- Planner collaboration mode (the mindset, not the toggle): chapter 07 ([collaboration modes](../../07-collaboration-modes.md))
+- Planner collaboration mode (the mindset, not the toggle): [07d-planner-mode.md](../workflow/07d-planner-mode.md)

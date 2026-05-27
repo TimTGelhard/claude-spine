@@ -7,12 +7,14 @@ description: Use when wiring an automatic behavior to a Claude Code event (typec
 
 Hooks are how the *harness* enforces automatic behavior. Not Claude. Not CLAUDE.md. The harness runs them deterministically on events.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## Index
 
 | Question / situation | Atomic file |
 |---|---|
-| Where do settings live — global / project / local? Cascade rules? | `/Users/macbook/claude-op-manual/chapters/persistence/14a-settings-cascade.md` |
-| What should I actually hook? Starter set, anti-hooks, verifying | `/Users/macbook/claude-op-manual/chapters/persistence/14b-hook-recipes.md` |
+| Where do settings live — global / project / local? Cascade rules? | `~/.claude-spine/chapters/persistence/14a-settings-cascade.md` |
+| What should I actually hook? Starter set, anti-hooks, verifying | `~/.claude-spine/chapters/persistence/14b-hook-recipes.md` |
 
 ## How to use
 

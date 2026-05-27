@@ -36,7 +36,7 @@ This is the most common scope-creep shape. The fix is two lines, but Claude (or 
 Pattern to apply:
 
 1. Fix the bug. Minimum diff.
-2. *If* the surrounding code is genuinely broken — note it. Don't bundle. ([18-anti-patterns.md](../../18-anti-patterns.md): one bug per change.)
+2. *If* the surrounding code is genuinely broken — note it. Don't bundle. ([18b-scope.md](../anti-patterns/18b-scope.md): one bug per change.)
 3. Next session can pick up the refactor as its own ask.
 
 ## When the user is the one driving scope creep

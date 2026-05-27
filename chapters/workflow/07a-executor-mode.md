@@ -19,7 +19,7 @@ Most users have one mode: this one. That's fine when it's the right mode and a p
 [OUTPUT]  Edit app/quotes/page.tsx.
 ```
 
-See [09-prompting.md](../../09-prompting.md) for the full prompt-structure pattern.
+See [09b-prompt-structure.md](../prompting/09b-prompt-structure.md) for the full prompt-structure pattern.
 
 ## Failure modes
 

@@ -29,7 +29,7 @@ This is the stage where Anthropic-tested review commands shine:
 - `/verify` — end-to-end verification: drives the running app, walks the flow, confirms it actually works.
 - `/ultrareview` — heavyweight multi-agent review before merging a significant branch / PR. **User-triggered only** — Claude can't launch this one. Pass `<PR#>` for a GitHub PR or no arg for the local branch.
 
-These beat ad-hoc manual review at this stage. Use them. See [15-tool-palette.md](../../15-tool-palette.md) for the full tier list.
+These beat ad-hoc manual review at this stage. Use them. See [15i-slash-commands.md](../tools/15i-slash-commands.md) for the full tier list.
 
 ## Why this stage is the one everyone skips
 

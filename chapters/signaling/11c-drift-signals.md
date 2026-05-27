@@ -2,7 +2,7 @@
 
 The signals to fire when Claude notices its own output going off-track — contradictions, uncertain assertions, or claims that aren't actually verified.
 
-Foundation: [11-overview.md](11-overview.md). Failure-mode background: [01c-failure-modes.md](../foundations/01c-failure-modes.md). Recovery playbook: [17-recovery-playbook.md](../../17-recovery-playbook.md).
+Foundation: [11-overview.md](11-overview.md). Failure-mode background: [01c-failure-modes.md](../foundations/01c-failure-modes.md). Recovery playbook: [17a-failure-triage.md](../recovery/17a-failure-triage.md).
 
 ## The trigger table
 

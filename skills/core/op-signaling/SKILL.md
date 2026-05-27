@@ -9,16 +9,18 @@ Claude's responsibility: surface workflow risk *before* it costs hours. The user
 
 This skill is read by Claude itself when about to (or failing to) signal. It's also the right read when the user asks how the pattern works.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## Index
 
 | Question / situation | Atomic file |
 |---|---|
-| What's the premise, phrasing, cadence, anti-patterns? | `/Users/macbook/claude-op-manual/chapters/signaling/11-overview.md` |
-| Context filling — when to warn, what to say | `/Users/macbook/claude-op-manual/chapters/signaling/11a-context-signals.md` |
-| Scope creep — files-touched check, bug-fix-becoming-refactor | `/Users/macbook/claude-op-manual/chapters/signaling/11b-scope-signals.md` |
-| Drift / quality — contradictions, two-strike rule, honest uncertainty | `/Users/macbook/claude-op-manual/chapters/signaling/11c-drift-signals.md` |
-| Verification gates + end-of-session signals | `/Users/macbook/claude-op-manual/chapters/signaling/11d-verification-signals.md` |
-| Meta-scope — proposal mode vs build mode, "X should be standard" triggers | `/Users/macbook/claude-op-manual/chapters/signaling/11e-meta-scope.md` |
+| What's the premise, phrasing, cadence, anti-patterns? | `~/.claude-spine/chapters/signaling/11-overview.md` |
+| Context filling — when to warn, what to say | `~/.claude-spine/chapters/signaling/11a-context-signals.md` |
+| Scope creep — files-touched check, bug-fix-becoming-refactor | `~/.claude-spine/chapters/signaling/11b-scope-signals.md` |
+| Drift / quality — contradictions, two-strike rule, honest uncertainty | `~/.claude-spine/chapters/signaling/11c-drift-signals.md` |
+| Verification gates + end-of-session signals | `~/.claude-spine/chapters/signaling/11d-verification-signals.md` |
+| Meta-scope — proposal mode vs build mode, "X should be standard" triggers | `~/.claude-spine/chapters/signaling/11e-meta-scope.md` |
 
 ## How to use
 

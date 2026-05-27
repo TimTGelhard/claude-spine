@@ -14,7 +14,7 @@ You give Claude something built (yours, Claude's, or someone else's) and ask for
 **Critical:** use a *fresh* context for review. A Claude that just wrote the code is biased toward defending it. Two ways to get fresh context:
 
 1. **Open a new terminal**, paste the code or hand over the file path, ask for a review.
-2. **Spawn a subagent** for the audit. Independent context = honest critique. See [16-subagents.md](../../16-subagents.md).
+2. **Spawn a subagent** for the audit. Independent context = honest critique. See [16a-when-to-delegate.md](../subagents/16a-when-to-delegate.md).
 
 The build-session Claude is the *worst* reviewer of its own work.
 
@@ -42,7 +42,7 @@ not what could maybe be improved.
 - `/code-review ultra` — heavyweight multi-agent cloud review (user-triggered only).
 - `/code-review --fix` — apply the findings to the working tree.
 
-See [15-tool-palette.md](../../15-tool-palette.md).
+See [15i-slash-commands.md](../tools/15i-slash-commands.md).
 
 ## Failure modes
 

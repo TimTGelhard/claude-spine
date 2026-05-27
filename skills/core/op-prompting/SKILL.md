@@ -7,13 +7,15 @@ description: Use when writing or improving a prompt, deciding how to phrase a re
 
 The lever with the highest ROI for output quality. The manual has three atomic files; read ONLY the one that matches the current question.
 
+> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
+
 ## Index
 
 | Question / situation | Atomic file |
 |---|---|
-| What are the core rules? Why do my prompts fail? | `/Users/macbook/claude-op-manual/chapters/prompting/09a-five-principles.md` |
-| How do I structure a non-trivial prompt? When add plan mode? Iterating after a wrong output? | `/Users/macbook/claude-op-manual/chapters/prompting/09b-prompt-structure.md` |
-| Show me good vs bad on a real task. Which prompt patterns are worth memorizing? | `/Users/macbook/claude-op-manual/chapters/prompting/09c-examples-and-anti-examples.md` |
+| What are the core rules? Why do my prompts fail? | `~/.claude-spine/chapters/prompting/09a-five-principles.md` |
+| How do I structure a non-trivial prompt? When add plan mode? Iterating after a wrong output? | `~/.claude-spine/chapters/prompting/09b-prompt-structure.md` |
+| Show me good vs bad on a real task. Which prompt patterns are worth memorizing? | `~/.claude-spine/chapters/prompting/09c-examples-and-anti-examples.md` |
 
 ## How to use
 

@@ -24,9 +24,16 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 
 ## Current phase
 
-**Phase 5 — Recovery + anti-patterns — done** (2026-05-27)
+**Phase 6a — Structural cleanup — done** (2026-05-27). Phase 6 was too large for one session (5+ deliverables); split into 6a / 6b / 6c.
 
-**Next:** Phase 6 — Public-readiness + install. Open a fresh terminal, read this file + `INDEX.md` + the plan, then: neutralize `global/CLAUDE.md.template` into `global/neutral/` (move the founder-flavored example to `global/opinionated/`), write `install.sh` (resolving the hard-coded skill-path open question), build the `op-onboard` skill (deep ~15–25 question interview, branching by experience level — see frozen design in "Architecture"), and rewrite README as the public-facing entry point. Phases 1–5 atomic files are all in place; the cross-reference back-fill open question can also be closed in Phase 6 since every target now exists.
+**Phase 6a (done):**
+- Phase 5 work committed.
+- All 13 core skill bodies path-swept: `/Users/macbook/claude-op-manual/` → `~/.claude-spine/`. Each skill now carries a one-line note explaining the convention.
+- Cross-reference back-fill complete: 17 stale `../../<N>-<chapter>.md` links across foundations, workflow, and signaling files now point at the correct atomic targets. The "Cross-reference back-fill" open question is **closed**.
+
+**Phase 6b (next):** write `install.sh` (symlinks `~/.claude/skills/op-*` → `<spine>/skills/core/op-*`; ensures `~/.claude-spine` resolves to spine clone) + neutralize `global/CLAUDE.md.template` into `global/neutral/` (the thin stub per locked architecture) + move founder-flavored version to `global/opinionated/` + ship `templates/` audit (founder-specific examples → neutralize).
+
+**Phase 6c (after 6b):** build `op-onboard` skill (hybrid interview: 5 essentials up front, opt-in deep ~15-question follow-up via `/onboard --deep`) + rewrite README as public-facing entry point.
 
 ---
 
@@ -71,7 +78,9 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 | 3 | Prompting + signaling — `chapters/prompting/`, `chapters/signaling/` + skills | **done (2026-05-27)** |
 | 4 | Persistence + tools — `chapters/persistence/`, `chapters/tools/`, `chapters/subagents/` + skills. **Includes the ch 13 thesis revision.** | **done (2026-05-27)** |
 | 5 | Recovery + anti-patterns — `chapters/recovery/`, `chapters/anti-patterns/` + skills | **done (2026-05-27)** |
-| 6 | Public-readiness + install — neutral global template, opinionated example, `install.sh`, `op-onboard` skill, README rewrite | not started |
+| 6a | Structural cleanup — commit Phase 5, sweep hardcoded paths to `~/.claude-spine/`, back-fill cross-references, lock install + onboarding decisions | **done (2026-05-27)** |
+| 6b | `install.sh` + neutral global template + opinionated example + templates audit | not started |
+| 6c | `op-onboard` skill (hybrid interview) + README rewrite | not started |
 | 6.5 | Skill bucket — `op-bucket-router`, `op-add-skill`, bucket INDEX regeneration. **Note:** Phase 8 promotes the bucket to top-level `bucket/` (was `skills/bucket/`). Coordinate folder structure between 6.5 and 8. | not started |
 | 7 | Demo + launch — end-to-end dry-run, video script outline, launch checklist | not started |
 | 8 | Personalization + self-evolution loop — `op-suggest`, `op-curate`, `bucket/SUGGESTIONS.md`, `bucket/chapters/`, personalization chapter. **Full plan: `PERSONALIZATION.md`.** Splits into sub-phases 8a–8e (one per session). | not started |
@@ -242,13 +251,13 @@ To be resolved in their phase.
 
 - Public landing page / docs site for v1, or GitHub README only? (Phase 7.)
 - Domain registration for `claudespine.dev` / `.com` — desirable for the launch/video, not blocking. (Phase 7.)
-- **Cross-reference back-fill.** Foundations files (01a–04c) link to chapters 05, 06, 07, 10, 16, 17, 11 at the repo root (the authoritative source per INDEX). When phases 2–5 atomize those chapters, sweep these foundations links to point at the new atomic files. Same applies in reverse to every later phase.
-- **Phase 6 sub-decision — skill installation mechanism.** The locked architecture is stub + spine (see "Install architecture" below), but the *how* of getting core skills into `~/.claude/skills/` is still open: copy the files in and rewrite paths at install time, or symlink `~/.claude/skills/op-*` → `<spine>/skills/core/op-*` so updates flow when the user pulls the repo. Symlinks are cleaner on macOS/Linux; copy works on Windows. Decide in Phase 6.
-- **Phase 6 sub-decision — exact interview question list.** Locked direction: ~12–15 questions, weighted toward open-ended, branching reduces the effective count. The six captured dimensions are listed in "Architecture / Onboarding mechanic." Exact wording designed in Phase 6.
+- **Skill body line-cap creep.** All 13 core skills are over the 40-line cap (range 34–52 after the Phase 6a path-note insert; the cap was already breached before the insert). Most are 1–6 lines over; `op-workflow` is at 52. Decide in 6b/6c whether to tighten the cap, prune the bodies, or accept the new normal. The cap exists to keep skills as routers, not content — none of these skills crossed into "content" territory, so accepting a slightly higher ceiling (45?) may be the right move.
 
-(Resolved 2026-05-27: repo name → `claude-spine`; onboarding → auto-fire + slash command; bucket sharing → fork-and-share v1; bucket index → on-fire folder scan, no index file.)
+(Resolved 2026-05-27: repo name → `claude-spine`; onboarding → auto-fire + slash command; bucket sharing → no sharing model at all; bucket index → `skills/bucket/INDEX.md`, auto-maintained.)
 
-(Resolved 2026-05-27, pre-Phase-6 audit: install architecture → stub + spine; interview depth → deep, open-ended-weighted, ~12–15 questions; rename `claude-op-manual` → `claude-spine` is **done** — the folder is now `/Users/macbook/claude-spine/`. Skill files and INDEX entries still contain old-name path strings; sweep in Phase 6.)
+(Resolved 2026-05-27, pre-Phase-6 audit: install architecture → stub + spine; rename `claude-op-manual` → `claude-spine` is **done** — folder is now `/Users/macbook/claude-spine/`.)
+
+(Resolved 2026-05-27, Phase 6a: skill installation → **symlink** (`~/.claude/skills/op-*` → `<spine>/skills/core/op-*`); interview depth → **hybrid** (5 essentials up front + opt-in `/onboard --deep` for the full ~15-question set); cross-reference back-fill **complete**; hardcoded path sweep **complete** — all skills now use `~/.claude-spine/...` paths.)
 
 ---
 
@@ -304,6 +313,16 @@ This replaces the earlier hard-coded `/Users/macbook/claude-op-manual/...` paths
 - **The two new skills (`op-recovery`, `op-anti-patterns`) supersede the single legacy `op-manual-recovery`.** The legacy skill covered both recovery and anti-patterns in one description; splitting them lets each skill have a sharper trigger (recovery fires on quality-dropping symptoms; anti-patterns fires on "about to do the thing" intents). The legacy skill remains loaded until Phase 6's `install.sh` does the cutover.
 - **Cross-references** in the new Phase 5 files use the established convention — relative paths between sibling atomic files (`[17b-recovery-moves.md]`) and cross-folder paths (`[../foundations/01c-failure-modes.md]`, `[../workflow/06-feature-sizing.md]`, `[../persistence/12c-memory.md]`, `[../signaling/11e-meta-scope.md]`, etc.). Every cross-reference target now exists — the **"Cross-reference back-fill" open question can be closed in Phase 6** by sweeping any remaining root-level chapter links in earlier-phase files (09b, 09c, 11c, 11d, 11e from Phase 3 notes) to point at the new atomic files.
 - **Same hard-coded `/Users/macbook/claude-op-manual/...` path issue** applies to both new skill files. Phase 6's `install.sh` must template.
+
+### Phase 6a notes (2026-05-27)
+
+- **Phase 6 split into 6a / 6b / 6c.** Original Phase 6 conflated 5+ deliverables into one session — failing the "one session = one feature" rule. 6a handles structural cleanup (path sweep + cross-ref back-fill), 6b handles install + global template, 6c handles onboarding + README rewrite.
+- **Install mechanism decision: symlink.** install.sh (6b) will create `~/.claude/skills/op-*` → `<spine>/skills/core/op-*` symlinks. `git pull` in the spine flows updates instantly to every installed skill. Skill bodies use `~/.claude-spine/...` paths; install.sh ensures `~/.claude-spine` resolves to the user's spine clone (real path or symlink). On Windows, install.sh falls back to copy + per-update re-install (Phase 6b detail).
+- **Onboarding mechanism decision: hybrid.** First-run interview asks 5 essentials (experience level, primary stack, push-back intensity, verbosity, project type). User can opt into the full ~15-question deep interview now or later via `/onboard --deep`. Captures both casual users (who'd bounce off a 25-question wall) and committed ones who want a fully-loaded profile from day 1.
+- **Path-resolution convention.** Skills read `~/.claude-spine/chapters/...` paths. Claude expands `~` to `$HOME` before passing to Read. Each skill now carries a one-line note at the top of the index explaining this. (Alternative considered: `$CLAUDE_SPINE_DIR` env var in shell rc — rejected because env var resolution requires a Bash round-trip on every chapter read. Tilde expansion is direct.)
+- **17 cross-references back-filled.** Files swept: `02-context-budget`, `01c-failure-modes`, `04b-plan-and-fast-mode`, `03a-hard-limits` (foundations); `05b`, `05d`, `05f`, `07a`, `07b`, `07d` (workflow); `11b`, `11c`, `11e` (signaling). All point at correct atomic files now. Cross-reference back-fill open question **closed**.
+- **Skill body line-cap broken across all 13 skills.** Pre-existing condition (most were over 40 before the path-note insert). New open question added for 6b/6c to decide cap revision vs body prune.
+- **Phase 6a touched no chapter content.** Only path strings and cross-reference link targets. Voice/structure/decomposition unchanged. This is structural cleanup work, not new content.
 
 ---
 
