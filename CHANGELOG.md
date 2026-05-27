@@ -93,6 +93,15 @@ The hooks are deliberately advisory (never block edits), narrowly scoped (only f
 - **Fail-fast on settings.json format drift.** The skill's allow-listed Edit targets the canonical pre-PostToolUse block shape; if a user reformatted settings.json the Edit doesn't match and the skill falls to the hand-edit fallback rather than retrying with looser matching. Matches the discipline of the subscription-tune writer.
 - **Pillar 6 P6.4/P6.5 closes the FIXES.md open queue except P4.4 (post-launch content) and L2–L8 (post-launch trim pass).**
 
+### L4b followup — wire missing hook tests into the fast suite
+
+Three hook fixtures had landed without ever being added to `tests/run.sh`'s `suites` array — `tests/hooks/test-block-env-commit.sh` (P6.1, shipped 2026-05-27), `tests/hooks/test-typecheck-after-edit.sh` (P6.4, shipped 2026-05-28), and `tests/hooks/test-format-on-save.sh` (P6.5, shipped 2026-05-28). Neither the local `./tests/run.sh` nor CI exercised any of them. Wiring all three raises the fast suite to **5 suites / 100 assertions** (12 env-staging + 12 env-commit + 11 typecheck-after-edit + 12 format-on-save + 53 installer); the change is hook-runner glue only — no change to any hook or fixture. CI picks it up on the next push to `main`.
+
+#### Changed
+
+- `tests/run.sh` — `suites` array gains the three missing entries; header comment updated to enumerate all five suites.
+- `LAUNCH.md` — new `### L4b followup (2026-05-28) — wire missing hook tests into the fast suite` subsection under L4 notes.
+
 ### Still pending pre-launch
 
 - **L4c** — token-efficiency benchmark (spine-on vs spine-off) for demo numbers.

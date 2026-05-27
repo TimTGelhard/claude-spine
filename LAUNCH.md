@@ -40,7 +40,7 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 | L3 | settings.json default tuning (effortLevel, autoCompactWindow) | nothing | done (2026-05-27) |
 | L4a | Testing harness — skill-trigger benchmarks | L7 confidence | done (2026-05-27) |
 | L4b | Testing harness — hook fixture + install dry-run + CI | L7 confidence | done (2026-05-27) |
-| L4c | Token-efficiency benchmark — spine-on vs spine-off | L7 (demo numbers) | not started |
+| L4c | Token-efficiency benchmark — spine-on vs spine-off | L7 (demo numbers) | harness + eval-set shipped (2026-05-28); baseline run pending |
 | L5 | Clean-room install on fresh VM / Docker | L7 (launch gate) | done (2026-05-27) |
 | L6 | CHANGELOG.md + archive v1 root files + repo URL verify | L7 polish | done (2026-05-27) |
 | L7 | Launch assets — L7a domain, L7b landing, L7c waitlist, L7d demo, L7e public | nothing — launches | L7b draft done (2026-05-27); L7a / L7c / L7d / L7e pending Tim |
@@ -275,6 +275,16 @@ All 18, flagged in `tests/skill-triggers/results/needs-tightening.md`. The flag 
 - Actionlint in CI — workflow is small enough to eyeball; a lint step is a follow-up if more workflows are added.
 - Description tightening for the 18 skills flagged by L4a — L4a notes already argued against blanket rewrites; the fixture here doesn't change that calculus.
 
+### L4b followup (2026-05-28) — wire missing hook tests into the fast suite
+
+Three hook fixtures had landed without ever being appended to the `suites` array in `tests/run.sh`, so neither `./tests/run.sh` nor CI exercised them:
+
+- `tests/hooks/test-block-env-commit.sh` (P6.1, shipped 2026-05-27)
+- `tests/hooks/test-typecheck-after-edit.sh` (P6.4, shipped 2026-05-28)
+- `tests/hooks/test-format-on-save.sh` (P6.5, shipped 2026-05-28)
+
+All three are now wired alongside the existing env-staging fixture and the installer dry-run. Full fast suite now reports **5 suites / 100 assertions** passing (12 env-staging + 12 env-commit + 11 typecheck-after-edit + 12 format-on-save + 53 installer). No code change to any hook or fixture — only the runner glue. CI picks the change up on the next push to `main`.
+
 ---
 
 ## L4c — Token-efficiency benchmark (spine-on vs spine-off)
@@ -309,6 +319,40 @@ All 18, flagged in `tests/skill-triggers/results/needs-tightening.md`. The flag 
 - This phase entry.
 - `tests/skill-triggers/run.sh` + `tests/skill-triggers/README.md` — pattern to mirror, including the stash-and-restore trap idiom.
 - L4a notes above — explains why `claude -p` undercounts and what that means for honest reporting.
+
+### L4c notes (2026-05-28) — harness shipped, baseline run pending
+
+**Status:** harness + eval-set committed; baseline `./run.sh` against Sonnet 4.6 is gated on Tim's authorization (≈ $9–$15 of API spend). Half of DoD met today: eval-set approved, scaffold lives, root README updated, caveats section written into `aggregate.py`'s output path. The remaining DoD item — "REPORT.md with at least 15 prompts × 2 conditions × 3 runs of data" — needs the actual run.
+
+**Scope of edits actually done:**
+
+- `benchmarks/tokens/eval-set.json` (new) — 19 prompts. Distribution: workflow_scoping (2), recovery (2), persistence (2), tool_choice (2), anti_patterns (2), brownfield (1), signaling (1), subagents (1), prompting (1), hooks (1), control (4). Approved by Tim before harness code shipped, per the L4c spec gate.
+- `benchmarks/tokens/run.sh` (new) — wraps `claude -p --output-format json`; stashes `~/.claude/CLAUDE.md` + every `~/.claude/skills/op-*` directory under a `mktemp -d` root for the spine-off batch, replaces `CLAUDE.md` with a one-line stub, restores on `EXIT` / `INT` / `TERM` / `HUP`. Default `--runs 3 --model claude-sonnet-4-6 --timeout 90`. Preflight echoes the installed-skill count and warns if it diverges from the repo (today: 20 installed vs 22 in `skills/core/` — a fresh `./install.sh` is the prerequisite for "today's numbers").
+- `benchmarks/tokens/aggregate.py` (new) — reads `results/results.jsonl` (one JSON record per call appended by `run.sh`), writes `REPORT.md`. Sections: per-prompt comparison, totals, per-condition σ, cache_creation vs cache_read, and the spec-mandated "What this doesn't measure" caveats. Idempotent — partial JSONL produces partial report.
+- `benchmarks/tokens/README.md` (new) — usage, prerequisites, cost estimate, when to re-run, cross-link to `tests/skill-triggers/README.md` so the two harnesses' purposes don't blur.
+- `benchmarks/tokens/REPORT.md` (new) — placeholder; rewritten on every aggregate run.
+- `README.md` — "Running the tests" gains a third subsection (Token-efficiency benchmark) sibling to the fast suite and the skill-trigger benchmarks.
+
+**DoD verification (partial):**
+
+- Eval-set was shown to Tim and explicitly approved before any harness code shipped. ✓
+- Honest caveats section present — `aggregate.py` emits four-paragraph "What this doesn't measure" block (single-shot undercount vs multi-turn amortization; cache_creation vs cache_read interpretation; cost-vs-tokens nuance; cross-link to skill-triggers harness). ✓
+- Root README updated with the third subsection. ✓
+- `./run.sh --dry-run --only-prompt ctrl-yaml-indent` exercises the stash → restore → spine-on loop end-to-end without spending. ✓
+- `python3 aggregate.py` on empty state writes the placeholder REPORT.md correctly. ✓
+- **Pending:** the actual `./run.sh` (≤ $15 on Sonnet 4.6) and the populated REPORT.md.
+
+**Schema verified before drafting the harness:**
+
+`claude -p --output-format json "hi"` was run once against the user's default model to confirm field names. Top-level keys observed: `total_cost_usd`, `usage`, `modelUsage`, `num_turns`, `duration_ms`, `ttft_ms`, `session_id`, `result`, `is_error`, `stop_reason`. Inside `usage`: `input_tokens`, `output_tokens`, `cache_creation_input_tokens`, `cache_read_input_tokens` (plus `cache_creation`, `iterations`, `service_tier`, etc. — not used). The harness pulls only the four `_tokens` fields + `total_cost_usd` + `ttft_ms` + `duration_ms` + `num_turns` + `is_error`. No invented field names.
+
+**Out of scope, not done in this phase:**
+
+- The actual benchmark run. Gated on authorization because $9–$15 of Sonnet 4.6 spend is non-trivial and L4c isn't a launch blocker (per LAUNCH.md "L4 + L5 → L7 confidence (not strict blocker)").
+- Per-prompt attribution ("which chapter was responsible for the savings") — out of scope per the L4c spec.
+- Multi-turn interactive measurement — out of scope per the L4c spec.
+
+**Why the harness chose batched conditions over alternating.** Spine-on calls share a large prefix (CLAUDE.md + skill manifest), so after the first call in a batch the prompt cache reads dominate (`cache_read_input_tokens` high, `cache_creation_input_tokens` near 0). Alternating spine-off / spine-on would re-pay the cold-cache cost on every spine-on call and over-report the spine's per-call cost. Batching mirrors the real steady state of long-running interactive sessions. The first call in each batch still carries the cold-cache stamp — `aggregate.py` surfaces this per-prompt in the "Cache creation vs read" table.
 
 ---
 

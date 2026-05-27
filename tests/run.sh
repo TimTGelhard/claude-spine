@@ -3,6 +3,9 @@
 #
 # Runs the deterministic, offline tests that should pass on every commit:
 #   - hooks/test-block-env-staging.sh    (JSON-in, JSON-out hook contract)
+#   - hooks/test-block-env-commit.sh     (git commit guard against staged .env)
+#   - hooks/test-typecheck-after-edit.sh (opt-in PostToolUse typecheck contract)
+#   - hooks/test-format-on-save.sh       (opt-in PostToolUse formatter routing)
 #   - installer/test-dry-run.sh          (install.sh --dry-run output contract)
 #
 # Skipped here: tests/skill-triggers/ — it costs real money (API calls) and
@@ -30,6 +33,9 @@ fi
 
 suites=(
   "hooks/test-block-env-staging.sh"
+  "hooks/test-block-env-commit.sh"
+  "hooks/test-typecheck-after-edit.sh"
+  "hooks/test-format-on-save.sh"
   "installer/test-dry-run.sh"
 )
 
