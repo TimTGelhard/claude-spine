@@ -253,9 +253,7 @@ You do *not* need to be technical to benefit. You only need to be someone who us
 
 ---
 
-## What you'd actually pay for
-
-For €20–50, you get:
+## What you actually get
 
 1. **The handbook** — years of distilled "how to actually work with an AI assistant" so you don't learn the hard way.
 2. **The starter templates** — drop them into any project and the AI suddenly knows where to write things down.
@@ -263,7 +261,7 @@ For €20–50, you get:
 4. **The evolution system** — the AI quietly builds your personal notebook in the background.
 5. **A clear way to upgrade** — when newer versions come out, the core updates but your personal notebook stays.
 
-No subscription. No login. No data sent anywhere. It lives on your computer, next to the AI, and works offline. You own it.
+It's MIT-licensed and ships as `git clone + ./install.sh`. No subscription. No login. No data sent anywhere. It lives on your computer, next to the AI, and works offline. You own it.
 
 ---
 
