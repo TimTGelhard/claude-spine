@@ -1,6 +1,6 @@
 ---
 name: op-onboard
-description: Use to create or refresh `~/.claude/claude-spine-profile.md` — the personal calibration file capturing the user's Claude subscription, experience level, stack preferences, project context, working style, output format, and risk tolerance. Fires when the user invokes `/onboard` (essentials), `/onboard --deep` (full ~17-question interview), or says "re-onboard" / "update my profile" / "redo onboarding". For the first-run greeting that points the user at `/onboard`, see the sibling `op-welcome` skill — it owns the file-absence surface so this skill never auto-launches an interview unannounced.
+description: Use to create or refresh `~/.claude/claude-spine-profile.md` — the personal calibration file capturing the user's Claude subscription, experience level, stack preferences, project context, working style, output format, and risk tolerance. Fires when the user invokes `/onboard` (essentials), `/onboard --deep` (full ~20-question interview), or says "re-onboard" / "update my profile" / "redo onboarding". For the first-run greeting that points the user at `/onboard`, see the sibling `op-welcome` skill — it owns the file-absence surface so this skill never auto-launches an interview unannounced.
 ---
 
 # op-onboard — personal calibration
@@ -11,17 +11,17 @@ Captures and maintains `~/.claude/claude-spine-profile.md`. The profile shapes C
 
 ## Mode selection
 
-1. **`/onboard` with no profile yet** → run **essentials** (6 questions), write the profile, then offer the deep path. (The first-run *greeting* is `op-welcome`'s job; this mode runs once the user actually invokes `/onboard`.)
+1. **`/onboard` with no profile yet** → run **essentials** (7 questions), write the profile, then offer the deep path. (The first-run *greeting* is `op-welcome`'s job; this mode runs once the user actually invokes `/onboard`.)
 2. **`/onboard`** with profile present → re-run essentials. Read the existing profile first; show current values; ask only the ones the user wants to change.
-3. **`/onboard --deep`** → if profile is missing, run essentials first, then deep (~11 more questions). If profile exists, jump straight to deep.
+3. **`/onboard --deep`** → if profile is missing, run essentials first, then deep (13 more questions). If profile exists, jump straight to deep.
 4. **Ad-hoc edits** ("change my push-back to spar with me") → edit the matching profile section directly; don't restart the interview.
 
 ## Adjacent files (read on-demand)
 
 | File | When |
 |---|---|
-| `~/.claude-spine/skills/core/op-onboard/questions-essential.md` | Always — the 6 essentials |
-| `~/.claude-spine/skills/core/op-onboard/questions-deep.md` | Deep mode only — the ~11 follow-ups |
+| `~/.claude-spine/skills/core/op-onboard/questions-essential.md` | Always — the 7 essentials |
+| `~/.claude-spine/skills/core/op-onboard/questions-deep.md` | Deep mode only — the 13 follow-ups |
 | `~/.claude-spine/skills/core/op-onboard/profile-template.md` | Before writing the profile file |
 
 ## How to run the interview
@@ -102,16 +102,17 @@ Here's what just happened:
   • I know you're a [Plan] user with [Experience] experience, working mostly
     on [Stack] for [Project context].
   • Across every Claude Code session on this machine, I'll match your
-    push-back intensity ([Push-back]) and verbosity ([Verbosity]).
+    push-back intensity ([Push-back]), answer length ([Answer length]),
+    and reasoning depth ([Reasoning depth]).
   • settings.json: [tuned to {{plan}} defaults | left alone | not present].
   • Deep profile: [completed | skipped — run `/onboard --deep` when you want
     to capture stack details, signal preferences, output format, and risk
-    tolerance (~11 more questions, ~5 min)].
+    tolerance (13 more questions, ~5 min)].
 
 What you have available now:
   /spine            see everything that's loaded (skills, commands, chapters)
   /prep             plan a new project or a major feature  (run in a project dir)
-  /onboard          re-run essentials  (`--deep` for the full 17-question pass)
+  /onboard          re-run essentials  (`--deep` for the full 20-question pass)
   /suggest          capture a high-signal moment to your personal bucket
   /curate           review captured moments and apply approved ones
   /add-skill        add a new skill to your personal bucket

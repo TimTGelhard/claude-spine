@@ -1,4 +1,4 @@
-# Essential questions (6)
+# Essential questions (7)
 
 The minimum profile Claude needs to be useful. Ask one at a time via `AskUserQuestion`. Map answers into the matching section of `profile-template.md`. "Other" is automatically added by the tool — let the user free-text whenever the predefined options don't fit.
 
@@ -70,18 +70,33 @@ Options (single-select):
 
 ---
 
-## Q5 — Verbosity
+## Q5a — Answer length
 
-Question: **"How much do you want me to explain when I answer?"**
-Header: `Verbosity`
+Question: **"How short should my answers be? (Just the length — how much I explain my reasoning is the next question.)"**
+Header: `Length`
 
 Options (single-select):
-- **Just the answer** — give me the code or the result, no extra talking
-- **Short and clear** — a sentence or two of context, then the answer
-- **Walk me through it** — explain what you're doing and why
-- **Teach me** — explain the background concepts too, like I'm learning as we go
+- **Terse** — minimum text needed to convey the answer. Code first, prose last.
+- **Standard** — a sentence or two of context around the answer
+- **Verbose** — full prose around the answer, no compression for its own sake
 
-→ Profile: `Working style → Verbosity`.
+→ Profile: `Working style → Answer length`.
+
+---
+
+## Q5b — Reasoning depth
+
+Question: **"How much should I explain *why* I'm doing what I'm doing — the reasoning, not the length?"**
+Header: `Reasoning`
+
+Options (single-select):
+- **Just the answer** — skip the rationale; show the result and move on
+- **Show the path** — name the choice I made and one or two trade-offs, then the answer
+- **Teach me the why** — walk through the reasoning, the alternatives I considered, and the background concepts as we go
+
+→ Profile: `Working style → Reasoning depth`.
+
+(Q5a controls *length*; Q5b controls *depth of reasoning*. A user can ask for **Terse + Teach me the why** — short prose that still names the trade-offs — or **Verbose + Just the answer** — full prose around the result without back-explaining decisions.)
 
 ---
 
@@ -108,7 +123,7 @@ Options (single-select):
 
 3. **Then ask about the deep interview:**
 
-   Question: **"Want to answer about 11 more questions so I can tailor things further? You can also do this later."**
+   Question: **"Want to answer 13 more questions so I can tailor things further? You can also do this later."**
    Header: `Continue?`
 
    Options (single-select):

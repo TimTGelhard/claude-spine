@@ -1,5 +1,5 @@
 ---
-description: Run or re-run the claude-spine personal profile interview. Pass --deep for the full ~17-question interview; otherwise runs the 6-question essentials.
+description: Run or re-run the claude-spine personal profile interview. Pass --deep for the full ~20-question interview; otherwise runs the 7-question essentials.
 argument-hint: [--deep]
 ---
 

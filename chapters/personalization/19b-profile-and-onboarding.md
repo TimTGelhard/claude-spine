@@ -14,14 +14,15 @@ The global stub (installed by `install.sh`) points Claude at the profile every s
 
 ## What the profile captures
 
-Six fixed sections, machine-parseable structure (don't rename headings):
+Seven fixed sections, machine-parseable structure (don't rename headings):
 
 | Section | What goes here |
 |---|---|
+| **Subscription** | Claude plan, typical daily usage, cost sensitivity |
 | **Developer profile** | Experience level, years coding, comfort areas, lean-in areas |
 | **Stack preferences** | Primary stack, secondary, what to avoid |
 | **Project context** | Typical project type, team size, user scale |
-| **Working style** | Push-back intensity, verbosity, active proactive-signal preferences |
+| **Working style** | Push-back intensity, answer length, reasoning depth, active proactive-signal preferences |
 | **Output format** | Code presentation (diffs vs full files), comments / emoji policy |
 | **Risk + safety** | Command-execution tolerance (ask vs run) |
 
@@ -33,27 +34,30 @@ Strict structure so future tooling can read the file. Hand-editing is fine — i
 
 The whole point of the hybrid model is to not scare new users with a 25-question wall while still letting committed users get a fully-loaded profile from day 1.
 
-**Essentials (5 questions, default first-run):**
+**Essentials (7 questions, default first-run):**
 
-1. Experience level
-2. Primary stack
-3. Push-back intensity
-4. Verbosity
-5. Typical project type
+1. Claude subscription
+2. Experience level
+3. Primary stack
+4. Push-back intensity
+5. Answer length (terse / standard / verbose)
+6. Reasoning depth (just the answer / show the path / teach me the why)
+7. Typical project type
 
 Captured up front, written immediately. The deep section headings are still in the file with `(unfilled — run /onboard --deep to capture)` under each, so you can see what's missing.
 
-**Deep (~10 more questions, opt-in):**
+**Deep (13 more questions, opt-in):**
 
-Comfort/lean-in areas, secondary stack and avoid list, team/scale context, active signal preferences, output format details, risk tolerance, optional free-text notes. Branches off the essentials — won't repeat questions you already answered.
+Daily Claude usage and cost sensitivity, comfort/lean-in areas, secondary stack and avoid list, team/scale context, active signal preferences, output format details, risk tolerance, optional free-text notes. Branches off the essentials — won't repeat questions you already answered.
 
 ## How to run it
 
 | Trigger | Behavior |
 |---|---|
-| Profile file missing | `op-onboard` auto-fires; runs essentials; offers deep at the end |
-| `/onboard` | Re-runs essentials only; shows current values, asks which to change |
-| `/onboard --deep` | Jumps to the ~10 deep questions (after essentials if profile is missing) |
+| Profile file missing | `op-welcome` emits a one-block greeting pointing the user at `/onboard`. `op-onboard` does **not** auto-launch the interview. |
+| `/onboard` (no profile) | Runs essentials; offers deep at the end |
+| `/onboard` (profile present) | Re-runs essentials only; shows current values, asks which to change |
+| `/onboard --deep` | Runs the 13 deep questions (after essentials if profile is missing) |
 | "Change my push-back to spar with me" | Direct edit to the matching section; no interview |
 | Hand-editing the file | Always fine — plain markdown, strict structure |
 
@@ -63,10 +67,11 @@ The interview itself is one question at a time via `AskUserQuestion`. Each quest
 
 Re-run `/onboard` when something about *you* shifts:
 
-- Your push-back / verbosity preferences feel wrong in practice (you keep correcting Claude in the same direction).
+- Your push-back, answer-length, or reasoning-depth preferences feel wrong in practice (you keep correcting Claude in the same direction).
 - You moved primary stacks (Next.js → Rails, say).
 - You moved domains (apps → ML; freelance → in-house).
 - Your project type shifted (MVPs → maintaining production at scale).
+- You changed Claude subscription (Pro → Max 20×, say) — `/onboard` re-proposes the matching `settings.json` tune.
 
 Don't re-run for one-session noise. The profile is meant to last across all of your projects long-term — that's why the upfront cost of the deep interview is justified.
 
@@ -90,7 +95,8 @@ More specific wins. Security rules apply at every level — the profile cannot w
 ## TL;DR
 
 - Profile lives at `~/.claude/claude-spine-profile.md`, outside the spine, survives reinstalls.
-- Six fixed sections, machine-parseable; hand-editing fine, don't rename headings.
-- Essentials first run (5 Qs), deep opt-in (~10 more), re-runnable via `/onboard` and `/onboard --deep`.
+- Seven fixed sections, machine-parseable; hand-editing fine, don't rename headings.
+- Essentials first run (7 Qs), deep opt-in (13 more), re-runnable via `/onboard` and `/onboard --deep`.
+- `op-welcome` owns the first-run greeting; `op-onboard` runs the interview only on explicit invocation.
 - Re-run when something about *you* shifts long-term. Don't re-run for session-level noise.
 - Profile is who-you-are; the bucket is what-you've-added. The suggestion loop doesn't touch the profile.

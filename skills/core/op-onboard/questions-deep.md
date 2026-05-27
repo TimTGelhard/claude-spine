@@ -1,4 +1,4 @@
-# Deep questions (~10, grouped by section)
+# Deep questions (13, grouped by section)
 
 Ask in order. Use `AskUserQuestion` for each. Skip a question if the essentials already implied the answer (e.g., don't re-ask experience level). Each question has up to 4 explicit options; "Other" is added by the tool for free-text. Where the question says `multi-select`, set `multiSelect: true`.
 
@@ -10,7 +10,7 @@ Ask in order. Use `AskUserQuestion` for each. Skip a question if the essentials 
 
 ### 0A — How heavily you use Claude in a typical day
 
-Question: **"On a busy day, how much do you use Claude? (This helps me decide when to suggest cheaper / lighter approaches vs heavier ones like Opus or multi-agent reviews.)"**
+Question: **"On a busy day, how much do you use Claude? (This helps me decide when to suggest cheaper / lighter approaches vs heavier ones — like running Opus, Claude's most capable but slowest and most expensive model, or kicking off a multi-agent review, where several Claude sessions check the same code in parallel.)"**
 Header: `Daily use`
 Options (single-select):
 - **Lightly** — a few questions a day; I bump into limits rarely or never
@@ -22,7 +22,7 @@ Options (single-select):
 
 ### 0B — Cost sensitivity
 
-Question: **"How careful do you want me to be about steering you toward cheaper options (like using a smaller model, or skipping expensive multi-agent reviews)?"**
+Question: **"How careful do you want me to be about steering you toward cheaper options? (Cheaper options = using a smaller / faster AI model when the work doesn't need the deepest reasoning, or skipping an expensive multi-agent review when one careful pass is enough.)"**
 Header: `Cost`
 Options (single-select):
 - **Very careful** — always pick the cheapest thing that works; flag when something will burn a lot

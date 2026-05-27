@@ -44,7 +44,8 @@ For essentials-only runs (deep deferred), keep the deep section headings but wri
 ## Working style
 
 - **Push-back intensity:** {{Q4 answer}}
-- **Verbosity:** {{Q5 answer}}
+- **Answer length:** {{Q5a answer}}
+- **Reasoning depth:** {{Q5b answer}}
 - **Active signals:** {{D1 list, or "All four (default)"}}
 
 ## Output format

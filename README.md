@@ -30,7 +30,7 @@ cd ~/.claude-spine
 ./install.sh
 ```
 
-Then **restart Claude Code**, open any session, and type **`/onboard`** — a 6-question, ~2-minute interview that calibrates Claude to your subscription, your stack, and how you like to work. It writes `~/.claude/claude-spine-profile.md` and ends with a one-screen "here's what's available now" handoff.
+Then **restart Claude Code**, open any session, and type **`/onboard`** — a 7-question, ~2-minute interview that calibrates Claude to your subscription, your stack, and how you like to work. It writes `~/.claude/claude-spine-profile.md` and ends with a one-screen "here's what's available now" handoff.
 
 After that you can:
 
@@ -45,7 +45,7 @@ That's the full first-run path. The rest of this section is optional.
 - `./install.sh --opinionated` — heavy, kitchen-sink CLAUDE.md instead of the neutral stub
 - `./install.sh --dry-run` — preview every action without writing anything
 - `./install.sh --help` — every flag (`--skip-skills`, `--skip-hook`, `--keep-legacy`, etc.)
-- `/onboard --deep` (after essentials) — full ~17-question pass for stack details, signal preferences, output format, risk tolerance
+- `/onboard --deep` (after essentials) — full ~20-question pass for stack details, signal preferences, output format, risk tolerance
 
 See [`global/INSTALL.md`](global/INSTALL.md) for partial-install flags, the full verification protocol, and uninstall.
 
@@ -65,7 +65,7 @@ Eight commands ship in `global/commands/`:
 
 | Command | What it does |
 |---|---|
-| `/onboard` | Six-question essentials interview (≈2 min). Writes `~/.claude/claude-spine-profile.md`. `--deep` for the full ~17-question pass. |
+| `/onboard` | Seven-question essentials interview (≈2 min). Writes `~/.claude/claude-spine-profile.md`. `--deep` for the full ~20-question pass. |
 | `/prep` | Planning pass for a new project or major new section. Step 0 auto-runs `init.sh` if `docs/` doesn't exist; then brief → architecture → first section plan. No code this session. |
 | `/done` | Close the active build session. Walks verify list, rolls up Stop-hook heartbeats, updates plan + `PROGRESS.md`, stages doc changes, suggests a commit message. The writeback command. |
 | `/suggest` | Capture a high-signal moment to `bucket/SUGGESTIONS.md`. Locked four-condition trigger. |
@@ -95,7 +95,7 @@ Net effect: every session starts lean. Claude loads heavy content on-demand, fil
 
 Two layers sit on top of the static spine:
 
-- **Profile** (`~/.claude/claude-spine-profile.md`) — written by `/onboard`. Captures who you are: experience level, primary stack, push-back intensity, verbosity, project type. Loaded every session via the global stub. Claude treats a senior backend engineer differently from a CS student.
+- **Profile** (`~/.claude/claude-spine-profile.md`) — written by `/onboard`. Captures who you are: subscription, experience level, primary stack, push-back intensity, answer length, reasoning depth, project type. Loaded every session via the global stub. Claude treats a senior backend engineer differently from a CS student.
 - **Bucket loop** (`bucket/`) — your personal skill and chapter library. Three slash commands wire it:
   - During normal work, `op-suggest` captures high-signal moments (explicit user signal, 2+ same friction, end-of-session reflection, or `/suggest`) to `bucket/SUGGESTIONS.md`. One-line append, no task interruption.
   - `/curate` walks pending entries one at a time, reads existing bucket files to surface overlap, proposes a diff, applies on your explicit approval. Files land under `bucket/skills/` or `bucket/chapters/`; `bucket/INDEX.md` and `bucket/CHANGELOG.md` update mechanically. `/curate --review-stale` walks old entries for prune-or-keep.

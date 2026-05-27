@@ -30,7 +30,7 @@ Output exactly once, verbatim, at the very top of your first turn — before any
 >
 > claude-spine is an operating-discipline layer for Claude Code — 21 skills, 8 slash commands, and a chapter library that loads on demand. Everything is already linked into `~/.claude/`, ready to use.
 >
-> **One thing first:** run `/onboard` — a ~2-minute, 6-question interview. It calibrates me to your Claude subscription, your stack, and how you like to work. Without it, every session falls back to generic defaults.
+> **One thing first:** run `/onboard` — a ~2-minute, 7-question interview. It calibrates me to your Claude subscription, your stack, and how you like to work. Without it, every session falls back to generic defaults.
 >
 > ↪ Continuing with what you asked — run `/onboard` whenever you're ready.
 

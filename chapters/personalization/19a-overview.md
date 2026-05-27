@@ -16,7 +16,7 @@ The split matters. Core is **read-only for users** — that's why `git pull` nev
 
 ## The three layers, in one paragraph each
 
-**Profile.** A small markdown file with your experience level, stack preferences, push-back intensity, verbosity, project context, output format, risk tolerance. Loaded every session via the global stub. It's what makes Claude treat a senior backend engineer differently from a CS student. See [19b](19b-profile-and-onboarding.md).
+**Profile.** A small markdown file with your subscription, experience level, stack preferences, push-back intensity, answer length, reasoning depth, project context, output format, risk tolerance. Loaded every session via the global stub. It's what makes Claude treat a senior backend engineer differently from a CS student. See [19b](19b-profile-and-onboarding.md).
 
 **Bucket.** A folder at the top of the spine holding your personal skills (`bucket/skills/`), personal chapters (`bucket/chapters/`), a queue of pending suggestions (`bucket/SUGGESTIONS.md`), and an audit log of what got added (`bucket/CHANGELOG.md`). The core skill `op-bucket-router` routes Claude to bucket content when no core skill matched the task. See [19e](19e-extending-the-bucket.md).
 

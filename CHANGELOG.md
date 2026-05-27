@@ -10,6 +10,34 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+### Pillar 1 — Personalization payload (in progress)
+
+The profile written by `/onboard` was capturing values that no downstream chapter or skill read. Same advice for a Python Pro user and a Rust Max-20× engineer. Pillar 1 attacks the gap in three steps; P1.2 lands first because it changes the essentials surface and the count semantics every other Pillar 1 piece references.
+
+#### Changed
+
+- `skills/core/op-onboard/questions-essential.md` — **Q5 split.** What was one "Verbosity" question collapsed two orthogonal dimensions: how short to be (length) and how much to back-explain decisions (reasoning depth). The user who wants short answers with full reasoning had no good option. Split into:
+  - **Q5a — Answer length** (Terse / Standard / Verbose)
+  - **Q5b — Reasoning depth** (Just the answer / Show the path / Teach me the why)
+
+  Essential count 6 → 7. Total interview length 17 (claimed) → 20 (actual: 7 + 13 = 20; the prior "17" was also off — deep ships 13 questions, not 11). Per FIXES P1.2.
+- `skills/core/op-onboard/profile-template.md` — Working style section: `Verbosity` field → `Answer length` + `Reasoning depth` (two distinct fields).
+- `skills/core/op-onboard/SKILL.md` — count refs and handoff block updated (verbosity → answer length + reasoning depth; "~11 follow-ups" → "13 follow-ups"; "~17-question interview" → "~20-question interview").
+- `global/commands/onboard.md` — description: `~17-question` → `~20-question`; `6-question essentials` → `7-question essentials`.
+- `README.md` — three count-claim positions: 6 → 7 essentials, ~17 → ~20 total; Personalization section "verbosity" → "answer length, reasoning depth"; adds Subscription to the captured-fields list.
+- `landing/index.html` — (no question-count claim — already uses skill counts only; no change needed here.)
+- `install.sh` — next-step block "6-question" → "7-question".
+- `skills/core/op-welcome/SKILL.md` — welcome block "6-question" → "7-question".
+- `EXPLAINER.md` — "First-time setup — 6 to 17 questions" → "First-time setup — 7 to 20 questions".
+- `chapters/personalization/19b-profile-and-onboarding.md` — major refresh: 5 → 7 essentials, ~10 → 13 deep questions, "Verbosity" → "Answer length / Reasoning depth", Subscription section added to the captures table, "Profile file missing → op-onboard auto-fires" replaced with the op-welcome handoff (cross-references Pillar 4), re-run reasons cover answer length / reasoning depth / subscription change.
+- `chapters/personalization/19a-overview.md` — Profile paragraph: "verbosity" → "answer length, reasoning depth"; adds Subscription to the captured-fields list.
+
+P1.3 follow-up (small):
+
+- `skills/core/op-onboard/questions-deep.md` — Q0A and Q0B gloss "Opus" (Claude's most capable but slowest and most expensive model) and "multi-agent review" (several Claude sessions checking the same code in parallel). Header count "~10" → "13".
+
+P1.1 (write `chapters/personalization/19f-subscription-aware.md` and wire `op-foundations` / `op-tools` / `op-subagents` / `op-signaling` to branch on `Plan:` and `Cost sensitivity:`) lands in a follow-up commit.
+
 ### Pillar 4 — First-run discovery surface
 
 A fresh-install user who opened Claude Code without reading the README saw no in-session prompt — the discovery surface for `/onboard` and the 21 op-* skills was "go read the repo." Pillar 4 closes that for the three highest-impact paths: a quiet auto-welcome on first run (file-existence-gated, not message-content-gated), a `/spine` command that prints the full skill / command / chapter map on demand, and a much richer `op-onboard` completion handoff that names every available command and points at the natural next action. Per [`FIXES.md`](FIXES.md) Pillar 4 (P4.1 + P4.2 + P4.3). P4.4 (landing-page screenshot + profile example) is post-launch content work.
