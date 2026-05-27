@@ -13,7 +13,7 @@ The manual is being reconstructed from a private 18-chapter operating guide into
 3. **Sophisticated routing** — instead of Claude loading whole chapters, a layer of skills + an index router picks the right atomic file for the task. Aim: Claude reads only what it needs.
 
 Plus two novel mechanics:
-- **Personalization** — first-run interview (`op-onboard` skill) calibrates Claude to user experience level, stack, push-back intensity, verbosity. Writes `~/.claude/op-manual-profile.md`.
+- **Personalization** — first-run interview (`op-onboard` skill) calibrates Claude to user experience level, stack, push-back intensity, verbosity. Writes `~/.claude/claude-spine-profile.md`.
 - **Personal skill library (the "bucket")** — `skills/bucket/` ships empty. Each user builds their own library over time via `op-add-skill`. Not a sharing mechanism — purely personal. A core skill `op-bucket-router` reads `skills/bucket/INDEX.md` (auto-maintained), picks the right bucket skills for the current task, loads only those. Core skills age slowly (discipline); bucket skills can age fast (stacks/projects) without rotting the spine.
 
 Full plan: `/Users/macbook/.claude/plans/i-want-to-make-parallel-knuth.md`.

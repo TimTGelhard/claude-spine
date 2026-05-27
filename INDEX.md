@@ -57,6 +57,8 @@
 | Teaching Claude unfamiliar code | `chapters/workflow/08c-teaching-unfamiliar.md` | 08 | written |
 | Rewriting legacy | `chapters/workflow/08d-rewrites.md` | 08 | written |
 
+**Plan-driven workflow wiring.** The planning pass (chapters 05h–05j) fires via the `op-prepare` skill, invoked by `/prep`. Per-session execution is carried by `/session-start` and `/session-end`. See [`global/commands/`](global/commands/) for the command definitions and [`README.md` § Slash commands](README.md#slash-commands) for the public surface.
+
 ## Prompting — how to interact
 
 | Topic / Trigger | Atomic file | Source | Status |

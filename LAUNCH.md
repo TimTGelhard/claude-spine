@@ -532,7 +532,7 @@ When you're picking up a phase:
 ## Critical context for cold-read sessions
 
 - Today's date (when this file was written): 2026-05-27. Use absolute dates for any new notes.
-- The 18 op-* skills are listed in `INDEX.md` and `skills/core/op-*/`. Don't add new ones in launch work — that's a post-launch decision.
+- The 19 op-* skills are listed in `INDEX.md` and `skills/core/op-*/`. Don't add new ones in launch work — that's a post-launch decision.
 - The bucket loop (`op-suggest`, `op-curate`, `/suggest`, `/curate`) is fully shipped. Don't touch it during launch work unless an L-phase explicitly says to.
 - Tim is the only user right now. The new skills have never been observed in isolation from the legacy `op-manual-*` set. L2 fixes this; until then, any skill-trigger benchmarks (L4) measure the *combined* set, not the new set alone.
 - Auto mode is active. Bias toward execution within the phase's scope. When in doubt about a decision that affects the public surface (default settings, README copy, naming), ask.

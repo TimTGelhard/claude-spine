@@ -10,25 +10,27 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
-Active roadmap in [`LAUNCH.md`](LAUNCH.md):
+Remaining gates before public launch (tracked in [`LAUNCH.md`](LAUNCH.md)):
 
-- **L5** — clean-room install on a fresh VM/container (pre-launch validation gate)
-- **L7** — domain, landing page, demo video, waitlist (public launch)
-- **L8** — opt-in: personal migration off a standalone `~/.claude/CLAUDE.md`
+- **L4c** — token-efficiency benchmark (spine-on vs spine-off) for demo numbers.
+- **L7a / L7c / L7d / L7e** — landing-page hardening (built CSS, OG image, waitlist wiring), demo recording, public launch.
+
+Internal cleanup tracked in [`docs/JANITOR.md`](docs/JANITOR.md): `op-prepare` skill-body split, `PERSONALIZATION.md` retirement, `EXPLAINER.md` pricing-language reframe, and the deferred `install.sh` polish from L4c.
 
 ---
 
 ## [0.9.0] — 2026-05-27
 
-First tagged release. Pre-launch state — architecture frozen, personalization loop shipped, self-tests passing. Awaiting clean-room install verification (L5) and public launch (L7).
+First tagged release. Architecture frozen, personalization loop shipped, plan-driven workflow shipped, clean-room install verified, self-tests passing. Awaiting public launch (L7a / L7c / L7d / L7e).
 
 ### Added
 
 #### v2 architecture
 
-- **75 atomic chapter files** under `chapters/<topic>/`, one concept per file (~150-line ceiling, real-seam decomposition). Index at [`INDEX.md`](INDEX.md); inverse map at [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md).
-- **18 core skills** in `skills/core/op-*/` — pure routers from task intent to the right atomic file(s). None hold chapter content; the bodies are 34–60 lines each.
+- **80 atomic chapter files** under `chapters/<topic>/`, one concept per file (~150-line ceiling, real-seam decomposition). Index at [`INDEX.md`](INDEX.md); inverse map at [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md).
+- **19 core skills** in `skills/core/op-*/` — pure routers from task intent to the right atomic file(s). None hold chapter content; the 18 original bodies are 34–60 lines each. `op-prepare` (planning-pass skill) is an in-progress longer-body outlier — split tracked in [`docs/JANITOR.md`](docs/JANITOR.md).
 - **5 personalization chapters** (`chapters/personalization/19a`–`19e`) — net-new in v2.
+- **Plan-driven workflow.** Adds `skills/core/op-prepare/SKILL.md` + three new workflow chapters (`05h-multi-session-planning.md`, `05i-execution-plan-anatomy.md`, `05j-cold-start-protocol.md`) + three new templates (`PROJECT_PLAN.md`, `SECTION_PLAN.md`, `PROGRESS.md`) + three slash commands (`/prep`, `/session-start`, `/session-end`) + `init.sh` to scaffold project docs from templates.
 
 #### Personalization loop
 
