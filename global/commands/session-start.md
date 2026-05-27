@@ -2,6 +2,8 @@
 description: Start a fresh build session in a plan-driven project. Loads the active session entry, confirms scope with the user, refuses to start coding until scope is confirmed. Follows the cold-start protocol from chapter 05j.
 ---
 
+> **Legacy / power-user.** The default flow is ambient — `op-spine-active` auto-loads scope at the start of every conversation in a plan-driven project, then proceeds. Use this gated `/session-start` flow when you explicitly want a **"no code until you say go"** gate before any edits (regulated work, paired-review sessions, anything safety-critical). See `~/.claude-spine/global/INSTALL.md` for the ambient default.
+
 You are starting a **fresh build session** in a plan-driven project. Follow the cold-start protocol from `~/.claude-spine/chapters/workflow/05j-cold-start-protocol.md`.
 
 ## What to do

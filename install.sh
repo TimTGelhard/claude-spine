@@ -11,7 +11,7 @@
 #   ./install.sh --skip-skills       # skip skill symlinks
 #   ./install.sh --skip-commands     # skip slash-command symlinks
 #   ./install.sh --skip-settings     # skip ~/.claude/settings.json
-#   ./install.sh --skip-hook         # skip the env-leak hook
+#   ./install.sh --skip-hook         # skip installing hooks (env-leak + spine-writeback)
 #   ./install.sh --keep-legacy       # don't remove pre-v2 op-manual-* skills
 #   ./install.sh --force-global      # overwrite ~/.claude/CLAUDE.md even if user-customized
 #   ./install.sh --dry-run           # print actions, change nothing
@@ -345,21 +345,30 @@ else
   echo
 fi
 
-# ---------- 6. env-leak hook ----------
+# ---------- 6. hooks ----------
 
 if [ "$SKIP_HOOK" -eq 0 ]; then
-  echo "==> installing env-leak hook"
+  echo "==> installing hooks"
   ensure_dir "$CLAUDE_DIR/hooks"
-  DEST="$CLAUDE_DIR/hooks/block-env-staging.sh"
-  if [ -e "$DEST" ] || [ -L "$DEST" ]; then
-    backup_path "$DEST"
+  hook_found=0
+  for hook_src in "$SPINE_DIR"/global/hooks/*.sh; do
+    [ -f "$hook_src" ] || continue
+    hook_found=1
+    hook_name="$(basename "$hook_src")"
+    DEST="$CLAUDE_DIR/hooks/$hook_name"
+    if [ -e "$DEST" ] || [ -L "$DEST" ]; then
+      backup_path "$DEST"
+    fi
+    run cp "$hook_src" "$DEST"
+    run chmod +x "$DEST"
+    echo "  wrote: $DEST"
+  done
+  if [ "$hook_found" -eq 0 ]; then
+    echo "  (no hooks found in $SPINE_DIR/global/hooks)"
   fi
-  run cp "$SPINE_DIR/global/hooks/block-env-staging.sh" "$DEST"
-  run chmod +x "$DEST"
-  echo "  wrote: $DEST"
   echo
 else
-  echo "==> skipping env-leak hook (--skip-hook)"
+  echo "==> skipping hooks (--skip-hook)"
   echo
 fi
 

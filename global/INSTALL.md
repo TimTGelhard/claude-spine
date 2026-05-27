@@ -13,9 +13,9 @@ If you only want the spine's chapters and templates without touching `~/.claude/
 |------|-------------|--------------|
 | `neutral/CLAUDE.md.template` (default) or `opinionated/CLAUDE.md.template` (with `--opinionated`) | `~/.claude/CLAUDE.md` | Global instructions every Claude Code session loads. |
 | `settings.json` | `~/.claude/settings.json` | Permissions allowlist (so common commands don't prompt), env-file guard hook wiring, plugin enablement, default mode + theme. |
-| `hooks/block-env-staging.sh` | `~/.claude/hooks/block-env-staging.sh` | Blocks `git add .env*` as defence-in-depth against secret leaks. Wired via `settings.json`. |
+| `hooks/*.sh` | `~/.claude/hooks/*.sh` | `block-env-staging.sh` blocks `git add .env*` as defence-in-depth against secret leaks. `spine-writeback.sh` is a Stop hook that logs a per-turn heartbeat in plan-driven projects. Both wired via `settings.json`. |
 | `../skills/core/op-*` | `~/.claude/skills/op-*` (symlinked) | The core `op-*` skills. Symlinks so `git pull` in the spine updates them instantly. |
-| `commands/*.md` | `~/.claude/commands/*.md` (symlinked) | Slash commands shipped by the spine: `/onboard` (personal-profile interview), `/suggest` + `/curate` (suggestion-capture + review), `/add-skill` + `/refresh-bucket` (personal skill-library management), and the plan-driven trio `/prep` + `/session-start` + `/session-end` (multi-session planning + cold-start-resistant execution). |
+| `commands/*.md` | `~/.claude/commands/*.md` (symlinked) | Slash commands shipped by the spine: `/onboard` (personal-profile interview), `/suggest` + `/curate` (suggestion-capture + review), `/add-skill` + `/refresh-bucket` (personal skill-library management), the plan-driven flow `/prep` + `/done` (planning + session writeback), and the legacy `/session-start` + `/session-end` for explicit-gate workflows. |
 | (the spine itself) | `~/.claude-spine` (symlinked) | A symlink so skill files can use `~/.claude-spine/...` paths regardless of where you cloned. |
 
 ## Install
@@ -53,18 +53,33 @@ If you previously had the v1 `op-manual-*` skills installed, they're backed up a
 
 #### Plan-driven workflow (recommended for new projects)
 
-The spine ships a plan-driven workflow that makes every session cold-start-resistant. The flow is:
+The spine ships a plan-driven workflow that makes every session cold-start-resistant. The **default is ambient** — most of the ceremony happens automatically:
 
 ```
-new project:    init.sh  →  /prep  →  /session-start  →  build  →  /session-end  →  (close terminal)
-next session:                          /session-start  →  build  →  /session-end
-new section:                /prep <section>  →  /session-start  →  …
+new project:    /prep                          # auto-scaffolds + brief + plan in one command
+next session:   (open Claude)   →   build   →   /done
+new section:    /prep <section>  →   build   →   /done
 ```
 
-- **`./init.sh <project-path>`** — scaffolds `docs/` and `.claude/CLAUDE.md` in a project from spine templates. Idempotent — won't overwrite existing files. Run once per new project.
-- **`/prep`** — one planning session that produces `docs/PROJECT_BRIEF.md`, `docs/ARCHITECTURE.md`, `docs/PROJECT_PLAN.md`, `docs/plans/<section-1>.md`, and an initialized `docs/PROGRESS.md`. No code this session. Run once at project start, then `/prep <section-name>` to plan each subsequent section just-in-time.
-- **`/session-start`** — opens a fresh build session. Reads `PROGRESS.md` and the active session entry only (~1-2K tokens). Confirms scope with you. Refuses to write code until you say "yes / go / confirmed".
-- **`/session-end`** — walks the verify list, updates the section plan + `PROGRESS.md`, stages changes, suggests a commit message. The user reviews and commits.
+How the ambient default works:
+
+- **`/prep`** — one slash command. Step 0 auto-runs `init.sh` if `docs/` doesn't exist, then walks brief → product-shape → architecture → master plan → first section. Output: plan files in `docs/`. No code this session. Run `/prep <section-name>` later to plan each subsequent section just-in-time.
+- **`op-spine-active`** — auto-firing skill. At the start of any conversation in a plan-driven project (cwd contains `docs/plans/` + `docs/PROGRESS.md`), silently loads `PROGRESS.md` + the active session entry, announces scope in 3-4 lines, then proceeds to build. No confirmation gate.
+- **`spine-writeback.sh`** — Stop hook wired via `settings.json`. After every assistant turn, appends a one-line heartbeat to the active section's `## Session log` block recording which files changed. Idempotent (skips repeats), silent no-op outside plan-driven dirs, never blocks Claude on failure.
+- **`/done`** — explicit session-complete. Walks the verify list, rolls up heartbeats into one PROGRESS.md log entry, advances the PROGRESS pointer, stages doc changes, suggests a commit message. You review the diff and commit.
+
+##### Power-user / explicit mode
+
+If you need a hard "no code until you confirm" gate (regulated work, paired review, safety-critical changes), use the legacy gated commands instead:
+
+```
+/session-start  →  confirm scope  →  build  →  /session-end
+```
+
+- **`/session-start`** — same orientation as the ambient `op-spine-active` skill, but **refuses to call `Edit`/`Write` until you say "yes / go / confirmed"**.
+- **`/session-end`** — alias for `/done`. Same writeback protocol.
+
+Both flows can coexist in the same project; pick per session. The Stop hook keeps logging heartbeats either way.
 
 For projects that pre-date this workflow, the older `docs/SESSION_STARTER.md` paste-prompts still work — see that file for guidance on when to use which.
 3. **If you installed the opinionated variant:** open `~/.claude/CLAUDE.md` and fill in the `{{placeholders}}` — name, intro line, stack defaults if they don't match yours.
@@ -92,7 +107,7 @@ Then:
 List the op-* skills loaded.
 ```
 
-Should show all 16 core skills: `op-foundations`, `op-workflow`, `op-collaboration-modes`, `op-brownfield`, `op-prompting`, `op-visuals`, `op-signaling`, `op-persistence`, `op-hooks`, `op-tools`, `op-subagents`, `op-recovery`, `op-anti-patterns`, `op-onboard`, `op-bucket-router`, `op-add-skill`.
+Should show the spine's core `op-*` skills, including the ambient `op-spine-active` (auto-fires in plan-driven projects) and the planning skill `op-prepare`. The list grows over time — what matters is that none of the v1 `op-manual-*` skills are present alongside them.
 
 Also verify the env-leak hook is wired:
 

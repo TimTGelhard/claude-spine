@@ -6,6 +6,8 @@ You are running the **planning pass** for a plan-driven project. Follow the proc
 
 ## What to do
 
+0. **Scaffold if needed.** If `docs/` doesn't exist in the cwd, run `~/.claude-spine/init.sh .` first to scaffold project docs from spine templates. `init.sh` is idempotent — it won't overwrite existing files, so it's safe to run even on partial setups. Skip this step only if `docs/` already exists.
+
 1. **State the contract**: "This is a planning pass. Output will be plan files in `docs/`. No code this session. Continue?"
 
 2. **Read the spine** to load the planning model:

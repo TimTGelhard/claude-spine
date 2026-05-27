@@ -2,6 +2,8 @@
 description: End a build session in a plan-driven project. Updates the section plan and PROGRESS.md, stages changes, suggests a commit message. Follows the writeback protocol from chapter 05j.
 ---
 
+> **Legacy alias for `/done`.** The ambient default flow uses `/done` as the primary writeback command — same protocol, plus rolling up Stop-hook heartbeats from the section's `Session log` block. This file is kept for users who built muscle memory around `/session-end`; both run the same procedure below.
+
 You are **ending a build session** in a plan-driven project. Follow the writeback protocol from `~/.claude-spine/chapters/workflow/05j-cold-start-protocol.md` (Step 6).
 
 ## What to do

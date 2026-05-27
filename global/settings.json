@@ -38,6 +38,7 @@
       "Bash(yarn:*)",
       "Bash(open:*)",
       "Bash(code:*)",
+      "Bash(*claude-spine/init.sh:*)",
       "Bash(which:*)",
       "Bash(whereis:*)",
       "Bash(lsof:*)",
@@ -110,6 +111,17 @@
             "if": "Bash(git add*)",
             "command": "${HOME}/.claude/hooks/block-env-staging.sh",
             "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${HOME}/.claude/hooks/spine-writeback.sh",
+            "timeout": 10
           }
         ]
       }

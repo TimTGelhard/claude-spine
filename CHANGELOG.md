@@ -10,6 +10,28 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+### L10 — Ambient workflow refactor
+
+Plan-driven workflow shifts from explicit ceremony (`/session-start` → `/session-end`) to an ambient default where boundary work happens automatically. Original goals (cold-start resistance, scope discipline, multi-session continuity) preserved; legacy commands kept as escape hatches.
+
+#### Added
+
+- `skills/core/op-spine-active/` — auto-firing skill. At the start of any conversation in a directory containing `docs/plans/` + `docs/PROGRESS.md`, loads the active session entry, announces scope in 3-4 lines, and proceeds to build. Ambient replacement for `/session-start`.
+- `global/hooks/spine-writeback.sh` — Stop hook. After every assistant turn, appends a one-line heartbeat to the active section's `## Session log` block recording which files changed. Idempotent (skips repeats sans timestamp), graceful (silent no-op outside plan-driven dirs, never blocks Claude on failure).
+- `global/commands/done.md` — `/done` command. Walks the verify list, rolls up heartbeats into one PROGRESS.md log entry, advances the PROGRESS pointer, stages doc changes, suggests a commit message. Primary writeback command in the ambient flow.
+
+#### Changed
+
+- `global/commands/prep.md` — added Step 0: auto-runs `~/.claude-spine/init.sh .` if `docs/` doesn't exist. Removes the manual shell step before opening Claude on a new project.
+- `global/commands/session-start.md` — top note marks it as **legacy / power-user**. Same gated protocol; default is now ambient. Use this when you explicitly need a "no code until you say go" gate.
+- `global/commands/session-end.md` — top note marks it as **legacy alias for `/done`**. Same writeback protocol.
+- `global/settings.json` — wires the Stop hook (`spine-writeback.sh`); adds `Bash(*claude-spine/init.sh:*)` to the allow list so `/prep` Step 0 doesn't prompt.
+- `install.sh` — hook installer refactored to loop over `global/hooks/*.sh` (was hardcoded single-file). Picks up `spine-writeback.sh` automatically; future hooks land without installer changes.
+- `global/INSTALL.md` — "Plan-driven workflow" rewritten with ambient default; explicit-command flow moved to a "Power-user / explicit mode" subsection.
+- `README.md` — slash-commands table updated: `/done` added; `/session-start` + `/session-end` marked legacy; status blurb mentions ambient flow.
+
+### Pre-launch gates
+
 Remaining gates before public launch (tracked in [`LAUNCH.md`](LAUNCH.md)):
 
 - **L4c** — token-efficiency benchmark (spine-on vs spine-off) for demo numbers.
