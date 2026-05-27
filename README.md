@@ -1,6 +1,8 @@
 # Claude Code — Advanced Operator's Manual
 
-A universal reference for working with Claude Code at an advanced level. Read-only for you; loadable by Claude at session start.
+For solo founders, indie hackers, and vibecoders shipping MVPs and client work with Claude Code at high velocity. Not a tutorial — a discipline manual for people already running real sessions for real users, who want their workflow to stop leaking quality.
+
+Read-only for you; loadable by Claude at session start.
 
 The manual is platform reference (principles, mechanics, discipline). The `templates/` folder is the working layer (per-project files Claude fills in and updates). The `global/` folder is an opinionated `~/.claude/` setup you can install in one step.
 
