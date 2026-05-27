@@ -72,7 +72,7 @@ There are three parts. You don't have to understand any of them in detail — bu
    │   PART 1 — THE HANDBOOK                               │
    │   "How to be a good co-worker"                        │
    │                                                       │
-   │   Around 50 short lessons the AI reads when it        │
+   │   Around 80 short lessons the AI reads when it        │
    │   needs them. Things like:                            │
    │     • "Before you start coding, look around"          │
    │     • "Don't pretend you know — check first"          │
@@ -119,7 +119,7 @@ When you install this, the very first thing it does is a short **interview**.
 ```
    ╔════════════════════════════════════════════════╗
    ║                                                 ║
-   ║   First-time setup — 15 to 25 questions         ║
+   ║   First-time setup — 6 to 17 questions          ║
    ║                                                 ║
    ║   "How experienced are you?"                    ║
    ║   "What kinds of projects do you usually do?"   ║
