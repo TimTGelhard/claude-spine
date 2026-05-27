@@ -115,23 +115,23 @@
 
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
-| Failure-mode triage table | `chapters/recovery/17a-failure-triage.md` | 17 | not written |
-| Recovery moves (restart, verify, isolate, rebuild) | `chapters/recovery/17b-recovery-moves.md` | 17 | not written |
-| High-stakes recovery (production, money, data) | `chapters/recovery/17c-high-stakes-cases.md` | 17 | not written |
+| Failure-mode triage table | `chapters/recovery/17a-failure-triage.md` | 17 | written |
+| Recovery moves (restart, verify, isolate, rebuild) + update-the-system + when-to-walk-away | `chapters/recovery/17b-recovery-moves.md` | 17 | written |
+| High-stakes recovery (secrets leaked, mid-flight migration, auth/RLS data leak, lost comprehension) | `chapters/recovery/17c-high-stakes-cases.md` | 17 | written |
 
 ## Anti-patterns — explicit "never do this"
 
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
-| Prompting anti-patterns | `chapters/anti-patterns/18a-prompting.md` | 18 | not written |
-| Scope anti-patterns | `chapters/anti-patterns/18b-scope.md` | 18 | not written |
-| Context anti-patterns | `chapters/anti-patterns/18c-context.md` | 18 | not written |
-| Tool anti-patterns | `chapters/anti-patterns/18d-tools.md` | 18 | not written |
-| Verification anti-patterns | `chapters/anti-patterns/18e-verification.md` | 18 | not written |
-| Security anti-patterns | `chapters/anti-patterns/18f-security.md` | 18 | not written |
-| Workflow anti-patterns | `chapters/anti-patterns/18g-workflow.md` | 18 | not written |
-| Long-term project anti-patterns | `chapters/anti-patterns/18h-long-term.md` | 18 | not written |
-| Meta anti-patterns (extending the manual, etc.) | `chapters/anti-patterns/18-meta-patterns.md` | 18 | not written |
+| Prompting + communication anti-patterns | `chapters/anti-patterns/18a-prompting.md` | 18 | written |
+| Scope anti-patterns | `chapters/anti-patterns/18b-scope.md` | 18 | written |
+| Context anti-patterns | `chapters/anti-patterns/18c-context.md` | 18 | written |
+| Tool anti-patterns | `chapters/anti-patterns/18d-tools.md` | 18 | written |
+| Verification anti-patterns | `chapters/anti-patterns/18e-verification.md` | 18 | written |
+| Security anti-patterns | `chapters/anti-patterns/18f-security.md` | 18 | written |
+| Workflow anti-patterns | `chapters/anti-patterns/18g-workflow.md` | 18 | written |
+| Long-term project anti-patterns | `chapters/anti-patterns/18h-long-term.md` | 18 | written |
+| Meta anti-patterns (extending the manual, etc.) + cross-catalog TL;DR | `chapters/anti-patterns/18-meta-patterns.md` | 18 | written |
 
 ---
 

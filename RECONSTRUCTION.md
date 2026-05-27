@@ -24,9 +24,9 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 
 ## Current phase
 
-**Phase 4 — Persistence + tools + subagents — done** (2026-05-27)
+**Phase 5 — Recovery + anti-patterns — done** (2026-05-27)
 
-**Next:** Phase 5 — Recovery + anti-patterns. Open a fresh terminal, read this file + `INDEX.md` + the plan, then atomize chapters 17–18 into `chapters/recovery/` and `chapters/anti-patterns/`, and add `op-recovery` (expanded from existing `op-manual-recovery`) and `op-anti-patterns` skills.
+**Next:** Phase 6 — Public-readiness + install. Open a fresh terminal, read this file + `INDEX.md` + the plan, then: neutralize `global/CLAUDE.md.template` into `global/neutral/` (move the founder-flavored example to `global/opinionated/`), write `install.sh` (resolving the hard-coded skill-path open question), build the `op-onboard` skill (deep ~15–25 question interview, branching by experience level — see frozen design in "Architecture"), and rewrite README as the public-facing entry point. Phases 1–5 atomic files are all in place; the cross-reference back-fill open question can also be closed in Phase 6 since every target now exists.
 
 ---
 
@@ -70,7 +70,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 | 2 | Workflow core — `chapters/workflow/` (atomize ch 05–08) + workflow/modes/brownfield skills | **done (2026-05-27)** |
 | 3 | Prompting + signaling — `chapters/prompting/`, `chapters/signaling/` + skills | **done (2026-05-27)** |
 | 4 | Persistence + tools — `chapters/persistence/`, `chapters/tools/`, `chapters/subagents/` + skills. **Includes the ch 13 thesis revision.** | **done (2026-05-27)** |
-| 5 | Recovery + anti-patterns — `chapters/recovery/`, `chapters/anti-patterns/` + skills | not started |
+| 5 | Recovery + anti-patterns — `chapters/recovery/`, `chapters/anti-patterns/` + skills | **done (2026-05-27)** |
 | 6 | Public-readiness + install — neutral global template, opinionated example, `install.sh`, `op-onboard` skill, README rewrite | not started |
 | 6.5 | Skill bucket — `op-bucket-router`, `op-add-skill`, bucket INDEX regeneration. **Note:** Phase 8 promotes the bucket to top-level `bucket/` (was `skills/bucket/`). Coordinate folder structure between 6.5 and 8. | not started |
 | 7 | Demo + launch — end-to-end dry-run, video script outline, launch checklist | not started |
@@ -193,6 +193,20 @@ This table grows as each phase lands. Each new file added here when it's written
 | `skills/core/op-hooks/SKILL.md` | new | 4 | written 2026-05-27 |
 | `skills/core/op-tools/SKILL.md` | new | 4 | written 2026-05-27 |
 | `skills/core/op-subagents/SKILL.md` | new | 4 | written 2026-05-27 |
+| `chapters/recovery/17a-failure-triage.md` | 17 | 5 | written 2026-05-27 |
+| `chapters/recovery/17b-recovery-moves.md` | 17 | 5 | written 2026-05-27 (absorbed step 3 "update the system" + "when to walk away") |
+| `chapters/recovery/17c-high-stakes-cases.md` | 17 | 5 | written 2026-05-27 |
+| `chapters/anti-patterns/18a-prompting.md` | 18 | 5 | written 2026-05-27 (absorbed communication anti-patterns) |
+| `chapters/anti-patterns/18b-scope.md` | 18 | 5 | written 2026-05-27 |
+| `chapters/anti-patterns/18c-context.md` | 18 | 5 | written 2026-05-27 |
+| `chapters/anti-patterns/18d-tools.md` | 18 | 5 | written 2026-05-27 |
+| `chapters/anti-patterns/18e-verification.md` | 18 | 5 | written 2026-05-27 |
+| `chapters/anti-patterns/18f-security.md` | 18 | 5 | written 2026-05-27 |
+| `chapters/anti-patterns/18g-workflow.md` | 18 | 5 | written 2026-05-27 |
+| `chapters/anti-patterns/18h-long-term.md` | 18 | 5 | written 2026-05-27 |
+| `chapters/anti-patterns/18-meta-patterns.md` | 18 | 5 | written 2026-05-27 (absorbed cross-catalog TL;DR) |
+| `skills/core/op-recovery/SKILL.md` | new (supersedes recovery half of `op-manual-recovery`) | 5 | written 2026-05-27 |
+| `skills/core/op-anti-patterns/SKILL.md` | new (supersedes anti-pattern half of `op-manual-recovery`) | 5 | written 2026-05-27 |
 
 ---
 
@@ -229,9 +243,28 @@ To be resolved in their phase.
 - Public landing page / docs site for v1, or GitHub README only? (Phase 7.)
 - Domain registration for `claudespine.dev` / `.com` — desirable for the launch/video, not blocking. (Phase 7.)
 - **Cross-reference back-fill.** Foundations files (01a–04c) link to chapters 05, 06, 07, 10, 16, 17, 11 at the repo root (the authoritative source per INDEX). When phases 2–5 atomize those chapters, sweep these foundations links to point at the new atomic files. Same applies in reverse to every later phase.
-- **Skill install path is currently hard-coded** to `/Users/macbook/claude-op-manual/...` inside `op-foundations/SKILL.md`. `install.sh` (Phase 6) needs to template this for the actual install location, or we standardize on `~/.claude-spine/` and rewrite paths at install.
+- **Phase 6 sub-decision — skill installation mechanism.** The locked architecture is stub + spine (see "Install architecture" below), but the *how* of getting core skills into `~/.claude/skills/` is still open: copy the files in and rewrite paths at install time, or symlink `~/.claude/skills/op-*` → `<spine>/skills/core/op-*` so updates flow when the user pulls the repo. Symlinks are cleaner on macOS/Linux; copy works on Windows. Decide in Phase 6.
+- **Phase 6 sub-decision — exact interview question list.** Locked direction: ~12–15 questions, weighted toward open-ended, branching reduces the effective count. The six captured dimensions are listed in "Architecture / Onboarding mechanic." Exact wording designed in Phase 6.
 
 (Resolved 2026-05-27: repo name → `claude-spine`; onboarding → auto-fire + slash command; bucket sharing → fork-and-share v1; bucket index → on-fire folder scan, no index file.)
+
+(Resolved 2026-05-27, pre-Phase-6 audit: install architecture → stub + spine; interview depth → deep, open-ended-weighted, ~12–15 questions; rename `claude-op-manual` → `claude-spine` is **done** — the folder is now `/Users/macbook/claude-spine/`. Skill files and INDEX entries still contain old-name path strings; sweep in Phase 6.)
+
+---
+
+## Install architecture (locked 2026-05-27, pre-Phase-6 audit)
+
+**Mechanism:** stub + spine.
+
+- `~/.claude/CLAUDE.md` is a **thin stub** that points Claude at the spine. It contains: (a) one-line identity ("this machine uses claude-spine"), (b) path to the spine root, (c) instruction to consult `<spine>/INDEX.md` when a task needs manual content, (d) a pointer at `~/.claude/claude-spine-profile.md` for personalization. Everything else (discipline, security, stack, anti-patterns) lives in the spine's chapters and is loaded on-demand by the core skills.
+- `<spine>/INDEX.md` is the **lookup mechanism**. Skills route through it; Claude reads only the atomic files that match the task.
+- `<spine>/` can live anywhere — `~/.claude-spine/` is the default but installable elsewhere. `install.sh` writes the path into the stub global and into the skill files (or symlinks them).
+- **Core skills are installed into `~/.claude/skills/op-*/`** (because Claude Code only auto-loads skills from there). Two implementation options for Phase 6 (sub-decision above): copy + rewrite paths, or symlink to the spine. Either way, the skill bodies reference paths inside `<spine>/chapters/...` — resolved at install time.
+- **Profile file:** `~/.claude/claude-spine-profile.md`. Written by `op-onboard`. Referenced from the stub global so Claude reads it every session.
+
+This replaces the earlier hard-coded `/Users/macbook/claude-op-manual/...` paths in every skill with an install-time-resolved location. The "Skill install path" open question (Phases 1–5 notes) is now closed at the architecture level; only the copy-vs-symlink choice remains.
+
+**Why this matters for the "make global obsolete" claim:** the stub is small enough (~15–25 lines) that any user's hand-written global is structurally replaced — identity + pointer + profile reference. Stack opinions, security rules, and discipline aren't *in* the global anymore; they're loaded on-demand from the spine, filtered by the profile. This is what makes the obsolescence claim defensible at launch — pending the personalization interview actually capturing enough nuance (the deferred conversation in `[[project-revisit-global-obsolete-claim]]`).
 
 ### Phase 2 notes (2026-05-27)
 
@@ -260,6 +293,17 @@ To be resolved in their phase.
 - **Cross-references inside Phase 4 files use relative paths** between sibling atomic files (`[13b](13b-trigger-descriptions.md)`) and cross-folder paths (`[14b](../persistence/14b-hook-recipes.md)`). Phase 5 should follow the same convention. Earlier-phase files that still point to root-level chapters can now be swept to point at the new atomic files — open question "Cross-reference back-fill" is still pending; do it in Phase 5 or 6.
 - **All four new skills (`op-persistence`, `op-hooks`, `op-tools`, `op-subagents`) use hardcoded `/Users/macbook/claude-op-manual/...` paths**, same as every prior phase. The "Skill install path is hard-coded" open question remains; Phase 6's `install.sh` must template.
 - **The legacy `op-manual-*` skills still load** — Phase 4 added new core skills alongside them, did not replace. Cutover happens at Phase 6's `install.sh`.
+
+### Phase 5 notes (2026-05-27)
+
+- **Chapter 17 split into 3 (17a triage, 17b moves, 17c high-stakes).** This matches the INDEX target. The decomposition rule passes cleanly: 17a is the *diagnosis* question, 17b is the *generic-action* question, 17c is the *unrecoverable-cost-of-getting-it-wrong* question. A user typically loads exactly one — the triage table when they don't know what's wrong, a specific move when they do, or 17c directly when they recognize a high-stakes situation.
+- **17b absorbed step 3 ("update the system") and the "when to walk away" section.** Both are the closing case of applying a move — they're not independently load-bearing questions on their own, they're the "what next" after a recovery. Putting them in their own file would have failed decomposition-rule question 3 (the router would just load them together with 17b every time).
+- **Chapter 18 split into 9 files (18a–18h + 18-meta-patterns).** This matches the INDEX target with one decomposition decision: the "Communication anti-patterns" section in the source chapter was *not* given its own file. The three entries fold naturally into 18a-prompting (two are about how you prompt across turns; the third — "treating Claude as if it remembers other sessions" — is also a prompting/persistence boundary issue and goes in 18a). 18a's title in INDEX was updated to "Prompting + communication anti-patterns" to make this visible. Adding 18i-communication.md would have left a 3-entry stub that always reads together with 18a.
+- **Cross-catalog TL;DR moved into 18-meta-patterns.md.** The original chapter ended with a TL;DR that summarized all categories. Each atomic file now has its own TL;DR for its category. The cross-catalog summary went into 18-meta-patterns because meta is the highest-leverage category — a user landing on the meta file is the one most likely to benefit from the wider list of failure-mode clusters.
+- **18-meta-patterns.md keeps the bare `18-` prefix** (not `18i-`) per the INDEX skeleton — it sits apart from the lettered categories because it's about extending the system, not about a category of in-codebase work.
+- **The two new skills (`op-recovery`, `op-anti-patterns`) supersede the single legacy `op-manual-recovery`.** The legacy skill covered both recovery and anti-patterns in one description; splitting them lets each skill have a sharper trigger (recovery fires on quality-dropping symptoms; anti-patterns fires on "about to do the thing" intents). The legacy skill remains loaded until Phase 6's `install.sh` does the cutover.
+- **Cross-references** in the new Phase 5 files use the established convention — relative paths between sibling atomic files (`[17b-recovery-moves.md]`) and cross-folder paths (`[../foundations/01c-failure-modes.md]`, `[../workflow/06-feature-sizing.md]`, `[../persistence/12c-memory.md]`, `[../signaling/11e-meta-scope.md]`, etc.). Every cross-reference target now exists — the **"Cross-reference back-fill" open question can be closed in Phase 6** by sweeping any remaining root-level chapter links in earlier-phase files (09b, 09c, 11c, 11d, 11e from Phase 3 notes) to point at the new atomic files.
+- **Same hard-coded `/Users/macbook/claude-op-manual/...` path issue** applies to both new skill files. Phase 6's `install.sh` must template.
 
 ---
 
