@@ -32,7 +32,7 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 
 | Phase | Scope | Blocks | Status |
 |---|---|---|---|
-| L0 | Decide community/sharing story (no code, README + bucket/README touched) | L7 (waitlist messaging) | not started |
+| L0 | Decide community/sharing story (no code, README + bucket/README touched) | L7 (waitlist messaging) | done (2026-05-27) |
 | L1 | Self-consistency sweep (circular refs, stale skill cross-refs, naming) | L8 (Tim migration), L7 (launch) | done (2026-05-27) |
 | L2 | install.sh legacy `op-manual-*` cutover + `/uninstall` | L8 (Tim migration), L7 (launch) | done (2026-05-27) |
 | L3 | settings.json default tuning (effortLevel, autoCompactWindow) | nothing | done (2026-05-27) |
@@ -61,6 +61,20 @@ Dependency graph: `L0 → L7`. `L1 → L8 → ...`. `L2 → L8 → ...`. `L4 + L
 **Recommendation:** start with #1 (no sharing) loudly defended, until real user volume creates pressure to revisit. The honest framing is "this is your toolbox, not your subreddit" — fits the existing voice. Revisit at v2 of the launch.
 
 **Definition of done:** decision recorded inline in this file; README's "What's NOT in this repo" section + `bucket/README.md` reflect the stance with one paragraph of rationale.
+
+### L0 notes (2026-05-27)
+
+**Decision (Tim):** Stance #1 — no sharing, expanded. The bucket stays personal; no community catalog is planned. The speculative-library trap (chapter 13d) is the strongest argument against curating examples; the secondary one is that bucket entries reference user-specific paths and credential layouts that don't generalize. Upstream PRs to `chapters/` and `skills/core/` remain the path for universal patterns.
+
+**Scope of edits actually done:**
+- `README.md` — expanded the "A skill-sharing platform" bullet in "What's NOT in this repo" from one sentence to a paragraph carrying the rationale (personal stack/paths, speculative-library trap with link to 13d, "toolbox not subreddit" framing) and the redirect: fork freely, upstream PRs for universal patterns.
+- `bucket/README.md` — added a new "On sharing (or the lack of one)" section between "What NOT to put here" and "Upstream + git". Two paragraphs: why no marketplace (personal data + speculative-library dilution, with link to 13d), and where genuine universals belong (issue or PR upstream to core).
+
+**DoD verification:** README's "What's NOT" section now carries the stance + rationale in one paragraph; `bucket/README.md` has a dedicated stance section. No infrastructure (Discussions, examples folder, tag) shipped — none needed for stance #1.
+
+**Out of scope, not done in this phase:** L7 waitlist messaging is downstream of this decision — when L7c lands, the waitlist copy should read "get notified when the spine stabilizes," not "join the community." No `CONTRIBUTING.md` edits — that doc already aligns (single-maintainer, fork freely, small PRs for factual errors).
+
+**Revisit trigger:** if real user volume produces sustained pressure to surface user-curated skills (more than a handful of public forks doing similar work, or repeated "where can I find other people's skills" requests), reopen as L0.5. Not before.
 
 ---
 

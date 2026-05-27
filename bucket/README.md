@@ -34,6 +34,12 @@ Three ways:
 - Secrets, API keys, client data. Plain markdown only.
 - One-off snippets you'll never reach for again. The bucket is for patterns you'll *route to* repeatedly. If a skill fires twice ever, delete it.
 
+## On sharing (or the lack of one)
+
+There's no plan to host a public catalog of bucket entries, and no Discussions board or examples folder for "share your favorite skill." The bucket is intentionally personal: entries reference your stack, your project paths, sometimes your credential layout. A community marketplace would invite people to collect skills they'll never actually fire — the speculative-library trap ([chapter 13d](../chapters/persistence/13d-skill-anti-patterns.md)) — and dilute the discipline the spine is built on.
+
+Fork the repo and shape your own bucket. If a pattern feels genuinely universal — not "useful for my projects" but "useful for any operator running Claude Code" — open an issue or PR upstream to `chapters/` or `skills/core/` instead. That's the path for universal patterns; the bucket stays yours.
+
 ## Upstream + git
 
 The bucket sits inside your spine clone. `git pull` from upstream never touches `bucket/` — the maintainers don't ship into it. Your additions stay. If you want to back up your bucket, fork the repo and push to your own remote — but don't push your bucket back to upstream.

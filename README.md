@@ -127,7 +127,7 @@ claude-spine/
 
 - **Project-specific code or content** — that lives in your project's `.claude/CLAUDE.md` and `docs/`.
 - **Stack-specific framework guidance** — use the relevant plugin skills (Vercel, Next.js, Supabase, Tailwind, shadcn, etc. via `/plugin install`).
-- **A skill-sharing platform** — the bucket is *personal*. No fork-and-share community story baked in; if you want to share your skills, that's your problem to solve.
+- **A skill-sharing platform** — the bucket is *personal* and ships empty by design. There's no community marketplace and there won't be one: bucket entries reference your stack and project paths, sometimes your credential layout, and a public catalog invites the speculative-library trap ([chapter 13d](chapters/persistence/13d-skill-anti-patterns.md)) — collecting skills you'd never actually fire. This is your toolbox, not your subreddit. Fork the repo and shape your own; upstream PRs to `chapters/` or `skills/core/` are how patterns become universal.
 - **A managed product** — claude-spine is a local install. No accounts, no telemetry, no auto-updates. `git pull` is the update mechanism.
 
 ---
