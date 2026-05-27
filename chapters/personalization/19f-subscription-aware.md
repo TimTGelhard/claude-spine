@@ -94,7 +94,7 @@ See [`chapters/foundations/02-context-budget.md`](../foundations/02-context-budg
 
 ## How to consult this chapter
 
-Routing skills that touch model choice, fan-out, or long-running work (`op-foundations`, `op-tools`, `op-subagents`, `op-signaling`, plus the `code-review` / `loop` / `schedule` skills) point here when the user's plan should shape the recommendation. The path is:
+Routing skills that touch model choice, fan-out, or long-running work — `op-foundations`, `op-tools`, `op-subagents`, `op-signaling` — point here when the user's plan should shape the recommendation. (The `code-review` / `loop` / `schedule` slash commands are external plugin skills not editable from the spine; when the user invokes them, the per-plan branch surfaces via `op-tools` and `op-signaling`, which both reference this chapter.) The path is:
 
 1. Read the user's profile (`~/.claude/claude-spine-profile.md`) — specifically the `Subscription` section.
 2. Find the matching row in the lever above.

@@ -10,9 +10,11 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
-### Pillar 1 — Personalization payload (Session 2 of 3)
+### Pillar 1 — Personalization payload (Sessions 2 + 3 of 3)
 
 Session 1 (in `[0.10.0]`) shipped `chapters/personalization/19f-subscription-aware.md` and wired four routing skills to it. The chapters those routers point *into*, though, still read generically — a Free user reading `04a-model-tiers.md` got the same "default to Sonnet" framing as a Max 20× user with cheap Opus access. Session 2 closes that gap by adding bidirectional cross-references from five high-leverage chapters back into 19f, so the per-plan branch surfaces wherever a generic recommendation sits.
+
+Session 3 closes the personalization payload — a read-through verification across all four plan tiers (Free / Pro / Max 5× / Max 20×) and a docs sweep that surfaces the subscription line in the prompting examples chapter. No new shipping artifacts; this is the wrap-up pass. The verification was done by reading 19f + the four routers + the five cross-referenced chapters with each plan tier in mind — no cross-reference drift found, one wording fix in 19f (the `code-review` / `loop` / `schedule` slash commands are external plugin skills, not routing skills, so the previous phrasing was inaccurate).
 
 #### Changed
 
@@ -21,11 +23,41 @@ Session 1 (in `[0.10.0]`) shipped `chapters/personalization/19f-subscription-awa
 - `chapters/foundations/04c-budget-and-cost.md` — "Plan budgets" section adds one paragraph pointing at 19f as the authoritative per-plan recommendation source, since 04c already enumerates plan tiers but doesn't surface the per-plan defaults table.
 - `chapters/subagents/16c-parallel-and-background.md` — new "Plan-aware fan-out budget" subsection after Anti-patterns, with the four-row fan-out table (Free / Pro / Max 5× / Max 20×) and the `Cost sensitivity` modifier rule. TL;DR gains one bullet.
 - `chapters/signaling/11-overview.md` — "five signal categories" framing preserved, with a clarifying line that cost/quota is cross-cutting, not a sixth category. New "Cost / quota signals" subsection between Anti-patterns and TL;DR — four-row decision table (Max 20× + Don't worry / Pro/Max 5× + Balanced / Free or Very careful / profile missing) for whether to flag, with 19f as the alternative-suggestion table.
-- `chapters/personalization/19f-subscription-aware.md` — fixed a stale lever-3 link (`16d-parallel-and-background.md` → `16c-`). Shipped in Session 1; surfaced by the bidirectional cross-reference work, since the 19f → 16c side has to resolve for the claim to hold.
-- `docs/SUBSCRIPTION-AWARENESS.md` — status header marks Sessions 1+2 done; Session 3 (re-onboard as each plan tier + docs sweep) remains open. Records the realistic-injection-path caveat for the external `code-review` / `loop` / `schedule` skills.
-- `FIXES.md` — status header drops Pillar 1 Sessions 2–3 → Pillar 1 Session 3. P1.1 entry annotation updated to credit Session 2.
+- `chapters/prompting/09c-examples-and-anti-examples.md` — new "The subscription line — read from your profile, not your prompt" section between the high-leverage patterns and the visuals section. Shows the same `/code-review ultra` question producing different answers for a Free vs Max 20× profile, names the eight per-plan levers, and gives two practical consequences (keep `/onboard` fresh; override per-prompt when needed). TL;DR gains one bullet. *(Session 3 — the `09-prompting` examples update from the planning doc.)*
+- `chapters/personalization/19f-subscription-aware.md` — fixed a stale lever-3 link (`16d-parallel-and-background.md` → `16c-`) and clarified the "How to consult this chapter" wording: the `code-review` / `loop` / `schedule` slash commands are external plugin skills, not editable from the spine, so the per-plan branch reaches them indirectly through `op-tools` and `op-signaling` (both wired in Session 1). The link fix shipped in Session 1; the wording clarification is the Session 3 sweep.
+- `docs/SUBSCRIPTION-AWARENESS.md` — status header marks all three sessions done.
+- `FIXES.md` — status header drops Pillar 1 Session 3 from the open queue. P1.1 entry annotation updated to credit Sessions 2 + 3.
 
 No new files. No skill changes (the four routers were already wired in Session 1). No INDEX update needed (19f row was already present from Session 1).
+
+### Pillar 3 — Workflow auto-inference
+
+Five attention points the ambient workflow used to leak into the user's head — scope, verify, next-section prep, cross-session notes, session size. Each was inferable from existing signal (build steps, recognized patterns, PROGRESS.md state, turn text, turn count). Pillar 3 closes them with zero new user-facing commands: it extends `op-prepare`, `/done`, and the existing Stop hook. The cold-start protocol now goes beyond "load orientation + announce scope" — it also proposes scope from build steps, scaffolds verify from a pattern catalog, offers next-section prep at completion, captures cue-phrase candidates per turn, and flags long sessions mid-flow.
+
+FIXES.md originally tagged Pillar 3 as post-launch ("needs real-user signal on which inferences are right"). The ~half-day estimate held; the cue-phrase set and long-session thresholds remain straightforward to tune once real-session data accumulates.
+
+#### Changed
+
+- `skills/core/op-prepare/procedure.md` — Step 6 restructured into three sub-steps:
+  - **Step 6.1** (P3.1) — after drafting build steps, propose the **Files to write/edit** list from a heuristics table (schema → migration with RLS inline; "Add API route" → `app/api/<x>/route.ts`; "Add server action" → `app/<route>/actions.ts`; UI step → `page.tsx` + component; "Add zod schema" → `schema.ts`; webhook → `app/api/webhooks/<service>/route.ts`; public flow → `app/(public)/<route>/page.tsx`; "Send email" → `lib/email/templates/` + `lib/server/email.ts`). The proposal is editable, not auto-applied.
+  - **Step 6.2** (P3.2) — when build steps + scope match a recognized pattern, scaffold the **Verify** block from a seven-row catalog: **Auth flow**, **CRUD resource**, **API + UI**, **RLS section**, **Public form**, **Webhook ingestion**, **Migration-only session**. Each scaffold lists 3-5 concrete checks the user refines. Prevents the generic "test it works" verify failure mode.
+  - **Step 6.3** — compose the entry. Past 100 lines, split.
+- `templates/SECTION_PLAN.md` — Verify-section instruction points at `op-prepare` procedure §6.2 for pattern scaffolds, so a fresh user doesn't default to "test it works".
+- `global/commands/done.md`:
+  - **Step 2** (P3.4) — reviews the `## Pending cross-session notes` block written by the hook. For each entry: promote (move to **Cross-session notes** above, edit if needed), dismiss, or edit-then-promote. Default to dismiss for noise. Deletes the Pending block after review.
+  - **Step 4 + Step 9** (P3.3) — when the next section has no plan file, `/done` now offers *"Section `<next-section>` has no plan file. Run `/prep <next-section>` now? (Y/n)"* rather than silently noting it in PROGRESS.md. On `Y`, hands off to `op-prepare`. On `N` or no answer, leaves the PROGRESS.md breadcrumb so the next ambient `op-spine-active` halts cleanly with the same suggestion.
+- `global/hooks/spine-writeback.sh` — three-block restructure (heartbeat / cue-capture / long-session), all running on the same Stop event:
+  - **Heartbeat** — behavior unchanged. Appends one line per file-changing turn to `## Session log` in the active section file, with idempotency guard.
+  - **Cue-capture** (P3.4) — reads `transcript_path` from the hook input JSON, locates the most recent `"type":"assistant"` JSONL entry via awk, extracts text content via `jq`, and greps for a tight cue set (`cross.?session note`, `follow.?up:`, `for (the |a )?(next|later|future) session`, `FYI for next session`, `note for next session`, `need to … in/before (next|later|future) session`, `schema (will need|needs to)`, `carry.?over:`). Up to 5 matches per turn, deduped against the section file, appended to `## Pending cross-session notes`. Set is intentionally tight — bias against noise.
+  - **Long-session signal** (P3.5) — increments a per-session-id counter under `$TMPDIR/spine-signals/<session_id>.turns` on every Stop event. Records first-turn epoch under `<session_id>.start`. When count ≥ 30 OR elapsed ≥ 2h, emits once per session: *"spine: past typical session size (N turns, Mm elapsed). split now or push? — see chapter 06 (feature sizing)."* Single-fire guarded by `<session_id>.long-session` marker. Ephemeral state — no repo pollution, no gitignore needed.
+- `FIXES.md` — status header drops Pillar 3 from the open queue; each P3.X entry annotated with `[shipped 2026-05-28 — landed in [Unreleased]]`; Suggested apply order item #10 annotated done.
+
+#### Implementation notes
+
+- No new skill, slash command, or settings.json hook entry. Pillar 3 is strictly additive behavior inside files that already shipped.
+- The heartbeat block no longer early-exits on "no files changed" — cue-capture and long-session need to run regardless. Heartbeat append is now gated by a local conditional; behavior at the file level is unchanged.
+- Long-session counter increments on every Stop event, not only file-changing turns, so a 30-turn conversational session still trips it.
+- macOS `awk`, `sed`, and `grep` compatibility verified (`bash -n` clean). The hook uses bash-specific features (here-strings, `${var:0:N}` substring); shebang is `#!/usr/bin/env bash`.
 
 ### Still pending pre-launch
 

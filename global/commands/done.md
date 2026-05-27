@@ -26,7 +26,12 @@ Edit `docs/plans/<active-section>.md`:
    - `blocked` — with a one-line reason in the entry.
    - `in-progress` — if pausing mid-work; add a one-line "resume here" note.
 2. **Cross-session notes** — anything discovered this session that affects later sessions in this section.
-3. **Section-level open questions** — any new decision-point that wasn't planned.
+3. **Pending cross-session notes** (auto-captured) — the Stop hook `spine-writeback.sh` appends turn-level cue-phrase matches to a `## Pending cross-session notes` block. If the block exists in this section file:
+   - Read each entry to the user verbatim.
+   - For each: ask **promote** (move to "Cross-session notes" above, edit if needed), **dismiss** (drop), or **edit-then-promote**. Default to dismiss for noise — the hook biases toward capture.
+   - After review, delete the entire `## Pending cross-session notes` block from the section file. Promoted entries now live in "Cross-session notes"; dismissed entries are gone.
+   - If the block is empty (header but no entries), just delete the empty block.
+4. **Section-level open questions** — any new decision-point that wasn't planned.
 
 ### Step 3 — Roll up heartbeats
 
@@ -40,7 +45,7 @@ Edit `docs/PROGRESS.md`:
 
 1. **Active section / active session**:
    - Section has more pending sessions → point at the next session in the same file.
-   - Section done → point at section N+1, session 1. If section N+1 has no plan file yet, note: *"Section N+1 needs `/prep <name>` before next session."*
+   - Section done → point at section N+1, session 1. If section N+1 has no plan file yet, also (a) note in PROGRESS.md: *"Section N+1 needs `/prep <name>` before next session."* and (b) remember this for Step 9 — you will offer to run `/prep <name>` now rather than letting the next cold-start halt on it.
 2. **Last session outcome** — one paragraph. What shipped. What carried over. What's notable.
 3. **Blockers** — anything stopping the next session. Empty if none.
 4. **Next session reading list** — copy from the next session entry's "Files to read" block.
@@ -80,9 +85,18 @@ Do NOT commit. The user reviews the diff and commits.
 Tell the user:
 
 - Session marked `<done|blocked|in-progress>`.
-- PROGRESS.md now points at session `<N.M>` (next session goal).
+- PROGRESS.md now points at section/session `<N+1.1>` (next session goal).
 - N files staged. Suggested commit message above.
 - Next: review diff, commit. Reopen Claude in this directory — `op-spine-active` will auto-load the next session.
+
+**If the next section has no plan file yet** (the condition you flagged in Step 4), append one more line:
+
+> Section `<next-section>` has no plan file. Run `/prep <next-section>` now? (Y/n)
+
+- **Y** → hand off to `op-prepare` scoped to that section (`/prep <next-section>`). Don't wait for the user to type — invoke it as the next action. Their commit + reopen still happens after.
+- **N or no answer** → leave the PROGRESS.md note in place. The next ambient `op-spine-active` will halt cleanly with the same suggestion. No silent state.
+
+Rationale: a section-boundary `/done` followed by a fresh terminal that halts on "no plan" is the exact cold-start friction this offer prevents. Asking once at writeback time avoids the mid-next-session interruption.
 
 ## Hard rules
 

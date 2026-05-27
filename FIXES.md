@@ -1,14 +1,14 @@
 # FIXES — senior review pass, 2026-05-27 (closed 2026-05-28)
 
-> **Status as of 2026-05-28:** Pillars 1 (Sessions 1+2 of 3), 2, 4, 5, 6 + the
-> HIGH/MEDIUM drift sweep + M4 have shipped — Sessions 1 + Pillars 2/4/5/6
-> landed in `[0.10.0]`; Pillar 1 Session 2 (chapter-level cross-references to
-> 19f) lands in the next `[Unreleased]` block. The open queue at this point is
-> **Pillar 3** (workflow auto-inference — P3.1–P3.5, all P2 / post-launch),
-> **Pillar 1 Session 3** (verify across all four plan tiers + docs sweep,
-> tracked in `docs/SUBSCRIPTION-AWARENESS.md`), **P4.4** (landing-page
-> screenshot + profile example, post-launch content work), **P6.4 + P6.5**
-> (opt-in onboard-deep hooks), and the LOW items L2–L8.
+> **Status as of 2026-05-28:** All six pillars (1, 2, 3, 4, 5, 6) + the
+> HIGH/MEDIUM drift sweep + M4 have shipped — Pillar 1 Session 1 + Pillars
+> 2/4/5/6 landed in `[0.10.0]`; Pillar 1 Sessions 2 + 3 and Pillar 3 (all
+> five P3.X items) land in the next `[Unreleased]` block. The open queue at
+> this point is **P4.4** (landing-page screenshot + profile example,
+> post-launch content work), **P6.4 + P6.5** (opt-in onboard-deep hooks,
+> waiting on a deeper onboard-deep extension), and the LOW items L2–L8 (the
+> file itself recommends folding most of these into a single post-launch
+> trim pass; see Suggested apply order at the bottom).
 > Each shipped item below has a `**[shipped …]**` annotation; unfixed items
 > have no annotation. Two passes are stacked in this file:
 >
@@ -279,8 +279,8 @@ access."* The branding on `README.md:15` is ahead of the implementation.
 
 #### P1.1 [P0] — Ship `19f-subscription-aware.md` and wire the routing skills
 
-**[Sessions 1+2 shipped — Session 1 in `187ddbe` / `[0.10.0]`; Session 2 lands
-in the next `[Unreleased]` block]** Session 1 of the 3-session plan in
+**[All 3 sessions shipped — Session 1 in `187ddbe` / `[0.10.0]`; Sessions 2 +
+3 land in the next `[Unreleased]` block]** Session 1 of the 3-session plan in
 `docs/SUBSCRIPTION-AWARENESS.md` created
 `chapters/personalization/19f-subscription-aware.md` (8 levers × 4 plan-rows
 each, plus Cost sensitivity modifier + default-to-Pro fallback), added the
@@ -293,9 +293,13 @@ content now surfaces the per-plan branch wherever a generic recommendation
 sits. The `code-review` / `loop` / `schedule` skills called out in the
 Session 2 plan are **external plugin skills** (not in this repo); the
 realistic injection path is through `op-tools` and `op-signaling`, both
-wired in Session 1. Session 3 (re-onboard as each plan tier to verify the
-shift + final CHANGELOG sweep) deferred — see
-`docs/SUBSCRIPTION-AWARENESS.md` for the open list.
+wired in Session 1. Session 3 was a read-through verification across all
+four plan tiers (Free / Pro / Max 5× / Max 20×) — no cross-reference drift
+found. The Session 3 docs sweep added a "The subscription line" section to
+`chapters/prompting/09c-examples-and-anti-examples.md` (shows the same
+`/code-review ultra` question producing different answers per profile) and
+clarified `19f`'s "How to consult this chapter" wording so the indirect
+injection path for the external plugin slash commands is accurate.
 
 ---
 
@@ -363,34 +367,74 @@ comprehensive. **But five per-session friction points are inferable by Claude**
 
 #### P3.1 [P1] — Auto-infer scope list from build steps in `op-prepare`
 
-Session entry with build steps "Create schema / Add API route / Wire UI" →
-propose scope list (`schema.ts, routes/api.ts, Form.tsx`). User edits.
-Touches `skills/core/op-prepare/procedure.md` near session-plan generation.
+**[shipped 2026-05-28 — landed in `[Unreleased]`]** `skills/core/op-prepare/procedure.md`
+Step 6 restructured into 6.1 (scope inference from build steps), 6.2 (verify
+scaffolds — see P3.2), 6.3 (compose). Step 6.1 adds a build-step → file-shape
+heuristics table (schema → migration with RLS inline; API route → `route.ts`;
+server action → `actions.ts`; UI step → `page.tsx` + component; zod → `schema.ts`;
+webhook → `app/api/webhooks/<service>/route.ts`; public flow → `app/(public)/…`;
+email → `lib/email/templates/` + `lib/server/email.ts`). The proposal is
+explicit and editable, not auto-applied — `op-prepare` surfaces it and the
+user adds/removes/corrects.
+
+---
 
 #### P3.2 [P1] — Scaffold verify checks by recognized pattern
 
-Common patterns (auth flow, CRUD endpoint, API+UI, RLS) have predictable
-verify lists. When `op-prepare` detects one, scaffold the checks; user refines.
-Touches `op-prepare/procedure.md` and `templates/SECTION_PLAN.md`.
+**[shipped 2026-05-28 — landed in `[Unreleased]`]** `skills/core/op-prepare/procedure.md`
+Step 6.2 adds the pattern catalog. Seven patterns covered: **Auth flow**
+(sign-up / sign-in / sign-out / protected route), **CRUD resource** (table +
+list + form), **API + UI** (server action driving a UI), **RLS section**
+(per-user data), **Public form** (unauth input — contact, public quote-accept),
+**Webhook ingestion** (Stripe / Resend with signature + idempotency), and
+**Migration-only session** (no UI surface). Each scaffold lists 3-5 concrete
+verify checks the user refines. `templates/SECTION_PLAN.md` Verify-section
+instruction now points at procedure §6.2 so a fresh user doesn't ship generic
+"test it works" by default.
+
+---
 
 #### P3.3 [P1] — Proactive next-section planning nudge at `/done`
 
-If `docs/PROGRESS.md` shows a `next-section` whose plan file doesn't exist,
-`/done` should offer at completion: *"Section &lt;next&gt; has no plan file.
-Run `/prep &lt;next&gt;` now? (Y/n)"* Prevents mid-session cold-start halts.
-Touches `global/commands/done.md`.
+**[shipped 2026-05-28 — landed in `[Unreleased]`]** `global/commands/done.md`
+Step 4 now (a) writes the existing "Section N+1 needs `/prep <name>`" note to
+PROGRESS.md when the next-section plan file is missing AND (b) flags the
+condition for Step 9. Step 9 surfaces an explicit offer:
+*"Section `<next-section>` has no plan file. Run `/prep <next-section>` now?
+(Y/n)"* On `Y`, `/done` hands off to `op-prepare` scoped to that section.
+On `N` or no-answer, the PROGRESS.md breadcrumb remains and the next ambient
+`op-spine-active` will halt cleanly with the same suggestion. No silent state.
+
+---
 
 #### P3.4 [P2] — Auto-extract cross-session notes from turn signals
 
-Stop hook scans turn for cue phrases ("I found that," "discovered," "will need
-to," "schema needs") and proposes them as cross-session-note candidates at
-`/done`. Touches `global/hooks/spine-writeback.sh` and `global/commands/done.md`.
+**[shipped 2026-05-28 — landed in `[Unreleased]`]** `global/hooks/spine-writeback.sh`
+restructured into three blocks (heartbeat / cue-capture / long-session — see
+P3.5). The cue-capture block reads `transcript_path` from the Stop-hook input,
+locates the most recent `"type":"assistant"` JSONL entry, extracts its text
+content via jq, and greps for a tight set of forward-looking cues
+(`cross.?session note`, `follow.?up:`, `for (the |a )?(next|later|future) session`,
+`FYI for next session`, `note for next session`, `need to … in/before (next|later|future) session`,
+`schema (will need|needs to)`, `carry.?over:`). Up to 5 matches per turn are
+deduped and appended to a `## Pending cross-session notes` block in the
+active section file. `/done` Step 2 reviews entries (promote / edit-promote /
+dismiss) and deletes the block. Set is intentionally tight — better to
+under-capture than to flood the Pending block.
+
+---
 
 #### P3.5 [P2] — Long-session live signal
 
-At 30+ assistant turns or 2h+ elapsed in a session, emit one soft signal:
-*"Past typical session size — split now or push?"* Once per session. New
-ambient skill or hook extension.
+**[shipped 2026-05-28 — landed in `[Unreleased]`]** Implemented as a third
+block in `global/hooks/spine-writeback.sh` (not a new skill — ambient skills
+only fire at conversation start, and the signal needs to fire mid-session).
+Per-session state lives under `$TMPDIR/spine-signals/<session_id>.{turns,start,long-session}` —
+counter, epoch, and single-fire marker. The counter increments on every Stop
+event (even on no-file-change turns), so a 30-turn conversational session
+still trips it. The signal fires once per session_id at ≥30 turns OR ≥2h
+elapsed, whichever first: *"spine: past typical session size (N turns, Mm
+elapsed). split now or push? — see chapter 06 (feature sizing)."*
 
 ---
 
@@ -566,8 +610,12 @@ Same pattern as P6.4. Stack-specific (prettier/black/gofmt); auto-detect from
 
 **Post-launch (defer):**
 
-10. **Pillar 3 — workflow auto-inference** (P3.1–P3.5). ~half-day; needs
-    real-user signal on which inferences are right.
+10. **Pillar 3 — workflow auto-inference** (P3.1–P3.5). **Shipped 2026-05-28
+    — landed in `[Unreleased]`.** Pulled forward into pre-launch; the
+    ~half-day estimate held. The "needs real-user signal" caveat survives as
+    a tuning note — the cue-phrase set in `spine-writeback.sh` and the
+    long-session thresholds (30 turns / 2h) are easy to adjust once real
+    sessions reveal misses or false positives.
 11. **Pillar 6 — opt-in hooks via onboard** (P6.4, P6.5). Needs the deep
     onboard flow extension first.
 12. **L1–L5** — original deferred items per prior decisions.

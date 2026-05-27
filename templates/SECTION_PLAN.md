@@ -57,7 +57,7 @@ Decisions needed before specific sessions in this section.
 2. <Step 2>
 3. <Step 3>
 
-**Verify** (concrete checks, not "test it works"):
+**Verify** (concrete checks, not "test it works" — when this session matches a recognized pattern, `op-prepare`'s procedure §6.2 scaffolds these; refine per your stack):
 
 - <e.g., "Sign-up form submits → row appears in `auth.users` table.">
 - <e.g., "Sign in with wrong password → returns error toast, no redirect.">

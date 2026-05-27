@@ -60,6 +60,23 @@ That's it. Don't ceremony a 2-line fix. (Principle 4: match prompt to scope.)
 
 This is explainer-mode prompting — see [07c-explainer-mode.md](../workflow/07c-explainer-mode.md).
 
+## The subscription line — read from your profile, not your prompt
+
+Some constraints Claude applies come from your profile, not your prompt. The clearest example: your Claude subscription. Ask the same question on two different profiles —
+
+> Should I run `/code-review ultra` on this PR?
+
+— and you get different answers. A Free or Pro user gets "warn first, try `high` effort instead." A Max 20× user with `Cost sensitivity: Don't worry about it` gets "go ahead." Claude reads `~/.claude/claude-spine-profile.md → Subscription` (Plan + Cost sensitivity) before answering, then applies the eight per-plan levers in [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md) — model default, ultra-review framing, fan-out budget, fast mode, long-loop stance, restart cadence, end-of-session verify, 1M-context assumption.
+
+Same prompt, different answer. The difference is the profile.
+
+Two practical consequences:
+
+- **Keep the profile fresh.** Re-run `/onboard` when your plan or cost stance changes.
+- **Override per-prompt when you want to.** "Ignore the cost framing — just give me the best answer for this PR." Claude will, because the spine is advice, not enforcement.
+
+If the profile is missing or the field is unfilled, Claude defaults to the Pro row — safe but cost-conservative. The user can run `/onboard` to calibrate later.
+
 ## Visuals — when to add an image
 
 See [10-visuals.md](10-visuals.md) for the full pattern. Quick version: paste screenshots of:
@@ -71,4 +88,5 @@ See [10-visuals.md](10-visuals.md) for the full pattern. Quick version: paste sc
 
 - The same task badly vs well-prompted produces visibly different output. Notice the gap.
 - Five patterns earn their place: orientation, challenge-me, small-fix, what's-broken, explain-it-to-me.
+- Some constraints (Plan, Cost sensitivity) are read from your profile, not your prompt — keep `/onboard` fresh; override per-prompt when needed. See [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md).
 - Pair with a visual only when the problem is visual.

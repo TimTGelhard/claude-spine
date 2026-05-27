@@ -78,16 +78,56 @@ Target: 5-12 sections for a typical MVP. More than 15, your sections are too gra
 
 ## Step 6 — Draft `docs/plans/<section-1>.md` — the FIRST section only
 
-Use `~/.claude-spine/templates/SECTION_PLAN.md` as scaffold. Break the section into 2-5 sessions. Each session entry has:
+Use `~/.claude-spine/templates/SECTION_PLAN.md` as scaffold. Break the section into 2-5 sessions. For each session entry, compose the fields in this order — the order matters because the later fields are *inferred* from the earlier ones:
 
-- Goal (one line)
-- Files to read (exact list)
-- Files to write/edit (scope)
-- Build steps (3-7 high-level items)
-- Verify (concrete checks)
-- Output (commit hint + plan-file updates)
+1. **Goal** — one line.
+2. **Files to read** — the exact orient list a cold session loads.
+3. **Build steps** — 3-7 high-level items.
+4. **Files to write/edit** — propose from the build steps (Step 6.1), user edits.
+5. **Verify** — scaffold from a recognized pattern when one matches (Step 6.2), otherwise ask for 2-4 concrete checks.
+6. **Output** — commit-message hint + plan-file updates.
 
 Keep each session entry under 100 lines. If it needs more, the session is too big — split.
+
+### Step 6.1 — Infer the scope list from build steps (don't ask the user from scratch)
+
+Read the build steps you just drafted. Propose the "Files to write/edit" list by inferring from them. Surface the proposal and ask "Edit this scope list before I write the session entry?" — the user adds, removes, or corrects. Never silently pick.
+
+These heuristics cover the common cases; the user's stack may differ:
+
+| Build-step phrase | Inferred files |
+|---|---|
+| "Create schema" / "Add table" / "Add migration" | `supabase/migrations/YYYYMMDDHHMMSS_<name>.sql` (single file; include RLS in the same migration as the table — see `~/.claude-spine/templates/CLAUDE.md` conventions) |
+| "Add RLS policy" / "Per-user access" | Same migration as the table — no separate file |
+| "Add API route" / "POST/GET/PATCH /api/<x>" | `app/api/<x>/route.ts` |
+| "Add server action" / "Submit / save / update from form" | `app/<route>/actions.ts` (named `action<Verb><Noun>`) |
+| "Wire UI" / "Form" / "Page" | `app/<route>/page.tsx` + `components/<Feature>Form.tsx` (split server vs client) |
+| "Add zod schema" / "Validate input" | `app/<route>/schema.ts` or `lib/schemas/<x>.ts` |
+| "Add a webhook handler" | `app/api/webhooks/<service>/route.ts` |
+| "Add a public/unauth flow" (contact form, public quote-accept) | `app/(public)/<route>/page.tsx` + matching server action |
+| "Send email" | A new template under `lib/email/templates/` + a Resend call from `lib/server/email.ts` |
+
+When the project's stack isn't TypeScript + Next.js + Supabase, swap the file shapes — the table is the *recipe*, not the contract. The discipline is: propose, then let the user edit.
+
+### Step 6.2 — Scaffold the Verify block from a recognized pattern
+
+Generic "test it works" verify lists are the failure mode this step exists to prevent ([05j](~/.claude-spine/chapters/workflow/05j-cold-start-protocol.md) hard rule #4). Match the session's build steps + scope against the patterns below; when one matches, scaffold the Verify block with the listed concrete checks. The user refines (drops irrelevant rows, adds project-specific ones).
+
+| Pattern | Scaffold the Verify block with… |
+|---|---|
+| **Auth flow** (sign-up / sign-in / sign-out / protected route) | (a) sign-up form submits → row appears in `auth.users`; (b) sign-in with wrong password returns error toast, no redirect; (c) sign-out clears session and redirects to `/`; (d) unauth user hitting a protected route is redirected to `/login`. |
+| **CRUD resource** (table + list + form) | (a) Create → row appears in DB; (b) list view renders the new row; (c) edit → row updated in DB and re-rendered; (d) delete → row removed and disappears from list; (e) RLS: a non-owner session cannot SELECT another user's row. |
+| **API + UI** (server action or route handler driving a UI) | (a) Happy path: action returns the expected shape; UI renders it; (b) error path: action returns a user-readable error and UI surfaces it (no raw stack); (c) no PII (email/phone/address) in client logs or error payloads. |
+| **RLS section** (introducing per-user data) | (a) Non-owner session: SELECT returns 0 rows; (b) owner session: SELECT returns the row; (c) admin / service role behaves as designed (full access if intended, denied if not); (d) the migration that creates the table also ships the RLS policy. |
+| **Public form** (unauthenticated input — contact, public quote-accept) | (a) Single-use token validated and consumed; (b) rate-limit returns 429 after N+1 attempts in the rate window; (c) bad input returns 400 with no leaked schema; (d) honeypot/captcha rejects the obvious bot pattern. |
+| **Webhook ingestion** (Stripe, Resend, etc.) | (a) Signature verification passes for a real-payload fixture; (b) verification fails for a tampered payload — 400; (c) duplicate event-id is idempotent (already-processed returns 200, no double write); (d) processing errors are logged with the event id but never surface PII. |
+| **Migration-only session** (no UI surface) | (a) Migration applies forward cleanly; (b) `supabase db diff` shows no drift after apply; (c) regenerated types are committed (`supabase gen types`); (d) one-line rollback recipe captured in the migration file's comments. |
+
+If no pattern matches, ask the user for the 2-4 concrete checks — naming what would have to be true for this session's work to count as done. *Don't ship generic "test it works."* That defeats the verify-list discipline and turns `/done` into a rubber stamp.
+
+### Step 6.3 — Compose the entry
+
+Now write the entry: goal, files-to-read, files-to-write/edit (from Step 6.1), build steps, verify (from Step 6.2), output. Past 100 lines, split into two sessions.
 
 **Do NOT pre-plan sections 2..N in detail.** Section plans drift as earlier sections discover real shape. The master plan stays in sync; only the active section plan is fully detailed.
 
