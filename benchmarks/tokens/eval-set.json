@@ -1,0 +1,139 @@
+{
+  "version": 1,
+  "description": "Token-efficiency benchmark — 15 spine-relevant prompts + 4 negative controls. Each prompt runs in two conditions (spine-on, spine-off) for N runs and the harness captures usage.input_tokens, usage.output_tokens, usage.cache_creation_input_tokens, usage.cache_read_input_tokens, and total_cost_usd from claude -p --output-format json.",
+  "prompts": [
+    {
+      "id": "ws-feature-sizing",
+      "category": "workflow_scoping",
+      "prompt": "I want to add a customer dashboard to my Next.js app — login, list of orders, status filter, CSV export. How should I size this? One session or multiple?",
+      "expected_spine_skill": "op-workflow",
+      "rationale": "Triggers the feature-sizing chapter (06). Spine-off answers generically; spine-on applies the one-session rubric."
+    },
+    {
+      "id": "ws-fresh-terminal",
+      "category": "workflow_scoping",
+      "prompt": "We're about 4 hours into this session and the code quality feels like it's slipping. Should I just push through or start a fresh terminal?",
+      "expected_spine_skill": "op-foundations",
+      "rationale": "Drift/dilution signal — chapter 03 has the explicit threshold. Spine-off may hedge."
+    },
+    {
+      "id": "rc-contradiction",
+      "category": "recovery",
+      "prompt": "Earlier in this conversation you said the migration was safe to roll forward; now you're telling me to roll back. Which is correct?",
+      "expected_spine_skill": "op-recovery",
+      "rationale": "Classic contradiction signal — chapter 17's playbook handles ground-truth and recovery."
+    },
+    {
+      "id": "rc-post-mortem",
+      "category": "recovery",
+      "prompt": "The deploy broke production. I've already rolled back. What's the right post-mortem flow before I touch the code again?",
+      "expected_spine_skill": "op-recovery",
+      "rationale": "Recovery chapter has the explicit incident-aftermath sequence."
+    },
+    {
+      "id": "pe-where-rule",
+      "category": "persistence",
+      "prompt": "I keep telling Claude not to commit secrets at the start of every session. Where should I save that rule so it sticks — CLAUDE.md, a custom skill, or memory?",
+      "expected_spine_skill": "op-persistence",
+      "rationale": "Direct persistence-decision trigger — chapters 12-13 are the routing target."
+    },
+    {
+      "id": "pe-supabase-client",
+      "category": "persistence",
+      "prompt": "Should the rule 'always use the new typed Supabase client, never the old anon-key one' live in CLAUDE.md or a custom skill?",
+      "expected_spine_skill": "op-persistence",
+      "rationale": "Same chapter, different framing — tests robustness of the persistence route."
+    },
+    {
+      "id": "tc-bash-or-edit",
+      "category": "tool_choice",
+      "prompt": "I want to count how many .ts files in this repo import lodash. Should I use the Bash tool or the Edit tool?",
+      "expected_spine_skill": "op-tools",
+      "rationale": "Tool palette chapter (15) maps task-shape → tool. Should disambiguate quickly."
+    },
+    {
+      "id": "tc-grep-or-explore",
+      "category": "tool_choice",
+      "prompt": "I need to find every place in the codebase where we call `stripe.subscriptions.create`. Use grep directly or spawn an Explore agent?",
+      "expected_spine_skill": "op-tools",
+      "rationale": "Chapter 15 + 16's heuristic: grep for ≤3 queries, Explore for broader sweeps."
+    },
+    {
+      "id": "ap-while-im-here",
+      "category": "anti_patterns",
+      "prompt": "While I'm in here fixing the bug, let me also add Redis caching to the API route. It's only a few extra lines.",
+      "expected_spine_skill": "op-anti-patterns",
+      "rationale": "Scope-creep / 'while I'm here' is the textbook anti-pattern from chapter 18."
+    },
+    {
+      "id": "ap-future-helper",
+      "category": "anti_patterns",
+      "prompt": "I'm going to add a generic `withErrorBoundary(fn)` helper now — we'll probably need it across the codebase later.",
+      "expected_spine_skill": "op-anti-patterns",
+      "rationale": "Speculative abstraction — chapter 18 explicitly warns against helpers for hypothetical future use."
+    },
+    {
+      "id": "bf-inherited-project",
+      "category": "brownfield",
+      "prompt": "I'm picking up a Next.js project a previous developer built — I didn't write it. Where do I start to safely add a small feature without breaking anything?",
+      "expected_spine_skill": "op-brownfield",
+      "rationale": "Chapter 08 has the discovery sequence for unfamiliar codebases."
+    },
+    {
+      "id": "sg-scope-check",
+      "category": "signaling",
+      "prompt": "I feel like we've drifted from the scope we agreed on at the start of this session, but I'm not sure. Can you check us against the original ask?",
+      "expected_spine_skill": "op-signaling",
+      "rationale": "Scope-drift signal — chapter 11 has the explicit re-check protocol."
+    },
+    {
+      "id": "sa-parallel-subagents",
+      "category": "subagents",
+      "prompt": "I want to check three independent things — lint passing, tests passing, and whether the production build works. Should I run them in parallel via subagents?",
+      "expected_spine_skill": "op-subagents",
+      "rationale": "Chapter 16 covers parallel/background agent decisions. Cost-aware branching also relevant (19f)."
+    },
+    {
+      "id": "pr-bad-output",
+      "category": "prompting",
+      "prompt": "I asked for a refactor of the auth middleware and got something completely wrong on the first try. How should I phrase the prompt differently next time?",
+      "expected_spine_skill": "op-prompting",
+      "rationale": "Chapter 09 covers prompt patterns for iterating after a wrong first output."
+    },
+    {
+      "id": "hk-typecheck-after-edit",
+      "category": "hooks",
+      "prompt": "I want Claude to automatically run `tsc --noEmit` after every .ts edit. Where in Claude Code do I configure that?",
+      "expected_spine_skill": "op-hooks",
+      "rationale": "Chapter 14 + 14b have the hook recipe for typecheck-after-edit verbatim."
+    },
+    {
+      "id": "ctrl-yaml-indent",
+      "category": "control",
+      "prompt": "Fix this YAML indent for me:\n\n```\nparent:\n  child: value\n    nested: bad\n```",
+      "expected_spine_skill": null,
+      "rationale": "Pure syntax fix. Spine should add zero value — any token delta here is signal of over-loading."
+    },
+    {
+      "id": "ctrl-array-to-set",
+      "category": "control",
+      "prompt": "What's the cleanest way in modern JavaScript to convert an array to a Set, dedupe it, and convert back to an array?",
+      "expected_spine_skill": null,
+      "rationale": "Stdlib question, no architectural decision. Spine-on should not consult any chapter."
+    },
+    {
+      "id": "ctrl-email-regex",
+      "category": "control",
+      "prompt": "Write me a regex that matches an email address — good enough for a form submission, doesn't need to be RFC 5322 perfect.",
+      "expected_spine_skill": null,
+      "rationale": "Pure utility ask. No 'when' or 'where' decision involved."
+    },
+    {
+      "id": "ctrl-git-pathspec",
+      "category": "control",
+      "prompt": "In `git log -p -- path/to/file.ts`, what does the `--` separator do exactly?",
+      "expected_spine_skill": null,
+      "rationale": "Git CLI syntax question. Spine has no domain-specific framing to add."
+    }
+  ]
+}

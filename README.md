@@ -188,6 +188,16 @@ python3 aggregate.py           # writes results/REPORT.md and needs-tightening.m
 
 Requires the `skill-creator` plugin and Python 3.10+ (falls back to `uv run --python 3.12` automatically). Not run in CI — costs real API spend, and has known structural bias for routing-style skills. See [`tests/skill-triggers/README.md`](tests/skill-triggers/README.md) for the full doc and caveats (the eval undercounts real-world triggering; the harness is most reliable for false-positive rates).
 
+**Token-efficiency benchmark** (paid, manual, run before a release tag):
+
+```bash
+cd benchmarks/tokens
+./run.sh                       # 19 prompts × 3 runs × 2 conditions = 114 calls, ~$9–$15 (Sonnet)
+python3 aggregate.py           # writes REPORT.md
+```
+
+Measures the per-call input cost of having the spine installed vs not. For each prompt, runs `claude -p` once with the spine installed and once with `~/.claude/CLAUDE.md` stubbed + `~/.claude/skills/op-*` stashed, then compares `usage` tokens and `total_cost_usd`. Requires the `claude` CLI authenticated, `jq`, and Python 3.10+. Not run in CI — costs real API spend and runs in minutes, not seconds. See [`benchmarks/tokens/README.md`](benchmarks/tokens/README.md) for the eval-set, cost detail, and the "what this doesn't measure" caveats (single-shot undercount vs. multi-turn amortization; cache_creation vs cache_read interpretation).
+
 ---
 
 ## Contributing

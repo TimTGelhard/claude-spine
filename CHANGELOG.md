@@ -102,9 +102,35 @@ Three hook fixtures had landed without ever being added to `tests/run.sh`'s `sui
 - `tests/run.sh` — `suites` array gains the three missing entries; header comment updated to enumerate all five suites.
 - `LAUNCH.md` — new `### L4b followup (2026-05-28) — wire missing hook tests into the fast suite` subsection under L4 notes.
 
+### L4c — Token-efficiency benchmark harness
+
+Spine-on vs spine-off token-cost measurement. The eval-set + harness ship in this update; a baseline run against Sonnet 4.6 (~$9–$15) and the resulting `REPORT.md` numbers ship in a separate session whenever Tim authorizes the spend. Today's commit is the scaffold + the operating contract — so a future run is one `./run.sh` away from a populated REPORT.
+
+The harness pattern mirrors `tests/skill-triggers/run.sh`: stash `~/.claude/CLAUDE.md` + every `~/.claude/skills/op-*` directory to a `mktemp -d` root, replace `~/.claude/CLAUDE.md` with a one-line stub, run the eval-set in batch, restore the spine on `EXIT` / `INT` / `TERM` / `HUP`, then run the spine-on batch. Cache behavior is the explicit design choice: batching means the prompt cache amortizes the spine-on prefix after the first call — that mirrors real steady-state usage; alternating conditions would cold-cache every call and over-report spine cost. `REPORT.md` calls this out per-prompt in a "Cache creation vs read" table.
+
+#### Added
+
+- `benchmarks/tokens/eval-set.json` — 19 prompts (15 spine-relevant + 4 negative controls). Categories: workflow_scoping (2), recovery (2), persistence (2), tool_choice (2), anti_patterns (2), brownfield (1), signaling (1), subagents (1), prompting (1), hooks (1), control (4). Each entry carries `id`, `category`, `prompt`, `expected_spine_skill`, and `rationale`. Approved by Tim before harness code shipped, per the L4c spec's gate.
+- `benchmarks/tokens/run.sh` — preflight reports installed vs. repo skill counts and warns if they diverge (a stale install measures yesterday's spine, not today's). Flags: `--runs N` (default 3), `--model NAME` (default `claude-sonnet-4-6`), `--timeout N` (default 90s), `--only-prompt ID`, `--only-cond on|off`, `--dry-run`. Per-call raw output lands in `results/raw/<id>__<cond>__r<N>.json`; a rolling summary lands in `results/results.jsonl` (one JSON object per call with the seven token / cost / timing fields aggregate.py needs).
+- `benchmarks/tokens/aggregate.py` — reads `results/results.jsonl`, writes `REPORT.md`. Sections: per-prompt comparison table (Δ tokens, Δ %, Δ cost USD); totals; per-condition variance (σ of input tokens across runs); cache_creation vs cache_read per prompt; the spec-mandated "What this doesn't measure" caveats section. Idempotent — re-run anytime; partial JSONL produces a partial report.
+- `benchmarks/tokens/README.md` — usage, prerequisites, cost estimate ($9–$15 default; ~10× on Opus), when to re-run, link to the report. Cross-links to `tests/skill-triggers/README.md` so the two harnesses' purposes don't blur.
+- `benchmarks/tokens/REPORT.md` — placeholder; aggregate.py rewrites this on every run.
+- `benchmarks/tokens/.gitignore` — excludes `results/` (per-call raw output + rolling jsonl summary). Each `./run.sh` regenerates; only the harness scaffold + the published `REPORT.md` are tracked.
+
+#### Changed
+
+- `README.md` — "Running the tests" section gains a third subsection (**Token-efficiency benchmark**) sibling to the fast suite and the skill-trigger benchmarks. Same "paid, manual, not in CI" framing; cost estimate inline.
+
+#### Implementation notes
+
+- **`claude -p --output-format json` schema verified before drafting the harness.** Top-level keys include `total_cost_usd`, `usage`, `modelUsage`, `num_turns`, `duration_ms`, `ttft_ms`. Inside `usage`: `input_tokens`, `output_tokens`, `cache_creation_input_tokens`, `cache_read_input_tokens` — the four fields the report compares. No invented field names.
+- **Cost-default tightened to Sonnet 4.6.** Tim's machine defaults to Opus 4.7 at $0.12 per "hi" call; the full 114-call sweep on Opus would be ~$15 *per condition* and blow the spec's $15 cap. `--model claude-sonnet-4-6` is the explicit default; `--model opus` is an opt-in.
+- **Batch order is spine-off → spine-on.** The spine-off batch leaves no cache prefix to invalidate; the subsequent spine-on batch creates its own cold cache on call 1 and amortizes on calls 2..N. Alternating would re-pay the cold-cache cost every prompt.
+- **No CI integration.** Same rationale as skill-triggers: real API spend, minutes of wall time, no `ANTHROPIC_API_KEY` in CI. The fast suite stays the only suite CI runs.
+
 ### Still pending pre-launch
 
-- **L4c** — token-efficiency benchmark (spine-on vs spine-off) for demo numbers.
+- **L4c baseline run** — the harness shipped today; the actual `./run.sh` against Sonnet 4.6 (~$9–$15) is gated on Tim's authorization. Once it runs, `benchmarks/tokens/REPORT.md` carries the numbers and L4c closes.
 - **L7a / L7c / L7d / L7e** — landing-page hardening (built CSS, OG image, waitlist wiring), demo recording, public launch.
 
 See [`LAUNCH.md`](LAUNCH.md) for launch gates and [`FIXES.md`](FIXES.md) for the active drift backlog.
