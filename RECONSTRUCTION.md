@@ -24,6 +24,10 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 
 ## Current phase
 
+**Phase 8d — bucket integration (chapters discovery + INDEX unification + stale-review + project-shift docs) — done** (2026-05-27). Ships `skills/core/op-curate/stale-review.md` (~65 lines) and updates `bucket/INDEX.md`, `op-bucket-router/SKILL.md`, `op-curate/SKILL.md`, `/curate`, `/refresh-bucket`, `bucket/README.md`, and chapters 19d + 19e. Three open questions resolved: (1) **unified bucket INDEX** — one `bucket/INDEX.md` with both Skills and Chapters tables, each with its own append-marker, `op-bucket-router` reads one file; split rejected because decomposition-rule #3 fails when the router always reads both halves; (2) **stale-review proxy** — driven by the `Added` date column in `bucket/INDEX.md` (default 6-month cutoff, tunable per session), no firing-timestamp tracking, no auto-archival; (3) **project-shift flow** — explicit only: run `/onboard --deep` to update the profile, then `/curate --review-stale` to walk the now-misaligned bucket entries. No auto-detection. `/onboard --refresh` references (5× in PERSONALIZATION.md, 1× in chapter 19e) replaced with `/onboard --deep` (the actual surface). `op-curate` became a folder skill (SKILL.md + adjacent `stale-review.md`) when adding `--review-stale` would have pushed SKILL.md past the 55-line cap — same pattern as `op-onboard`. `install.sh` needed zero changes — all touched files are in already-globbed paths.
+
+**Phase 8c — `op-curate` curation skill — done** (2026-05-27). Ships `skills/core/op-curate/SKILL.md` (single-file, ~60 lines incl. frontmatter — same shape as `op-suggest`) and `global/commands/curate.md`. Read-before-write encoded as a numbered list in the body (three required reads: `SUGGESTIONS.md`, `INDEX.md`, overlapping bucket files). Diff-preview pattern spelled out by file type (new files → full body in code block; modifications → unified diff). Hard-refusal table covers four paths (`chapters/`, `skills/core/`, profile, global stub). Status flow: resolved entries move from "Pending" to "Applied / rejected (archive)" with `Status: applied|rejected` + added `Resolved: YYYY-MM-DD` line — the 8b open question resolved this direction.
+
 **Phase 8b — `op-suggest` capture skill — done** (2026-05-27). Ships `skills/core/op-suggest/SKILL.md` (58 lines, single-file — no adjacent files; the entry schema lives inline) and `global/commands/suggest.md`. The trigger description in the frontmatter is locked: four narrow conditions to fire (explicit user signal, repeated friction 2+, end-of-session reflection, `/suggest`); five explicit no-fires (speculation, one-off, mid-task ideation, Claude hunch, dedupe-at-capture). Dry-run walked 8 scenarios through the description and all classified correctly. Claude can now capture suggestions during normal work; curation (`op-curate` / `/curate`) lands in 8c.
 
 **Phase 8a — personalization chapters + bucket scaffolding — done** (2026-05-27). Ships `chapters/personalization/` (19a–19e), `bucket/SUGGESTIONS.md`, `bucket/CHANGELOG.md`, `bucket/chapters/` skeleton, and integrations into `INDEX.md` + `bucket/README.md`. The manual now *describes* personalization end-to-end; the skills that implement the loop land in 8b/8c.
@@ -59,7 +63,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 - Top-level `INDEX.md` fallback section + RECONSTRUCTION target-folder-structure swept to the new `bucket/` location.
 - `install.sh` needed **no changes** — its `op-*/` skill glob and `global/commands/*.md` command glob automatically pick up the new files. Verified via `--dry-run`.
 
-**Next:** Phase 8c (`op-curate` curation skill + `/curate` slash command + read-before-write enforcement + diff-preview pattern). Phase 7 (demo + launch) remains gated on 8 completing.
+**Next:** Phase 8e (end-to-end dry-run, trigger threshold tuning, README personalization section, Phase 8 done flip). Phase 7 (demo + launch) remains gated on 8 completing.
 
 ---
 
@@ -112,8 +116,8 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 | 8 | Personalization + self-evolution loop — `op-suggest`, `op-curate`, `bucket/SUGGESTIONS.md`, `bucket/chapters/`, personalization chapter. **Full plan: `PERSONALIZATION.md`.** Splits into sub-phases 8a–8e (one per session). | **in progress** |
 | 8a | Personalization chapters (19a–19e) + bucket scaffolding (`SUGGESTIONS.md`, `CHANGELOG.md`, `bucket/chapters/`) + INDEX section. The manual describes personalization; skills land in 8b/8c. | **done (2026-05-27)** |
 | 8b | `op-suggest` capture skill + `/suggest` slash command + entry-schema lock + dry-run | **done (2026-05-27)** |
-| 8c | `op-curate` curation skill + `/curate` slash command + read-before-write enforcement + diff-preview pattern | not started |
-| 8d | Integration: `op-bucket-router` discovers `bucket/chapters/`; bucket INDEX unification decision; stale-review tooling; project-shift handling | not started |
+| 8c | `op-curate` curation skill + `/curate` slash command + read-before-write enforcement + diff-preview pattern | **done (2026-05-27)** |
+| 8d | Integration: `op-bucket-router` discovers `bucket/chapters/`; bucket INDEX unification decision; stale-review tooling; project-shift handling | **done (2026-05-27)** |
 | 8e | End-to-end dry-run, trigger threshold tuning, README personalization section, Phase 8 done flip | not started |
 
 Phases 1–5 are content-independent; any order works, but listed order is dependency-friendly. Phase 6 needs 1–5 done. Phase 6.5 should land before Phase 8 (bucket infrastructure first, then the evolution loop on top). Phase 7 needs 6 + 6.5 + 8.
@@ -271,6 +275,9 @@ This table grows as each phase lands. Each new file added here when it's written
 | `bucket/chapters/.gitkeep` | new | 8a | written 2026-05-27 |
 | `skills/core/op-suggest/SKILL.md` | new | 8b | written 2026-05-27 |
 | `global/commands/suggest.md` | new | 8b | written 2026-05-27 |
+| `skills/core/op-curate/SKILL.md` | new | 8c | written 2026-05-27 |
+| `global/commands/curate.md` | new | 8c | written 2026-05-27 |
+| `skills/core/op-curate/stale-review.md` | new | 8d | written 2026-05-27 |
 
 ---
 
@@ -314,6 +321,8 @@ To be resolved in their phase.
 (Resolved 2026-05-27, Phase 6a: skill installation → **symlink** (`~/.claude/skills/op-*` → `<spine>/skills/core/op-*`); interview depth → **hybrid** (5 essentials up front + opt-in `/onboard --deep` for the full ~15-question set); cross-reference back-fill **complete**; hardcoded path sweep **complete** — all skills now use `~/.claude-spine/...` paths.)
 
 (Resolved 2026-05-27, Phase 6c: **skill body cap raised from 40 → 55 lines.** All 14 core skills fit — range 34–52, op-onboard at 43. The cap exists to keep skills as routers; none crossed into content territory. When a skill needs more than 55 lines, extra material goes in adjacent files loaded on-demand — `op-onboard` is the reference pattern.)
+
+(Resolved 2026-05-27, Phase 8d: **unified bucket INDEX** — one `bucket/INDEX.md` holds both Skills and Chapters tables, each with its own append-marker. Split rejected (decomposition-rule #3: router always reads both halves). **Stale-review proxy** — `Added` date in INDEX, 6-month default cutoff, no firing-timestamp tracking. **Project-shift flow** — `/onboard --deep` then `/curate --review-stale`, explicit only, no auto-detect. `/onboard --refresh` references replaced with `/onboard --deep` (5× PERSONALIZATION.md, 1× chapter 19e).)
 
 ---
 
@@ -411,8 +420,36 @@ This replaces the earlier hard-coded `/Users/macbook/claude-op-manual/...` paths
 - **`/suggest` slash command at `global/commands/suggest.md`.** Bypasses the high-threshold gate (the slash command IS the gate — user explicitly opted in). Walks the user through title → type → proposed change → append. Same shape as `/add-skill`.
 - **Dry-run walked 8 scenarios** through the locked description: 4 should-fire (explicit signal, repeated friction, end-of-session reflection, `/suggest`) and 4 no-fires (one-off correction, mid-task ideation, Claude hunch, speculation). All classified correctly. The "orthogonal contexts" carve-out from 19c is handled by the "same mistake, same direction, same correction — you can quote both corrections" line: if both corrections can't be quoted side-by-side as the same statement, it's not a pattern.
 - **`install.sh` needed zero changes.** Sections 2 (`skills/core/op-*/`) and 3 (`global/commands/*.md`) already glob the new files. Same as Phase 6.5 — the install architecture is correctly future-proofed against new skills and commands landing.
-- **Open question for 8c:** SUGGESTIONS.md status updates on resolution — does `op-curate` flip `Status: pending` in-place (preserving chronological order) or move the entry under "Applied / rejected (archive)"? The current SUGGESTIONS.md skeleton supports either path; the schema-in-body for `op-suggest` doesn't take a position (it only writes the initial `pending` entry). 8c decides — Session C will make the call when implementing the curation skill body.
+- **Open question for 8c:** SUGGESTIONS.md status updates on resolution — does `op-curate` flip `Status: pending` in-place (preserving chronological order) or move the entry under "Applied / rejected (archive)"? The current SUGGESTIONS.md skeleton supports either path; the schema-in-body for `op-suggest` doesn't take a position (it only writes the initial `pending` entry). 8c decides — Session C will make the call when implementing the curation skill body. **Resolved in 8c: move-to-archive (see 8c notes).**
 - **No chapter content touched.** Phase 8b was skill + slash command only — exactly the planned scope.
+
+### Phase 8c notes (2026-05-27)
+
+- **`op-curate` is a single-file skill** (`SKILL.md` only, no adjacent files). Same shape as `op-suggest`: the curation flow is operational checklist, not template content — nothing to load on-demand. Body lands at 55 lines (at the cap), frontmatter adds 4. Total file ~60 lines, in the same band as `op-suggest` (58) and `op-workflow` (52). All 15 core skills now sit at 34–60 lines.
+- **Status flip = move-to-archive (not in-place).** The 8b open question is closed in this direction. On apply or reject, the entry leaves the Pending section and lands under "Applied / rejected (archive)" with `Status: applied|rejected` and an added `- **Resolved:** YYYY-MM-DD` line. The SUGGESTIONS.md skeleton from 8a already supports this — the archive heading was written then. Reasons: (a) the Pending section stays small as the queue grows; (b) `op-suggest`'s append marker is inside Pending and never gets touched by curation; (c) the archive preserves chronological capture order without polluting the active queue. The alternative (in-place flip) was viable but would have left Pending bloated with resolved entries that `op-curate` has to filter on every read.
+- **Read-before-write encoded as a numbered list, not a soft rule.** Three explicit reads (`SUGGESTIONS.md`, `bucket/INDEX.md`, any overlapping bucket files). The skill body says: "if you're about to propose a write without having opened the bucket INDEX this session, that's the bug." Same shape as the 19d chapter rule.
+- **Diff preview is spelled out by file type.** New files → full body in fenced code block. Modifications → unified diff. The skill body names both shapes inline; the chapter (19d) doesn't go into format-by-type — that's an operational detail belonging to the skill.
+- **Hard refusal table = the same four paths as 19d.** `chapters/`, `skills/core/`, profile, global stub. Each row names where the user *should* go instead (PR, `/onboard`, re-run install) so the refusal isn't a dead-end.
+- **New-chapter writes are explicitly half-supported.** Phase 8d wires `op-bucket-router` to discover `bucket/chapters/`; until then, op-curate can write a chapter and log it in CHANGELOG, but the router won't auto-find it. The body flags this with a one-line "bucket-router chapter discovery lands in Phase 8d." Avoids pretending the chapter path is fully integrated when it isn't.
+- **`/curate` slash command at `global/commands/curate.md`.** Same shape as `/suggest`: short frontmatter description, one-paragraph invocation pointing at the SKILL, with an explicit "confirm the mode switch if user was mid-task" note. No args — `--review-stale` lands in 8d.
+- **Auto-propose at 5+ pending NOT encoded into the skill.** Both PERSONALIZATION.md and 19d mention "Claude proposes curate when 5+ pending." That's a signaling rule in normal sessions, not part of the on-demand curation flow. The skill itself is invoked, never autonomous. Pre-emptive proposal logic is deferred — likely a hint in 19c or a tiny standalone behavior in 8d, not a third skill.
+- **`install.sh` needed zero changes.** Sections 2 (`skills/core/op-*/`) and 3 (`global/commands/*.md`) absorb the new skill and command automatically. Same outcome as 6.5, 8a, 8b — the install architecture continues to absorb new skills and commands without code edits.
+- **No chapter content touched.** Phase 8c was skill + slash command only — exactly the planned scope.
+
+### Phase 8d notes (2026-05-27)
+
+- **Unified bucket INDEX locked.** `bucket/INDEX.md` now has two tables — Skills and Chapters — each with its own append-marker (`<!-- op-add-skill appends rows above this comment. -->` and `<!-- op-curate appends chapter rows above this comment. -->`). The split alternative was rejected because decomposition-rule #3 fails: `op-bucket-router` always reads both halves to answer "is there a bucket entry for this task?", so two files would always load together — the router never benefits from the split. The single-file shape also matches 19e's pre-written description (the chapter was authored agnostically in 8a but leaned unified throughout).
+- **`op-bucket-router` discovers chapters via the INDEX, not by folder-scan.** Router reads `bucket/INDEX.md` and scans both tables. Chapters are *loaded as content* (not "fired" — there's no trigger to satisfy); skills *fire* as before. Added a "Skills vs chapters — when each fits" decision table to the router body to keep the routing semantics legible. Chapter discovery doesn't add a separate code path; it adds a second table read inside the same INDEX read.
+- **`op-curate` became a folder skill.** Adding the `--review-stale` mode pushed the SKILL.md body past the 55-line cap, so the stale-review procedure moved to `op-curate/stale-review.md` — loaded only when `/curate --review-stale` fires. Same architectural pattern as `op-onboard` (`questions-essential.md` / `questions-deep.md` loaded on-demand). SKILL.md gained an "Adjacent files" table and a one-line argument-dispatch rule at the top of "When to fire."
+- **Stale-review proxy = `Added` date column.** No firing-timestamp tracking, no per-file last-used field. The `Added` column already exists in the INDEX (`op-add-skill` writes it, `op-curate` writes it when applying a suggestion, `/refresh-bucket` preserves it). 6-month default cutoff, tunable per session ("show me anything older than 3 months"). The date is a *coarse* proxy — the user's judgment is the actual filter. Rejected alternatives: tracking last-fired (heavy, requires hook plumbing); auto-archival (violates "no auto-GC" rule from 19e).
+- **`/curate --review-stale` is opt-in only and never composed.** Stale-review never auto-fires at the end of a normal curation pass. Never auto-proposes itself. The user invokes it explicitly. Mixing modes within a session was considered and rejected — same "one session, one kind of work" rule from 19d.
+- **Project-shift handling is documentation, not new tooling.** `/onboard --refresh` was a phantom command — referenced in PERSONALIZATION.md (5×) and chapter 19e (1×) but never built. Real surface is `/onboard --deep`. Replaced all references. The shift flow is now spelled out in 19e: `/onboard --deep` first (re-set profile), *then* `/curate --review-stale` (walk the now-misaligned bucket). Order matters and is called out.
+- **`op-curate` now writes Chapters table rows on apply.** When a `new-chapter` suggestion is approved, the SKILL.md body says: append a row to the Chapters table in `bucket/INDEX.md` above its marker, same shape as the Skills row. The Phase 8c caveat ("bucket-router chapter discovery lands in Phase 8d") was deleted from the body — both halves are now wired.
+- **`/refresh-bucket` rebuilds both tables.** Scans `bucket/skills/` (folder-form + single-file) and `bucket/chapters/` (single-file only — bucket chapters are flat per 19e). Chapter row summary comes from the chapter file's first H1 (no frontmatter convention for bucket chapters). Markers are preserved per-table; `Added` dates are preserved per-row. The command's existing diff-preview / no-invent-rows / read-only-on-core rules carry over unchanged.
+- **`bucket/README.md` updated** with the three-way add path (guided skill via `op-add-skill`, via curation, by hand + `/refresh-bucket`) and a one-line note about the two-table INDEX shape.
+- **Chapters 19d and 19e updated.** 19d's "deferred to Phase 8d" caveat replaced with the real procedure pointer. 19e's `/onboard --refresh` replaced; the garbage-collection section spells out the `Added`-date cutoff mechanic and the project-shift order-of-operations.
+- **`install.sh` needed zero changes.** Sections 2 (`skills/core/op-*/`) and 3 (`global/commands/*.md`) absorb the new adjacent file and the changed slash commands automatically. Consistent with 6.5, 8a, 8b, 8c — the install architecture continues to absorb new files in already-globbed paths without code edits.
+- **What's NOT in 8d.** No auto-propose-curation behavior (carried into 8e as a possible signaling tweak in 19c). No new top-level skill. No `op-add-chapter` — chapters land via curation or hand-drop + `/refresh-bucket`. No project-shift detection logic — explicit only.
 
 ### Phase 8a notes (2026-05-27)
 
@@ -439,6 +476,31 @@ This replaces the earlier hard-coded `/Users/macbook/claude-op-manual/...` paths
 - **`global/INSTALL.md` rewritten** to document the install.sh path + both variants + verification queries + uninstall. The earlier copy-paste instructions are gone — `install.sh` does the same thing more safely (backups, idempotency, dry-run).
 - **Templates audit: light neutralization.** Each template got a one-line header note explaining that the example domain (Next.js + Supabase + quote-management for tradespeople) is concrete by design and the structure is stack-agnostic. SESSION_STARTER.md needed no change. Rejected: abstract placeholders (would have weakened the templates as filled-in demos); a templates/neutral/ + templates/opinionated/ split (YAGNI for v1, users will heavily edit anyway).
 - **Skill body line-cap open question still pending.** Phase 6b didn't touch skill bodies. 6c can revisit when adding `op-onboard`.
+
+---
+
+## Pre-launch cleanup (after Phase 8 done, before Phase 7)
+
+Captured 2026-05-27 from a ship-readiness audit. **Not blocking Phase 8 work** — execute after 8e flips to done, as the lead-in to Phase 7. Half a day of work total. Re-audit after each item.
+
+**Doc lies (highest priority — these break first-touch trust):**
+
+1. **README skill count: "14 op-* skills" → "18".** Two places: the v2 status banner near the top, and the bullet under "What you get." The README's own verify step (§"First session after install" step 4) tells the user to expect 14 — they'll see 18 and assume the install is broken.
+2. **README v2 status banner is two phases behind.** Says "Phases 0 through 6c are done … Phase 6.5 is next." 6.5 + 8a + 8b + 8c are all done. Update to current state or change the phrasing to "v2 reconstruction nearing completion — see RECONSTRUCTION.md for live state."
+3. **`INDEX.md` header still says "skeleton — most files don't exist yet."** They do. Replace with the actual status (all written, phases 1–5 populated).
+4. **Root v1/v2 duplication unresolved.** Eighteen `01-…` through `18-…` files at the repo root vs `chapters/<topic>/<NNx>-…`. README calls v1 authoritative "until every phase atomizes it" — phases 1–5 atomized them and are done. Decide: delete, `git mv` into `archive/`, or stamp `> DEPRECATED — see chapters/<topic>/<NNx>-…` at the top of each. Pick one, don't leave both routable.
+
+**Code/infra:**
+
+5. **Two skills exceed the self-imposed 55-line cap:** `op-curate` (60), `op-suggest` (58). Trim, or raise the cap to 65 and add a one-line note in RECONSTRUCTION's architecture section explaining curation/capture skills are slightly longer because they encode workflow flow. Don't ignore — own the decision.
+6. **`jq` is a hard dependency of the env-leak hook but a soft prereq of the installer.** Today: installer warns, hook breaks silently on first `git add .env` if `jq` is absent — the exact failure mode the hook exists to prevent. Fix: either fail-fast in `install.sh` when `--skip-hook` is not set and `jq` is missing, or have the hook itself shell-out a fallback grep on `$CLAUDE_TOOL_INPUT` and degrade safely.
+7. **7 broken markdown links in `RECONSTRUCTION.md`** — bare `13b-trigger-descriptions.md`-style refs missing the `chapters/persistence/` prefix. Internal doc, low impact, but this is the file Claude is told to read first; sloppy refs erode trust. Patch them as part of any other RECONSTRUCTION edit.
+8. **No `CONTRIBUTING.md`** despite the target folder structure listing one and the README having a Contributing section. Decide: write it, or delete the README mention.
+
+**Validation before Phase 7 launches:**
+
+9. **Clean-room install on a fresh VM/container.** Today's `--dry-run` passes on this machine, but this machine already has `~/.claude/`. Verify on a host with no prior state: clone → `./install.sh` → restart Claude Code → run both README verification queries → run `/onboard` → confirm profile file is created. Capture every divergence between README and reality, fold back into items 1–4.
+10. **End-to-end personalization loop dry-run.** This is Phase 8e's scope and is the gate from 8 to 7: trigger `/suggest` during real work → capture entry → `/curate` → apply → entry moves to archive section. Then `/add-skill` → bucket INDEX updates → `op-bucket-router` matches and loads only the new file. If 8e ships this, item 10 is already done — keep it here as a checklist reminder.
 
 ---
 

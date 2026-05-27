@@ -17,14 +17,15 @@ That's the bucket. It's append-mostly, you own it, no one else writes here.
 
 ## How Claude finds your bucket
 
-Auto-loading from `~/.claude/skills/` is reserved for the **core** skills. Bucket skills are *routed to* by `op-bucket-router` (a core skill that fires when no core router matched the task). It reads `bucket/INDEX.md`, picks the matching row, loads only that file. Same routing pattern as the core chapters.
+Auto-loading from `~/.claude/skills/` is reserved for the **core** skills. Bucket entries are *routed to* by `op-bucket-router` (a core skill that fires when no core router matched the task). It reads `bucket/INDEX.md` — which has separate **Skills** and **Chapters** tables — picks the matching row, loads only that file. Skills get fired; chapters get pulled in as content. Same routing pattern as the core chapters.
 
-## Adding a skill
+## Adding a skill or chapter
 
-Two ways:
+Three ways:
 
-1. **Guided** — say "save this as a bucket skill" / "I want to add a skill for X." `op-add-skill` walks you through naming, the trigger description, and the body, writes the file, and appends a row to `bucket/INDEX.md`.
-2. **By hand** — drop a `bucket/skills/<name>.md` (or `<name>/SKILL.md`) in directly, then run `/refresh-bucket` to rebuild the INDEX.
+1. **Guided skill add** — say "save this as a bucket skill" / "I want a skill for X." `op-add-skill` walks you through naming, the trigger description, and the body, writes the file, and appends a row to the Skills table.
+2. **Via curation** — the suggestion loop (`op-suggest` during work → `/curate` to review). Approved `new-skill` or `new-chapter` suggestions land in the right folder and table with one approval each.
+3. **By hand** — drop a `bucket/skills/<name>.md` (or `<name>/SKILL.md`) or a `bucket/chapters/<slug>.md` in directly, then run `/refresh-bucket` to rebuild both INDEX tables.
 
 ## What NOT to put here
 

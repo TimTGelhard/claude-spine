@@ -133,7 +133,7 @@ Profile lives outside the repo at `~/.claude/claude-spine-profile.md` so it pers
 - Never modify `chapters/` or `skills/core/`. Hard refusal if asked.
 - Never write a new bucket file without reading the existing INDEX first.
 - Never apply more than one change without explicit user approval per change.
-- Profile updates are out of scope — those go through `/onboard --refresh`.
+- Profile updates are out of scope — those go through `/onboard --deep`.
 
 ---
 
@@ -195,7 +195,7 @@ This is too much for one session. Five execution sessions after this planning se
 - Wire `op-bucket-router` to discover `bucket/chapters/` (not just skills).
 - Decide: unified `bucket/INDEX.md` vs split `bucket/skills/INDEX.md` + `bucket/chapters/INDEX.md`. Open question for the execution session.
 - Garbage-collection story: stale bucket entries from abandoned project types. Probably manual via `/curate --review-stale`, not automatic.
-- "Project shift" detection: how does Claude know the user moved from apps to ML? Probably explicit `/onboard --refresh` rather than auto-detect.
+- "Project shift" detection: how does Claude know the user moved from apps to ML? Probably explicit `/onboard --deep` rather than auto-detect.
 
 **Deliverable:** full personalization mechanic, integrated.
 
@@ -217,7 +217,7 @@ This is too much for one session. Five execution sessions after this planning se
 - **High threshold for suggestion capture.** Only on explicit user signals or repeated friction. The same speculative-addition rule that governs the core spine (chapter 13/18) applies to the personalization loop *itself*.
 - **Curation is a dedicated session**, separate from normal work. Triggered by user or by Claude proposing when N+ pending entries exist.
 - **Read-before-write is hard-enforced** in `op-curate`. No file proposed without reading the bucket INDEX + affected files first.
-- **Profile evolution is separate from chapter/skill evolution.** Profile updates flow through `op-onboard` / `/onboard --refresh`. The suggestion loop never modifies the profile.
+- **Profile evolution is separate from chapter/skill evolution.** Profile updates flow through `op-onboard` / `/onboard --deep`. The suggestion loop never modifies the profile.
 - **Append-only by default.** Personal chapters/skills are new files. Modifications to existing bucket entries are allowed but flagged in curation.
 
 ---
@@ -228,7 +228,7 @@ This is too much for one session. Five execution sessions after this planning se
 - **Trigger threshold tuning.** Is "same friction 2x" too loose? Too tight? Decide after Session E dry-run.
 - **Auto-propose curation.** Does Claude proactively suggest running `/curate` when there are N+ pending entries? If yes, what N? (Probably 5; revisit after dry-run.)
 - **Stale-entry garbage collection.** Bucket chapters from abandoned project types — manual review via `/curate --review-stale`, auto-archive after X months, or never auto-touch? (Session D.)
-- **Project shift detection.** Auto-detect when the user's work changes domains, or require explicit `/onboard --refresh`? Probably explicit. (Session D.)
+- **Project shift detection.** Auto-detect when the user's work changes domains, or require explicit `/onboard --deep`? Probably explicit. (Session D.)
 - **SUGGESTIONS.md ordering.** Append-only chronological, or grouped by type? Append-only is simpler and audit-friendly; group during curation. (Session B.)
 - **Profile-affecting suggestions.** If Claude observes a working-style drift ("user now prefers terser responses than profile says"), does it log a `profile-update` suggestion? Or is profile only changed via onboarding? (Session B.)
 
@@ -243,7 +243,7 @@ This is too much for one session. Five execution sessions after this planning se
 | **Duplicate entries** — Claude proposes a chapter that overlaps with existing bucket content | Read-before-write enforcement in `op-curate`. Diff preview makes overlap visible to the user. |
 | **Core spine drift via stealth modification** — Claude writes to `chapters/` despite the rule | Hard refusal coded into `op-curate` skill body. Optional: settings.json hook to block writes to `chapters/` and `skills/core/` outside of upstream pulls. |
 | **Personalization becomes a feature creep target** — users want more loops, more sessions, more skills | The chapter 13/18 anti-patterns apply to the personalization mechanic itself. Phase 8 ships with the loop documented here, no more. Future extensions need their own justification. |
-| **Profile/bucket get out of sync** with the user's actual current work | `/onboard --refresh` re-runs the interview. Curation surfaces stale-feeling entries. User retains full control to delete or edit anything in `bucket/`. |
+| **Profile/bucket get out of sync** with the user's actual current work | `/onboard --deep` re-runs the interview. Curation surfaces stale-feeling entries. User retains full control to delete or edit anything in `bucket/`. |
 
 ---
 

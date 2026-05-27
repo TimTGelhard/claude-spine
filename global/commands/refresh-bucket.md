@@ -1,26 +1,31 @@
 ---
-description: Rescan ~/.claude-spine/bucket/skills/ and rebuild bucket/INDEX.md. Use after dropping a bucket skill in by hand (without going through op-add-skill), or to clean up stale rows.
+description: Rescan ~/.claude-spine/bucket/skills/ and ~/.claude-spine/bucket/chapters/, then rebuild both tables in bucket/INDEX.md. Use after dropping a bucket skill or chapter in by hand (without going through op-add-skill or op-curate), or to clean up stale rows that point at missing files.
 ---
 
-Rebuild the bucket INDEX from what's actually on disk.
+Rebuild the bucket INDEX from what's actually on disk. Two tables are rebuilt: **Skills** and **Chapters**.
 
-Steps:
+## Steps
 
-1. List the entries directly under `~/.claude-spine/bucket/skills/`. For each entry:
-   - Folder with a `SKILL.md` inside → that's a folder-form skill; the path to record is `skills/<name>/SKILL.md`.
+1. **Scan `~/.claude-spine/bucket/skills/`.** For each entry directly under it:
+   - Folder containing a `SKILL.md` → folder-form skill; path is `skills/<name>/SKILL.md`.
    - Single `.md` file → single-file skill; path is `skills/<name>.md`.
    - Anything else (stray non-`.md` file, empty folder, `.gitkeep`) → skip.
-2. For each found skill, parse the frontmatter `description:` field — the trigger summary for the INDEX row.
-3. Read the current `~/.claude-spine/bucket/INDEX.md` to get the existing rows (for `Added` dates — preserve them; don't reset to today if the row already exists).
-4. Rewrite `~/.claude-spine/bucket/INDEX.md`:
-   - Keep the file header, the "How files are organized" section, and the `<!-- op-add-skill appends rows above this comment. -->` marker line — these are static.
-   - Replace the table body. One row per found skill: `| <trigger summary, condensed if >120 chars> | <path from bucket/> | <YYYY-MM-DD added — preserved or today's date if new> |`.
-   - If no skills exist, restore the empty-marker row (`_(no skills yet — use ...)_`).
-5. Show the user a unified diff of what changed before saving. Bail if they say no.
-6. After save, tell the user: count of skills indexed, any stale rows removed, any new rows added.
+2. **Scan `~/.claude-spine/bucket/chapters/`.** For each entry directly under it:
+   - Single `.md` file → chapter; path is `chapters/<slug>.md`.
+   - Folder, non-`.md` file, `.gitkeep` → skip. (Bucket chapters are flat single files, per [19e](../../chapters/personalization/19e-extending-the-bucket.md).)
+3. **For each found skill,** parse the frontmatter `description:` field → that's the trigger summary for the Skills row.
+4. **For each found chapter,** read the first H1 (`# ...`) or the first non-empty line if there's no H1 → that's the topic summary for the Chapters row. (No frontmatter convention for bucket chapters; the H1 is the title.)
+5. **Read the current `~/.claude-spine/bucket/INDEX.md`** to get existing rows in both tables, so `Added` dates are preserved for rows whose file still exists.
+6. **Rewrite `~/.claude-spine/bucket/INDEX.md`:**
+   - Keep the file header, the "How files are organized" section, the section headers, and both `<!-- ... appends rows above this comment. -->` markers — these are static.
+   - **Skills table** body: one row per found skill: `| <trigger summary, condensed if >120 chars> | <path from bucket/> | <YYYY-MM-DD added — preserved if the row existed, today if new> |`. If no skills exist, restore the empty-marker row.
+   - **Chapters table** body: same shape, one row per found chapter, using the H1 topic as the summary. If no chapters exist, restore the empty-marker row.
+7. **Show the user a unified diff** of what changed before saving. Bail if they say no.
+8. **After save,** tell the user: count of skills indexed, count of chapters indexed, any stale rows removed (rows pointing at missing files), any new rows added.
 
-Rules:
+## Rules
 
 - **Read-only on `chapters/` and `skills/core/`.** This command only touches `bucket/INDEX.md`.
-- **Don't invent rows.** If the frontmatter description is missing or malformed, list the skill in the output but don't add a row — tell the user to fix it.
-- **Don't delete the user's bucket skills.** Stale-row cleanup means removing INDEX entries that point at missing files. The actual files are never touched.
+- **Don't invent rows.** If a skill's frontmatter description is missing or malformed, or a chapter has no H1 *and* no usable first line, list the file in the output but don't add a row — tell the user to fix it.
+- **Don't delete the user's bucket files.** Stale-row cleanup means removing INDEX entries that point at missing files. The actual files are never touched.
+- **Preserve marker order.** Skills table marker stays at the bottom of the Skills section; Chapters table marker at the bottom of the Chapters section. Don't merge or move them.

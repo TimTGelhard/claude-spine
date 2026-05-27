@@ -73,12 +73,12 @@ Bucket entries decay when:
 - A project type abandons you (the freelance-quote skills don't fire when you're full-time in-house).
 - A pattern was wrong about itself (you wrote it after 3 paste-ins but it never fires in practice).
 
-No auto-archival by default. The bucket is yours; the spine doesn't decide when your patterns expire. Two opt-in tools (Phase 8d):
+No auto-archival by default. The bucket is yours; the spine doesn't decide when your patterns expire. Two opt-in tools:
 
-- `/curate --review-stale` — walk through entries that haven't fired in N months, prune-or-keep one at a time.
+- `/curate --review-stale` — walk through entries whose `bucket/INDEX.md` `Added` date is older than a cutoff (6 months by default; tunable per session), one at a time. Each gets keep / archive / defer-to-edit. The `Added` date is a coarse proxy — your judgment is the real filter.
 - Manual delete — find the file, `rm` it, run `/refresh-bucket`.
 
-Project-shift detection (Claude noticing you moved domains) is similarly explicit, not automatic. When your work changes meaningfully, run `/onboard --refresh` and then a stale-review pass.
+Project-shift detection (Claude noticing you moved domains) is explicit, not automatic. When your work changes meaningfully, run `/onboard --deep` to update the profile, **then** `/curate --review-stale` once the new context is set. Order matters: the profile change reframes which old bucket entries still earn their place.
 
 ## How bucket additions interact with `git pull`
 

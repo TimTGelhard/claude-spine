@@ -90,9 +90,9 @@ When the suggestion overlaps with existing bucket content, curation has three pl
 
 Claude proposes one of these explicitly. Don't write a third bucket skill that does almost the same thing as the second one.
 
-## Stale-entry review (deferred to Phase 8d)
+## Stale-entry review
 
-When bucket entries from abandoned project types are still around, `/curate --review-stale` (Phase 8d) walks them with you for prune-or-keep decisions. Auto-archival is not the default — your bucket doesn't decay on a timer. The current rule: stale-detection is opt-in, manual, surfaced by you running the flag.
+When bucket entries from abandoned project types are still around, `/curate --review-stale` walks them with you for prune-or-keep decisions. Auto-archival is not the default — your bucket doesn't decay on a timer. The rule: stale-detection is opt-in, manual, surfaced by you running the flag. Driven by the `Added` date in `bucket/INDEX.md` (default cutoff 6 months, tunable per session). Full procedure in [19e §Garbage collection](19e-extending-the-bucket.md).
 
 ## What a healthy curation session looks like
 
