@@ -374,12 +374,30 @@ fi
 
 # ---------- summary ----------
 
-echo "==> done."
-if [ -d "$BACKUP_DIR" ]; then
-  echo "  backups: $BACKUP_DIR"
-fi
-echo "  restart Claude Code to load the new global + skills."
+echo "==> claude-spine is installed."
 echo
-echo "  verify in a fresh session:"
-echo "    \"What's in my global CLAUDE.md? Summarize the section headings.\""
-echo "    \"List the op-* skills loaded.\""
+echo "  What just happened: 21 skills, 8 slash commands, a thin global"
+echo "  CLAUDE.md, settings, and safety hooks were linked into ~/.claude/."
+echo "  Claude Code will pick them up on its next launch."
+echo
+echo "  ┌── Next steps ─────────────────────────────────────────────────┐"
+echo "  │                                                               │"
+echo "  │  1. Restart Claude Code  (so it loads the new skills)         │"
+echo "  │  2. Open any Claude Code session                              │"
+echo "  │  3. Type  /onboard                                            │"
+echo "  │                                                               │"
+echo "  │  /onboard is a ~2-minute, 6-question interview that calibrates│"
+echo "  │  Claude to your subscription, stack, and working style.       │"
+echo "  │  Without it, every session falls back to generic defaults.    │"
+echo "  │                                                               │"
+echo "  │  After onboard, type  /spine  to see everything that's loaded,│"
+echo "  │  or just start working — Claude knows what to do.             │"
+echo "  │                                                               │"
+echo "  └───────────────────────────────────────────────────────────────┘"
+if [ -d "$BACKUP_DIR" ]; then
+  echo
+  echo "  Existing files were backed up to:"
+  echo "    $BACKUP_DIR"
+fi
+echo
+echo "  Re-running ./install.sh is safe (idempotent). To uninstall: ./uninstall.sh"

@@ -102,17 +102,19 @@ Options (single-select):
 
 ## After Q6
 
-Save the essentials immediately (write the profile file now, even if deep is coming next — captures the first-run state).
+1. **Save the essentials immediately** — write the profile file now, even if deep is coming next. Captures the first-run state.
 
-Then ask:
+2. **Propose settings.json tune (from Q1).** Run the "Subscription-based settings tuning" flow in `SKILL.md`: read `~/.claude/settings.json`, compute target values from the Q1 mapping table, and — if the target differs from the current values — show a one-line diff and ask for explicit approval. Apply on yes; skip on no. If Q1 was "Other" or settings.json doesn't exist, skip silently.
 
-Question: **"Want to answer about 10 more questions so I can tailor things further? You can also do this later."**
-Header: `Continue?`
+3. **Then ask about the deep interview:**
 
-Options (single-select):
-- **Yes, keep going now**
-- **Not now — I'll run `/onboard --deep` later**
-- **No, I'm good with the basics**
+   Question: **"Want to answer about 11 more questions so I can tailor things further? You can also do this later."**
+   Header: `Continue?`
 
-If "Yes, keep going now" → load `questions-deep.md`.
-If "Not now" or "No, I'm good with the basics" → leave deep sections in the profile as `(unfilled — run /onboard --deep to capture)`. Tell the user the essentials are saved and where to find the file.
+   Options (single-select):
+   - **Yes, keep going now**
+   - **Not now — I'll run `/onboard --deep` later**
+   - **No, I'm good with the basics**
+
+   If "Yes, keep going now" → load `questions-deep.md`.
+   If "Not now" or "No, I'm good with the basics" → leave deep sections in the profile as `(unfilled — run /onboard --deep to capture)`. Tell the user the essentials are saved, where to find the file, and whether settings.json was tuned or skipped.

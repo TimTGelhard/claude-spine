@@ -3,9 +3,11 @@
 **If you're a Claude session reading this cold, this file is your first read.** It's the gap-fixing plan between the end of `RECONSTRUCTION.md` (v2 architecture shipped 2026-05-27) and a public launch. Each phase is sized for one focused session.
 
 Companion docs:
-- `RECONSTRUCTION.md` — v2 build history, frozen architectural decisions, pre-launch cleanup pass (items 1–8 done, item 9 still open).
+- `RECONSTRUCTION.md` — v2 build history, frozen architectural decisions, pre-launch cleanup pass (all 10 items closed — item 9 closed by L5's clean-room install report).
 - `docs/archive/PERSONALIZATION-plan-2026-05.md` — personalization loop design (Phase 8 planning doc, archived once the loop shipped).
-- `README.md` — public-facing entry point (already rewritten in Phase 6c).
+- `docs/archive/PLAN-AMBIENT-WORKFLOW-2026-05.md` — L10 ambient workflow planning doc (archived once the L10 + L10.1 mechanics shipped).
+- `README.md` — public-facing entry point (rewritten in Phase 6c).
+- `CHANGELOG.md` — release-narrative; `[Unreleased]` covers L10 + L10.1 + onboarding subscription awareness + pre-launch cleanup since the 0.9.0 freeze.
 
 ---
 

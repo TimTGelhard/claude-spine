@@ -1,73 +1,26 @@
-# Reconstruction State — v2 Public Toolbox
+# Reconstruction State — v2 build history
 
-**If you're a Claude session reading this cold, this file is your first read. It tells you exactly where the v2 reconstruction stands and what to do next.**
+**Frozen 2026-05-27 (v2 architecture shipped).** This file is the build history for the v2 reconstruction. The current-state entry points are `README.md` (what the project is) and `LAUNCH.md` (gap-fixing roadmap to public launch); release-narrative lives in `CHANGELOG.md`. Read this file only if you need the *why* behind a frozen architectural decision or the phase-by-phase audit trail.
 
 ---
 
-## What v2 is
+## What v2 was
 
-The manual is being reconstructed from a private 18-chapter operating guide into a **public Claude Code toolbox** that anyone in the world can install. Three problems being solved:
+The manual was reconstructed from a private 18-chapter operating guide into a **public Claude Code toolbox** that anyone in the world can install. Three problems solved:
 
-1. **Granularity** — current chapters cluster multiple concepts (one chapter is 290 lines, several are >200). Reconstruction breaks them into ~55 atomic files (<150 lines each), one concept per file, organized by topic folder.
-2. **Public-readiness** — founder-specific language (solo founder, Solvero, Dutch tradespeople, Next.js+Supabase opinions) is being neutralized. Stack opinions move to an explicit `global/opinionated/` variant; defaults become `global/neutral/`.
-3. **Sophisticated routing** — instead of Claude loading whole chapters, a layer of skills + an index router picks the right atomic file for the task. Aim: Claude reads only what it needs.
+1. **Granularity** — v1 chapters clustered multiple concepts (one was 290 lines, several >200). v2 breaks them into ~80 atomic files (<150 lines each), one concept per file, organized by topic folder.
+2. **Public-readiness** — founder-specific language (solo founder, Solvero, Dutch tradespeople, Next.js+Supabase opinions) was neutralized. Stack opinions live in an explicit `global/opinionated/` variant; defaults are `global/neutral/`.
+3. **Sophisticated routing** — instead of Claude loading whole chapters, a layer of skills + an index router picks the right atomic file for the task. Claude reads only what it needs.
 
-Plus two novel mechanics:
+Plus two novel mechanics that shipped in Phase 8:
 - **Personalization** — first-run interview (`op-onboard` skill) calibrates Claude to user experience level, stack, push-back intensity, verbosity. Writes `~/.claude/claude-spine-profile.md`.
-- **Personal skill library (the "bucket")** — `skills/bucket/` ships empty. Each user builds their own library over time via `op-add-skill`. Not a sharing mechanism — purely personal. A core skill `op-bucket-router` reads `skills/bucket/INDEX.md` (auto-maintained), picks the right bucket skills for the current task, loads only those. Core skills age slowly (discipline); bucket skills can age fast (stacks/projects) without rotting the spine.
-
-Full plan: `/Users/macbook/.claude/plans/i-want-to-make-parallel-knuth.md`.
-
-Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in this repo.
+- **Personal skill library (the "bucket")** — `bucket/` ships empty. Each user builds their own library over time via `op-add-skill`. Not a sharing mechanism — purely personal. A core skill `op-bucket-router` reads `bucket/INDEX.md` (auto-maintained), picks the right bucket skills for the current task, loads only those. Core skills age slowly (discipline); bucket skills can age fast (stacks/projects) without rotting the spine.
 
 ---
 
-## Current phase
+## Where things stand
 
-**Phase 8d — bucket integration (chapters discovery + INDEX unification + stale-review + project-shift docs) — done** (2026-05-27). Ships `skills/core/op-curate/stale-review.md` (~65 lines) and updates `bucket/INDEX.md`, `op-bucket-router/SKILL.md`, `op-curate/SKILL.md`, `/curate`, `/refresh-bucket`, `bucket/README.md`, and chapters 19d + 19e. Three open questions resolved: (1) **unified bucket INDEX** — one `bucket/INDEX.md` with both Skills and Chapters tables, each with its own append-marker, `op-bucket-router` reads one file; split rejected because decomposition-rule #3 fails when the router always reads both halves; (2) **stale-review proxy** — driven by the `Added` date column in `bucket/INDEX.md` (default 6-month cutoff, tunable per session), no firing-timestamp tracking, no auto-archival; (3) **project-shift flow** — explicit only: run `/onboard --deep` to update the profile, then `/curate --review-stale` to walk the now-misaligned bucket entries. No auto-detection. `/onboard --refresh` references (5× in PERSONALIZATION.md, 1× in chapter 19e) replaced with `/onboard --deep` (the actual surface). `op-curate` became a folder skill (SKILL.md + adjacent `stale-review.md`) when adding `--review-stale` would have pushed SKILL.md past the 55-line cap — same pattern as `op-onboard`. `install.sh` needed zero changes — all touched files are in already-globbed paths.
-
-**Phase 8c — `op-curate` curation skill — done** (2026-05-27). Ships `skills/core/op-curate/SKILL.md` (single-file, ~60 lines incl. frontmatter — same shape as `op-suggest`) and `global/commands/curate.md`. Read-before-write encoded as a numbered list in the body (three required reads: `SUGGESTIONS.md`, `INDEX.md`, overlapping bucket files). Diff-preview pattern spelled out by file type (new files → full body in code block; modifications → unified diff). Hard-refusal table covers four paths (`chapters/`, `skills/core/`, profile, global stub). Status flow: resolved entries move from "Pending" to "Applied / rejected (archive)" with `Status: applied|rejected` + added `Resolved: YYYY-MM-DD` line — the 8b open question resolved this direction.
-
-**Phase 8b — `op-suggest` capture skill — done** (2026-05-27). Ships `skills/core/op-suggest/SKILL.md` (58 lines, single-file — no adjacent files; the entry schema lives inline) and `global/commands/suggest.md`. The trigger description in the frontmatter is locked: four narrow conditions to fire (explicit user signal, repeated friction 2+, end-of-session reflection, `/suggest`); five explicit no-fires (speculation, one-off, mid-task ideation, Claude hunch, dedupe-at-capture). Dry-run walked 8 scenarios through the description and all classified correctly. Claude can now capture suggestions during normal work; curation (`op-curate` / `/curate`) lands in 8c.
-
-**Phase 8a — personalization chapters + bucket scaffolding — done** (2026-05-27). Ships `chapters/personalization/` (19a–19e), `bucket/SUGGESTIONS.md`, `bucket/CHANGELOG.md`, `bucket/chapters/` skeleton, and integrations into `INDEX.md` + `bucket/README.md`. The manual now *describes* personalization end-to-end; the skills that implement the loop land in 8b/8c.
-
-**Phase 6.5 — bucket infrastructure — done** (2026-05-27). Ships `op-bucket-router`, `op-add-skill`, `/refresh-bucket` + `/add-skill` slash commands, and the seed `bucket/` folder at the repo root.
-
-**Phase 6a (done 2026-05-27):**
-- Phase 5 work committed.
-- All 13 core skill bodies path-swept: `/Users/macbook/claude-op-manual/` → `~/.claude-spine/`. Each skill now carries a one-line note explaining the convention.
-- Cross-reference back-fill complete: 17 stale `../../<N>-<chapter>.md` links across foundations, workflow, and signaling files now point at the correct atomic targets. The "Cross-reference back-fill" open question is **closed**.
-
-**Phase 6b (done 2026-05-27):**
-- `install.sh` shipped at repo root. Symlinks `~/.claude/skills/op-*` → `<spine>/skills/core/op-*`, ensures `~/.claude-spine` resolves to the spine clone, installs `settings.json` + env-leak hook, renders the global stub (substituting `{{SPINE_DIR}}`). Idempotent. Backs up overwritten files to `~/.claude-backup-<timestamp>/`. Flags: `--opinionated`, `--skip-global|skills|settings|hook`, `--dry-run`. Windows path warns to use WSL.
-- `global/neutral/CLAUDE.md.template` written — thin stub (~20 lines) per locked architecture. Identity, spine path, INDEX.md pointer, profile file reference, override hierarchy.
-- `global/opinionated/CLAUDE.md.template` — the founder-flavored heavy template moved here via `git mv`. `{{MANUAL_DIR}}` placeholders renamed to `~/.claude-spine` paths; old root-level chapter references (e.g., `06-feature-sizing.md`) re-pointed at the new atomic files (e.g., `~/.claude-spine/chapters/workflow/06-feature-sizing.md`). Header note added explaining this is the heavy variant.
-- `global/INSTALL.md` rewritten to document install.sh + both variants + verification + uninstall.
-- Templates audit complete. Decision: **light neutralization**, not abstract placeholders. Each template got a one-line "Example uses Next.js + Supabase + quote-management" header note so a Django/Go/Rails user understands the structure is stack-agnostic even though the filled-in examples aren't. SESSION_STARTER.md needed no change (already stack-agnostic). The templates are intentionally opinionated — they ARE the filled-in example users edit; abstract placeholders would have weakened them.
-
-**Phase 6c (done 2026-05-27):**
-- `skills/core/op-onboard/` shipped — SKILL.md (router, 43 lines incl. frontmatter), `questions-essential.md` (the 5 essentials with full phrasing + option sets), `questions-deep.md` (~10 follow-ups grouped A–F), `profile-template.md` (the exact layout the profile file must follow). Auto-fires when `~/.claude/claude-spine-profile.md` is missing; re-runnable via `/onboard` (essentials) and `/onboard --deep` (full).
-- `global/commands/onboard.md` slash command added. `install.sh` updated: new section "3. slash commands" symlinks `global/commands/*.md` → `~/.claude/commands/*.md`; new `--skip-commands` flag; sections renumbered (3→4 global, 4→5 settings, 5→6 hook).
-- `global/INSTALL.md` updated — new commands row in the install table, new `--skip-commands` flag, step-2 mention of running `/onboard` after restart, op-onboard added to the verify list (14 skills now), uninstall block adds the commands + profile cleanup lines.
-- README rewritten as public-facing v2 entry point (129 lines, down from 235). Structure: tagline + v2 status banner → what you get (5 bullets) → install (one block) → first session (4 steps including `/onboard`) → architecture (stub + spine) → human read-order → folder tour → what's NOT here → contributing/license. The v1 layered-explanation, manual TOC, and triage table are gone — their content lives in INDEX.md and the atomic chapters now.
-
-**Phase 6.5 (done 2026-05-27):**
-- Bucket promoted to top-level `bucket/` at the repo root — matches the Phase 8 locked decision (PERSONALIZATION.md). Built at the final location to avoid a migration in 8a. Old `skills/bucket/` removed; `.gitkeep` moved via `git mv` to `bucket/skills/.gitkeep`.
-- `bucket/INDEX.md` seed written — router-map table with an empty-marker row and the `<!-- op-add-skill appends rows above this comment. -->` insertion point. Explains the "loaded only when `op-bucket-router` fires" rule.
-- `bucket/README.md` — explains what the bucket is, what NOT to put in it (project docs, secrets, one-offs), how Claude finds bucket skills (routed-to, not auto-loaded), and how `git pull` interacts with personal additions.
-- `skills/core/op-bucket-router/SKILL.md` (42 lines) — fallback router. Fires only when no core `op-*` matched. Reads `bucket/INDEX.md`, picks one row, loads one file. Never invents bucket skills.
-- `skills/core/op-add-skill/SKILL.md` (51 lines) + adjacent `bucket-skill-template.md` (70 lines, content) — guides bucket-skill creation. Gate enforces the "3+-times-paste-in" rule from chapter 13d. Single-file vs folder form is the user's call. Auto-appends a row to `bucket/INDEX.md`.
-- `global/commands/refresh-bucket.md` — rescans `bucket/skills/`, rewrites the INDEX, shows a unified diff before saving, preserves `Added` dates on existing rows.
-- `global/commands/add-skill.md` — direct entry point to `op-add-skill`.
-- Top-level `INDEX.md` fallback section + RECONSTRUCTION target-folder-structure swept to the new `bucket/` location.
-- `install.sh` needed **no changes** — its `op-*/` skill glob and `global/commands/*.md` command glob automatically pick up the new files. Verified via `--dry-run`.
-
-**Phase 8e — dry-run + threshold tuning + README personalization section — done** (2026-05-27). End-to-end dry-run walked the loop on paper: onboard → capture via `op-suggest` → `/curate` → `op-curate` applies → `bucket/INDEX.md` row + `bucket/CHANGELOG.md` entry + `SUGGESTIONS.md` archive move → later sessions `op-bucket-router` finds the new row. One real friction caught: the empty-state placeholder rows in `bucket/INDEX.md` (both tables) and the `_(no pending suggestions yet)_` line in `bucket/SUGGESTIONS.md` were left in place when the first real entry appended — `/refresh-bucket` cleaned them up retroactively, but the user shouldn't need to. Fixed in `op-add-skill`, `op-curate`, and `op-suggest` by adding a one-line "replace the placeholder on first real append" rule to each (no template changes, no logic refactor — just an extra sentence in the apply step). Threshold tuning: **none**. The "auto-propose `/curate` at 5+ pending" idea deferred from 8c → 8d → 8e is explicitly **not shipped in v1** — rejected as speculative tuning without real-user data, same anti-pattern the personalization loop exists to fight. 19c's "When the queue gets long" section rewritten to be honest about the v1 surface (manual `/curate` invocation, no auto-nudge). README gained a "Personalization" section between "How it works" and "Read order" that walks the profile + the bucket loop end-to-end (capture / curate / route) and names the slash commands and skills. Two short bullet edits in "What you get" replaced the old single-line personalization mention with a pointer to the new section, and fixed the `skills/bucket/` → `bucket/` path lie left over from pre-6.5. Folder tree in the README updated to match. Phase 8 overall flips done.
-
-**Pre-launch cleanup pass — done** (2026-05-27). Items 1–8 of the "Pre-launch cleanup" section below landed in one commit: README skill count (5 mentions swept), v2 status banner rewrite, INDEX header refresh, 18 v1-root files stamped with deprecation headers pointing at `chapters/<topic>/`, skill cap raised to 65 with rationale, `install.sh` jq fail-fast, `CONTRIBUTING.md` written, item 7's "7 broken links" confirmed as a miscount of intentional backtick-quoted examples. Item 9 (clean-room install on a fresh host) is the only remaining pre-launch gate — it can't be done from this machine and rolls into Phase 7's pre-launch checklist.
-
-**Next:** Phase 7 (demo + launch). Personalization loop is feature-complete; pre-launch cleanup pass is done; the only blocking item left is the clean-room install verification, which Phase 7 handles as the launch gate.
+Phases 0–8e + the pre-launch cleanup pass all shipped 2026-05-27 — see "Progress by phase" and the phase-notes sections below for the audit trail. Phase 7 (demo + public launch) was deferred to a dedicated tracker — see [`LAUNCH.md`](LAUNCH.md) — because the work splits across multiple sessions and depends on Tim's domain / waitlist / demo decisions. Post-Phase-8 follow-on work (L9b cleanup, the L10 ambient-workflow refactor + L10.1 legacy-command removal, the onboarding subscription-awareness expansion) shipped after the Phase 8 freeze and is recorded in [`CHANGELOG.md`](CHANGELOG.md) under `[Unreleased]`; the L10 planning doc is archived at [`docs/archive/PLAN-AMBIENT-WORKFLOW-2026-05.md`](docs/archive/PLAN-AMBIENT-WORKFLOW-2026-05.md).
 
 ---
 
@@ -88,7 +41,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 - **Skill body cap:** 65 lines (revised 2026-05-27, pre-launch cleanup). Originally 40, raised to 55 in Phase 6c, raised to 65 during pre-launch cleanup to give workflow-encoding skills (`op-suggest`, `op-curate`) the room their apply-step sequences need. Pure-index skills still land at 34–50; workflow-encoding skills land at 55–60. None of the 18 core skills have crossed into content territory — the cap exists to keep skills as *routers*, not content. When a router (not a workflow encoder) needs more than the cap, the extra material is operational data and should move to an adjacent file in the skill folder (`op-onboard` is the reference pattern: SKILL.md routes to `questions-essential.md` / `questions-deep.md` / `profile-template.md`, all loaded on-demand).
 - **Atomic file cap:** 150 lines. A hard ceiling, not a decision rule — if you'd exceed it, the content is almost certainly load-bearing for multiple distinct questions and the decomposition rule above will tell you where the seams are. If it doesn't, leave the file at 150+ rather than splitting on a fake seam.
 - **Naming (locked 2026-05-27):** the public name is **`claude-spine`**. Tagline: "The spine of every Claude Code project." Local folder, GitHub repo, all internal references rename together in Phase 6. Current folder `claude-op-manual` and remote `claude-code-operators-manual` are both pre-rename names — don't update them yet.
-- **Onboarding mechanic (re-locked 2026-05-27):** both mechanisms — `op-onboard` auto-fires when no profile file exists; `/onboard` slash command re-runs / edits the profile. The interview is **deep, not shallow** — this profile is meant to last across all of the user's projects long-term, so the upfront cost is justified. Target ~15–25 questions, branching by experience level. Captured dimensions (designed in Phase 6):
+- **Onboarding mechanic (re-locked 2026-05-27):** both mechanisms — `op-onboard` auto-fires when no profile file exists; `/onboard` slash command re-runs / edits the profile. **Decision (Phase 6c):** hybrid surface — **6 essentials up front** (~2 min), opt-in `--deep` for ~11 more grouped follow-ups. The "25-question wall" originally feared in this section was the right thing to fear; the deep pass is therefore opt-in. Captured dimensions (designed in Phase 6):
   - **Developer profile** — years of experience, self-assessed level, comfort areas
   - **Stack preferences** — primary, secondary, "avoid," version pinning where it matters
   - **Project context** — typical project types, solo vs team, production user scale, time pressure
@@ -96,7 +49,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
   - **Output format** — diffs vs full files, commenting density, emoji policy, diagram style
   - **Risk + safety** — production-app strictness, version-control hygiene, command-execution tolerance
 
-  Profile written to `~/.claude/op-manual-profile.md` (renames in Phase 6 to `~/.claude/claude-spine-profile.md`). Global CLAUDE.md references it; Claude reads it every session. **Open design question:** all upfront vs progressive (5 essential up front + Claude asks 1–2 more when relevant decisions come up in real work). Decide in Phase 6 — instinct says progressive, since 25-question walls scare off new users.
+  Profile written to `~/.claude/claude-spine-profile.md` (the original draft used `~/.claude/op-manual-profile.md`; renamed during Phase 6c with the project rename to `claude-spine`). Global CLAUDE.md references it; Claude reads it every session.
 - **Bucket sharing (re-locked 2026-05-27):** **no sharing model at all.** The bucket is each user's *personal* skill library. They write their own skills into it; they keep them. No companion repo, no GitHub topic convention, no fork-and-share community story. If someone wants to share, that's their problem — claude-spine doesn't ship any sharing infrastructure. The earlier "fork-and-share" framing was misleading and is removed.
 - **Bucket index (re-locked 2026-05-27):** **yes, there's a `skills/bucket/INDEX.md`.** Same pattern as the chapter `INDEX.md` — Claude reads the index, picks the matching skills for the task, loads only those. This keeps per-task reads small even when the user's library grows to 50+ skills. Maintenance: `op-add-skill` updates `INDEX.md` automatically whenever it writes a new skill. For users who drop files into `skills/bucket/` manually, a `/refresh-bucket` slash command regenerates the index by scanning the folder. `op-bucket-router` trusts the index (no scan-on-fire). This matches the chapter-routing pattern; one mental model for routing instead of two.
 

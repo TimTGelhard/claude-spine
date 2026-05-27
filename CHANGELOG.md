@@ -10,6 +10,28 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+### Pillar 4 — First-run discovery surface
+
+A fresh-install user who opened Claude Code without reading the README saw no in-session prompt — the discovery surface for `/onboard` and the 21 op-* skills was "go read the repo." Pillar 4 closes that for the three highest-impact paths: a quiet auto-welcome on first run (file-existence-gated, not message-content-gated), a `/spine` command that prints the full skill / command / chapter map on demand, and a much richer `op-onboard` completion handoff that names every available command and points at the natural next action. Per [`FIXES.md`](FIXES.md) Pillar 4 (P4.1 + P4.2 + P4.3). P4.4 (landing-page screenshot + profile example) is post-launch content work.
+
+The in-flight `op-onboard` subscription-aware settings tune also lands in this entry — it shares the same surface (the post-essentials writeback step) and was committed together to avoid two passes over the same file region.
+
+#### Added
+
+- `skills/core/op-welcome/` — auto-firing skill. When `~/.claude/claude-spine-profile.md` is missing (fresh install), emits one quiet welcome block at the start of the first conversation pointing the user at `/onboard`. Silent once the profile exists. Once-per-conversation, file-existence-gated. Orthogonal to `op-spine-active`'s trigger (project state, not profile state) — both can co-fire on a fresh-install plan-driven project.
+- `global/commands/spine.md` — `/spine` command. Reads the spine on-disk and prints: profile path + status, slash-commands list, op-* skills with one-line triggers, chapter root, bucket state, pending-suggestions count. Read-only, single-shot. Counts everything from disk so the output never goes stale.
+- `skills/core/op-onboard/SKILL.md` — **subscription-based settings tune.** After essentials are saved, proposes raising `autoCompactWindow` and `effortLevel` in `~/.claude/settings.json` for Max 20× users (the spine ships Pro-safe defaults). Plain-English explanation block + explicit Apply/Skip approval — never silent. Write surface is allow-listed to two keys; aborts if the file format diverges from defaults.
+- `skills/core/op-onboard/SKILL.md` — **rich completion handoff.** After the profile is written, emits one structured "you're set up" block summarizing what was captured, whether settings.json was tuned, and listing all eight slash commands with one-line uses. Replaces the previous terse three-bullet farewell.
+
+#### Changed
+
+- `README.md` — skill count 20 → 21 in all live-claim positions (5 lines). Phrasing updated to "(19 task-routers + 2 ambient: cold-start and first-run welcome)." `/spine` added to the slash-commands table; command count "Seven" → "Eight."
+- `landing/index.html` — "20 op-* skills" → "21 op-* skills."
+- `install.sh` — final summary replaces the terse `==> done.` + verify-hint block with a structured "what just happened" + "Next steps" panel that names `/onboard` and `/spine` directly. Idempotency line added.
+- `tests/installer/test-dry-run.sh` — skill-coverage list updated to include `op-prepare`, `op-spine-active`, `op-welcome` (was missing all three); summary-line assertions updated to match the new install.sh output (`installing hooks`, `claude-spine is installed.`, `Type  /onboard` block).
+- `skills/core/op-onboard/SKILL.md` — description tightened: removes the implicit "auto-fires when profile missing" trigger (`op-welcome` now owns that surface) so this skill only fires on explicit invocation. Mode-selection #1 reworded as "`/onboard` with no profile yet" — the *greeting* is `op-welcome`'s job, the *interview* still runs on first explicit `/onboard`.
+- `skills/core/op-onboard/questions-essential.md` — post-Q6 flow rewritten as three numbered steps (save → propose settings tune → ask about deep) so the settings-tune step is a first-class part of the essentials flow, not buried.
+
 ### L10 — Ambient workflow refactor
 
 Plan-driven workflow shifts from explicit ceremony (`/session-start` → `/session-end`) to an ambient default where boundary work happens automatically. Original goals (cold-start resistance, scope discipline, multi-session continuity) preserved. Initial L10 kept the legacy commands as escape hatches; L10.1 (below) removed them once the ambient flow was confirmed sufficient.

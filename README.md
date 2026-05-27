@@ -10,7 +10,7 @@ For people already running real Claude Code sessions on real projects who want t
 
 ## What you get
 
-- **20 `op-*` skills** (19 task-routers + 1 ambient cold-start) that load only when relevant. Each one is a router that points Claude at the atomic chapter for the question — never the whole folder. See `skills/core/`.
+- **21 `op-*` skills** (19 task-routers + 2 ambient: cold-start and first-run welcome) that load only when relevant. Each one is a router that points Claude at the atomic chapter for the question — never the whole folder. See `skills/core/`.
 - **~80 atomic chapters** (<150 lines each), one concept per file, organized by topic (foundations, workflow, prompting, signaling, persistence, tools, subagents, recovery, anti-patterns). Indexed by [`INDEX.md`](INDEX.md).
 - **Personalization layer** — a profile (`/onboard`) that calibrates Claude to you, plus a capture/curate loop that grows your personal bucket as patterns emerge. See [Personalization](#personalization) below.
 - **Empty personal bucket** (`bucket/`). Ships empty by design — your skill and chapter library grows one curated addition at a time. No pre-seeded "popular skills" trap.
@@ -20,34 +20,48 @@ For people already running real Claude Code sessions on real projects who want t
 
 ---
 
-## Install
+## Quick start
+
+Three commands. Two minutes. You're set up.
 
 ```bash
 git clone https://github.com/TimTGelhard/claude-spine ~/.claude-spine
 cd ~/.claude-spine
-./install.sh                  # neutral global stub (recommended default)
-./install.sh --opinionated    # heavy, kitchen-sink CLAUDE.md
-./install.sh --dry-run        # preview without changing anything
+./install.sh
 ```
 
-Existing `~/.claude/` files are backed up to `~/.claude-backup-<timestamp>/` before being overwritten. Re-running is safe. See [`global/INSTALL.md`](global/INSTALL.md) for all flags, verification queries, and uninstall.
+Then **restart Claude Code**, open any session, and type **`/onboard`** — a 6-question, ~2-minute interview that calibrates Claude to your subscription, your stack, and how you like to work. It writes `~/.claude/claude-spine-profile.md` and ends with a one-screen "here's what's available now" handoff.
 
-**Requirements:** macOS or Linux (Windows works inside WSL). `bash`, `jq` (for the env-leak hook), `git`.
+After that you can:
 
----
+- Type **`/spine`** to see everything that's loaded (21 skills, 8 slash commands, ~80 chapters).
+- **`cd` into a project** and type **`/prep`** to plan a feature.
+- **Just start chatting** — the right skill loads on demand.
 
-## First session after install
+That's the full first-run path. The rest of this section is optional.
 
-1. **Restart Claude Code** so it picks up the new global, skills, and slash commands.
-2. **Run `/onboard`** — the 6-question essentials interview. Takes ~2 minutes. Profile is written to `~/.claude/claude-spine-profile.md`.
-3. **Optional:** `/onboard --deep` for the full ~17-question interview (stack details, signal preferences, output format, risk tolerance). Run now or later — Claude offers it at the end of essentials.
-4. **Verify:** start a session and ask *"List the op-* skills loaded"* — you should see all 20. Ask *"What's in my global CLAUDE.md?"* — should match the variant you installed.
+### Install variants
+
+- `./install.sh --opinionated` — heavy, kitchen-sink CLAUDE.md instead of the neutral stub
+- `./install.sh --dry-run` — preview every action without writing anything
+- `./install.sh --help` — every flag (`--skip-skills`, `--skip-hook`, `--keep-legacy`, etc.)
+- `/onboard --deep` (after essentials) — full ~17-question pass for stack details, signal preferences, output format, risk tolerance
+
+See [`global/INSTALL.md`](global/INSTALL.md) for partial-install flags, the full verification protocol, and uninstall.
+
+### What gets installed and where
+
+The installer symlinks the spine's skills, slash commands, global `CLAUDE.md`, `settings.json`, and safety hooks into `~/.claude/`. Existing files are backed up to `~/.claude-backup-<timestamp>/` before being overwritten — re-running is safe.
+
+### Requirements
+
+macOS or Linux (Windows works inside WSL). `bash`, `jq` (for the env-leak hook), `git`.
 
 ---
 
 ## Slash commands
 
-Seven commands ship in `global/commands/`:
+Eight commands ship in `global/commands/`:
 
 | Command | What it does |
 |---|---|
@@ -58,6 +72,7 @@ Seven commands ship in `global/commands/`:
 | `/curate` | Review pending suggestions one-at-a-time; propose diff; apply on explicit approval. `--review-stale` walks old entries. |
 | `/add-skill` | Gated skill-creation for the personal bucket (3+-paste-in rule). |
 | `/refresh-bucket` | Rebuild `bucket/INDEX.md` from disk after manual file drops. |
+| `/spine` | One-shot discovery — prints the active op-* skills, slash commands, profile path, and INDEX locations. Read-only. |
 
 The plan-driven flow is `/prep` → (open Claude; `op-spine-active` auto-loads scope) → build → `/done` ([chapters/workflow/05h–05j](chapters/workflow/05h-multi-session-planning.md)); a Stop hook (`spine-writeback.sh`) logs per-turn heartbeats in between. For safety-critical sessions wanting a code-gate, use Claude Code's built-in plan mode (Shift+Tab Tab). `/onboard`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket` carry personalization ([chapters/personalization/19a–19e](chapters/personalization/19a-overview.md)).
 
@@ -69,7 +84,7 @@ claude-spine uses a **stub + spine** architecture:
 
 - `~/.claude/CLAUDE.md` is a thin stub (~25 lines) that points at the spine and the profile. Identity + pointers, nothing more.
 - The spine (this repo) holds all the operating discipline as atomic markdown files.
-- The 20 `op-*` skills route Claude to the right atomic file *only when needed* — descriptions are the trigger; bodies stay small (~40–60 lines). Skills with a longer procedure (e.g. `op-prepare`, `op-curate`) split into a router `SKILL.md` + adjacent procedure file.
+- The 21 `op-*` skills route Claude to the right atomic file *only when needed* — descriptions are the trigger; bodies stay small (~40–60 lines). Skills with a longer procedure (e.g. `op-prepare`, `op-curate`) split into a router `SKILL.md` + adjacent procedure file.
 - The profile file calibrates which defaults the spine's chapters should apply for *this user*.
 
 Net effect: every session starts lean. Claude loads heavy content on-demand, filtered by your profile. The same machine can serve five projects without polluting any one session with the others' context.
@@ -126,7 +141,7 @@ claude-spine/
 │   ├── recovery/                # when quality drops mid-session
 │   └── anti-patterns/           # explicit "never do this"
 ├── skills/
-│   └── core/                    # the 20 op-* skills (shipped + maintained)
+│   └── core/                    # the 21 op-* skills (shipped + maintained)
 ├── bucket/                      # YOUR personal library — ships empty by design
 ├── templates/                   # per-project docs you copy and adapt
 └── global/
@@ -165,7 +180,7 @@ Covers the env-leak hook (`global/hooks/block-env-staging.sh` — assert deny/al
 
 ```bash
 cd tests/skill-triggers
-./run.sh                       # all 20 skills, ~5–10 min wall time, ~$5–10 (Sonnet)
+./run.sh                       # all 21 skills, ~5–10 min wall time, ~$5–10 (Sonnet)
 ./run.sh op-anti-patterns      # one skill
 python3 aggregate.py           # writes results/REPORT.md and needs-tightening.md
 ```

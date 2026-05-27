@@ -89,15 +89,17 @@ assert_contains "$log" "core skills step"          "==> linking core skills into
 assert_contains "$log" "slash commands step"       "==> linking slash commands into"
 assert_contains "$log" "neutral global step"       "==> installing global CLAUDE.md (neutral variant)"
 assert_contains "$log" "settings.json step"        "==> installing settings.json"
-assert_contains "$log" "env-leak hook step"        "==> installing env-leak hook"
-assert_contains "$log" "summary done"              "==> done."
+assert_contains "$log" "hooks step"                 "==> installing hooks"
+assert_contains "$log" "summary done"              "==> claude-spine is installed."
+assert_contains "$log" "next-step block present"   "Type  /onboard"
 # Clean HOME has no legacy skills, so the cleanup section must NOT print.
 assert_not_contains "$log" "no legacy cleanup on clean HOME" "==> removing legacy op-manual-* skills"
 # Sanity: every shipped core skill should appear in the link plan.
 for skill in op-add-skill op-anti-patterns op-brownfield op-bucket-router \
              op-collaboration-modes op-curate op-foundations op-hooks \
-             op-onboard op-persistence op-prompting op-recovery op-signaling \
-             op-subagents op-suggest op-tools op-visuals op-workflow; do
+             op-onboard op-persistence op-prepare op-prompting op-recovery \
+             op-signaling op-spine-active op-subagents op-suggest op-tools \
+             op-visuals op-welcome op-workflow; do
   assert_contains "$log" "links $skill" "/skills/$skill"
 done
 echo
@@ -155,7 +157,7 @@ log="$(run_install skip-settings --skip-settings)"
 assert_contains "$log" "skip-settings notice"      "==> skipping settings.json (--skip-settings)"
 
 log="$(run_install skip-hook --skip-hook)"
-assert_contains "$log" "skip-hook notice"          "==> skipping env-leak hook (--skip-hook)"
+assert_contains "$log" "skip-hook notice"          "==> skipping hooks (--skip-hook)"
 echo
 
 # ---------- scenario 6: --help exits 0 and prints usage ----------
