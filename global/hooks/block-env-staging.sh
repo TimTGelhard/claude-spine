@@ -18,7 +18,7 @@ CMD=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 # Does NOT match `git add .` or `git add -A` alone — those rely on .gitignore.
 # That's acceptable: if .gitignore is set up correctly (per stack defaults),
 # `git add .` won't pick up .env files anyway.
-if echo "$CMD" | grep -qE '(^|[[:space:]])(\./)?\.env(\.[a-zA-Z0-9_.-]+)?($|[[:space:]])'; then
+if echo "$CMD" | grep -qE '(^|[[:space:]])(.*/)?\.env(\.[a-zA-Z0-9_.-]+)?($|[[:space:]])'; then
   jq -n '{
     hookSpecificOutput: {
       hookEventName: "PreToolUse",

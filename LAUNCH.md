@@ -37,7 +37,7 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 | L2 | install.sh legacy `op-manual-*` cutover + `/uninstall` | L8 (Tim migration), L7 (launch) | done (2026-05-27) |
 | L3 | settings.json default tuning (effortLevel, autoCompactWindow) | nothing | done (2026-05-27) |
 | L4a | Testing harness — skill-trigger benchmarks | L7 confidence | done (2026-05-27) |
-| L4b | Testing harness — hook fixture + install dry-run + CI | L7 confidence | not started |
+| L4b | Testing harness — hook fixture + install dry-run + CI | L7 confidence | done (2026-05-27) |
 | L5 | Clean-room install on fresh VM / Docker | L7 (launch gate) | not started |
 | L6 | CHANGELOG.md + archive v1 root files + repo URL verify | L7 polish | not started |
 | L7 | Launch assets — domain, landing page, demo, waitlist signup | nothing — launches | not started |
@@ -249,6 +249,28 @@ All 18, flagged in `tests/skill-triggers/results/needs-tightening.md`. The flag 
 **Out of scope, not done in this phase:** L4b (hook fixture + install dry-run test + CI workflow). The launch doc explicitly invites splitting into L4a/L4b — this session shipped L4a only. L4b is small (~1 hour) and unblocked; left for its own session per the cold-read rules.
 
 **Cost of the baseline run:** ~$8 of Sonnet 4.6 API spend for the full 18-skill sweep + one Opus re-verification of `op-anti-patterns`. Plus a transient ~24MB download of Python 3.12 via uv (one-time, cached at `~/.local/share/uv/python/`).
+
+### L4b notes (2026-05-27)
+
+**Scope of edits actually done:**
+- `tests/hooks/test-block-env-staging.sh` (new, ~110 lines) — 12-case fixture that feeds the Claude Code PreToolUse JSON protocol to the env-leak hook and asserts `permissionDecision: deny` on six should-block patterns (bare `.env`, `.env.local`, `.env.production`, `foo/.env.local`, `git add -A .env.staging`, `./.env`) and silent allow on six should-pass patterns (`git add file.txt`, `git add .`, `git add -A` alone, `foo.env.template`, `git status`, empty `command` field).
+- `tests/installer/test-dry-run.sh` (new, ~165 lines) — 48-assertion sweep across 7 scenarios: default clean HOME (every section header + all 18 skill links), `--opinionated` (variant swap), legacy-cleanup branch (priming the temp HOME with `op-manual-*` dirs and confirming dry-run preserves them), `--keep-legacy` short-circuit, every `--skip-*` flag (skills/commands/global/settings/hook), `--help` content, unknown-flag rejection. Isolates `HOME` to a `mktemp -d` so it never touches the user's real `~/.claude/`.
+- `tests/run.sh` (new, ~50 lines) — aggregator that runs the two suites, prints a per-suite summary, exits non-zero on any failure. Explicitly does NOT run `tests/skill-triggers/` (different cadence: pre-edit, costs API spend, has the documented routing-skill bias).
+- `.github/workflows/test.yml` (new, ~25 lines) — GitHub Actions workflow. Triggers on `push` to `main` and `pull_request`. Single job on `ubuntu-latest` (which ships `bash` + `jq` out of the box), runs `./tests/run.sh`. Skill-trigger benchmarks deliberately excluded — comment in the file explains why (no API key in CI, real cost, known TP-undercount bias).
+- `README.md` — "Running the tests" section restructured into two subsections (fast suite + skill-trigger benchmarks) with a pointer to the CI workflow file.
+- `global/hooks/block-env-staging.sh` — one-character regex fix surfaced by the fixture. The leading boundary `(\./)?` only allowed a `./` path prefix, so `git add foo/.env.local` (which the script's own header comment lists as a matched pattern, and which the launch doc's spec asserts should deny) silently passed through. Changed to `(.*/)?` so any leading path is matched. Verified the regex still rejects `git add foo.env.template` and `git add file.txt`.
+
+**DoD verification:**
+- `./tests/run.sh` → 2 suites pass, 60 individual assertions pass (12 hook + 48 installer), exit 0.
+- README's "Running the tests" section covers both the fast suite and the existing skill-trigger benchmarks, with a pointer to the CI workflow.
+- YAML validated via `uv run --with pyyaml python -c 'yaml.safe_load(...)'`; jobs + triggers parsed correctly.
+
+**One real bug found:** the env-leak hook regex didn't match its own documented pattern (`git add foo/.env`). Fixed inline. **Tim's installed copy at `~/.claude/hooks/block-env-staging.sh` is a `cp` (not a symlink) per install.sh's design — re-running `./install.sh` picks up the fix.** Worth doing before any session that might `git add` something env-flavored from a subdirectory.
+
+**Out of scope, not done in this phase:**
+- Uninstall dry-run smoke test — `uninstall.sh` ships with `--dry-run`, but L4b's spec lists only `install.sh`. Easy to add a `tests/installer/test-uninstall-dry-run.sh` later (same isolated-HOME pattern).
+- Actionlint in CI — workflow is small enough to eyeball; a lint step is a follow-up if more workflows are added.
+- Description tightening for the 18 skills flagged by L4a — L4a notes already argued against blanket rewrites; the fixture here doesn't change that calculus.
 
 ---
 

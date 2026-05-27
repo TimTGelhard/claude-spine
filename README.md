@@ -134,7 +134,17 @@ claude-spine/
 
 ## Running the tests
 
-Skill-trigger benchmarks measure whether each `op-*` skill's description causes Claude to consult it for matching queries — and skip for non-matching ones. Used before editing any skill frontmatter.
+Two test suites live under `tests/`:
+
+**Fast suite** (deterministic, offline, runs in CI on every push):
+
+```bash
+./tests/run.sh
+```
+
+Covers the env-leak hook (`global/hooks/block-env-staging.sh` — assert deny/allow on the Claude Code hook JSON protocol) and `install.sh --dry-run` (assert every documented section and flag combination fires correctly). Requires `bash` + `jq`. CI runs this on push to `main` and pull requests — see [`.github/workflows/test.yml`](.github/workflows/test.yml).
+
+**Skill-trigger benchmarks** (paid, manual, run before editing any `op-*` frontmatter):
 
 ```bash
 cd tests/skill-triggers
@@ -143,7 +153,7 @@ cd tests/skill-triggers
 python3 aggregate.py           # writes results/REPORT.md and needs-tightening.md
 ```
 
-Requires the `skill-creator` plugin and Python 3.10+ (falls back to `uv run --python 3.12` automatically). See [`tests/skill-triggers/README.md`](tests/skill-triggers/README.md) for the full doc, including caveats (the eval undercounts real-world triggering for routing skills like ours — the harness is most reliable for false-positive rates).
+Requires the `skill-creator` plugin and Python 3.10+ (falls back to `uv run --python 3.12` automatically). Not run in CI — costs real API spend, and has known structural bias for routing-style skills. See [`tests/skill-triggers/README.md`](tests/skill-triggers/README.md) for the full doc and caveats (the eval undercounts real-world triggering; the harness is most reliable for false-positive rates).
 
 ---
 

@@ -1,0 +1,27 @@
+name: tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  fast-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify required tools
+        run: |
+          set -e
+          jq --version
+          bash --version | head -n 1
+
+      - name: Run fast test suite
+        run: ./tests/run.sh
+
+  # Skill-trigger benchmarks are intentionally NOT run in CI. They cost real
+  # API spend (~$5–10 per Sonnet sweep, ~$20–40 per Opus sweep), require a
+  # Claude Code install + ANTHROPIC_API_KEY, and have known structural bias
+  # for routing-style skills (see tests/skill-triggers/README.md "Caveats").
+  # Run them manually before editing any op-* frontmatter description.
