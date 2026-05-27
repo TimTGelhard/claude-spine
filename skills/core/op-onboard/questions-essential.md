@@ -1,4 +1,4 @@
-# Essential questions (5)
+# Essential questions (6)
 
 The minimum profile Claude needs to be useful. Ask one at a time via `AskUserQuestion`. Map answers into the matching section of `profile-template.md`. "Other" is automatically added by the tool — let the user free-text whenever the predefined options don't fit.
 
@@ -6,7 +6,24 @@ The minimum profile Claude needs to be useful. Ask one at a time via `AskUserQue
 
 ---
 
-## Q1 — Experience level
+## Q1 — Claude subscription
+
+Question: **"Which Claude subscription do you use? This helps me match my suggestions to what your plan can actually do (some plans have stricter usage limits or don't include the most expensive models)."**
+Header: `Subscription`
+
+Options (single-select):
+- **Free** — no paid plan; using claude.ai with daily limits
+- **Pro** — the $20/month plan; reasonable usage, mostly Sonnet
+- **Max (5×)** — the ~$100/month plan; more usage, occasional Opus
+- **Max (20×)** — the ~$200/month plan; heavy usage, Opus most of the time
+
+(Other = free-text — e.g. "Team plan", "Enterprise", "API / pay-as-you-go".)
+
+→ Profile: `Subscription → Plan`.
+
+---
+
+## Q2 — Experience level
 
 Question: **"How much coding have you done so far?"**
 Header: `Experience`
@@ -21,7 +38,7 @@ Options (single-select):
 
 ---
 
-## Q2 — Primary stack
+## Q3 — Primary stack
 
 Question: **"What kind of tools or languages do you use most? (If you're not sure, pick the closest — or use 'Other' to type it in plain words.)"**
 Header: `Stack`
@@ -38,7 +55,7 @@ Options (single-select):
 
 ---
 
-## Q3 — Push-back intensity
+## Q4 — Push-back intensity
 
 Question: **"When you ask me to do something and I think it's a bad idea, how should I respond?"**
 Header: `Push-back`
@@ -53,7 +70,7 @@ Options (single-select):
 
 ---
 
-## Q4 — Verbosity
+## Q5 — Verbosity
 
 Question: **"How much do you want me to explain when I answer?"**
 Header: `Verbosity`
@@ -68,7 +85,7 @@ Options (single-select):
 
 ---
 
-## Q5 — Project context
+## Q6 — Project context
 
 Question: **"What kind of projects are you mostly working on right now?"**
 Header: `Projects`
@@ -83,7 +100,7 @@ Options (single-select):
 
 ---
 
-## After Q5
+## After Q6
 
 Save the essentials immediately (write the profile file now, even if deep is coming next — captures the first-run state).
 

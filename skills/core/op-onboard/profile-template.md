@@ -16,29 +16,35 @@ For essentials-only runs (deep deferred), keep the deep section headings but wri
 > Last updated: YYYY-MM-DD
 > Re-run: `/onboard` (essentials) or `/onboard --deep` (full). Hand-editing is fine — it's plain markdown.
 
+## Subscription
+
+- **Plan:** {{Q1 answer}}
+- **Daily usage:** {{0A, or "(unfilled — run /onboard --deep)"}}
+- **Cost sensitivity:** {{0B, or "(unfilled — run /onboard --deep)"}}
+
 ## Developer profile
 
-- **Experience level:** {{Q1 answer}}
+- **Experience level:** {{Q2 answer}}
 - **Years coding:** {{A1, or "(unfilled — run /onboard --deep)"}}
 - **Comfort areas:** {{A2 list, comma-separated, or unfilled}}
 - **Lean-in areas:** {{A3 list, comma-separated, or unfilled}}
 
 ## Stack preferences
 
-- **Primary:** {{Q2 answer}}
+- **Primary:** {{Q3 answer}}
 - **Secondary:** {{B1, or unfilled}}
 - **Avoid:** {{B2 list, or unfilled}}
 
 ## Project context
 
-- **Typical work:** {{Q5 answer}}
+- **Typical work:** {{Q6 answer}}
 - **Team size:** {{C1, or unfilled}}
 - **User scale:** {{C2, or unfilled}}
 
 ## Working style
 
-- **Push-back intensity:** {{Q3 answer}}
-- **Verbosity:** {{Q4 answer}}
+- **Push-back intensity:** {{Q4 answer}}
+- **Verbosity:** {{Q5 answer}}
 - **Active signals:** {{D1 list, or "All four (default)"}}
 
 ## Output format

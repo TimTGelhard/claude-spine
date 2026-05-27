@@ -1,6 +1,6 @@
 ---
 name: op-onboard
-description: Use to create or refresh `~/.claude/claude-spine-profile.md` — the personal calibration file capturing the user's experience level, stack preferences, project context, working style, output format, and risk tolerance. Fires when the profile file does not exist (first-run calibration), or when the user invokes `/onboard` (re-run essentials), `/onboard --deep` (full ~15-question interview), or says "re-onboard" / "update my profile" / "redo onboarding". The profile persists across all projects and is read by Claude at the start of every session.
+description: Use to create or refresh `~/.claude/claude-spine-profile.md` — the personal calibration file capturing the user's Claude subscription, experience level, stack preferences, project context, working style, output format, and risk tolerance. Fires when the profile file does not exist (first-run calibration), or when the user invokes `/onboard` (re-run essentials), `/onboard --deep` (full ~17-question interview), or says "re-onboard" / "update my profile" / "redo onboarding". The profile persists across all projects and is read by Claude at the start of every session.
 ---
 
 # op-onboard — personal calibration
@@ -11,9 +11,9 @@ Captures and maintains `~/.claude/claude-spine-profile.md`. The profile shapes C
 
 ## Mode selection
 
-1. **First-run** (profile missing) → run **essentials** (5 questions), write the profile, then offer the deep path.
+1. **First-run** (profile missing) → run **essentials** (6 questions), write the profile, then offer the deep path.
 2. **`/onboard`** (no flag) → re-run essentials. Read the existing profile first; show current values; ask only the ones the user wants to change.
-3. **`/onboard --deep`** → if profile is missing, run essentials first, then deep (~10 more questions). If profile exists, jump straight to deep.
+3. **`/onboard --deep`** → if profile is missing, run essentials first, then deep (~11 more questions). If profile exists, jump straight to deep.
 4. **Ad-hoc edits** ("change my push-back to spar with me") → edit the matching profile section directly; don't restart the interview.
 
 ## Adjacent files (read on-demand)

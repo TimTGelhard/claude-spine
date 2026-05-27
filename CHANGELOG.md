@@ -44,6 +44,23 @@ Vibecoder default fully realized: no escape-hatch commands, no two-doors-to-one-
 - `chapters/workflow/05j-cold-start-protocol.md` — rewritten without the gated variant. Plan mode is the recommended gate primitive.
 - References to the removed commands dropped or replaced in: `chapters/workflow/05h-multi-session-planning.md`, `chapters/workflow/05i-execution-plan-anatomy.md`, `INDEX.md`, `README.md`, `global/INSTALL.md`, `global/commands/prep.md`, `global/commands/done.md`, `skills/core/op-spine-active/SKILL.md`, `skills/core/op-prepare/SKILL.md` + `procedure.md`, `templates/PROGRESS.md`, `templates/SECTION_PLAN.md`, `templates/SESSION_STARTER.md`, `init.sh`.
 
+### Onboarding — Claude subscription awareness
+
+Defaults today assume a Max-tier user with cheap Opus and 1M-context access. That misreads the Free / Pro segment and under-uses what Max users could be doing. Step one: ask the user which plan they're on; capture daily usage and cost sensitivity in the deep interview. Behavior changes that actually consume the captured field are queued separately ([`docs/SUBSCRIPTION-AWARENESS.md`](docs/SUBSCRIPTION-AWARENESS.md)) so the question can land without waiting on the multi-session implementation work.
+
+#### Added
+
+- `skills/core/op-onboard/questions-essential.md` — new Q1 "Which Claude subscription do you use?" with Free / Pro / Max 5× / Max 20× options (Other = free-text for Team / Enterprise / API). Existing Q1–Q5 renumber to Q2–Q6.
+- `skills/core/op-onboard/questions-deep.md` — new Section 0 (subscription) with 0A "daily Claude usage" and 0B "cost sensitivity". Deep-question count 15 → 17.
+- `skills/core/op-onboard/profile-template.md` — new `Subscription` section at the top of the profile with `Plan`, `Daily usage`, `Cost sensitivity` fields.
+- `docs/SUBSCRIPTION-AWARENESS.md` — planning doc tracking the multi-session work to actually adjust behavior based on the captured plan (model recommendations, ultra-review framing, parallel-subagent caution, fresh-terminal cadence, etc.). Status: queued, not started.
+
+#### Changed
+
+- `skills/core/op-onboard/SKILL.md` — trigger description mentions subscription as a captured field; mode-selection counts updated to 6 essentials / 17 deep.
+- `global/commands/onboard.md` — description updated to 6-question essentials / ~17-question deep.
+- `skills/core/op-onboard/questions-deep.md` — every existing deep question rewritten in the same plain-language non-coder style as the essentials (parenthetical glosses for jargon, situational labels instead of survey buckets). Matches the style note added at the top of the file.
+
 ### Pre-launch gates
 
 Remaining gates before public launch (tracked in [`LAUNCH.md`](LAUNCH.md)):
