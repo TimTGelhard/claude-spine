@@ -111,6 +111,23 @@
             "if": "Bash(git add*)",
             "command": "${HOME}/.claude/hooks/block-env-staging.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "if": "Bash(git commit*)",
+            "command": "${HOME}/.claude/hooks/block-env-commit.sh",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${HOME}/.claude/hooks/notify-long-task.sh",
+            "timeout": 5
           }
         ]
       }

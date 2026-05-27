@@ -29,8 +29,8 @@ Before any proposal: (1) `~/.claude-spine/bucket/SUGGESTIONS.md` — pull `Statu
 2. Show the proposal as a **unified diff** (modify) or a **full file body in a code block** (new). No "approve in principle."
 3. Wait for explicit approval, rejection, or edits. One change per cycle.
 4. **On approve** — apply the write, then:
-   - New skill → append a row above the Skills marker in `bucket/INDEX.md`: `| <trigger> | <path-from-bucket/> | <YYYY-MM-DD> |`. If the table body holds only the `_(no skills yet — ...)_` empty-marker row, **replace** it instead of appending.
-   - New chapter → append a row above the Chapters marker, same shape: `| <topic> | <path-from-bucket/> | <YYYY-MM-DD> |`. Same empty-marker replacement rule. The router discovers chapters via this table.
+   - New skill → append a row above the Skills marker in `bucket/INDEX.md`: `| <trigger> | <path-from-bucket/> | <YYYY-MM-DD> | — |` (four columns; `Last fired` starts as `—` and gets stamped by `op-bucket-router` on first match). If the table body holds only the `_(no skills yet — ...)_` empty-marker row, **replace** it instead of appending.
+   - New chapter → append a row above the Chapters marker, same shape: `| <topic> | <path-from-bucket/> | <YYYY-MM-DD> | — |`. Same empty-marker replacement rule. The router discovers chapters via this table.
    - Append one line under today's date in `bucket/CHANGELOG.md` above its marker.
    - In `SUGGESTIONS.md`: remove from Pending; append under "Applied / rejected (archive)" with `Status: applied` + `- **Resolved:** YYYY-MM-DD`.
 5. **On reject** — same archive move, `Status: rejected`. Audit-only; never deleted.

@@ -10,7 +10,7 @@ For people already running real Claude Code sessions on real projects who want t
 
 ## What you get
 
-- **21 `op-*` skills** (19 task-routers + 2 ambient: cold-start and first-run welcome) that load only when relevant. Each one is a router that points Claude at the atomic chapter for the question — never the whole folder. See `skills/core/`.
+- **22 `op-*` skills** (19 task-routers + 3 ambient: cold-start, first-run welcome, curation nudge) that load only when relevant. Each one is a router that points Claude at the atomic chapter for the question — never the whole folder. See `skills/core/`.
 - **~80 atomic chapters** (<150 lines each), one concept per file, organized by topic (foundations, workflow, prompting, signaling, persistence, tools, subagents, recovery, anti-patterns). Indexed by [`INDEX.md`](INDEX.md).
 - **Personalization layer** — a profile (`/onboard`) that calibrates Claude to you, plus a capture/curate loop that grows your personal bucket as patterns emerge. See [Personalization](#personalization) below.
 - **Empty personal bucket** (`bucket/`). Ships empty by design — your skill and chapter library grows one curated addition at a time. No pre-seeded "popular skills" trap.
@@ -34,7 +34,7 @@ Then **restart Claude Code**, open any session, and type **`/onboard`** — a 7-
 
 After that you can:
 
-- Type **`/spine`** to see everything that's loaded (21 skills, 8 slash commands, ~80 chapters).
+- Type **`/spine`** to see everything that's loaded (22 skills, 9 slash commands, ~80 chapters).
 - **`cd` into a project** and type **`/prep`** to plan a feature.
 - **Just start chatting** — the right skill loads on demand.
 
@@ -61,7 +61,7 @@ macOS or Linux (Windows works inside WSL). `bash`, `jq` (for the env-leak hook),
 
 ## Slash commands
 
-Eight commands ship in `global/commands/`:
+Nine commands ship in `global/commands/`:
 
 | Command | What it does |
 |---|---|
@@ -73,6 +73,7 @@ Eight commands ship in `global/commands/`:
 | `/add-skill` | Gated skill-creation for the personal bucket (3+-paste-in rule). |
 | `/refresh-bucket` | Rebuild `bucket/INDEX.md` from disk after manual file drops. |
 | `/spine` | One-shot discovery — prints the active op-* skills, slash commands, profile path, and INDEX locations. Read-only. |
+| `/hooks` | One-shot listing of every configured hook (event, matcher, script). Reads `~/.claude/settings.json` + any project-level `.claude/settings.json`. Read-only. |
 
 The plan-driven flow is `/prep` → (open Claude; `op-spine-active` auto-loads scope) → build → `/done` ([chapters/workflow/05h–05j](chapters/workflow/05h-multi-session-planning.md)); a Stop hook (`spine-writeback.sh`) logs per-turn heartbeats in between. For safety-critical sessions wanting a code-gate, use Claude Code's built-in plan mode (Shift+Tab Tab). `/onboard`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket` carry personalization ([chapters/personalization/19a–19e](chapters/personalization/19a-overview.md)).
 
@@ -84,7 +85,7 @@ claude-spine uses a **stub + spine** architecture:
 
 - `~/.claude/CLAUDE.md` is a thin stub (~25 lines) that points at the spine and the profile. Identity + pointers, nothing more.
 - The spine (this repo) holds all the operating discipline as atomic markdown files.
-- The 21 `op-*` skills route Claude to the right atomic file *only when needed* — descriptions are the trigger; bodies stay small (~40–60 lines). Skills with a longer procedure (e.g. `op-prepare`, `op-curate`) split into a router `SKILL.md` + adjacent procedure file.
+- The 22 `op-*` skills route Claude to the right atomic file *only when needed* — descriptions are the trigger; bodies stay small (~40–60 lines). Skills with a longer procedure (e.g. `op-prepare`, `op-curate`) split into a router `SKILL.md` + adjacent procedure file.
 - The profile file calibrates which defaults the spine's chapters should apply for *this user*.
 
 Net effect: every session starts lean. Claude loads heavy content on-demand, filtered by your profile. The same machine can serve five projects without polluting any one session with the others' context.
@@ -141,7 +142,7 @@ claude-spine/
 │   ├── recovery/                # when quality drops mid-session
 │   └── anti-patterns/           # explicit "never do this"
 ├── skills/
-│   └── core/                    # the 21 op-* skills (shipped + maintained)
+│   └── core/                    # the 22 op-* skills (shipped + maintained)
 ├── bucket/                      # YOUR personal library — ships empty by design
 ├── templates/                   # per-project docs you copy and adapt
 └── global/
@@ -180,7 +181,7 @@ Covers the env-leak hook (`global/hooks/block-env-staging.sh` — assert deny/al
 
 ```bash
 cd tests/skill-triggers
-./run.sh                       # all 21 skills, ~5–10 min wall time, ~$5–10 (Sonnet)
+./run.sh                       # all 22 skills, ~5–10 min wall time, ~$5–10 (Sonnet)
 ./run.sh op-anti-patterns      # one skill
 python3 aggregate.py           # writes results/REPORT.md and needs-tightening.md
 ```

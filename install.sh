@@ -376,7 +376,7 @@ fi
 
 echo "==> claude-spine is installed."
 echo
-echo "  What just happened: 21 skills, 8 slash commands, a thin global"
+echo "  What just happened: 22 skills, 9 slash commands, a thin global"
 echo "  CLAUDE.md, settings, and safety hooks were linked into ~/.claude/."
 echo "  Claude Code will pick them up on its next launch."
 echo

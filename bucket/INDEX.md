@@ -13,8 +13,9 @@
 
 **Maintenance:**
 
-- `op-add-skill` appends a new row to **Skills** automatically when it writes a new bucket skill.
-- `op-curate` appends a new row to **Skills** or **Chapters** automatically when applying a `new-skill` or `new-chapter` suggestion.
+- `op-add-skill` appends a new row to **Skills** automatically when it writes a new bucket skill. `Last fired` starts as `—`.
+- `op-curate` appends a new row to **Skills** or **Chapters** automatically when applying a `new-skill` or `new-chapter` suggestion. `Last fired` starts as `—`.
+- `op-bucket-router` updates a row's `Last fired` cell to today's date whenever it routes to that row.
 - If you dropped a file into `bucket/skills/` or `bucket/chapters/` by hand, run `/refresh-bucket` to rescan both folders and rebuild the tables.
 - Manual edits are fine — this is plain markdown.
 
@@ -32,9 +33,9 @@
 
 Procedures Claude fires when the trigger matches. Routed to by `op-bucket-router`.
 
-| Trigger / question | Skill file | Added |
-|---|---|---|
-| _(no skills yet — use `op-add-skill` or `/add-skill` to add one)_ | — | — |
+| Trigger / question | Skill file | Added | Last fired |
+|---|---|---|---|
+| _(no skills yet — use `op-add-skill` or `/add-skill` to add one)_ | — | — | — |
 
 <!-- op-add-skill appends rows above this comment. Don't move this marker. -->
 
@@ -44,9 +45,9 @@ Procedures Claude fires when the trigger matches. Routed to by `op-bucket-router
 
 References Claude loads as content when the topic matches. Not "fired" — loaded for reading.
 
-| Topic / question | Chapter file | Added |
-|---|---|---|
-| _(no chapters yet — chapters land via `op-curate` applying a `new-chapter` suggestion, or by hand-drop + `/refresh-bucket`)_ | — | — |
+| Topic / question | Chapter file | Added | Last fired |
+|---|---|---|---|
+| _(no chapters yet — chapters land via `op-curate` applying a `new-chapter` suggestion, or by hand-drop + `/refresh-bucket`)_ | — | — | — |
 
 <!-- op-curate appends chapter rows above this comment. Don't move this marker. -->
 

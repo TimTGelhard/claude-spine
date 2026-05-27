@@ -81,9 +81,15 @@ This is the place where one-off frictions can still make it into the queue, *if*
 
 ## When the queue gets long
 
-You can `/curate` whenever. Past ~5 pending, schedule a session soon; past ~10 it should be this session — past that the queue stops being a queue and becomes a graveyard, which defeats the loop. The visibility cue is the user reading `SUGGESTIONS.md`, not Claude nagging.
+You can `/curate` whenever. Past ~5 pending, schedule a session soon; past ~10 it should be this session — past that the queue stops being a queue and becomes a graveyard, which defeats the loop.
 
-v1 deliberately does *not* auto-propose curation when the queue crosses a threshold. The alternative — a recurring "queue has N pending — want to `/curate`?" nudge after every capture — was rejected during Phase 8e: it adds Claude-noise on every fire past the threshold, the file is right there for the user to look at, and any tuned threshold is a guess without real-user data. Post-launch usage may justify revisiting; speculative tuning now would violate the same anti-pattern this loop exists to fight ([13d](../persistence/13d-skill-anti-patterns.md)).
+**`op-curate-nudge` closes the loop.** This auto-firing skill emits *one* quiet line at the start of any conversation where (a) `bucket/SUGGESTIONS.md` has 5+ pending entries AND (b) the latest `bucket/CHANGELOG.md` date is >30 days ago (or absent). Once per conversation, never per turn. Phrasing:
+
+> Your suggestion queue has N pending entries; last `/curate` was on YYYY-MM-DD (X days ago). Consider running `/curate` when you have ~10 minutes.
+
+The threshold rule prevents the graveyard outcome without becoming nagware. The v1 design deliberately omitted the nudge to avoid noise on every capture above threshold; the v2 design brings it back as a *one-time* conversation-start signal, gated tight enough that a low-velocity user never sees it and a daily-capture user sees it at most once every 30 days. The "rejected during Phase 8e" alternative was the per-capture variant — fire on every append past the threshold. That one is still rejected. This one is the bounded conversation-start variant; it doesn't violate [13d](../persistence/13d-skill-anti-patterns.md) because it fires at most monthly even at full velocity.
+
+If you want to suppress the nudge entirely (e.g., you read SUGGESTIONS.md by hand), unlink `~/.claude/skills/op-curate-nudge` — the file-existence check is what arms it.
 
 ## TL;DR
 

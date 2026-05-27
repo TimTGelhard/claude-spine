@@ -96,10 +96,10 @@ assert_contains "$log" "next-step block present"   "Type  /onboard"
 assert_not_contains "$log" "no legacy cleanup on clean HOME" "==> removing legacy op-manual-* skills"
 # Sanity: every shipped core skill should appear in the link plan.
 for skill in op-add-skill op-anti-patterns op-brownfield op-bucket-router \
-             op-collaboration-modes op-curate op-foundations op-hooks \
-             op-onboard op-persistence op-prepare op-prompting op-recovery \
-             op-signaling op-spine-active op-subagents op-suggest op-tools \
-             op-visuals op-welcome op-workflow; do
+             op-collaboration-modes op-curate op-curate-nudge op-foundations \
+             op-hooks op-onboard op-persistence op-prepare op-prompting \
+             op-recovery op-signaling op-spine-active op-subagents op-suggest \
+             op-tools op-visuals op-welcome op-workflow; do
   assert_contains "$log" "links $skill" "/skills/$skill"
 done
 echo

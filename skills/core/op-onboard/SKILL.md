@@ -111,6 +111,7 @@ Here's what just happened:
 
 What you have available now:
   /spine            see everything that's loaded (skills, commands, chapters)
+  /hooks            list every hook configured for this session (event + script)
   /prep             plan a new project or a major feature  (run in a project dir)
   /onboard          re-run essentials  (`--deep` for the full 20-question pass)
   /suggest          capture a high-signal moment to your personal bucket

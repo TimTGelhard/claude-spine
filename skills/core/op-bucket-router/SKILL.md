@@ -43,8 +43,17 @@ If you're unsure which the user wants, prefer the skill (it produces action; the
 
 - **Never invent a bucket entry.** If the tables are empty or don't match, the answer is "no bucket match" — not a freshly-imagined skill or chapter.
 - **One row at a time.** Don't load multiple skills or multiple chapters unless the user's task is genuinely cross-cutting and the rows obviously belong together.
-- **Don't modify the bucket.** Writing or editing bucket files is `op-add-skill` (skills) or `op-curate` (chapters and modifications) territory — this skill only reads.
+- **Don't modify the bucket — with one exception.** Writing or editing bucket files is `op-add-skill` (skills) or `op-curate` (chapters and modifications) territory. The one exception: **stamp `Last fired` on the matched row.** See "Stamping Last fired" below.
 - **Stale rows happen.** If the listed file is missing, tell the user; suggest `/refresh-bucket` to rescan and rebuild the INDEX.
+
+## Stamping `Last fired`
+
+When you route to a row (Skills *or* Chapters) and actually use its file, update that row's `Last fired` cell to today's date (`YYYY-MM-DD`) using `Edit`. This is the single allowed write into the bucket from this skill.
+
+- **One row per turn.** Only the row whose file you loaded gets stamped. Don't update sibling rows.
+- **Single-column edit.** Replace only the trailing cell. Do not rewrite the trigger, file path, or `Added` date.
+- **No stamp if you didn't use the file.** Reading INDEX.md and finding no match → no write. Match-but-decline (e.g., the user changed their mind) → no write. Stamping is the "I loaded this and acted on it" signal that `/curate --review-stale` reads later.
+- **No stamp on missing-file rows.** If the row's `Skill file` / `Chapter file` path doesn't exist, surface that to the user and recommend `/refresh-bucket` — do not stamp.
 
 ## Sibling skills
 

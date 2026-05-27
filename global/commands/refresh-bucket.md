@@ -15,10 +15,10 @@ Rebuild the bucket INDEX from what's actually on disk. Two tables are rebuilt: *
    - Folder, non-`.md` file, `.gitkeep` → skip. (Bucket chapters are flat single files, per [19e](../../chapters/personalization/19e-extending-the-bucket.md).)
 3. **For each found skill,** parse the frontmatter `description:` field → that's the trigger summary for the Skills row.
 4. **For each found chapter,** read the first H1 (`# ...`) or the first non-empty line if there's no H1 → that's the topic summary for the Chapters row. (No frontmatter convention for bucket chapters; the H1 is the title.)
-5. **Read the current `~/.claude-spine/bucket/INDEX.md`** to get existing rows in both tables, so `Added` dates are preserved for rows whose file still exists.
+5. **Read the current `~/.claude-spine/bucket/INDEX.md`** to get existing rows in both tables, so `Added` *and* `Last fired` are preserved for rows whose file still exists.
 6. **Rewrite `~/.claude-spine/bucket/INDEX.md`:**
    - Keep the file header, the "How files are organized" section, the section headers, and both `<!-- ... appends rows above this comment. -->` markers — these are static.
-   - **Skills table** body: one row per found skill: `| <trigger summary, condensed if >120 chars> | <path from bucket/> | <YYYY-MM-DD added — preserved if the row existed, today if new> |`. If no skills exist, restore the empty-marker row.
+   - **Skills table** body: one row per found skill: `| <trigger summary, condensed if >120 chars> | <path from bucket/> | <YYYY-MM-DD added — preserved if the row existed, today if new> | <Last fired — preserved if the row existed, `—` if new> |` (four columns). If no skills exist, restore the empty-marker row.
    - **Chapters table** body: same shape, one row per found chapter, using the H1 topic as the summary. If no chapters exist, restore the empty-marker row.
 7. **Show the user a unified diff** of what changed before saving. Bail if they say no.
 8. **After save,** tell the user: count of skills indexed, count of chapters indexed, any stale rows removed (rows pointing at missing files), any new rows added.
