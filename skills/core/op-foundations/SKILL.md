@@ -23,6 +23,7 @@ The manual has atomic files for each foundational concept. Read ONLY the one tha
 | Which model — Opus, Sonnet, Haiku — for this task? | `~/.claude-spine/chapters/foundations/04a-model-tiers.md` |
 | Is plan mode / fast mode worth using here? | `~/.claude-spine/chapters/foundations/04b-plan-and-fast-mode.md` |
 | Plan budget, context cost discipline, when NOT to use Claude Code | `~/.claude-spine/chapters/foundations/04c-budget-and-cost.md` |
+| Should this recommendation shift based on the user's Claude subscription? | `~/.claude-spine/chapters/personalization/19f-subscription-aware.md` |
 
 ## How to use
 
@@ -36,6 +37,8 @@ The manual has atomic files for each foundational concept. Read ONLY the one tha
 - "Why is Claude getting confused / forgetting things?" → 01c (failure modes)
 - "How big can my session get?" / "should I restart?" → 02
 - "Can Claude do X?" (capability check) → 03a or 03b
-- "Should I use Opus for this?" → 04a
+- "Should I use Opus for this?" → 04a, then check 19f for the plan-conditional recommendation
 - "Worth using plan mode?" → 04b
-- "I'm burning through my plan budget" → 04c
+- "I'm burning through my plan budget" → 04c, then 19f for plan-specific guidance
+
+When the recommendation has a cost / quota / model component, **read 19f and branch on the user's `Plan:` and `Cost sensitivity:` fields** before answering. Default to the Pro row if the profile is missing.

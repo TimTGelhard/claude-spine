@@ -21,6 +21,7 @@ This skill is read by Claude itself when about to (or failing to) signal. It's a
 | Drift / quality — contradictions, two-strike rule, honest uncertainty | `~/.claude-spine/chapters/signaling/11c-drift-signals.md` |
 | Verification gates + end-of-session signals | `~/.claude-spine/chapters/signaling/11d-verification-signals.md` |
 | Meta-scope — proposal mode vs build mode, "X should be standard" triggers | `~/.claude-spine/chapters/signaling/11e-meta-scope.md` |
+| About to do something materially expensive (ultra review, fan-out, long loop) — when to flag the cost | `~/.claude-spine/chapters/personalization/19f-subscription-aware.md` |
 
 ## How to use
 
@@ -36,6 +37,7 @@ This skill is read by Claude itself when about to (or failing to) signal. It's a
 - "Is this actually done? Have we verified?" → 11d.
 - "Build me a library of skills / agents / hooks" → **11e first, do not start writing.**
 - "Why didn't you flag this earlier?" → 11-overview (cadence) + the relevant category.
+- About to fire off ultra review, multi-agent fan-out, open-ended `/loop`, or repeated Opus calls → **read 19f first**: surface the cost note only if the user's `Plan:` and `Cost sensitivity:` say it's worth flagging. Max 20× + "Don't worry about it" → don't flag; Free / Pro or "Very careful" → one-line warning + cheaper alternative.
 
 ## Sibling skills
 

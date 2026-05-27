@@ -1,6 +1,6 @@
 # Subscription-aware adjustments — planning doc
 
-> **Status:** queued, not started. The onboarding question + profile field landed 2026-05-27. The downstream work to actually *adjust behavior* based on the captured plan is multi-session and tracked here.
+> **Status:** Session 1 done (2026-05-27 — `chapters/personalization/19f-subscription-aware.md` shipped + `op-foundations` / `op-tools` / `op-subagents` / `op-signaling` wired to it). Sessions 2 + 3 still open — see "Sketch of the implementation" below.
 
 ## Why
 

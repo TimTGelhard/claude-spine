@@ -16,6 +16,7 @@ The biggest underused lever for keeping main-conversation context clean. Routes 
 | Should I delegate this or do it inline? How to brief a subagent? | `~/.claude-spine/chapters/subagents/16a-when-to-delegate.md` |
 | Which agent type — general-purpose / Explore / Plan / custom? When write a custom subagent? Orchestrator trap? | `~/.claude-spine/chapters/subagents/16b-agent-types.md` |
 | Parallel agents in one turn, background subagents, anti-patterns | `~/.claude-spine/chapters/subagents/16c-parallel-and-background.md` |
+| How many parallel subagents is OK on this user's plan? | `~/.claude-spine/chapters/personalization/19f-subscription-aware.md` |
 
 ## How to use
 
@@ -29,8 +30,10 @@ The biggest underused lever for keeping main-conversation context clean. Routes 
 - "Should I subagent this?" → 16a.
 - "Write me a subagent prompt for X." → 16a (good prompt rules).
 - "Should I build an orchestrator with 7 specialists?" → 16b (orchestrator trap — almost always no for solo work).
-- "Can I run these audits in parallel?" → 16c.
+- "Can I run these audits in parallel?" → 16c, then 19f for the per-plan fan-out budget.
 - "Why doesn't my subagent know about Y?" → 16a (no context = brief like it has none).
+
+Before recommending parallel fan-out of 2+ agents, **read 19f and the user's `Plan:` field**. Free / Pro burn through quota fast on fan-out; Max plans absorb it. Default to the Pro row if the profile is missing.
 
 ## Sibling skills
 

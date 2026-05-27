@@ -36,7 +36,22 @@ P1.3 follow-up (small):
 
 - `skills/core/op-onboard/questions-deep.md` — Q0A and Q0B gloss "Opus" (Claude's most capable but slowest and most expensive model) and "multi-agent review" (several Claude sessions checking the same code in parallel). Header count "~10" → "13".
 
-P1.1 (write `chapters/personalization/19f-subscription-aware.md` and wire `op-foundations` / `op-tools` / `op-subagents` / `op-signaling` to branch on `Plan:` and `Cost sensitivity:`) lands in a follow-up commit.
+P1.1 (the read path — Session 1 of the SUBSCRIPTION-AWARENESS plan):
+
+#### Added
+
+- `chapters/personalization/19f-subscription-aware.md` — concrete prose for the eight subscription-aware levers (default model, ultra review, parallel subagents, fast mode, long autonomous loops, fresh-terminal cadence, end-of-session multi-agent verify, long-context workflows). One table per lever, plan-by-plan rows. Plus `Cost sensitivity` modifier rules and an "Other plan" mapping. Default-to-Pro fallback when the profile is missing. 117 lines (under the 150-line atomic cap).
+
+#### Changed
+
+- `INDEX.md` — new Personalization row pointing to 19f.
+- `skills/core/op-foundations/SKILL.md` — adds 19f to the index ("Should this recommendation shift based on the user's Claude subscription?") + common-trigger lines for "Should I use Opus" and "burning through my plan budget" + body footnote: "When the recommendation has a cost / quota / model component, read 19f and branch on `Plan:` and `Cost sensitivity:` before answering."
+- `skills/core/op-tools/SKILL.md` — adds 19f for cost-sensitive tool choices (ultra review, long loop, fan-out, repeated WebFetch / MCP) + matching common-trigger lines.
+- `skills/core/op-subagents/SKILL.md` — adds 19f for the per-plan fan-out budget; updates the parallel-audits trigger to point at 19f after 16c.
+- `skills/core/op-signaling/SKILL.md` — adds 19f for "about to do something materially expensive" framing; new common-trigger line specifies the Max 20× + "Don't worry about it" → no flag rule and the Free / Pro or "Very careful" → one-line warning + cheaper alternative rule.
+- `docs/SUBSCRIPTION-AWARENESS.md` — status updated: Session 1 done, Sessions 2 + 3 remain.
+
+Sessions 2 + 3 (adjusting individual chapters like `04a-model-tiers`, `chapter 16`, `chapter 11`, and the `code-review` / `loop` / `schedule` skill bodies, plus re-onboard verification across plan tiers) deferred to follow-up sessions — see `docs/SUBSCRIPTION-AWARENESS.md`.
 
 ### Pillar 4 — First-run discovery surface
 

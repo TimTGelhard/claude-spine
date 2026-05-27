@@ -23,6 +23,7 @@ Picking the right tool isn't optional — it's how Claude controls context cost,
 | Web access (WebFetch, WebSearch) | `~/.claude-spine/chapters/tools/15g-web.md` |
 | MCP integrations (Chrome DevTools, Context7, Playwright, audit) | `~/.claude-spine/chapters/tools/15h-mcp.md` |
 | Slash commands tier list and when to reach for them first | `~/.claude-spine/chapters/tools/15i-slash-commands.md` |
+| Tool choice has a cost / quota / model angle (ultra-review, long loop, fan-out) | `~/.claude-spine/chapters/personalization/19f-subscription-aware.md` |
 
 ## How to use
 
@@ -38,6 +39,9 @@ Picking the right tool isn't optional — it's how Claude controls context cost,
 - "Plan mode for this?" → 15d.
 - "Which MCPs should I have?" → 15h.
 - "What does `/verify` do exactly?" → 15i.
+- "Should I run `/code-review ultra` here?" / "OK to fire off a `/loop` overnight?" → 19f first (the answer depends on `Plan:` and `Cost sensitivity:` in the user's profile), then the tool-specific file.
+
+When picking a tool with material cost (ultra review, open-ended `/loop`, multi-agent fan-out, repeated WebFetch / MCP calls), **read 19f and the user's `Plan:` field before recommending**. Default to the Pro row if the profile is missing.
 
 ## Sibling skills
 

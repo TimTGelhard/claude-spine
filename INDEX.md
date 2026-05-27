@@ -147,6 +147,7 @@
 | Suggestion-capture loop (`op-suggest`, `SUGGESTIONS.md` schema, trigger rules) | `chapters/personalization/19c-suggestion-loop.md` | new | written |
 | Curation sessions (`/curate`, read-before-write, diff preview, CHANGELOG) | `chapters/personalization/19d-curation-session.md` | new | written |
 | Extending the bucket — skill vs chapter, gates, GC, git-pull interaction | `chapters/personalization/19e-extending-the-bucket.md` | new | written |
+| Subscription-aware recommendations (the `Plan:` / `Cost sensitivity:` lever table) | `chapters/personalization/19f-subscription-aware.md` | new | written |
 
 ---
 
