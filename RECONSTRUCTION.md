@@ -24,7 +24,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 
 ## Current phase
 
-**Phase 6c — `op-onboard` skill + slash command + README rewrite — done** (2026-05-27). Phase 6 was too large for one session (5+ deliverables); split into 6a / 6b / 6c.
+**Phase 6.5 — bucket infrastructure — done** (2026-05-27). Ships `op-bucket-router`, `op-add-skill`, `/refresh-bucket` + `/add-skill` slash commands, and the seed `bucket/` folder at the repo root.
 
 **Phase 6a (done 2026-05-27):**
 - Phase 5 work committed.
@@ -44,9 +44,18 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 - `global/INSTALL.md` updated — new commands row in the install table, new `--skip-commands` flag, step-2 mention of running `/onboard` after restart, op-onboard added to the verify list (14 skills now), uninstall block adds the commands + profile cleanup lines.
 - README rewritten as public-facing v2 entry point (129 lines, down from 235). Structure: tagline + v2 status banner → what you get (5 bullets) → install (one block) → first session (4 steps including `/onboard`) → architecture (stub + spine) → human read-order → folder tour → what's NOT here → contributing/license. The v1 layered-explanation, manual TOC, and triage table are gone — their content lives in INDEX.md and the atomic chapters now.
 
-**Next:** Phase 6.5 — `op-bucket-router`, `op-add-skill`, bucket INDEX regeneration.
+**Phase 6.5 (done 2026-05-27):**
+- Bucket promoted to top-level `bucket/` at the repo root — matches the Phase 8 locked decision (PERSONALIZATION.md). Built at the final location to avoid a migration in 8a. Old `skills/bucket/` removed; `.gitkeep` moved via `git mv` to `bucket/skills/.gitkeep`.
+- `bucket/INDEX.md` seed written — router-map table with an empty-marker row and the `<!-- op-add-skill appends rows above this comment. -->` insertion point. Explains the "loaded only when `op-bucket-router` fires" rule.
+- `bucket/README.md` — explains what the bucket is, what NOT to put in it (project docs, secrets, one-offs), how Claude finds bucket skills (routed-to, not auto-loaded), and how `git pull` interacts with personal additions.
+- `skills/core/op-bucket-router/SKILL.md` (42 lines) — fallback router. Fires only when no core `op-*` matched. Reads `bucket/INDEX.md`, picks one row, loads one file. Never invents bucket skills.
+- `skills/core/op-add-skill/SKILL.md` (51 lines) + adjacent `bucket-skill-template.md` (70 lines, content) — guides bucket-skill creation. Gate enforces the "3+-times-paste-in" rule from chapter 13d. Single-file vs folder form is the user's call. Auto-appends a row to `bucket/INDEX.md`.
+- `global/commands/refresh-bucket.md` — rescans `bucket/skills/`, rewrites the INDEX, shows a unified diff before saving, preserves `Added` dates on existing rows.
+- `global/commands/add-skill.md` — direct entry point to `op-add-skill`.
+- Top-level `INDEX.md` fallback section + RECONSTRUCTION target-folder-structure swept to the new `bucket/` location.
+- `install.sh` needed **no changes** — its `op-*/` skill glob and `global/commands/*.md` command glob automatically pick up the new files. Verified via `--dry-run`.
 
-**Phase 6b (done 2026-05-27):**
+**Next:** Phase 7 (demo + launch) or Phase 8 (personalization + self-evolution loop). PERSONALIZATION.md splits Phase 8 into 8a–8e; 6.5's early bucket promotion means 8a's "lift `skills/bucket/` → `bucket/`" step is already done.
 
 ---
 
@@ -94,7 +103,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 | 6a | Structural cleanup — commit Phase 5, sweep hardcoded paths to `~/.claude-spine/`, back-fill cross-references, lock install + onboarding decisions | **done (2026-05-27)** |
 | 6b | `install.sh` + neutral global template + opinionated example + templates audit | **done (2026-05-27)** |
 | 6c | `op-onboard` skill (hybrid interview) + README rewrite | **done (2026-05-27)** |
-| 6.5 | Skill bucket — `op-bucket-router`, `op-add-skill`, bucket INDEX regeneration. **Note:** Phase 8 promotes the bucket to top-level `bucket/` (was `skills/bucket/`). Coordinate folder structure between 6.5 and 8. | not started |
+| 6.5 | Bucket infrastructure — `op-bucket-router`, `op-add-skill`, `bucket/INDEX.md` seed, `/refresh-bucket` + `/add-skill` slash commands. Bucket built at top-level `bucket/` to align with Phase 8's locked decision. | **done (2026-05-27)** |
 | 7 | Demo + launch — end-to-end dry-run, video script outline, launch checklist | not started |
 | 8 | Personalization + self-evolution loop — `op-suggest`, `op-curate`, `bucket/SUGGESTIONS.md`, `bucket/chapters/`, personalization chapter. **Full plan: `PERSONALIZATION.md`.** Splits into sub-phases 8a–8e (one per session). | not started |
 
@@ -123,14 +132,16 @@ claude-op-manual/
 │   ├── recovery/                  # Phase 5
 │   └── anti-patterns/             # Phase 5
 ├── skills/
-│   ├── core/                      # shipped + maintained by the manual
-│   └── bucket/                    # empty by design — each user's personal library
-│       └── INDEX.md               # router map for bucket skills (Phase 6.5)
-│                                  # auto-updated by op-add-skill, /refresh-bucket for manual adds
+│   └── core/                      # shipped + maintained by the manual
+├── bucket/                        # PERSONAL layer — top-level (promoted from skills/bucket/ in Phase 6.5)
+│   ├── INDEX.md                   # router map; auto-updated by op-add-skill, /refresh-bucket for manual adds
+│   ├── README.md                  # what the bucket is, what NOT to put in it
+│   └── skills/                    # empty by design — each user's personal skill library
 ├── templates/                     # existing — neutralize in Phase 6
 └── global/
     ├── neutral/                   # default install (Phase 6)
     ├── opinionated/               # founder-flavored example (Phase 6)
+    ├── commands/                  # slash commands (onboard, add-skill, refresh-bucket)
     └── hooks/                     # existing — keep
 ```
 
@@ -234,6 +245,13 @@ This table grows as each phase lands. Each new file added here when it's written
 | `skills/core/op-onboard/questions-deep.md` | new | 6c | written 2026-05-27 |
 | `skills/core/op-onboard/profile-template.md` | new | 6c | written 2026-05-27 |
 | `global/commands/onboard.md` | new | 6c | written 2026-05-27 |
+| `bucket/INDEX.md` | new | 6.5 | written 2026-05-27 |
+| `bucket/README.md` | new | 6.5 | written 2026-05-27 |
+| `skills/core/op-bucket-router/SKILL.md` | new | 6.5 | written 2026-05-27 |
+| `skills/core/op-add-skill/SKILL.md` | new | 6.5 | written 2026-05-27 |
+| `skills/core/op-add-skill/bucket-skill-template.md` | new | 6.5 | written 2026-05-27 |
+| `global/commands/refresh-bucket.md` | new | 6.5 | written 2026-05-27 |
+| `global/commands/add-skill.md` | new | 6.5 | written 2026-05-27 |
 
 ---
 
@@ -353,6 +371,18 @@ This replaces the earlier hard-coded `/Users/macbook/claude-op-manual/...` paths
 - **README rewritten from 235 → 129 lines.** Old README described v1 architecture (root-level chapters, copy-paste install, layered manual/templates/global story). New README leads with the v2 status banner, then five "what you get" bullets, install + first-session + how-it-works + read-order + folder tour + what's-NOT-here + contributing. INDEX.md is now the manual TOC; triage table lives in `chapters/recovery/17a-failure-triage.md`. The README's job shrank to *entry point* — get them installed, oriented, and reading.
 - **Skill body cap raised to 55** (was 40). All 14 skills fit — range 34–52, op-onboard at 43, op-workflow at 52 (legitimately wider because it covers ch 05 + 06). New rule: if you need more than 55, extract to adjacent files. See Architecture section above.
 - **No chapter content touched.** Phase 6c was skill + global + README — exactly the planned scope, no drift.
+
+### Phase 6.5 notes (2026-05-27)
+
+- **Bucket built at top-level `bucket/`, not `skills/bucket/`.** PERSONALIZATION.md locked the top-level decision, and RECONSTRUCTION explicitly flagged the "coordinate 6.5 and 8" concern. Building at the final location now means Session A of Phase 8 ("lift `skills/bucket/` → `bucket/`") is already done — no migration, no path-rewrite churn later. Phase 8 will *extend* `bucket/` (adding `bucket/chapters/`, `bucket/SUGGESTIONS.md`, `bucket/CHANGELOG.md`); 6.5 only ships `bucket/skills/` + INDEX + README.
+- **`bucket/INDEX.md` has a marker comment** (`<!-- op-add-skill appends rows above this comment. Don't move this marker. -->`) so `op-add-skill` can append rows without re-templating the whole file. `/refresh-bucket` regenerates the table body while preserving the marker. Same shape as common static-site index conventions.
+- **`op-bucket-router` is a fallback router, not a front-door router.** It fires only when no core `op-*` matched the task. The skill description names this explicitly: "Use as the fallback router when the user's task isn't covered by any other core `op-*` skill." The skill body has explicit "When NOT to fire" rules to prevent it from interrupting flows where a core router already fits.
+- **`op-add-skill` has a gate at the top of the body** — refuses to add a skill unless the user has reached for the pattern 3+ times or named an explicit "I always do this" condition. Without the gate, this skill becomes the speculative-library factory chapter 13d warns against. The gate is the same rule the user must apply manually elsewhere; encoding it into the skill removes the temptation to skip it.
+- **`op-add-skill` is a folder skill** (with `bucket-skill-template.md` adjacent) following the `op-onboard` pattern: SKILL.md routes, the template is loaded only when actually writing a file. Keeps SKILL.md at 51 lines and prevents the template's content from being read on every fire.
+- **Two slash commands shipped, not one.** `/refresh-bucket` (rebuild the INDEX from disk) is the obvious one; `/add-skill` (direct entry point to `op-add-skill`) is the second. Without `/add-skill`, the user would rely on natural-language phrasing to fire the skill — works most of the time but fails in the edge case where the skill description's triggers don't match the user's words. The direct command is the safety net.
+- **`install.sh` needed zero changes.** Section 2 already globs `skills/core/op-*/`, section 3 already globs `global/commands/*.md`. Both new skills and both new commands are picked up automatically. Verified by `./install.sh --dry-run` — the new symlink lines appear without code edits.
+- **Bucket folder is NOT symlinked into `~/.claude/`.** Bucket skills are deliberately *not* auto-loaded — they're routed-to by `op-bucket-router`. Symlinking them into `~/.claude/skills/` would make Claude Code auto-load them as core-equivalents, defeating the routing pattern (and risking trigger noise as the user's library grows to 30+ entries). The bucket lives at `~/.claude-spine/bucket/` and is reached only through `op-bucket-router` reading `bucket/INDEX.md`.
+- **No chapter content touched.** Phase 6.5 was infrastructure-only: folders, INDEX seed, two skills, two slash commands. Exactly the planned scope.
 
 ### Phase 6b notes (2026-05-27)
 

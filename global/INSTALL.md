@@ -71,7 +71,7 @@ Then:
 List the op-* skills loaded.
 ```
 
-Should show all 14 core skills: `op-foundations`, `op-workflow`, `op-collaboration-modes`, `op-brownfield`, `op-prompting`, `op-visuals`, `op-signaling`, `op-persistence`, `op-hooks`, `op-tools`, `op-subagents`, `op-recovery`, `op-anti-patterns`, `op-onboard`.
+Should show all 16 core skills: `op-foundations`, `op-workflow`, `op-collaboration-modes`, `op-brownfield`, `op-prompting`, `op-visuals`, `op-signaling`, `op-persistence`, `op-hooks`, `op-tools`, `op-subagents`, `op-recovery`, `op-anti-patterns`, `op-onboard`, `op-bucket-router`, `op-add-skill`.
 
 Also verify the env-leak hook is wired:
 
@@ -97,7 +97,7 @@ The spine chapters (especially `chapters/persistence/12b-claudemd.md` and `chapt
 ```bash
 rm ~/.claude/CLAUDE.md ~/.claude/settings.json ~/.claude/hooks/block-env-staging.sh
 rm -rf ~/.claude/skills/op-*
-rm ~/.claude/commands/onboard.md   # add any other claude-spine commands here as they ship
+rm ~/.claude/commands/onboard.md ~/.claude/commands/add-skill.md ~/.claude/commands/refresh-bucket.md
 rm ~/.claude/claude-spine-profile.md   # the personal profile, if you want a clean slate
 rm ~/.claude-spine   # only if it's a symlink — `ls -la ~/.claude-spine` to check
 # Restore your backup:

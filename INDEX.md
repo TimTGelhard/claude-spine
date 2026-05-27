@@ -4,7 +4,7 @@
 
 **Status:** skeleton — most files don't exist yet. Phases 1–5 populate them. See `RECONSTRUCTION.md` for current progress.
 
-**How to use this file (as Claude):** find the topic that matches the user's task; read only the listed atomic file(s). Don't load whole folders. If no row matches, let `op-bucket-router` read `skills/bucket/INDEX.md` and pick a match from the user's personal library. If still no match, ask the user.
+**How to use this file (as Claude):** find the topic that matches the user's task; read only the listed atomic file(s). Don't load whole folders. If no row matches, let `op-bucket-router` read `bucket/INDEX.md` and pick a match from the user's personal library. If still no match, ask the user.
 
 ---
 
@@ -137,7 +137,7 @@
 
 ## Fallback: personal skill library
 
-If no row above matches the user's task, the `op-bucket-router` skill takes over: it reads `skills/bucket/INDEX.md` (the user's personal library router), picks the matching skills, and loads only those files. The bucket INDEX is auto-maintained by `op-add-skill` — users who drop files in manually can run `/refresh-bucket` to update it. If still no match in the bucket either: ask the user.
+If no row above matches the user's task, the `op-bucket-router` skill takes over: it reads `bucket/INDEX.md` (the user's personal library router at the top of the spine), picks the matching skills, and loads only those files. The bucket INDEX is auto-maintained by `op-add-skill` — users who drop files in manually can run `/refresh-bucket` to update it. If still no match in the bucket either: ask the user.
 
 ---
 
