@@ -10,7 +10,74 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
-### Pillar 1 — Personalization payload (in progress)
+### Still pending pre-launch
+
+- **L4c** — token-efficiency benchmark (spine-on vs spine-off) for demo numbers.
+- **L7a / L7c / L7d / L7e** — landing-page hardening (built CSS, OG image, waitlist wiring), demo recording, public launch.
+
+See [`LAUNCH.md`](LAUNCH.md) for launch gates and [`FIXES.md`](FIXES.md) for the active drift backlog.
+
+---
+
+## [0.10.0] — 2026-05-28
+
+Closes the six pre-launch pillars from [`FIXES.md`](FIXES.md). Personalization is now wired (Pillar 1: 19f subscription-aware chapter + four routers branch on it). First-run discovery exists (Pillar 4: auto-welcome, `/spine` command, richer onboard handoff). The capture/curate flywheel has closure (Pillar 2: `op-curate-nudge` + `Last fired` field). Two skill triggers are tightened (Pillar 5). Two default-on safety hooks plus a `/hooks` command ship (Pillar 6). Pillar 3 (workflow auto-inference) is deferred to post-launch per FIXES.md ordering.
+
+Counts from 0.9.0 → 0.10.0:
+
+- **Skill set: 19 → 22.** Added three ambient skills: `op-spine-active` (L10), `op-welcome` (Pillar 4), `op-curate-nudge` (Pillar 2).
+- **Slash commands: 8 → 9.** Added `/done` (L10), `/spine` (Pillar 4), `/hooks` (Pillar 6); removed `/session-start` + `/session-end` (L10.1, superseded by the ambient flow plus built-in plan mode).
+
+### Pillar 2 — Self-improvement loop closure
+
+The capture/curate flywheel had no closing nudge: `op-suggest` quietly appended to `bucket/SUGGESTIONS.md` but nothing ever surfaced a reminder to actually run `/curate`. Past the ~10-pending threshold the queue became a graveyard. This pillar closes the loop with a single conversation-start nudge plus a `Last fired` field that makes stale-review concrete.
+
+#### Added
+
+- `skills/core/op-curate-nudge/SKILL.md` — auto-firing skill. Fires once at conversation start when `bucket/SUGGESTIONS.md` has 5+ pending entries AND the latest `bucket/CHANGELOG.md` date is >30 days ago (or no `/curate` has ever run). Emits one quiet line suggesting `/curate`, then continues with the user's request. Co-fires cleanly with `op-welcome` and `op-spine-active`. Third ambient skill alongside those two.
+- `bucket/INDEX.md` — new fourth column **`Last fired`** on both Skills and Chapters tables. Defaults to `—` on row creation; updated to today's date by `op-bucket-router` whenever the row routes to a file that exists.
+
+#### Changed
+
+- `skills/core/op-bucket-router/SKILL.md` — new "Stamping Last fired" section + rule update. The previously-blanket "Don't modify the bucket" rule now has one carve-out: stamp the matched row's `Last fired` cell to today's date. One row per turn, single-column edit, no stamp on missing-file rows.
+- `skills/core/op-add-skill/SKILL.md` — row-append format extended to four columns; new rows initialize `Last fired` as `—`.
+- `skills/core/op-curate/SKILL.md` — same row-append change on approve (new skill or new chapter).
+- `skills/core/op-curate/stale-review.md` — rewrites the "what stale means" definition to use the new `Last fired` field. Two-tier candidate pool now: (a) **never-fired** rows where `Last fired` is `—` AND `Added` is >90 days (strongest signal — added but the trigger never matched real work); (b) **fired-but-stale** rows where `Last fired` is >6 months ago. Walks never-fired first, then fired-long-ago. Archive log entries record both dates.
+- `global/commands/refresh-bucket.md` — rebuild logic preserves `Last fired` alongside `Added` when a row's file still exists; new hand-dropped rows initialize `Last fired` to `—`.
+- `chapters/personalization/19c-suggestion-loop.md` — the v1 "deliberately do not auto-propose curation" paragraph is replaced with the new threshold rule (5 pending + 30-day cooldown + once-per-conversation). The per-capture-fire variant remains rejected; the conversation-start variant ships. Rationale: bounded fire rate doesn't violate [13d](../persistence/13d-skill-anti-patterns.md) — at most monthly even at full velocity.
+- Skill count swept 21 → 22 in `README.md` (4 sites), `landing/index.html`, `install.sh`'s summary, `skills/core/op-welcome/SKILL.md`, and `tests/installer/test-dry-run.sh` (new `op-curate-nudge` assertion).
+
+### Pillar 6 — Default-on hooks + `/hooks` listing command
+
+`chapters/persistence/14b-hook-recipes.md` taught six hooks; only two shipped. Closes the gap with two high-value low-risk additions plus a discovery surface for what's actually wired.
+
+#### Added
+
+- `global/hooks/block-env-commit.sh` — PreToolUse hook. Closes the `git commit` gap left by `block-env-staging.sh` (which only catches `git add` arguments). A `.env` file tracked from before `.gitignore`, or force-staged via `git add -f`, would still reach `git commit`. The new hook reads `git diff --cached --name-only` for any `.env*` final-segment match and denies with a remediation hint. Same risk profile as the staging hook; same defense-in-depth posture.
+- `global/hooks/notify-long-task.sh` — Notification hook. Surfaces Claude Code's notification events (waiting on input, idle, long-task completion) as macOS / Linux desktop alerts. macOS uses `osascript`; Linux uses `notify-send`; cross-platform fallback is the terminal bell. Graceful-fail throughout — never blocks Claude.
+- `global/commands/hooks.md` — `/hooks` command. Reads `~/.claude/settings.json` plus any project-level `.claude/settings.json`; prints one row per configured hook (event, matcher/if filter, script path). Read-only single-shot discovery surface, paired with the `/spine` command.
+- `tests/hooks/test-block-env-commit.sh` — 12-case fixture (6 should-block, 6 should-allow). Sets up a throwaway git repo, force-stages various files, and feeds the hook the Claude Code PreToolUse input shape on stdin to verify deny / allow decisions.
+
+#### Changed
+
+- `global/settings.json` — wires both new hooks. PreToolUse Bash matcher now has two `if`-gated entries (`git add*` → staging hook; `git commit*` → commit hook). New `Notification` event hook points at `notify-long-task.sh`.
+- `README.md` — slash-commands table grows from 8 → 9 rows (adds `/hooks`); count claims swept ("Eight commands" → "Nine commands"; "8 slash commands" → "9 slash commands" in two positions).
+- `install.sh` — summary line "21 skills, 8 slash commands" → "22 skills, 9 slash commands" (Pillar 2 also touches this line).
+- `skills/core/op-welcome/SKILL.md` — same summary tweak.
+- `skills/core/op-onboard/SKILL.md` — completion-handoff command list adds `/hooks` (matches the new `/spine` sibling).
+
+### Pillar 5 — Skill trigger tightening
+
+Two skill trigger descriptions bundled too many semantic categories — `op-persistence` mixed five tasks (CLAUDE.md / skill / memory / library audit / hook-vs-CLAUDE.md choice); `op-signaling` blended retrospective / mid-stream / meta-scope / calibration into one paragraph. Both rewritten to lead with one primary user-facing trigger, plus literal keyword phrases the description-matching can actually pattern-match against, plus counter-examples (code-level `persistence` / `signaling` queries — the false-positive categories the eval-set already filters).
+
+#### Changed
+
+- `skills/core/op-persistence/SKILL.md` — description rewritten. Leads with "deciding *where* a behavior or rule should persist across sessions" + literal trigger phrases ("should this go in a skill or CLAUDE.md?", "I keep telling Claude X every session"); body still branches into sub-tasks (skill anatomy, trigger descriptions, library audit) once routed. NOT-for clause covers localStorage / Redis / DB schemas / session state.
+- `skills/core/op-signaling/SKILL.md` — description rewritten. Leads with the user-facing trigger ("flag risks proactively", "are we still in scope?", "is context filling?", "you contradicted yourself", "why didn't you flag X earlier?") + the meta-scope trigger (user proposing to extend Claude's setup). NOT-for clause covers SIGTERM / loading spinners / WebSocket events / notification system design.
+
+The eval-set test cases for both skills were left unchanged — the new descriptions still cover all 5 should-trigger queries in each set. Benchmark re-run deferred to a separate session (~$5 spend).
+
+### Pillar 1 — Personalization payload (Sessions 1 of 3)
 
 The profile written by `/onboard` was capturing values that no downstream chapter or skill read. Same advice for a Python Pro user and a Rust Max-20× engineer. Pillar 1 attacks the gap in three steps; P1.2 lands first because it changes the essentials surface and the count semantics every other Pillar 1 piece references.
 
@@ -138,15 +205,6 @@ The 18 one-line redirect files at the repo root (`01-first-principles.md` … `1
 
 - `V1-CHAPTERS-DEPRECATED.md` — top paragraph and "Why" passage rewritten to describe the new reality (bodies in `docs/v1-archive/`, no root stubs). Trailing "When are v1 stubs going away?" section replaced with "Where do the v1 bodies live now?" pointing at the archive directory.
 - `docs/SUBSCRIPTION-AWARENESS.md` — table reference to `04-models-and-economics.md` repointed at `chapters/foundations/04a-model-tiers.md`.
-
-### Pre-launch gates
-
-Remaining gates before public launch (tracked in [`LAUNCH.md`](LAUNCH.md)):
-
-- **L4c** — token-efficiency benchmark (spine-on vs spine-off) for demo numbers.
-- **L7a / L7c / L7d / L7e** — landing-page hardening (built CSS, OG image, waitlist wiring), demo recording, public launch.
-
-Internal drift tracked in [`FIXES.md`](FIXES.md) (the prior 2026-05-27 pre-launch sweep is archived at [`docs/archive/JANITOR-2026-05.md`](docs/archive/JANITOR-2026-05.md); its `PERSONALIZATION.md` retirement and `EXPLAINER.md` pricing-language reframe items have shipped, only the deferred `install.sh` polish from L4c remains).
 
 ---
 

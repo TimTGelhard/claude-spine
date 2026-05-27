@@ -1,29 +1,39 @@
-# FIXES — senior review pass, 2026-05-27
+# FIXES — senior review pass, 2026-05-27 (closed 2026-05-28)
 
-> Two passes are stacked in this file:
+> **Status as of 2026-05-28:** Pillars 1 (Sessions 1 of 3), 2, 4, 5, 6 + the
+> HIGH/MEDIUM drift sweep + M4 have shipped — all under the `[0.10.0]` cut. The
+> open queue at this point is **Pillar 3** (workflow auto-inference — P3.1–P3.5,
+> all P2 / post-launch), **Pillar 1 Sessions 2–3** (per-chapter/per-skill
+> subscription-aware adjustments tracked in `docs/SUBSCRIPTION-AWARENESS.md`),
+> **P4.4** (landing-page screenshot + profile example, post-launch content
+> work), **P6.4 + P6.5** (opt-in onboard-deep hooks), and the LOW items L2–L8.
+> Each shipped item below has a `**[shipped …]**` annotation; unfixed items
+> have no annotation. Two passes are stacked in this file:
 >
 > **Pass 1 — drift catalog (HIGH / MEDIUM / LOW below).** From a fresh review
 > on `main`. The previous internal audit in [`docs/JANITOR.md`](docs/JANITOR.md)
 > shipped most of its items (op-prepare split, PERSONALIZATION archived,
-> EXPLAINER pricing reframe). What's listed here is **new drift since that pass**
-> — almost entirely a consequence of L10 adding `op-spine-active` (skill count
-> 19 → 20) and L10's planning doc still living at the repo root. These are
-> maintenance defects — outdated numbers, residual planning doc, broken links.
-> Total work: ~20 minutes.
+> EXPLAINER pricing reframe). What's listed here was **new drift since that
+> pass** — almost entirely a consequence of L10 adding `op-spine-active` (skill
+> count 19 → 20) and L10's planning doc still living at the repo root. Total
+> work: ~20 minutes. All HIGH + MEDIUM items have shipped.
 >
 > **Pass 2 — strategic pillar findings (`## Pillar findings` further down).**
-> From a deeper pre-global-launch review. Unlike the drift items, these are
+> From a deeper pre-global-launch review. Unlike the drift items, these were
 > *content / architecture gaps* — a partly-hollow personalization promise on
 > the README, a self-improvement loop with no closure, predictable workflow
-> attention-leaks, first-run UX that requires README literacy, two weak skill
-> triggers, and high-value hooks taught but not shipped. Six pillars; tackle
-> one per session.
+> attention-leaks, first-run UX that required README literacy, two weak skill
+> triggers, and high-value hooks taught but not shipped. Six pillars. Pillars
+> 1, 2, 4, 5, 6 are done (with Pillar 1 covering Session 1 of 3); Pillar 3 is
+> deferred to post-launch.
 
-## Live counts on disk (truth source as of 2026-05-27)
+## Live counts on disk (truth source as of 2026-05-28)
 
-- `op-*` skills under `skills/core/`: **20**
-- `.md` files under `chapters/`: **80**
-- Onboarding questions: **6 essential + ~11 deep = 6–17 total**
+- `op-*` skills under `skills/core/`: **22** (19 task-routers + 3 ambient: `op-spine-active`, `op-welcome`, `op-curate-nudge`)
+- `.md` files under `chapters/`: **81** (Pillar 1 added `chapters/personalization/19f-subscription-aware.md`)
+- Onboarding questions: **7 essential + 13 deep = 7–20 total** (Pillar 1.2 split Q5 into Q5a + Q5b)
+- Slash commands under `global/commands/`: **9** (`/onboard`, `/prep`, `/done`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket`, `/spine`, `/hooks`)
+- Hooks under `global/hooks/`: **4** (`block-env-staging.sh`, `block-env-commit.sh`, `notify-long-task.sh`, `spine-writeback.sh`)
 
 Anywhere a doc claims numbers different from the above and is making a
 *current-state* claim (as opposed to historical/changelog narrative), it's wrong.
@@ -31,6 +41,18 @@ Anywhere a doc claims numbers different from the above and is making a
 ---
 
 ## HIGH — visible to readers, sweep before the next push
+
+**[All H1–H4 shipped 2026-05-27 — commit `acc3769`, landed in `[0.10.0]`.]**
+The drift sweep merged the four count-corrections into a single PR per the
+"Suggested apply order" below. Subsequent pillars (Pillar 4 added `op-welcome`;
+Pillar 2 added `op-curate-nudge`; Pillar 1 added 19f-subscription-aware.md;
+Pillar 1.2 split Q5 into two essentials) have bumped the live counts further,
+so the specific "20 skills" / "6 to 17 questions" / "~80 chapters" phrasings
+recommended below are themselves now stale — current truth is in
+"Live counts on disk" at the top of this file. The historical record below
+documents the state at the time of the sweep, not the current state.
+
+---
 
 ### H1. `README.md` — three live "19 op-* skills" claims should be **20**
 
@@ -121,6 +143,14 @@ and start a fresh JANITOR for the new drift listed above.
 Option (b) is cleaner — JANITOR docs are point-in-time audits, not living docs.
 
 ### M4. CHANGELOG `[Unreleased]` is large enough to merit a version cut
+
+**[shipped 2026-05-28 — landed in `[0.10.0]`]** Cut as `[0.10.0]` (minor
+feature — the workflow change in L10 plus the personalization payload in
+Pillar 1 plus three new ambient skills justify a minor bump, not a patch).
+`[Unreleased]` now holds only the pre-launch gates left in `LAUNCH.md`
+(L4c benchmark, L7a/c/d/e landing-page hardening + demo + public launch).
+
+---
 
 `[Unreleased]` already documents L10 (3 new files, 5 changed). Holding this
 under `[Unreleased]` indefinitely makes the changelog harder to read at launch.
@@ -247,39 +277,35 @@ access."* The branding on `README.md:15` is ahead of the implementation.
 
 #### P1.1 [P0] — Ship `19f-subscription-aware.md` and wire the routing skills
 
-The fix is already scoped in `docs/SUBSCRIPTION-AWARENESS.md:30-49` (3 sessions
-of work). Steps:
+**[shipped 2026-05-27 — commit `187ddbe`, landed in `[0.10.0]`]** Session 1 of
+the 3-session plan in `docs/SUBSCRIPTION-AWARENESS.md`. Created
+`chapters/personalization/19f-subscription-aware.md` (8 levers × 4 plan-rows
+each, plus Cost sensitivity modifier + default-to-Pro fallback). INDEX row
+added. Four routing skills wired to read 19f and branch on `Plan:` /
+`Cost sensitivity:` (`op-foundations`, `op-tools`, `op-subagents`,
+`op-signaling`). Sessions 2 + 3 (per-chapter / per-skill body adjustments
+across `04a-model-tiers`, ch 16, ch 11, `code-review` / `loop` / `schedule`)
+deferred — see `docs/SUBSCRIPTION-AWARENESS.md` for the queued list.
 
-1. Write `chapters/personalization/19f-subscription-aware.md` — mirror the
-   lever table at `docs/SUBSCRIPTION-AWARENESS.md:19-28` as concrete prose.
-2. Add an INDEX.md row.
-3. Update `skills/core/op-foundations/SKILL.md`, `op-tools/SKILL.md`,
-   `op-subagents/SKILL.md`, `op-signaling/SKILL.md` — each references 19f
-   and branches on `Plan:` / `Cost sensitivity:`.
-4. Spot-check by re-onboarding as Free and Max 20×; confirm tone shifts.
+---
 
 #### P1.2 [P1] — Onboard Q5 conflates tone and depth
 
-Q5 options ("Just the answer," "Short and clear," "Walk me through," "Teach me")
-mix *how short* with *how much background*. A user who wants short answers but
-full reasoning has no good option.
+**[shipped 2026-05-27 — commit `cdbf591`, landed in `[0.10.0]`]** Q5 split into
+Q5a (Answer length: Terse / Standard / Verbose) and Q5b (Reasoning depth: Just
+the answer / Show the path / Teach me the why). Essentials count 6 → 7; total
+interview 17 → 20 (essentials 7 + deep 13). Profile template updated, SKILL.md
+counts swept, README + install.sh + op-welcome + EXPLAINER + 19a + 19b all
+synced.
 
-**Fix:** split into two questions in `skills/core/op-onboard/questions-essential.md`:
-
-- Q5a — "How short should answers be?" (Terse / Standard / Verbose)
-- Q5b — "How much should you explain reasoning?" (Just the answer / Show the
-  path / Teach me the why)
-
-Two new profile fields; both read by `op-collaboration-modes` and `op-prompting`.
+---
 
 #### P1.3 [P1] — Deep-mode questions assume jargon the essentials gloss
 
-Essentials gloss "deploy (getting code online)" and "MVP (a first version to
-show people)." Deep questions A3, C1, F1 reuse RLS / migrations / edge cases
-without glossing.
-
-**Fix:** sweep `skills/core/op-onboard/questions-deep.md` — apply the
-plain-language gloss pattern from essentials. ~30 min.
+**[shipped 2026-05-27 — commit `cdbf591`, landed in `[0.10.0]`]** Q0A and Q0B
+gloss "Opus" (Claude's most capable but slowest and most expensive model) and
+"multi-agent review" (several Claude sessions checking the same code in
+parallel). Deep-question header count "~10" → "13".
 
 ---
 
@@ -294,30 +320,28 @@ This is the single missing flywheel.
 
 #### P2.1 [P1] — Ship the 5+-pending curation nudge
 
-A single Stop-hook or `op-spine-active` extension: if `bucket/SUGGESTIONS.md`
-has 5+ pending entries AND last `/curate` >30 days ago, emit *one* quiet line
-at conversation start:
+**[shipped 2026-05-28 — landed in `[0.10.0]`]** Implemented as a new auto-firing
+skill (`skills/core/op-curate-nudge/SKILL.md`) rather than a Stop hook — keeps
+the pattern consistent with `op-welcome` and `op-spine-active`, and the
+"once per conversation" gate is enforced by the model rather than a marker file.
+Fires when SUGGESTIONS.md has 5+ pending AND the latest `bucket/CHANGELOG.md`
+date is >30 days ago (or never). Lines 84-86 of `19c-suggestion-loop.md`
+rewritten — replaces the v1 "deliberately does not auto-propose" paragraph
+with the bounded conversation-start variant + rationale (the per-capture
+variant remains rejected). Skill count 21 → 22.
 
-> "Your suggestion queue has 7 pending entries; consider `/curate` when you
-> have 10 minutes."
-
-Once per conversation, not per turn. Highest-impact change for "self-improving"
-to be honest. Update `chapters/personalization/19c-suggestion-loop.md:84-86` —
-replace the "v1 deliberately does not auto-propose" paragraph with the new
-threshold rule and graveyard-prevention rationale.
+---
 
 #### P2.2 [P1] — Add `Last fired:` field to `bucket/INDEX.md` rows
 
-Enables `/curate --review-stale` to surface "never-fired in 90 days"
-candidates concretely instead of date-of-add only.
-
-- `op-bucket-router` updates the row's `Last fired:` field on load.
-- `op-add-skill` initializes it at creation.
-- `op-curate` stale-review reads it; flags rows where `Last fired` is empty
-  AND `Added` >90 days ago.
-
-Touches `op-bucket-router/SKILL.md`, `op-add-skill/SKILL.md`,
-`op-curate/stale-review.md`.
+**[shipped 2026-05-28 — landed in `[0.10.0]`]** New fourth column on both
+Skills and Chapters tables in `bucket/INDEX.md`. `op-bucket-router/SKILL.md`
+gains a "Stamping Last fired" section (single carve-out from the
+"don't modify the bucket" rule). `op-add-skill/SKILL.md` and `op-curate/SKILL.md`
+extend their row-append format to include `Last fired: —`. `refresh-bucket`
+preserves the column across rebuilds. `op-curate/stale-review.md` rewritten:
+two-tier candidate pool (never-fired-and->90-days first, then
+fired->6-months-ago).
 
 ---
 
@@ -369,25 +393,36 @@ No welcome, no `/onboard` prompt, no in-session tour. The README says "run
 
 #### P4.1 [P0] — Auto-prompt `/onboard` on first run
 
-`op-spine-active` (or a new `op-welcome` sibling) should detect missing
-`~/.claude/claude-spine-profile.md` and emit *once*:
+**[shipped 2026-05-27 — commit `f18c905`, landed in `[0.10.0]`]** New
+`skills/core/op-welcome/` sibling to `op-spine-active`. Auto-fires once when
+`~/.claude/claude-spine-profile.md` is missing; emits a short welcome block
+pointing at `/onboard`. Silent once the profile exists. Skill count 20 → 21
+at the time of landing.
 
-> "Welcome to claude-spine. Run `/onboard` (2 min) to calibrate me to your
-> stack and working style — every future session benefits."
-
-Triggered by file absence, not message content. Silent after first emission.
+---
 
 #### P4.2 [P1] — Add `/spine` command listing active skills, commands, profile
 
-User types `/` and sees 7 commands but no way to see the 20 op-* skills.
-Add `global/commands/spine.md`: prints active skills, all slash commands,
-profile path, INDEX.md location. Single-shot discovery surface.
+**[shipped 2026-05-27 — commit `f18c905`, landed in `[0.10.0]`]**
+`global/commands/spine.md` ships. Reads disk every time — never hard-codes
+counts. Prints profile path + status, slash commands list, op-* skills with
+one-line triggers, chapters root, bucket state, pending-suggestions count.
+Read-only, single-shot. Slash-command count 7 → 8 at the time of landing
+(Pillar 6 later took it to 9).
+
+---
 
 #### P4.3 [P1] — `op-onboard` final line hands off to `/prep`
 
-After `/onboard` completes, the procedure (`skills/core/op-onboard/SKILL.md`)
-should end with: *"Profile saved. Next: open a session in a project directory
-and run `/prep` to plan your first feature."*
+**[shipped 2026-05-27 — commit `f18c905`, landed in `[0.10.0]`]** Replaced the
+prior terse three-bullet farewell with a structured "what just happened" + "you
+have available now" + "what to do next" handoff block. Names every slash
+command with a one-line use; explicitly points at `/prep` for new projects.
+The post-essentials writeback step that proposes raising `autoCompactWindow` +
+`effortLevel` for Max 20× users landed in the same commit (it shares the same
+file region).
+
+---
 
 #### P4.4 [P2] — Landing page screenshot + profile example
 
@@ -405,25 +440,26 @@ are too broad to defend.
 
 #### P5.1 [P1] — Tighten `op-persistence` trigger description
 
-`skills/core/op-persistence/SKILL.md:3` bundles 5+ tasks (CLAUDE.md editing,
-skill design, library audit, "where to remember," hook vs CLAUDE.md choice).
-Tighten to ONE primary trigger:
+**[shipped 2026-05-28 — landed in `[0.10.0]`]** Description rewritten. Leads
+with "deciding *where* a behavior or rule should persist across sessions"; adds
+literal trigger phrases ("should this go in a skill or CLAUDE.md?", "I keep
+telling Claude X every session"); body branches into the sub-tasks once routed.
+NOT-for clause covers code-level persistence (localStorage, Redis, DB schemas,
+session state). Eval-set unchanged — all 5 should-trigger queries still match;
+benchmark re-run deferred to a separate session.
 
-> "Use when deciding *where* a behavior should persist — CLAUDE.md vs skill
-> vs memory vs hook. Body branches into the sub-tasks once routed."
-
-Re-run `tests/skill-triggers/run.sh op-persistence` after the change.
+---
 
 #### P5.2 [P1] — Tighten `op-signaling` or merge into `op-recovery`
 
-`skills/core/op-signaling/SKILL.md:3` blends three semantic categories and
-reads like internal guidance, not a user-triggered router. Either:
-
-(a) tighten to user-facing trigger ("flag when I'm drifting mid-session"), or
-(b) merge mid-stream signaling into `op-recovery` and drop the skill.
-
-Default: tighten, don't merge. Decide based on whether real-session signaling
-questions surface post-launch.
+**[shipped 2026-05-28 — landed in `[0.10.0]`]** Option (a) — tighten, not
+merge. Description rewritten with user-facing trigger phrases ("are we still
+in scope?", "is context filling?", "you contradicted yourself", "why didn't
+you flag X earlier?", "you flag too often / not enough") plus the meta-scope
+trigger (user proposing to extend Claude's setup). NOT-for clause covers
+code-level signaling (SIGTERM, loading spinners, WebSocket events, notification
+system design). Decision on (b) remains revisitable post-launch if real-session
+data shows the skill still under-fires.
 
 ---
 
@@ -435,20 +471,36 @@ are defensible.
 
 #### P6.1 [P1] — Ship `block .env on git commit` (default-on, mandatory)
 
-Closes the gap between `git add` (already blocked) and `git commit`. Same risk
-profile as the existing PreToolUse hook. Extend `block-env-staging.sh` matcher
-or add sibling `block-env-commit.sh`. Wire in `global/settings.json`.
+**[shipped 2026-05-28 — landed in `[0.10.0]`]** Sibling `block-env-commit.sh`
+(not an extension of the staging hook) — keeps the two scripts independently
+testable. Reads `git diff --cached --name-only` for `.env*` final-segment
+matches and denies with a remediation hint. Wired in `global/settings.json`
+as a second `if`-gated entry under the existing PreToolUse Bash matcher.
+12-case fixture (`tests/hooks/test-block-env-commit.sh`) sets up a throwaway
+git repo to exercise the deny / allow decisions.
+
+---
 
 #### P6.2 [P1] — Ship `notify-on-long-task` (default-on)
 
-High-value, low-risk, no false positives. New `global/hooks/notify-long-task.sh`;
-wire as `Notification` event in `global/settings.json`.
+**[shipped 2026-05-28 — landed in `[0.10.0]`]** `global/hooks/notify-long-task.sh`
+ships. macOS uses `osascript display notification`; Linux uses `notify-send`;
+cross-platform fallback is the terminal bell. Wired in `global/settings.json`
+as a new `Notification` event hook. Graceful-fail throughout — never blocks
+Claude even on malformed input.
+
+---
 
 #### P6.3 [P1] — Add `/hooks` listing command
 
-Currently the only way to see active hooks is reading `~/.claude/settings.json`.
-Add `global/commands/hooks.md`: prints every configured hook with event +
-matcher + script. Could also live as a subcommand of `/spine` (P4.2) — pick one.
+**[shipped 2026-05-28 — landed in `[0.10.0]`]** `global/commands/hooks.md`
+ships as a standalone command (not a subcommand of `/spine` — keeps each
+discovery surface narrow). Reads `~/.claude/settings.json` plus any
+project-level `.claude/settings.json`; prints one row per configured hook with
+event, matcher / `if` filter, and resolved script path. Read-only single-shot.
+Slash-command count 8 → 9.
+
+---
 
 #### P6.4 [P2] — Opt-in `typecheck-after-edit` via onboard deep mode
 
