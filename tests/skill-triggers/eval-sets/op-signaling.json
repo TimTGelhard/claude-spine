@@ -1,0 +1,12 @@
+[
+  {"query": "why didn't you flag earlier that I was burning context on those big file reads? You should have signaled before we hit hour 2", "should_trigger": true},
+  {"query": "I want to add a custom subagent for code review and an MCP for Linear and a hook that runs after every commit — and another skill for capturing learnings. Can you set all of these up?", "should_trigger": true},
+  {"query": "we started this session to fix one auth bug and now we've also rewritten the routing layer and added a feature flag system — is that fine or should you have flagged something?", "should_trigger": true},
+  {"query": "calibrate how often you interrupt me with proactive signals — I feel like you're flagging too aggressively in code reviews and not aggressively enough on context fills", "should_trigger": true},
+  {"query": "before you do anything else: I'm proposing we extend the spine itself by adding a 19th chapter on prompt engineering. Walk through this with me first.", "should_trigger": true},
+  {"query": "signal handling in the worker process is broken — SIGTERM isn't being caught", "should_trigger": false},
+  {"query": "the loading spinner needs a signal to the user that something's happening — what's the UX standard", "should_trigger": false},
+  {"query": "fix the cron job — it's not signaling completion to the parent process", "should_trigger": false},
+  {"query": "design the API for the notification system — push, email, sms", "should_trigger": false},
+  {"query": "the WebSocket reconnect is signaling state changes on every retry — debug", "should_trigger": false}
+]

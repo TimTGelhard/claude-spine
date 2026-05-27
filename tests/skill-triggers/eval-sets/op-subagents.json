@@ -1,0 +1,12 @@
+[
+  {"query": "I need to audit 40 route handlers for missing zod validation — should I just grep, or is this where a subagent earns its keep?", "should_trigger": true},
+  {"query": "spawn three parallel agents to refactor the auth helper, write the test suite, and update the README in one go", "should_trigger": true},
+  {"query": "I want to write a custom subagent in ~/.claude/agents/ for 'review my migration for safety' — walk me through the SKILL-like file", "should_trigger": true},
+  {"query": "is this a job for the Explore agent or the general-purpose one — I'm looking for every file in the repo that imports 'supabase-js'", "should_trigger": true},
+  {"query": "I'm thinking 'orchestrator + specialists' for the codebase rewrite — one agent plans, several execute. Does that pattern fit here or am I over-engineering?", "should_trigger": true},
+  {"query": "the deploy is failing with a subprocess error — debug the agent that's spawning the build", "should_trigger": false},
+  {"query": "explain how Node.js child_process.fork creates subagents — wait, subprocesses", "should_trigger": false},
+  {"query": "the AI agent we're integrating with is throwing 429s — handle the rate limit", "should_trigger": false},
+  {"query": "design the database for our multi-tenant agent platform — agents and their tools", "should_trigger": false},
+  {"query": "the user-agent string isn't being passed through the reverse proxy — fix the nginx config", "should_trigger": false}
+]

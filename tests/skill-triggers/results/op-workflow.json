@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-workflow",
+  "description": "Use when starting a new project from scratch, scoping what to build before opening Claude Code, planning the prep / architecture / build / harden / ship sequence, sizing a feature for one session, choosing how to break a too-big feature, or deciding whether the current scope fits in one terminal. Routes to chapters 05 (the 7-stage workflow) and 06 (feature sizing) of claude-spine.",
+  "results": [
+    {
+      "query": "I'm about to start a new MVP \u2014 an invoicing tool for Dutch freelancers, ~3 weeks budget. What's the prep \u2192 architecture \u2192 build \u2192 harden \u2192 ship sequence I should follow?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "this 'add Stripe Billing portal' task feels too big for one session \u2014 how do I cut it into the right slices without making 6 PRs?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "before I open Claude Code, walk me through scoping this feature: multi-tenant team invites with role-based permissions. Is this one session or does it need to be split?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I've got the schema and 3 API routes done. Where am I in the 7-stage workflow \u2014 should I be hardening already or still in build?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the GitHub Actions workflow is failing on the deploy step \u2014 fix the YAML",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "I want to add SSO + multi-region replication + a redesigned dashboard. Is that one feature or three?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the daily-digest cron workflow is firing twice \u2014 debug the scheduler",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "implement an n8n workflow for syncing Stripe customers to HubSpot",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "explain how Next.js handles the middleware \u2192 route handler workflow",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "design the workflow for user onboarding \u2014 verify email, set password, create org, invite team",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-hooks",
+  "description": "Use when wiring an automatic behavior to a Claude Code event (typecheck after edit, block commit on test fail, notify on long completion), editing settings.json (global or project), troubleshooting why a hook didn't fire, deciding between hook / CLAUDE.md / skill for \"from now on, when X, do Y\", or setting up the starter automation set for a new machine. Routes to chapter 14 (hooks and automation) of claude-spine.",
+  "results": [
+    {
+      "query": "set up the starter hook set on this new MacBook \u2014 env-leak blocker, typecheck-after-edit, notify-on-long-completion",
+      "should_trigger": true,
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "from now on, when I'm about to commit, block the commit if any test fails. Set that up.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I want Claude to auto-run `npm run typecheck` after every file edit in this Next.js repo \u2014 wire it up in settings.json",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the test suite is hooking into a wrong port \u2014 fix the conflict",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "I added a PostToolUse hook to my settings.json but it's not firing \u2014 help me debug why",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the deploy script keeps hooking on the broken DNS record \u2014 debug it",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "write a webhook handler for Stripe payment_intent.succeeded",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "React hooks: when does useEffect fire vs useLayoutEffect?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "useState vs useReducer for a complex form \u2014 which one fits this case",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "should this 'always run prettier on saved files' rule be a hook, a CLAUDE.md instruction, or a skill? What's the right home?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 6,
+    "failed": 4
+  }
+}

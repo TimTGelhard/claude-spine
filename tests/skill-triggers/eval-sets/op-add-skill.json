@@ -1,0 +1,12 @@
+[
+  {"query": "ok I just realized I keep redoing this exact 'find the latest supabase migration version, bump it by one, write the new file' dance every time I change a schema. Can we capture this as a skill so next time you reach for it automatically?", "should_trigger": true},
+  {"query": "/add-skill", "should_trigger": true},
+  {"query": "this whole conversion-from-postgres-types-to-zod-schemas thing — third time we've done it this month. Save it as a skill", "should_trigger": true},
+  {"query": "I want a skill for 'review my Next.js route handlers and flag the ones that aren't doing zod parsing'. We've done that pattern enough times now.", "should_trigger": true},
+  {"query": "actually that audit output was great. Let's make this a skill — 'audit Supabase RLS policies from two sessions, owner + non-owner, report which tables are leaking'. Add it to my bucket.", "should_trigger": true},
+  {"query": "what skills do I currently have loaded in this session?", "should_trigger": false},
+  {"query": "I need to skill up on React Server Components — recommend a learning path with code examples", "should_trigger": false},
+  {"query": "save the conversation from today as a session log in docs/sessions/ for me to pick up tomorrow", "should_trigger": false},
+  {"query": "the new contractor needs to learn our codebase fast — which 3 files should she read first and in what order", "should_trigger": false},
+  {"query": "add a column to the users table for billing_status and write the migration with backfill", "should_trigger": false}
+]

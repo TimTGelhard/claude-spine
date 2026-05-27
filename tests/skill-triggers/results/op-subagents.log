@@ -1,0 +1,12 @@
+Evaluating: Use when deciding whether to delegate to a subagent (Agent tool) vs do work inline, writing a subagent prompt, picking an agent type (general-purpose / Explore / Plan / custom), running parallel or background agents, designing a custom subagent in ~/.claude/agents/, or evaluating whether an orchestrator-with-specialists pattern fits the task. Routes to chapter 16 (subagents) of claude-spine.
+Results: 5/10 passed
+  [FAIL] rate=0/1 expected=True: I want to write a custom subagent in ~/.claude/agents/ for 'review my 
+  [PASS] rate=0/1 expected=False: the deploy is failing with a subprocess error — debug the agent that's
+  [PASS] rate=0/1 expected=False: the user-agent string isn't being passed through the reverse proxy — f
+  [FAIL] rate=0/1 expected=True: I'm thinking 'orchestrator + specialists' for the codebase rewrite — o
+  [PASS] rate=0/1 expected=False: the AI agent we're integrating with is throwing 429s — handle the rate
+  [FAIL] rate=0/1 expected=True: spawn three parallel agents to refactor the auth helper, write the tes
+  [PASS] rate=0/1 expected=False: explain how Node.js child_process.fork creates subagents — wait, subpr
+  [FAIL] rate=0/1 expected=True: is this a job for the Explore agent or the general-purpose one — I'm l
+  [FAIL] rate=0/1 expected=True: I need to audit 40 route handlers for missing zod validation — should 
+  [PASS] rate=0/1 expected=False: design the database for our multi-tenant agent platform — agents and t

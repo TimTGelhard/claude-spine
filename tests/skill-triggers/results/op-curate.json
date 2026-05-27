@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-curate",
+  "description": "Use to run a curation session \u2014 review pending entries in `~/.claude-spine/bucket/SUGGESTIONS.md` and turn approved ones into new or modified files under `bucket/`. Fires on (1) `/curate` slash command (with optional `--review-stale` for stale-entry review instead of pending curation); (2) the user explicitly asks to curate the bucket \u2014 \"let's curate,\" \"go through pending suggestions,\" \"review what we captured,\" \"process the queue,\" \"let's review stale bucket entries.\" Reads `~/.claude-spine/bucket/INDEX.md` plus any overlapping bucket files before any proposal \u2014 read-before-write is mandatory. Shows a unified diff or full file body before every write \u2014 explicit per-change approval, no batch. On apply: writes the bucket file, updates the matching table (Skills or Chapters) in `bucket/INDEX.md`, appends to `bucket/CHANGELOG.md`, moves the entry to the archive section with `Status: applied`. On reject: moves to archive with `Status: rejected`. Hard-refuses to touch `chapters/`, `skills/core/`, the global stub, or the profile \u2014 bucket-only.",
+  "results": [
+    {
+      "query": "/curate",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "/add-skill for the migration-bump pattern",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "/curate --review-stale",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "/suggest \u2014 add 'always check Supabase RLS from two sessions' to my queue",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "let's go through the pending suggestions in my bucket and decide which to apply",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "process the queue of bucket suggestions \u2014 I want to review them one by one before anything writes",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "review the diff in this PR for me",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "let's curate \u2014 what's been captured since last week's session that's worth turning into actual bucket entries",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "go through the failing tests one by one and tell me what's broken",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "curate the data in the users table \u2014 drop the rows with null emails",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

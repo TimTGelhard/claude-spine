@@ -1,0 +1,12 @@
+Evaluating: Use when entering a codebase you didn't build, returning to your own project after months away, inheriting client code, extending a site months after launch, or about to modify code where you couldn't answer "what does this file do" in one sentence. Covers the discovery sequence, safe first changes, teaching Claude an unfamiliar codebase, and when a rewrite is the right answer. Routes to chapter 08 (brownfield) of claude-spine.
+Results: 6/10 passed
+  [FAIL] rate=0/1 expected=True: old Rails app, version 4.2, nobody's touched it in 3 years. Client wan
+  [PASS] rate=0/1 expected=False: in this file I wrote yesterday, why is the loader function returning a
+  [FAIL] rate=0/1 expected=True: I'm picking up the MVP I shipped 7 months ago. I genuinely don't remem
+  [PASS] rate=1/1 expected=True: client just handed me a Next.js repo their last agency built. ~80 file
+  [FAIL] rate=0/1 expected=True: this auth module — I built it but it's been 5 months and I'm scared to
+  [PASS] rate=0/1 expected=False: rewrite this function — I know what it does, it just needs to handle t
+  [PASS] rate=0/1 expected=False: I'm starting a new Next.js project from scratch — best stack defaults?
+  [PASS] rate=0/1 expected=False: what's the right way to teach a junior dev our codebase conventions on
+  [PASS] rate=0/1 expected=False: explain how React Server Components differ from Client Components
+  [FAIL] rate=0/1 expected=True: inheriting a Solidity contract from another dev. I can't read it cold 

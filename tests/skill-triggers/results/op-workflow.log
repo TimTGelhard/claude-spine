@@ -1,0 +1,12 @@
+Evaluating: Use when starting a new project from scratch, scoping what to build before opening Claude Code, planning the prep / architecture / build / harden / ship sequence, sizing a feature for one session, choosing how to break a too-big feature, or deciding whether the current scope fits in one terminal. Routes to chapters 05 (the 7-stage workflow) and 06 (feature sizing) of claude-spine.
+Results: 5/10 passed
+  [FAIL] rate=0/1 expected=True: I'm about to start a new MVP — an invoicing tool for Dutch freelancers
+  [FAIL] rate=0/1 expected=True: this 'add Stripe Billing portal' task feels too big for one session — 
+  [FAIL] rate=0/1 expected=True: before I open Claude Code, walk me through scoping this feature: multi
+  [FAIL] rate=0/1 expected=True: I've got the schema and 3 API routes done. Where am I in the 7-stage w
+  [PASS] rate=0/1 expected=False: the GitHub Actions workflow is failing on the deploy step — fix the YA
+  [FAIL] rate=0/1 expected=True: I want to add SSO + multi-region replication + a redesigned dashboard.
+  [PASS] rate=0/1 expected=False: the daily-digest cron workflow is firing twice — debug the scheduler
+  [PASS] rate=0/1 expected=False: implement an n8n workflow for syncing Stripe customers to HubSpot
+  [PASS] rate=0/1 expected=False: explain how Next.js handles the middleware → route handler workflow
+  [PASS] rate=0/1 expected=False: design the workflow for user onboarding — verify email, set password, 

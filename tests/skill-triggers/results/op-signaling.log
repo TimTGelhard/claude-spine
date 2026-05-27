@@ -1,0 +1,12 @@
+Evaluating: Use when Claude should interrupt with a proactive signal (context filling, scope creep, drift, missed verification, end-of-session), when the user proposes extending Claude's own setup (skills/hooks/agents/MCPs/CLAUDE.md additions — meta-scope), when asking "why didn't you flag X earlier", or when calibrating how often to signal. Routes to chapter 11 (proactive signaling) of claude-spine.
+Results: 5/10 passed
+  [PASS] rate=0/1 expected=False: fix the cron job — it's not signaling completion to the parent process
+  [FAIL] rate=0/1 expected=True: calibrate how often you interrupt me with proactive signals — I feel l
+  [FAIL] rate=0/1 expected=True: why didn't you flag earlier that I was burning context on those big fi
+  [FAIL] rate=0/1 expected=True: I want to add a custom subagent for code review and an MCP for Linear 
+  [FAIL] rate=0/1 expected=True: we started this session to fix one auth bug and now we've also rewritt
+  [PASS] rate=0/1 expected=False: signal handling in the worker process is broken — SIGTERM isn't being 
+  [PASS] rate=0/1 expected=False: the loading spinner needs a signal to the user that something's happen
+  [PASS] rate=0/1 expected=False: the WebSocket reconnect is signaling state changes on every retry — de
+  [FAIL] rate=0/1 expected=True: before you do anything else: I'm proposing we extend the spine itself 
+  [PASS] rate=0/1 expected=False: design the API for the notification system — push, email, sms

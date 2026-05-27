@@ -1,0 +1,12 @@
+Evaluating: Use to capture a high-signal moment to the user's personal queue at `~/.claude-spine/bucket/SUGGESTIONS.md`. Fires on four narrow conditions only — (1) explicit user signal ("we should add this to the manual," "remember this," "next time we hit this, let's…," "let's not forget this"); (2) repeated friction — Claude was corrected on the same pattern 2+ times in this session; (3) end-of-session reflection ("what did we learn here?," "anything worth capturing?," natural stopping point with a learning frame); (4) the user invokes `/suggest`. Never fires on speculation ("it'd be cool if…"), one-off friction, mid-task ideation, or Claude's own hunches without user reaction. Appends one entry to the queue and gets out of the way — never modifies `chapters/` or `skills/core/`, never edits existing bucket files, never interrupts the task in progress.
+Results: 5/10 passed
+  [PASS] rate=0/1 expected=False: /curate
+  [PASS] rate=0/1 expected=False: /add-skill — for the migration-bump pattern
+  [FAIL] rate=0/1 expected=True: /suggest
+  [PASS] rate=0/1 expected=False: suggest a better name for this React hook
+  [FAIL] rate=0/1 expected=True: we should add 'never run a migration on Friday afternoon without a rol
+  [PASS] rate=0/1 expected=False: the AI suggestion box is rendering twice on Safari — debug it
+  [FAIL] rate=0/1 expected=True: this 'always check both light and dark mode before saying UI is done' 
+  [FAIL] rate=0/1 expected=True: ok end-of-session reflection — what did we actually learn from the Str
+  [PASS] rate=0/1 expected=False: what do you suggest as the next feature to build for the MVP — landing
+  [FAIL] rate=0/1 expected=True: next time we hit this Supabase RLS recursive policy bug, let's not spe

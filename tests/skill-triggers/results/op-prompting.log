@@ -1,0 +1,12 @@
+Evaluating: Use when writing or improving a prompt, deciding how to phrase a request to Claude Code, structuring a non-trivial task (CONTEXT/TASK/CONSTRAINTS/EXAMPLES/OUTPUT), iterating after a wrong first output, or picking a high-leverage prompt pattern (orientation, challenge-me, small-fix, what's-broken, explain-it-to-me). Routes to chapter 09 (prompting) of claude-spine.
+Results: 5/10 passed
+  [FAIL] rate=0/1 expected=True: I keep getting bad output from this 'rewrite my landing page hero' pro
+  [FAIL] rate=0/1 expected=True: this is a non-trivial task — adding multi-tenant teams to my B2B SaaS.
+  [FAIL] rate=0/1 expected=True: first attempt gave me boilerplate React. Iterate on the prompt — what 
+  [FAIL] rate=0/1 expected=True: which high-leverage prompt pattern fits this — I'm about to ask Claude
+  [PASS] rate=0/1 expected=False: this CLI command prompt isn't matching properly in bash — fix the rege
+  [PASS] rate=0/1 expected=False: design the welcome prompt UI for new users — what should it say
+  [PASS] rate=0/1 expected=False: explain the difference between system prompts and user prompts in the 
+  [PASS] rate=0/1 expected=False: implement a command-line prompt that asks for confirmation before dele
+  [PASS] rate=0/1 expected=False: the LLM is prompted with 8k tokens of context every request — is that 
+  [FAIL] rate=0/1 expected=True: what's the right way to phrase 'I want you to audit my migration safet

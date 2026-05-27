@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-onboard",
+  "description": "Use to create or refresh `~/.claude/claude-spine-profile.md` \u2014 the personal calibration file capturing the user's experience level, stack preferences, project context, working style, output format, and risk tolerance. Fires when the profile file does not exist (first-run calibration), or when the user invokes `/onboard` (re-run essentials), `/onboard --deep` (full ~15-question interview), or says \"re-onboard\" / \"update my profile\" / \"redo onboarding\". The profile persists across all projects and is read by Claude at the start of every session.",
+  "results": [
+    {
+      "query": "/onboard",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "/onboard --deep",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "redo onboarding for me \u2014 I want to refresh the essentials interview, not the deep one",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "re-onboard \u2014 my stack has changed since I set this up, I'm on Next.js + Supabase now, not Rails",
+      "should_trigger": true,
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "update my profile \u2014 I'm doing more client work now and less personal MVPs, that should change how you collaborate with me",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the onboarding screen is broken on mobile \u2014 fix the layout",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "write the welcome email for new signups",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "set up a SaaS onboarding flow with email verification for new users",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "onboard the new junior dev to our codebase \u2014 walk her through the structure",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "what's the right user-onboarding pattern for a B2B SaaS \u2014 checklist or guided tour?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 6,
+    "failed": 4
+  }
+}

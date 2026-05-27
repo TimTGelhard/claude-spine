@@ -1,0 +1,12 @@
+[
+  {"query": "I'm trying to describe a UI bug — the dropdown is overlapping the modal but only on iPhone SE in dark mode. Should I paste a screenshot or just describe it in text?", "should_trigger": true},
+  {"query": "let me share this Figma design as a screenshot — Claude, build the navbar to match it pixel-by-pixel", "should_trigger": true},
+  {"query": "the architecture doc needs a diagram of how auth flows from client → middleware → Supabase. Mermaid or ASCII?", "should_trigger": true},
+  {"query": "before we build the dashboard, I want to sketch out the layout — give me an ASCII mockup of the three-column variant vs the sidebar-and-canvas variant", "should_trigger": true},
+  {"query": "I need to compare iOS vs Android rendering of this transaction list — both look 'right' but feel wrong on Android. How do I share that with you usefully?", "should_trigger": true},
+  {"query": "the Mermaid library is throwing a parse error in our docs site — fix it", "should_trigger": false},
+  {"query": "design a visual identity for the new SaaS — color palette and typography", "should_trigger": false},
+  {"query": "implement a screenshot tool for the support widget — capture the current page DOM", "should_trigger": false},
+  {"query": "what's the difference between SVG and Canvas for rendering charts at scale", "should_trigger": false},
+  {"query": "the visual regression tests are failing — pixel diff is 4% off on the pricing page", "should_trigger": false}
+]

@@ -1,0 +1,12 @@
+[
+  {"query": "I want Claude to auto-run `npm run typecheck` after every file edit in this Next.js repo — wire it up in settings.json", "should_trigger": true},
+  {"query": "from now on, when I'm about to commit, block the commit if any test fails. Set that up.", "should_trigger": true},
+  {"query": "I added a PostToolUse hook to my settings.json but it's not firing — help me debug why", "should_trigger": true},
+  {"query": "should this 'always run prettier on saved files' rule be a hook, a CLAUDE.md instruction, or a skill? What's the right home?", "should_trigger": true},
+  {"query": "set up the starter hook set on this new MacBook — env-leak blocker, typecheck-after-edit, notify-on-long-completion", "should_trigger": true},
+  {"query": "React hooks: when does useEffect fire vs useLayoutEffect?", "should_trigger": false},
+  {"query": "the test suite is hooking into a wrong port — fix the conflict", "should_trigger": false},
+  {"query": "write a webhook handler for Stripe payment_intent.succeeded", "should_trigger": false},
+  {"query": "the deploy script keeps hooking on the broken DNS record — debug it", "should_trigger": false},
+  {"query": "useState vs useReducer for a complex form — which one fits this case", "should_trigger": false}
+]

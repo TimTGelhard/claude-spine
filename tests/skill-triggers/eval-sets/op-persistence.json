@@ -1,0 +1,12 @@
+[
+  {"query": "I want Claude to always run prettier on saved TS files in this project. Should that go in CLAUDE.md, a hook, or a skill?", "should_trigger": true},
+  {"query": "I'm writing a custom skill for 'audit Supabase RLS from two sessions' — help me draft the trigger description so it actually fires when I need it", "should_trigger": true},
+  {"query": "the project CLAUDE.md has grown to 400 lines — most of it is stale and contradicts itself. How do I clean it up without losing the load-bearing parts?", "should_trigger": true},
+  {"query": "I keep telling Claude 'never commit a .env file' in every session — where should that rule actually live so it sticks across all my projects?", "should_trigger": true},
+  {"query": "audit my personal skill library — I haven't looked at it in 6 months. Some of these triggers can't be doing anything useful anymore.", "should_trigger": true},
+  {"query": "make my React state persistent across page reloads using localStorage", "should_trigger": false},
+  {"query": "design a Postgres schema for an audit log table — append-only", "should_trigger": false},
+  {"query": "explain how Redis persistence works — RDB vs AOF", "should_trigger": false},
+  {"query": "the form state is persisting between users — debug the session leak", "should_trigger": false},
+  {"query": "write a memoization helper for expensive React component renders", "should_trigger": false}
+]

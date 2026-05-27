@@ -1,0 +1,12 @@
+[
+  {"query": "should I use the Edit tool or the Write tool to update this 60-line file — only changing 4 lines but they're not contiguous?", "should_trigger": true},
+  {"query": "I want to search the whole codebase for every place that calls 'createServerClient' — is grep the right move or should I spawn an Explore agent?", "should_trigger": true},
+  {"query": "this `npm run build` is going to take 8 minutes — should I background it with run_in_background, or is there a smarter pattern?", "should_trigger": true},
+  {"query": "should this be a Bash call or one of the dedicated tools? I want to count lines in 5 files and write the result to a report", "should_trigger": true},
+  {"query": "I've got 11 MCPs loaded and my context bar is full before I even start — which ones are pulling their weight and which should I unload?", "should_trigger": true},
+  {"query": "the build tool keeps complaining about missing types in tsconfig — fix the paths config", "should_trigger": false},
+  {"query": "design the tools page of the marketing site — three columns with feature cards", "should_trigger": false},
+  {"query": "what's the right ORM tool for a Postgres + Next.js stack in 2026", "should_trigger": false},
+  {"query": "the CI tool is failing on the linting step — debug the github action", "should_trigger": false},
+  {"query": "implement the file-upload tool in the dashboard — accept PDFs up to 10MB", "should_trigger": false}
+]

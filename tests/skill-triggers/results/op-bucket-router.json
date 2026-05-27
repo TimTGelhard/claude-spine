@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-bucket-router",
+  "description": "Use as the fallback router when the user's task isn't covered by any other core `op-*` skill \u2014 checks the user's personal bucket library (`~/.claude-spine/bucket/INDEX.md`, which has both a Skills table and a Chapters table) for a matching entry and loads only the matched file. Fires when another router would normally handle the task but no core chapter covers it (project-specific recipe, stack-specific pattern, user's personal convention, reference for their own architecture), or the user says \"do this the way I usually do\" / \"use my X skill\" / \"check my bucket\" / \"is there anything in my chapters about this?\". Never invents bucket entries \u2014 only routes to existing ones.",
+  "results": [
+    {
+      "query": "check my bucket \u2014 is there anything in my chapters about how I structure Supabase RLS for multi-tenant tables?",
+      "should_trigger": true,
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "I think I have a personal note somewhere on how I handle Solvero client handoffs \u2014 load it if you find it",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "before we write this Vercel deploy script, check my bucket for an existing recipe",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "use my 'lighthouse-90-checklist' skill on this page",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "do this the way I usually do it \u2014 like the pattern we agreed on for Dutch postcode validation in the contact form a while back",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "fix the bug where the form is double-submitting on slow networks",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "let's add a new skill to my bucket for 'audit RLS policies'",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "run /curate on my pending suggestions",
+      "should_trigger": false,
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "what's the standard way to wire Supabase auth into a Next.js App Router project?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "explain how the React rendering pipeline works",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

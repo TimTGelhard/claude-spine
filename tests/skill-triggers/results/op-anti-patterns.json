@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-anti-patterns",
+  "description": "Use BEFORE taking actions that match a known anti-pattern \u2014 about to add a new dependency, new abstraction, new helper \"for future use\", new chapter/skill/agent speculatively, \"let me also add X while I'm here\", \"I'll write the docs after MVP works\", merging a diff you haven't read, declaring UI done without browser-verifying, skipping a two-session RLS check, or extending the manual / skills / agents / hooks themselves. Also use when the user proposes one of those. Routes to chapter 18 (anti-patterns) of claude-spine.",
+  "results": [
+    {
+      "query": "I'll wrap this in a generic 'fetcher' helper so future code can reuse the pattern across the project, even though only this one route needs it right now",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the migration's been bothering me \u2014 let me just `try { applyMigration() } catch (e) {}` and we'll come back to it after the demo",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "what are the architectural patterns in this PR \u2014 anything worth calling out for review?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "shipping the UI now \u2014 works on my machine, walked the happy path. We'll catch the empty-state and slow-network edge cases in QA next week",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "let's add nodemailer and a queue library for the email path. We'll need them for the password reset later",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "ok so I was thinking, while we're in this file fixing the auth bug, let me also add a Redis cache layer for sessions \u2014 we'll need it later when we scale anyway. Make sense?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "fix the bug where the dashboard query is filtering by user_id but the column is uppercase Uuid",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "add a test case for the empty-cart checkout flow",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "explain how the queue retry logic works in this codebase",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "refactor the auth helper into a class \u2014 the spec says it has to be testable with DI",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

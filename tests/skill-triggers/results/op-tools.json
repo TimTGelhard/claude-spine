@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-tools",
+  "description": "Use when choosing which Claude Code tool fits a task (Read/Edit/Write, Bash, grep, Agent, plan mode, TaskCreate, WebFetch, MCP, slash commands), debugging \"should this be Bash or a dedicated tool\", deciding when to background a long-running command, picking between grep and Agent(Explore) for a search, or auditing loaded MCPs for cost. Routes to chapter 15 (tool palette) of claude-spine.",
+  "results": [
+    {
+      "query": "should this be a Bash call or one of the dedicated tools? I want to count lines in 5 files and write the result to a report",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the build tool keeps complaining about missing types in tsconfig \u2014 fix the paths config",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "should I use the Edit tool or the Write tool to update this 60-line file \u2014 only changing 4 lines but they're not contiguous?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the CI tool is failing on the linting step \u2014 debug the github action",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "implement the file-upload tool in the dashboard \u2014 accept PDFs up to 10MB",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "this `npm run build` is going to take 8 minutes \u2014 should I background it with run_in_background, or is there a smarter pattern?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I want to search the whole codebase for every place that calls 'createServerClient' \u2014 is grep the right move or should I spawn an Explore agent?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I've got 11 MCPs loaded and my context bar is full before I even start \u2014 which ones are pulling their weight and which should I unload?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "design the tools page of the marketing site \u2014 three columns with feature cards",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "what's the right ORM tool for a Postgres + Next.js stack in 2026",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

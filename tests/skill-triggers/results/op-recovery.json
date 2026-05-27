@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-recovery",
+  "description": "Use when workflow quality is dropping mid-session, Claude is contradicting itself, hallucinating file paths or API names, drifting from earlier constraints, when each fix introduces a new bug, when the user says \"are you sure\", \"you said the opposite earlier\", \"this isn't working\", \"you're going in circles\", \"I don't recognize this code\", when a deploy broke production, a migration failed mid-flight, secrets leaked, or auth/RLS may be exposing user data. Routes to chapter 17 (recovery playbook) of claude-spine.",
+  "results": [
+    {
+      "query": "you said the opposite earlier in this session \u2014 go back, the auth helper IS supposed to throw on null, not return null. Are you sure?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the recovery email link isn't working \u2014 debug the auth token flow",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "the deploy to prod broke \u2014 homepage is 500ing, and the migration we ran 20 minutes ago might be the cause. What do we do right now?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "we're going in circles on this Stripe webhook \u2014 every fix introduces a new bug. Step back and tell me what's actually happening here.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "recover the lost local changes in this branch \u2014 git reflog or git stash?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "the password recovery form is sending two emails \u2014 fix the duplicate",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "I don't recognize this code anymore \u2014 when did we add the 'queue' folder and what's in it? I think you might have hallucinated a path",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I just realized our service_role key was in NEXT_PUBLIC_SUPABASE_KEY in the .env for two days. It's on Vercel. What's the recovery procedure?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "explain how Postgres recovers a crashed transaction on restart \u2014 WAL replay",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "design a disaster recovery plan for the Supabase database \u2014 what's the RPO/RTO trade off",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

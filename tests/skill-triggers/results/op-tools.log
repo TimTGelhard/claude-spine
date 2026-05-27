@@ -1,0 +1,12 @@
+Evaluating: Use when choosing which Claude Code tool fits a task (Read/Edit/Write, Bash, grep, Agent, plan mode, TaskCreate, WebFetch, MCP, slash commands), debugging "should this be Bash or a dedicated tool", deciding when to background a long-running command, picking between grep and Agent(Explore) for a search, or auditing loaded MCPs for cost. Routes to chapter 15 (tool palette) of claude-spine.
+Results: 5/10 passed
+  [FAIL] rate=0/1 expected=True: should this be a Bash call or one of the dedicated tools? I want to co
+  [PASS] rate=0/1 expected=False: the build tool keeps complaining about missing types in tsconfig — fix
+  [FAIL] rate=0/1 expected=True: should I use the Edit tool or the Write tool to update this 60-line fi
+  [PASS] rate=0/1 expected=False: the CI tool is failing on the linting step — debug the github action
+  [PASS] rate=0/1 expected=False: implement the file-upload tool in the dashboard — accept PDFs up to 10
+  [FAIL] rate=0/1 expected=True: this `npm run build` is going to take 8 minutes — should I background 
+  [FAIL] rate=0/1 expected=True: I want to search the whole codebase for every place that calls 'create
+  [FAIL] rate=0/1 expected=True: I've got 11 MCPs loaded and my context bar is full before I even start
+  [PASS] rate=0/1 expected=False: design the tools page of the marketing site — three columns with featu
+  [PASS] rate=0/1 expected=False: what's the right ORM tool for a Postgres + Next.js stack in 2026

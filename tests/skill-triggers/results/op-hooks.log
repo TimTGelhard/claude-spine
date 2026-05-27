@@ -1,0 +1,12 @@
+Evaluating: Use when wiring an automatic behavior to a Claude Code event (typecheck after edit, block commit on test fail, notify on long completion), editing settings.json (global or project), troubleshooting why a hook didn't fire, deciding between hook / CLAUDE.md / skill for "from now on, when X, do Y", or setting up the starter automation set for a new machine. Routes to chapter 14 (hooks and automation) of claude-spine.
+Results: 6/10 passed
+  [PASS] rate=1/1 expected=True: set up the starter hook set on this new MacBook — env-leak blocker, ty
+  [FAIL] rate=0/1 expected=True: from now on, when I'm about to commit, block the commit if any test fa
+  [FAIL] rate=0/1 expected=True: I want Claude to auto-run `npm run typecheck` after every file edit in
+  [PASS] rate=0/1 expected=False: the test suite is hooking into a wrong port — fix the conflict
+  [FAIL] rate=0/1 expected=True: I added a PostToolUse hook to my settings.json but it's not firing — h
+  [PASS] rate=0/1 expected=False: the deploy script keeps hooking on the broken DNS record — debug it
+  [PASS] rate=0/1 expected=False: write a webhook handler for Stripe payment_intent.succeeded
+  [PASS] rate=0/1 expected=False: React hooks: when does useEffect fire vs useLayoutEffect?
+  [PASS] rate=0/1 expected=False: useState vs useReducer for a complex form — which one fits this case
+  [FAIL] rate=0/1 expected=True: should this 'always run prettier on saved files' rule be a hook, a CLA

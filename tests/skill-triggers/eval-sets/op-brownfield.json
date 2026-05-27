@@ -1,0 +1,12 @@
+[
+  {"query": "client just handed me a Next.js repo their last agency built. ~80 files, no README, no tests. They want a 'small change to the contact form' but I don't know where anything lives. Where do I start?", "should_trigger": true},
+  {"query": "I'm picking up the MVP I shipped 7 months ago. I genuinely don't remember why I built the queue worker the way I did. Walk me back into it before I touch anything.", "should_trigger": true},
+  {"query": "inheriting a Solidity contract from another dev. I can't read it cold — what's the right way to teach Claude this codebase before I ask it to add a withdrawal function?", "should_trigger": true},
+  {"query": "old Rails app, version 4.2, nobody's touched it in 3 years. Client wants a Stripe integration added. I literally couldn't tell you what `app/services/order_processor.rb` does. Help me orient.", "should_trigger": true},
+  {"query": "this auth module — I built it but it's been 5 months and I'm scared to change it. Before I add SSO, walk me through reverse-engineering what's there.", "should_trigger": true},
+  {"query": "I'm starting a new Next.js project from scratch — best stack defaults?", "should_trigger": false},
+  {"query": "in this file I wrote yesterday, why is the loader function returning a tuple instead of an object?", "should_trigger": false},
+  {"query": "what's the right way to teach a junior dev our codebase conventions on day one?", "should_trigger": false},
+  {"query": "explain how React Server Components differ from Client Components", "should_trigger": false},
+  {"query": "rewrite this function — I know what it does, it just needs to handle the offline case", "should_trigger": false}
+]

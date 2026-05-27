@@ -1,0 +1,12 @@
+[
+  {"query": "do this the way I usually do it — like the pattern we agreed on for Dutch postcode validation in the contact form a while back", "should_trigger": true},
+  {"query": "check my bucket — is there anything in my chapters about how I structure Supabase RLS for multi-tenant tables?", "should_trigger": true},
+  {"query": "use my 'lighthouse-90-checklist' skill on this page", "should_trigger": true},
+  {"query": "I think I have a personal note somewhere on how I handle Solvero client handoffs — load it if you find it", "should_trigger": true},
+  {"query": "before we write this Vercel deploy script, check my bucket for an existing recipe", "should_trigger": true},
+  {"query": "what's the standard way to wire Supabase auth into a Next.js App Router project?", "should_trigger": false},
+  {"query": "explain how the React rendering pipeline works", "should_trigger": false},
+  {"query": "fix the bug where the form is double-submitting on slow networks", "should_trigger": false},
+  {"query": "let's add a new skill to my bucket for 'audit RLS policies'", "should_trigger": false},
+  {"query": "run /curate on my pending suggestions", "should_trigger": false}
+]

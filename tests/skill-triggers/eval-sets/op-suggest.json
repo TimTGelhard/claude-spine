@@ -1,0 +1,12 @@
+[
+  {"query": "/suggest", "should_trigger": true},
+  {"query": "we should add 'never run a migration on Friday afternoon without a rollback plan' to the manual — remember this", "should_trigger": true},
+  {"query": "next time we hit this Supabase RLS recursive policy bug, let's not spend an hour on it — capture the pattern somewhere I'll see it", "should_trigger": true},
+  {"query": "ok end-of-session reflection — what did we actually learn from the Stripe webhook debugging today, anything worth capturing for next time?", "should_trigger": true},
+  {"query": "this 'always check both light and dark mode before saying UI is done' came up three times today. Let's not forget it.", "should_trigger": true},
+  {"query": "/add-skill — for the migration-bump pattern", "should_trigger": false},
+  {"query": "/curate", "should_trigger": false},
+  {"query": "suggest a better name for this React hook", "should_trigger": false},
+  {"query": "the AI suggestion box is rendering twice on Safari — debug it", "should_trigger": false},
+  {"query": "what do you suggest as the next feature to build for the MVP — landing page or signup flow first?", "should_trigger": false}
+]

@@ -1,0 +1,12 @@
+Evaluating: Use to add a new skill to the user's personal `bucket/skills/` library. Fires when the user says "save this as a skill," "make this a skill," "I want a skill for X," "add this to my bucket," "remember how to do this next time" (recurring pattern, not a one-off), or invokes `/add-skill`. Walks the user through naming, the trigger description, and the body; writes the skill file under `~/.claude-spine/bucket/skills/`; appends a row to `~/.claude-spine/bucket/INDEX.md`. Refuses if the pattern isn't reach-for-it-3+-times-worthy — see chapter 13's library thesis.
+Results: 6/10 passed
+  [FAIL] rate=0/1 expected=True: /add-skill
+  [PASS] rate=1/1 expected=True: I want a skill for 'review my Next.js route handlers and flag the ones
+  [FAIL] rate=0/1 expected=True: actually that audit output was great. Let's make this a skill — 'audit
+  [FAIL] rate=0/1 expected=True: this whole conversion-from-postgres-types-to-zod-schemas thing — third
+  [FAIL] rate=0/1 expected=True: ok I just realized I keep redoing this exact 'find the latest supabase
+  [PASS] rate=0/1 expected=False: save the conversation from today as a session log in docs/sessions/ fo
+  [PASS] rate=0/1 expected=False: the new contractor needs to learn our codebase fast — which 3 files sh
+  [PASS] rate=0/1 expected=False: add a column to the users table for billing_status and write the migra
+  [PASS] rate=0/1 expected=False: what skills do I currently have loaded in this session?
+  [PASS] rate=0/1 expected=False: I need to skill up on React Server Components — recommend a learning p

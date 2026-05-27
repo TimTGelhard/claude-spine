@@ -1,0 +1,12 @@
+Evaluating: Use as the fallback router when the user's task isn't covered by any other core `op-*` skill — checks the user's personal bucket library (`~/.claude-spine/bucket/INDEX.md`, which has both a Skills table and a Chapters table) for a matching entry and loads only the matched file. Fires when another router would normally handle the task but no core chapter covers it (project-specific recipe, stack-specific pattern, user's personal convention, reference for their own architecture), or the user says "do this the way I usually do" / "use my X skill" / "check my bucket" / "is there anything in my chapters about this?". Never invents bucket entries — only routes to existing ones.
+Results: 5/10 passed
+  [PASS] rate=1/1 expected=True: check my bucket — is there anything in my chapters about how I structu
+  [FAIL] rate=0/1 expected=True: I think I have a personal note somewhere on how I handle Solvero clien
+  [FAIL] rate=0/1 expected=True: before we write this Vercel deploy script, check my bucket for an exis
+  [FAIL] rate=0/1 expected=True: use my 'lighthouse-90-checklist' skill on this page
+  [FAIL] rate=0/1 expected=True: do this the way I usually do it — like the pattern we agreed on for Du
+  [PASS] rate=0/1 expected=False: fix the bug where the form is double-submitting on slow networks
+  [PASS] rate=0/1 expected=False: let's add a new skill to my bucket for 'audit RLS policies'
+  [FAIL] rate=1/1 expected=False: run /curate on my pending suggestions
+  [PASS] rate=0/1 expected=False: what's the standard way to wire Supabase auth into a Next.js App Route
+  [PASS] rate=0/1 expected=False: explain how the React rendering pipeline works

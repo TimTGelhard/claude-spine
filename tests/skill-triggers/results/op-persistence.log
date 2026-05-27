@@ -1,0 +1,12 @@
+Evaluating: Use when deciding where Claude should remember something (CLAUDE.md / skill / memory / project doc), writing or editing a CLAUDE.md file, authoring a custom skill, designing a skill's trigger description, choosing between skill / hook / CLAUDE.md for "always do X" behavior, or auditing a personal skill library for rot. Routes to chapters 12 and 13 (persistence) of claude-spine.
+Results: 5/10 passed
+  [FAIL] rate=0/1 expected=True: I want Claude to always run prettier on saved TS files in this project
+  [FAIL] rate=0/1 expected=True: audit my personal skill library — I haven't looked at it in 6 months. 
+  [FAIL] rate=0/1 expected=True: I'm writing a custom skill for 'audit Supabase RLS from two sessions' 
+  [PASS] rate=0/1 expected=False: make my React state persistent across page reloads using localStorage
+  [PASS] rate=0/1 expected=False: the form state is persisting between users — debug the session leak
+  [PASS] rate=0/1 expected=False: explain how Redis persistence works — RDB vs AOF
+  [FAIL] rate=0/1 expected=True: I keep telling Claude 'never commit a .env file' in every session — wh
+  [FAIL] rate=0/1 expected=True: the project CLAUDE.md has grown to 400 lines — most of it is stale and
+  [PASS] rate=0/1 expected=False: design a Postgres schema for an audit log table — append-only
+  [PASS] rate=0/1 expected=False: write a memoization helper for expensive React component renders

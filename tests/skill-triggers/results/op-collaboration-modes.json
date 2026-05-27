@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-collaboration-modes",
+  "description": "Use when deciding how to engage Claude for a task \u2014 whether to just say \"build this\" (executor), ask for an independent audit (reviewer), ask Claude to explain unfamiliar code before changing it (explainer), or get 2-3 design options with tradeoffs (planner). Also use when shifting modes mid-session (plan \u2192 build \u2192 review). Routes to chapter 07 (collaboration modes) of claude-spine.",
+  "results": [
+    {
+      "query": "we've been in planning for an hour, let's switch \u2014 build the user-settings page now, full executor mode",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "you've been in 'just build it' mode, but I think we need to step back and review what's been written before continuing \u2014 flip the switch",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "before we touch this Redis logic, just explain to me what it's doing \u2014 I haven't read it in 4 months",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I want you to review the auth refactor PR independently \u2014 don't agree with my reasoning, find what I missed",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "review the failing test in checkout.spec.ts and tell me what's wrong",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "give me 2 or 3 ways we could design the team-invite flow with tradeoffs \u2014 I don't want you to just build the first thing",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "Claude, just add the email field to the signup form",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "explain what RLS is",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "what's the difference between executor functions and lambda functions in TypeScript?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "design a database schema for a multi-tenant SaaS",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

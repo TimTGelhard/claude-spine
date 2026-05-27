@@ -1,0 +1,12 @@
+[
+  {"query": "/onboard", "should_trigger": true},
+  {"query": "/onboard --deep", "should_trigger": true},
+  {"query": "re-onboard — my stack has changed since I set this up, I'm on Next.js + Supabase now, not Rails", "should_trigger": true},
+  {"query": "update my profile — I'm doing more client work now and less personal MVPs, that should change how you collaborate with me", "should_trigger": true},
+  {"query": "redo onboarding for me — I want to refresh the essentials interview, not the deep one", "should_trigger": true},
+  {"query": "onboard the new junior dev to our codebase — walk her through the structure", "should_trigger": false},
+  {"query": "set up a SaaS onboarding flow with email verification for new users", "should_trigger": false},
+  {"query": "write the welcome email for new signups", "should_trigger": false},
+  {"query": "what's the right user-onboarding pattern for a B2B SaaS — checklist or guided tour?", "should_trigger": false},
+  {"query": "the onboarding screen is broken on mobile — fix the layout", "should_trigger": false}
+]

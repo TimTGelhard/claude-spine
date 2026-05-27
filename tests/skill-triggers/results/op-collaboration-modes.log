@@ -1,0 +1,12 @@
+Evaluating: Use when deciding how to engage Claude for a task — whether to just say "build this" (executor), ask for an independent audit (reviewer), ask Claude to explain unfamiliar code before changing it (explainer), or get 2-3 design options with tradeoffs (planner). Also use when shifting modes mid-session (plan → build → review). Routes to chapter 07 (collaboration modes) of claude-spine.
+Results: 5/10 passed
+  [FAIL] rate=0/1 expected=True: we've been in planning for an hour, let's switch — build the user-sett
+  [FAIL] rate=0/1 expected=True: you've been in 'just build it' mode, but I think we need to step back 
+  [FAIL] rate=0/1 expected=True: before we touch this Redis logic, just explain to me what it's doing —
+  [FAIL] rate=0/1 expected=True: I want you to review the auth refactor PR independently — don't agree 
+  [PASS] rate=0/1 expected=False: review the failing test in checkout.spec.ts and tell me what's wrong
+  [FAIL] rate=0/1 expected=True: give me 2 or 3 ways we could design the team-invite flow with tradeoff
+  [PASS] rate=0/1 expected=False: Claude, just add the email field to the signup form
+  [PASS] rate=0/1 expected=False: explain what RLS is
+  [PASS] rate=0/1 expected=False: what's the difference between executor functions and lambda functions 
+  [PASS] rate=0/1 expected=False: design a database schema for a multi-tenant SaaS

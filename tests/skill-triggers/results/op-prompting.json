@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-prompting",
+  "description": "Use when writing or improving a prompt, deciding how to phrase a request to Claude Code, structuring a non-trivial task (CONTEXT/TASK/CONSTRAINTS/EXAMPLES/OUTPUT), iterating after a wrong first output, or picking a high-leverage prompt pattern (orientation, challenge-me, small-fix, what's-broken, explain-it-to-me). Routes to chapter 09 (prompting) of claude-spine.",
+  "results": [
+    {
+      "query": "I keep getting bad output from this 'rewrite my landing page hero' prompt \u2014 Claude takes it in a generic direction. Help me restructure the prompt to get the voice I actually want.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "this is a non-trivial task \u2014 adding multi-tenant teams to my B2B SaaS. Help me structure the prompt with CONTEXT / TASK / CONSTRAINTS / EXAMPLES / OUTPUT before I send it to Claude.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "first attempt gave me boilerplate React. Iterate on the prompt \u2014 what did I leave out that would have pushed it toward production-quality?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "which high-leverage prompt pattern fits this \u2014 I'm about to ask Claude what's broken in a flaky end-to-end test that fails 1 in 10 times",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "this CLI command prompt isn't matching properly in bash \u2014 fix the regex",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "design the welcome prompt UI for new users \u2014 what should it say",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "explain the difference between system prompts and user prompts in the Anthropic API",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "implement a command-line prompt that asks for confirmation before deleting files",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "the LLM is prompted with 8k tokens of context every request \u2014 is that hurting latency?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "what's the right way to phrase 'I want you to audit my migration safety' so I get a real review and not just a checklist?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

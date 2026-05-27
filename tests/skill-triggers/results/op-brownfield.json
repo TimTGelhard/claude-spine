@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-brownfield",
+  "description": "Use when entering a codebase you didn't build, returning to your own project after months away, inheriting client code, extending a site months after launch, or about to modify code where you couldn't answer \"what does this file do\" in one sentence. Covers the discovery sequence, safe first changes, teaching Claude an unfamiliar codebase, and when a rewrite is the right answer. Routes to chapter 08 (brownfield) of claude-spine.",
+  "results": [
+    {
+      "query": "old Rails app, version 4.2, nobody's touched it in 3 years. Client wants a Stripe integration added. I literally couldn't tell you what `app/services/order_processor.rb` does. Help me orient.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "in this file I wrote yesterday, why is the loader function returning a tuple instead of an object?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "I'm picking up the MVP I shipped 7 months ago. I genuinely don't remember why I built the queue worker the way I did. Walk me back into it before I touch anything.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "client just handed me a Next.js repo their last agency built. ~80 files, no README, no tests. They want a 'small change to the contact form' but I don't know where anything lives. Where do I start?",
+      "should_trigger": true,
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "this auth module \u2014 I built it but it's been 5 months and I'm scared to change it. Before I add SSO, walk me through reverse-engineering what's there.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "rewrite this function \u2014 I know what it does, it just needs to handle the offline case",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "I'm starting a new Next.js project from scratch \u2014 best stack defaults?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "what's the right way to teach a junior dev our codebase conventions on day one?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "explain how React Server Components differ from Client Components",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "inheriting a Solidity contract from another dev. I can't read it cold \u2014 what's the right way to teach Claude this codebase before I ask it to add a withdrawal function?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 6,
+    "failed": 4
+  }
+}

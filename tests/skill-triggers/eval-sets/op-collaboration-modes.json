@@ -1,0 +1,12 @@
+[
+  {"query": "I want you to review the auth refactor PR independently — don't agree with my reasoning, find what I missed", "should_trigger": true},
+  {"query": "before we touch this Redis logic, just explain to me what it's doing — I haven't read it in 4 months", "should_trigger": true},
+  {"query": "give me 2 or 3 ways we could design the team-invite flow with tradeoffs — I don't want you to just build the first thing", "should_trigger": true},
+  {"query": "we've been in planning for an hour, let's switch — build the user-settings page now, full executor mode", "should_trigger": true},
+  {"query": "you've been in 'just build it' mode, but I think we need to step back and review what's been written before continuing — flip the switch", "should_trigger": true},
+  {"query": "Claude, just add the email field to the signup form", "should_trigger": false},
+  {"query": "what's the difference between executor functions and lambda functions in TypeScript?", "should_trigger": false},
+  {"query": "explain what RLS is", "should_trigger": false},
+  {"query": "review the failing test in checkout.spec.ts and tell me what's wrong", "should_trigger": false},
+  {"query": "design a database schema for a multi-tenant SaaS", "should_trigger": false}
+]

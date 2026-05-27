@@ -132,6 +132,21 @@ claude-spine/
 
 ---
 
+## Running the tests
+
+Skill-trigger benchmarks measure whether each `op-*` skill's description causes Claude to consult it for matching queries — and skip for non-matching ones. Used before editing any skill frontmatter.
+
+```bash
+cd tests/skill-triggers
+./run.sh                       # all 18 skills, ~5–10 min wall time, ~$5–10 (Sonnet)
+./run.sh op-anti-patterns      # one skill
+python3 aggregate.py           # writes results/REPORT.md and needs-tightening.md
+```
+
+Requires the `skill-creator` plugin and Python 3.10+ (falls back to `uv run --python 3.12` automatically). See [`tests/skill-triggers/README.md`](tests/skill-triggers/README.md) for the full doc, including caveats (the eval undercounts real-world triggering for routing skills like ours — the harness is most reliable for false-positive rates).
+
+---
+
 ## Contributing
 
 Single-maintainer, opinionated repo. Issues and small PRs welcome for: factual errors, broken links, outdated Claude Code mechanics, install steps that don't work on a clean machine.

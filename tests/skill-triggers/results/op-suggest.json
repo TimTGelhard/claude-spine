@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-suggest",
+  "description": "Use to capture a high-signal moment to the user's personal queue at `~/.claude-spine/bucket/SUGGESTIONS.md`. Fires on four narrow conditions only \u2014 (1) explicit user signal (\"we should add this to the manual,\" \"remember this,\" \"next time we hit this, let's\u2026,\" \"let's not forget this\"); (2) repeated friction \u2014 Claude was corrected on the same pattern 2+ times in this session; (3) end-of-session reflection (\"what did we learn here?,\" \"anything worth capturing?,\" natural stopping point with a learning frame); (4) the user invokes `/suggest`. Never fires on speculation (\"it'd be cool if\u2026\"), one-off friction, mid-task ideation, or Claude's own hunches without user reaction. Appends one entry to the queue and gets out of the way \u2014 never modifies `chapters/` or `skills/core/`, never edits existing bucket files, never interrupts the task in progress.",
+  "results": [
+    {
+      "query": "/curate",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "/add-skill \u2014 for the migration-bump pattern",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "/suggest",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "suggest a better name for this React hook",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "we should add 'never run a migration on Friday afternoon without a rollback plan' to the manual \u2014 remember this",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the AI suggestion box is rendering twice on Safari \u2014 debug it",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "this 'always check both light and dark mode before saying UI is done' came up three times today. Let's not forget it.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "ok end-of-session reflection \u2014 what did we actually learn from the Stripe webhook debugging today, anything worth capturing for next time?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "what do you suggest as the next feature to build for the MVP \u2014 landing page or signup flow first?",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "next time we hit this Supabase RLS recursive policy bug, let's not spend an hour on it \u2014 capture the pattern somewhere I'll see it",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

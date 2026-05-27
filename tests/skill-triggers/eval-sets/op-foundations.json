@@ -1,0 +1,12 @@
+[
+  {"query": "I keep hearing about Claude having a 'context window' — what does that actually mean in practice, and why does my session feel worse around hour two?", "should_trigger": true},
+  {"query": "explain how Claude Code's tool loop actually works under the hood — what's the LLM doing between my prompt and the file edit?", "should_trigger": true},
+  {"query": "should I use Opus or Sonnet for refactoring a 12-file auth module — what's the actual tradeoff in terms of cost vs quality for this kind of task?", "should_trigger": true},
+  {"query": "I'm on Pro plan and burning through budget fast — what are the controls I have, and when does plan mode or fast mode pay for itself?", "should_trigger": true},
+  {"query": "what can Claude actually NOT do that I might assume it can? I want to know the failure modes before I ship something that depends on it.", "should_trigger": true},
+  {"query": "what's the foundation of React's reconciliation algorithm?", "should_trigger": false},
+  {"query": "explain how PostgreSQL row-level security actually works at the planner level", "should_trigger": false},
+  {"query": "I'm new to TypeScript — give me the foundations I need to read this codebase", "should_trigger": false},
+  {"query": "model the Supabase auth user table with a foreign key to profiles", "should_trigger": false},
+  {"query": "what economic models support a freemium SaaS pricing tier?", "should_trigger": false}
+]

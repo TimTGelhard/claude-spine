@@ -1,0 +1,12 @@
+[
+  {"query": "/curate", "should_trigger": true},
+  {"query": "/curate --review-stale", "should_trigger": true},
+  {"query": "let's go through the pending suggestions in my bucket and decide which to apply", "should_trigger": true},
+  {"query": "process the queue of bucket suggestions — I want to review them one by one before anything writes", "should_trigger": true},
+  {"query": "let's curate — what's been captured since last week's session that's worth turning into actual bucket entries", "should_trigger": true},
+  {"query": "/suggest — add 'always check Supabase RLS from two sessions' to my queue", "should_trigger": false},
+  {"query": "/add-skill for the migration-bump pattern", "should_trigger": false},
+  {"query": "curate the data in the users table — drop the rows with null emails", "should_trigger": false},
+  {"query": "review the diff in this PR for me", "should_trigger": false},
+  {"query": "go through the failing tests one by one and tell me what's broken", "should_trigger": false}
+]

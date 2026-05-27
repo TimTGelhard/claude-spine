@@ -1,0 +1,12 @@
+Evaluating: Use when workflow quality is dropping mid-session, Claude is contradicting itself, hallucinating file paths or API names, drifting from earlier constraints, when each fix introduces a new bug, when the user says "are you sure", "you said the opposite earlier", "this isn't working", "you're going in circles", "I don't recognize this code", when a deploy broke production, a migration failed mid-flight, secrets leaked, or auth/RLS may be exposing user data. Routes to chapter 17 (recovery playbook) of claude-spine.
+Results: 5/10 passed
+  [FAIL] rate=0/1 expected=True: you said the opposite earlier in this session — go back, the auth help
+  [PASS] rate=0/1 expected=False: the recovery email link isn't working — debug the auth token flow
+  [FAIL] rate=0/1 expected=True: the deploy to prod broke — homepage is 500ing, and the migration we ra
+  [FAIL] rate=0/1 expected=True: we're going in circles on this Stripe webhook — every fix introduces a
+  [PASS] rate=0/1 expected=False: recover the lost local changes in this branch — git reflog or git stas
+  [PASS] rate=0/1 expected=False: the password recovery form is sending two emails — fix the duplicate
+  [FAIL] rate=0/1 expected=True: I don't recognize this code anymore — when did we add the 'queue' fold
+  [FAIL] rate=0/1 expected=True: I just realized our service_role key was in NEXT_PUBLIC_SUPABASE_KEY i
+  [PASS] rate=0/1 expected=False: explain how Postgres recovers a crashed transaction on restart — WAL r
+  [PASS] rate=0/1 expected=False: design a disaster recovery plan for the Supabase database — what's the

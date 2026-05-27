@@ -1,0 +1,12 @@
+[
+  {"query": "I'm about to start a new MVP — an invoicing tool for Dutch freelancers, ~3 weeks budget. What's the prep → architecture → build → harden → ship sequence I should follow?", "should_trigger": true},
+  {"query": "before I open Claude Code, walk me through scoping this feature: multi-tenant team invites with role-based permissions. Is this one session or does it need to be split?", "should_trigger": true},
+  {"query": "this 'add Stripe Billing portal' task feels too big for one session — how do I cut it into the right slices without making 6 PRs?", "should_trigger": true},
+  {"query": "I want to add SSO + multi-region replication + a redesigned dashboard. Is that one feature or three?", "should_trigger": true},
+  {"query": "I've got the schema and 3 API routes done. Where am I in the 7-stage workflow — should I be hardening already or still in build?", "should_trigger": true},
+  {"query": "the GitHub Actions workflow is failing on the deploy step — fix the YAML", "should_trigger": false},
+  {"query": "design the workflow for user onboarding — verify email, set password, create org, invite team", "should_trigger": false},
+  {"query": "explain how Next.js handles the middleware → route handler workflow", "should_trigger": false},
+  {"query": "implement an n8n workflow for syncing Stripe customers to HubSpot", "should_trigger": false},
+  {"query": "the daily-digest cron workflow is firing twice — debug the scheduler", "should_trigger": false}
+]

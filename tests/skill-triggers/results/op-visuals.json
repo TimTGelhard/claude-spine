@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-visuals",
+  "description": "Use when deciding whether to paste a screenshot vs text, sharing a UI bug or design reference with Claude, writing ASCII or Mermaid diagrams in project docs, sketching a UI mockup before a build session, or handling mobile / cross-platform visual comparisons. Routes to chapter 10 (visuals) of claude-spine.",
+  "results": [
+    {
+      "query": "I'm trying to describe a UI bug \u2014 the dropdown is overlapping the modal but only on iPhone SE in dark mode. Should I paste a screenshot or just describe it in text?",
+      "should_trigger": true,
+      "trigger_rate": 1.0,
+      "triggers": 1,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "the architecture doc needs a diagram of how auth flows from client \u2192 middleware \u2192 Supabase. Mermaid or ASCII?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "let me share this Figma design as a screenshot \u2014 Claude, build the navbar to match it pixel-by-pixel",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I need to compare iOS vs Android rendering of this transaction list \u2014 both look 'right' but feel wrong on Android. How do I share that with you usefully?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the Mermaid library is throwing a parse error in our docs site \u2014 fix it",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "implement a screenshot tool for the support widget \u2014 capture the current page DOM",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "design a visual identity for the new SaaS \u2014 color palette and typography",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "before we build the dashboard, I want to sketch out the layout \u2014 give me an ASCII mockup of the three-column variant vs the sidebar-and-canvas variant",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the visual regression tests are failing \u2014 pixel diff is 4% off on the pricing page",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "what's the difference between SVG and Canvas for rendering charts at scale",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 6,
+    "failed": 4
+  }
+}

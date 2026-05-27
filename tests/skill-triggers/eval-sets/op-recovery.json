@@ -1,0 +1,12 @@
+[
+  {"query": "you said the opposite earlier in this session — go back, the auth helper IS supposed to throw on null, not return null. Are you sure?", "should_trigger": true},
+  {"query": "we're going in circles on this Stripe webhook — every fix introduces a new bug. Step back and tell me what's actually happening here.", "should_trigger": true},
+  {"query": "I don't recognize this code anymore — when did we add the 'queue' folder and what's in it? I think you might have hallucinated a path", "should_trigger": true},
+  {"query": "the deploy to prod broke — homepage is 500ing, and the migration we ran 20 minutes ago might be the cause. What do we do right now?", "should_trigger": true},
+  {"query": "I just realized our service_role key was in NEXT_PUBLIC_SUPABASE_KEY in the .env for two days. It's on Vercel. What's the recovery procedure?", "should_trigger": true},
+  {"query": "the recovery email link isn't working — debug the auth token flow", "should_trigger": false},
+  {"query": "recover the lost local changes in this branch — git reflog or git stash?", "should_trigger": false},
+  {"query": "design a disaster recovery plan for the Supabase database — what's the RPO/RTO trade off", "should_trigger": false},
+  {"query": "explain how Postgres recovers a crashed transaction on restart — WAL replay", "should_trigger": false},
+  {"query": "the password recovery form is sending two emails — fix the duplicate", "should_trigger": false}
+]

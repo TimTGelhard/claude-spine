@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-subagents",
+  "description": "Use when deciding whether to delegate to a subagent (Agent tool) vs do work inline, writing a subagent prompt, picking an agent type (general-purpose / Explore / Plan / custom), running parallel or background agents, designing a custom subagent in ~/.claude/agents/, or evaluating whether an orchestrator-with-specialists pattern fits the task. Routes to chapter 16 (subagents) of claude-spine.",
+  "results": [
+    {
+      "query": "I want to write a custom subagent in ~/.claude/agents/ for 'review my migration for safety' \u2014 walk me through the SKILL-like file",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the deploy is failing with a subprocess error \u2014 debug the agent that's spawning the build",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "the user-agent string isn't being passed through the reverse proxy \u2014 fix the nginx config",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "I'm thinking 'orchestrator + specialists' for the codebase rewrite \u2014 one agent plans, several execute. Does that pattern fit here or am I over-engineering?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the AI agent we're integrating with is throwing 429s \u2014 handle the rate limit",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "spawn three parallel agents to refactor the auth helper, write the test suite, and update the README in one go",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "explain how Node.js child_process.fork creates subagents \u2014 wait, subprocesses",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "is this a job for the Explore agent or the general-purpose one \u2014 I'm looking for every file in the repo that imports 'supabase-js'",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I need to audit 40 route handlers for missing zod validation \u2014 should I just grep, or is this where a subagent earns its keep?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "design the database for our multi-tenant agent platform \u2014 agents and their tools",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

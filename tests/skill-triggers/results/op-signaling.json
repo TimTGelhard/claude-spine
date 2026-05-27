@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-signaling",
+  "description": "Use when Claude should interrupt with a proactive signal (context filling, scope creep, drift, missed verification, end-of-session), when the user proposes extending Claude's own setup (skills/hooks/agents/MCPs/CLAUDE.md additions \u2014 meta-scope), when asking \"why didn't you flag X earlier\", or when calibrating how often to signal. Routes to chapter 11 (proactive signaling) of claude-spine.",
+  "results": [
+    {
+      "query": "fix the cron job \u2014 it's not signaling completion to the parent process",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "calibrate how often you interrupt me with proactive signals \u2014 I feel like you're flagging too aggressively in code reviews and not aggressively enough on context fills",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "why didn't you flag earlier that I was burning context on those big file reads? You should have signaled before we hit hour 2",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I want to add a custom subagent for code review and an MCP for Linear and a hook that runs after every commit \u2014 and another skill for capturing learnings. Can you set all of these up?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "we started this session to fix one auth bug and now we've also rewritten the routing layer and added a feature flag system \u2014 is that fine or should you have flagged something?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "signal handling in the worker process is broken \u2014 SIGTERM isn't being caught",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "the loading spinner needs a signal to the user that something's happening \u2014 what's the UX standard",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "the WebSocket reconnect is signaling state changes on every retry \u2014 debug",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "before you do anything else: I'm proposing we extend the spine itself by adding a 19th chapter on prompt engineering. Walk through this with me first.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "design the API for the notification system \u2014 push, email, sms",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}

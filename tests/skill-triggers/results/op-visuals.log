@@ -1,0 +1,12 @@
+Evaluating: Use when deciding whether to paste a screenshot vs text, sharing a UI bug or design reference with Claude, writing ASCII or Mermaid diagrams in project docs, sketching a UI mockup before a build session, or handling mobile / cross-platform visual comparisons. Routes to chapter 10 (visuals) of claude-spine.
+Results: 6/10 passed
+  [PASS] rate=1/1 expected=True: I'm trying to describe a UI bug — the dropdown is overlapping the moda
+  [FAIL] rate=0/1 expected=True: the architecture doc needs a diagram of how auth flows from client → m
+  [FAIL] rate=0/1 expected=True: let me share this Figma design as a screenshot — Claude, build the nav
+  [FAIL] rate=0/1 expected=True: I need to compare iOS vs Android rendering of this transaction list — 
+  [PASS] rate=0/1 expected=False: the Mermaid library is throwing a parse error in our docs site — fix i
+  [PASS] rate=0/1 expected=False: implement a screenshot tool for the support widget — capture the curre
+  [PASS] rate=0/1 expected=False: design a visual identity for the new SaaS — color palette and typograp
+  [FAIL] rate=0/1 expected=True: before we build the dashboard, I want to sketch out the layout — give 
+  [PASS] rate=0/1 expected=False: the visual regression tests are failing — pixel diff is 4% off on the 
+  [PASS] rate=0/1 expected=False: what's the difference between SVG and Canvas for rendering charts at s

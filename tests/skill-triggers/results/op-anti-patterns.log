@@ -1,0 +1,12 @@
+Evaluating: Use BEFORE taking actions that match a known anti-pattern — about to add a new dependency, new abstraction, new helper "for future use", new chapter/skill/agent speculatively, "let me also add X while I'm here", "I'll write the docs after MVP works", merging a diff you haven't read, declaring UI done without browser-verifying, skipping a two-session RLS check, or extending the manual / skills / agents / hooks themselves. Also use when the user proposes one of those. Routes to chapter 18 (anti-patterns) of claude-spine.
+Results: 5/10 passed
+  [FAIL] rate=0/1 expected=True: I'll wrap this in a generic 'fetcher' helper so future code can reuse 
+  [FAIL] rate=0/1 expected=True: the migration's been bothering me — let me just `try { applyMigration(
+  [PASS] rate=0/1 expected=False: what are the architectural patterns in this PR — anything worth callin
+  [FAIL] rate=0/1 expected=True: shipping the UI now — works on my machine, walked the happy path. We'l
+  [FAIL] rate=0/1 expected=True: let's add nodemailer and a queue library for the email path. We'll nee
+  [FAIL] rate=0/1 expected=True: ok so I was thinking, while we're in this file fixing the auth bug, le
+  [PASS] rate=0/1 expected=False: fix the bug where the dashboard query is filtering by user_id but the 
+  [PASS] rate=0/1 expected=False: add a test case for the empty-cart checkout flow
+  [PASS] rate=0/1 expected=False: explain how the queue retry logic works in this codebase
+  [PASS] rate=0/1 expected=False: refactor the auth helper into a class — the spec says it has to be tes

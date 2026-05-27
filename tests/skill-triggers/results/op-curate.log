@@ -1,0 +1,12 @@
+Evaluating: Use to run a curation session — review pending entries in `~/.claude-spine/bucket/SUGGESTIONS.md` and turn approved ones into new or modified files under `bucket/`. Fires on (1) `/curate` slash command (with optional `--review-stale` for stale-entry review instead of pending curation); (2) the user explicitly asks to curate the bucket — "let's curate," "go through pending suggestions," "review what we captured," "process the queue," "let's review stale bucket entries." Reads `~/.claude-spine/bucket/INDEX.md` plus any overlapping bucket files before any proposal — read-before-write is mandatory. Shows a unified diff or full file body before every write — explicit per-change approval, no batch. On apply: writes the bucket file, updates the matching table (Skills or Chapters) in `bucket/INDEX.md`, appends to `bucket/CHANGELOG.md`, moves the entry to the archive section with `Status: applied`. On reject: moves to archive with `Status: rejected`. Hard-refuses to touch `chapters/`, `skills/core/`, the global stub, or the profile — bucket-only.
+Results: 5/10 passed
+  [FAIL] rate=0/1 expected=True: /curate
+  [PASS] rate=0/1 expected=False: /add-skill for the migration-bump pattern
+  [FAIL] rate=0/1 expected=True: /curate --review-stale
+  [PASS] rate=0/1 expected=False: /suggest — add 'always check Supabase RLS from two sessions' to my que
+  [FAIL] rate=0/1 expected=True: let's go through the pending suggestions in my bucket and decide which
+  [FAIL] rate=0/1 expected=True: process the queue of bucket suggestions — I want to review them one by
+  [PASS] rate=0/1 expected=False: review the diff in this PR for me
+  [FAIL] rate=0/1 expected=True: let's curate — what's been captured since last week's session that's w
+  [PASS] rate=0/1 expected=False: go through the failing tests one by one and tell me what's broken
+  [PASS] rate=0/1 expected=False: curate the data in the users table — drop the rows with null emails

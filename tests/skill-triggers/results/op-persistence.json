@@ -1,0 +1,91 @@
+{
+  "skill_name": "op-persistence",
+  "description": "Use when deciding where Claude should remember something (CLAUDE.md / skill / memory / project doc), writing or editing a CLAUDE.md file, authoring a custom skill, designing a skill's trigger description, choosing between skill / hook / CLAUDE.md for \"always do X\" behavior, or auditing a personal skill library for rot. Routes to chapters 12 and 13 (persistence) of claude-spine.",
+  "results": [
+    {
+      "query": "I want Claude to always run prettier on saved TS files in this project. Should that go in CLAUDE.md, a hook, or a skill?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "audit my personal skill library \u2014 I haven't looked at it in 6 months. Some of these triggers can't be doing anything useful anymore.",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "I'm writing a custom skill for 'audit Supabase RLS from two sessions' \u2014 help me draft the trigger description so it actually fires when I need it",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "make my React state persistent across page reloads using localStorage",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "the form state is persisting between users \u2014 debug the session leak",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "explain how Redis persistence works \u2014 RDB vs AOF",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "I keep telling Claude 'never commit a .env file' in every session \u2014 where should that rule actually live so it sticks across all my projects?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "the project CLAUDE.md has grown to 400 lines \u2014 most of it is stale and contradicts itself. How do I clean it up without losing the load-bearing parts?",
+      "should_trigger": true,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": false
+    },
+    {
+      "query": "design a Postgres schema for an audit log table \u2014 append-only",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    },
+    {
+      "query": "write a memoization helper for expensive React component renders",
+      "should_trigger": false,
+      "trigger_rate": 0.0,
+      "triggers": 0,
+      "runs": 1,
+      "pass": true
+    }
+  ],
+  "summary": {
+    "total": 10,
+    "passed": 5,
+    "failed": 5
+  }
+}
