@@ -12,6 +12,7 @@
 #   ./install.sh --skip-commands     # skip slash-command symlinks
 #   ./install.sh --skip-settings     # skip ~/.claude/settings.json
 #   ./install.sh --skip-hook         # skip the env-leak hook
+#   ./install.sh --keep-legacy       # don't remove pre-v2 op-manual-* skills
 #   ./install.sh --dry-run           # print actions, change nothing
 #   ./install.sh -h | --help
 
@@ -39,6 +40,7 @@ SKIP_SKILLS=0
 SKIP_COMMANDS=0
 SKIP_SETTINGS=0
 SKIP_HOOK=0
+KEEP_LEGACY=0
 DRY_RUN=0
 
 for arg in "$@"; do
@@ -49,9 +51,10 @@ for arg in "$@"; do
     --skip-commands) SKIP_COMMANDS=1 ;;
     --skip-settings) SKIP_SETTINGS=1 ;;
     --skip-hook) SKIP_HOOK=1 ;;
+    --keep-legacy) KEEP_LEGACY=1 ;;
     --dry-run) DRY_RUN=1 ;;
     -h|--help)
-      sed -n '2,17p' "$0"
+      sed -n '2,18p' "$0"
       exit 0
       ;;
     *)
@@ -184,6 +187,39 @@ else
   echo "  linked: $SPINE_LINK → $SPINE_DIR"
 fi
 echo
+
+# ---------- 1b. legacy op-manual-* cleanup ----------
+
+# The v1 line of skills was named op-manual-{workflow,tactics,templates,recovery}.
+# The v2 spine ships a finer-grained op-* set that supersedes them. If we leave
+# both in place, trigger descriptions overlap and skills double-fire. Wipe them
+# unless the user opted into --keep-legacy.
+
+if [ "$SKIP_SKILLS" -eq 0 ]; then
+  if [ "$KEEP_LEGACY" -eq 1 ]; then
+    echo "==> --keep-legacy: leaving any op-manual-* skills in place"
+    echo "    (they may overlap with the spine's op-* set and double-fire)"
+    echo
+  else
+    legacy_found=0
+    for legacy_dir in "$CLAUDE_DIR"/skills/op-manual-*; do
+      [ -e "$legacy_dir" ] || [ -L "$legacy_dir" ] || continue
+      legacy_found=1
+      break
+    done
+    if [ "$legacy_found" -eq 1 ]; then
+      echo "==> removing legacy op-manual-* skills (superseded by spine's op-*)"
+      for legacy_dir in "$CLAUDE_DIR"/skills/op-manual-*; do
+        [ -e "$legacy_dir" ] || [ -L "$legacy_dir" ] || continue
+        backup_path "$legacy_dir"
+        run rm -rf "$legacy_dir"
+        echo "  removed: $legacy_dir"
+      done
+      echo "  (pass --keep-legacy to opt out of this step)"
+      echo
+    fi
+  fi
+fi
 
 # ---------- 2. core skill symlinks ----------
 

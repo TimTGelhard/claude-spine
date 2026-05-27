@@ -30,6 +30,8 @@ From the spine root:
 
 Existing `~/.claude/CLAUDE.md`, `settings.json`, and `~/.claude/hooks/block-env-staging.sh` are backed up to `~/.claude-backup-<timestamp>/` before being overwritten. The installer is idempotent — re-running it updates the symlinks and re-installs `settings.json` + hook + global stub from the spine.
 
+If you previously had the v1 `op-manual-*` skills installed, they're backed up and removed during install so they don't double-fire alongside the v2 `op-*` set. Pass `--keep-legacy` to leave them in place (e.g. for an A/B session).
+
 ### Flags
 
 | Flag | Effect |
@@ -40,6 +42,7 @@ Existing `~/.claude/CLAUDE.md`, `settings.json`, and `~/.claude/hooks/block-env-
 | `--skip-commands` | Don't symlink slash commands into `~/.claude/commands/`. |
 | `--skip-settings` | Don't overwrite `~/.claude/settings.json`. |
 | `--skip-hook` | Don't install the env-leak hook. |
+| `--keep-legacy` | Leave any pre-v2 `~/.claude/skills/op-manual-*` skills in place. By default they're backed up and removed because their trigger descriptions overlap with the v2 `op-*` set. |
 | `--dry-run` | Print what would happen; change nothing. |
 
 ### After install
@@ -94,12 +97,20 @@ The spine chapters (especially `chapters/persistence/12b-claudemd.md` and `chapt
 
 ## Uninstall
 
+From the spine root:
+
 ```bash
-rm ~/.claude/CLAUDE.md ~/.claude/settings.json ~/.claude/hooks/block-env-staging.sh
-rm -rf ~/.claude/skills/op-*
-rm ~/.claude/commands/onboard.md ~/.claude/commands/add-skill.md ~/.claude/commands/refresh-bucket.md
-rm ~/.claude/claude-spine-profile.md   # the personal profile, if you want a clean slate
-rm ~/.claude-spine   # only if it's a symlink — `ls -la ~/.claude-spine` to check
-# Restore your backup:
-# cp -a ~/.claude-backup-YYYYMMDD-HHMMSS/.claude/. ~/.claude/
+./uninstall.sh             # remove what install.sh installed
+./uninstall.sh --dry-run   # show what would be removed
 ```
+
+It removes only what the spine installs — the `~/.claude/skills/op-*` symlinks that resolve into this clone, the `~/.claude/commands/*.md` symlinks the spine added, `~/.claude/hooks/block-env-staging.sh`, and `~/.claude-spine` (only when it's a symlink).
+
+It deliberately leaves user data alone:
+
+- `~/.claude/CLAUDE.md` — you may have edited it.
+- `~/.claude/settings.json` — same.
+- `~/.claude/claude-spine-profile.md` — your onboarding profile.
+- `bucket/` inside the spine — your bucket skills.
+
+To restore the originals install.sh backed up, look in `~/.claude-backup-<timestamp>/` and `cp -a` the bits you want back. To drop the listed user data too, `rm` them by hand.

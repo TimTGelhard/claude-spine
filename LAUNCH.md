@@ -34,7 +34,7 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 |---|---|---|---|
 | L0 | Decide community/sharing story (no code, README + bucket/README touched) | L7 (waitlist messaging) | not started |
 | L1 | Self-consistency sweep (circular refs, stale skill cross-refs, naming) | L8 (Tim migration), L7 (launch) | done (2026-05-27) |
-| L2 | install.sh legacy `op-manual-*` cutover + `/uninstall` | L8 (Tim migration), L7 (launch) | not started |
+| L2 | install.sh legacy `op-manual-*` cutover + `/uninstall` | L8 (Tim migration), L7 (launch) | done (2026-05-27) |
 | L3 | settings.json default tuning (effortLevel, autoCompactWindow) | nothing | not started |
 | L4 | Testing harness — skill-trigger benchmarks + hook test fixture | L7 confidence | not started |
 | L5 | Clean-room install on fresh VM / Docker | L7 (launch gate) | not started |
@@ -130,6 +130,21 @@ Also: there's no scripted uninstall. `global/INSTALL.md` documents the manual st
 3. Update `global/INSTALL.md` to document both behaviors + the `--keep-legacy` flag.
 
 **Definition of done:** A fresh run of `./install.sh --dry-run` shows the legacy cleanup step. A fresh run of `./uninstall.sh --dry-run` shows the exact files it'd remove and the user data it leaves alone. Both scripts have `--help`.
+
+### L2 notes (2026-05-27)
+
+**Scope of edits actually done:**
+- `install.sh` — added `--keep-legacy` flag, added section `1b` (legacy `op-manual-*` cleanup) between the `~/.claude-spine` symlink and the core-skill symlink loop. Uses the existing `backup_path` helper. Conditional on `SKIP_SKILLS=0` (so `--skip-skills` users aren't surprised by skills disappearing). Updated `--help` sed range from `2,17p` to `2,18p` to cover the new flag line.
+- `uninstall.sh` (new) — mirrors `install.sh`'s structure: resolves spine root the same way, parses `--dry-run` / `--help`, uses a `points_into_spine` helper that compares `readlink` output against `$SPINE_DIR/<subpath>/*`. install.sh writes absolute paths in its symlinks, so a literal prefix match is enough and avoids relying on `readlink -f` (BSD readlink on macOS doesn't support `-f`). Removes only spine-owned symlinks; leaves `CLAUDE.md`, `settings.json`, `claude-spine-profile.md`, and the spine's `bucket/` in place per spec. `~/.claude-spine` removed only when it's actually a symlink — a real directory at that path is left alone.
+- `global/INSTALL.md` — added `--keep-legacy` row to the Flags table, added one short paragraph above the table explaining the legacy cutover behavior. Replaced the manual `rm` block in the Uninstall section with a pointer to `./uninstall.sh` + explicit list of what it leaves in place.
+
+**DoD verification:**
+- `./install.sh --dry-run` on Tim's machine (which still has all four legacy directories) shows the cleanup step firing — each `op-manual-*` backed up to `~/.claude-backup-<ts>/.claude/skills/` then `rm -rf`'d, followed by the standard `op-*` symlink creation.
+- `./install.sh --keep-legacy --dry-run` correctly skips the cleanup and prints the "leaving any op-manual-* skills in place" notice.
+- `./uninstall.sh --dry-run` reports `(none found)` for skill/command symlinks (none installed yet on Tim's machine), correctly flags the existing env-leak hook for removal, and lists `CLAUDE.md` / `settings.json` / `bucket/` under "intentionally LEFT IN PLACE".
+- Both scripts respond to `-h` / `--help`.
+
+**Out of scope, not done in this phase:** L8 (Tim's actual personal migration) is now unblocked but deliberately not executed here — `RECONSTRUCTION.md` and the cold-read rules say one session = one phase. The opinionated CLAUDE.md template's "currently /onboard" line in `global/INSTALL.md`'s table is now stale (5 commands exist) — left untouched because it's outside L2's scope; rolling it into L6 (CHANGELOG + polish) is the cleaner placement.
 
 ---
 
