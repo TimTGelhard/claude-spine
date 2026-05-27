@@ -42,7 +42,7 @@ See [`chapters/foundations/04a-model-tiers.md`](../foundations/04a-model-tiers.m
 | Max (5×) | Up to 4 parallel agents; flag if proposing 5+. |
 | Max (20×) | No soft cap; fan-out is the default for breadth-first work. |
 
-See [`chapters/subagents/16d-parallel-and-background.md`](../subagents/16d-parallel-and-background.md) for when fan-out earns its cost.
+See [`chapters/subagents/16c-parallel-and-background.md`](../subagents/16c-parallel-and-background.md) for when fan-out earns its cost.
 
 ### 4. Fast mode
 
