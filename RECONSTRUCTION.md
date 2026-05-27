@@ -24,6 +24,10 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 
 ## Current phase
 
+**Phase 8b — `op-suggest` capture skill — done** (2026-05-27). Ships `skills/core/op-suggest/SKILL.md` (58 lines, single-file — no adjacent files; the entry schema lives inline) and `global/commands/suggest.md`. The trigger description in the frontmatter is locked: four narrow conditions to fire (explicit user signal, repeated friction 2+, end-of-session reflection, `/suggest`); five explicit no-fires (speculation, one-off, mid-task ideation, Claude hunch, dedupe-at-capture). Dry-run walked 8 scenarios through the description and all classified correctly. Claude can now capture suggestions during normal work; curation (`op-curate` / `/curate`) lands in 8c.
+
+**Phase 8a — personalization chapters + bucket scaffolding — done** (2026-05-27). Ships `chapters/personalization/` (19a–19e), `bucket/SUGGESTIONS.md`, `bucket/CHANGELOG.md`, `bucket/chapters/` skeleton, and integrations into `INDEX.md` + `bucket/README.md`. The manual now *describes* personalization end-to-end; the skills that implement the loop land in 8b/8c.
+
 **Phase 6.5 — bucket infrastructure — done** (2026-05-27). Ships `op-bucket-router`, `op-add-skill`, `/refresh-bucket` + `/add-skill` slash commands, and the seed `bucket/` folder at the repo root.
 
 **Phase 6a (done 2026-05-27):**
@@ -55,7 +59,7 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 - Top-level `INDEX.md` fallback section + RECONSTRUCTION target-folder-structure swept to the new `bucket/` location.
 - `install.sh` needed **no changes** — its `op-*/` skill glob and `global/commands/*.md` command glob automatically pick up the new files. Verified via `--dry-run`.
 
-**Next:** Phase 7 (demo + launch) or Phase 8 (personalization + self-evolution loop). PERSONALIZATION.md splits Phase 8 into 8a–8e; 6.5's early bucket promotion means 8a's "lift `skills/bucket/` → `bucket/`" step is already done.
+**Next:** Phase 8c (`op-curate` curation skill + `/curate` slash command + read-before-write enforcement + diff-preview pattern). Phase 7 (demo + launch) remains gated on 8 completing.
 
 ---
 
@@ -105,7 +109,12 @@ Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in th
 | 6c | `op-onboard` skill (hybrid interview) + README rewrite | **done (2026-05-27)** |
 | 6.5 | Bucket infrastructure — `op-bucket-router`, `op-add-skill`, `bucket/INDEX.md` seed, `/refresh-bucket` + `/add-skill` slash commands. Bucket built at top-level `bucket/` to align with Phase 8's locked decision. | **done (2026-05-27)** |
 | 7 | Demo + launch — end-to-end dry-run, video script outline, launch checklist | not started |
-| 8 | Personalization + self-evolution loop — `op-suggest`, `op-curate`, `bucket/SUGGESTIONS.md`, `bucket/chapters/`, personalization chapter. **Full plan: `PERSONALIZATION.md`.** Splits into sub-phases 8a–8e (one per session). | not started |
+| 8 | Personalization + self-evolution loop — `op-suggest`, `op-curate`, `bucket/SUGGESTIONS.md`, `bucket/chapters/`, personalization chapter. **Full plan: `PERSONALIZATION.md`.** Splits into sub-phases 8a–8e (one per session). | **in progress** |
+| 8a | Personalization chapters (19a–19e) + bucket scaffolding (`SUGGESTIONS.md`, `CHANGELOG.md`, `bucket/chapters/`) + INDEX section. The manual describes personalization; skills land in 8b/8c. | **done (2026-05-27)** |
+| 8b | `op-suggest` capture skill + `/suggest` slash command + entry-schema lock + dry-run | **done (2026-05-27)** |
+| 8c | `op-curate` curation skill + `/curate` slash command + read-before-write enforcement + diff-preview pattern | not started |
+| 8d | Integration: `op-bucket-router` discovers `bucket/chapters/`; bucket INDEX unification decision; stale-review tooling; project-shift handling | not started |
+| 8e | End-to-end dry-run, trigger threshold tuning, README personalization section, Phase 8 done flip | not started |
 
 Phases 1–5 are content-independent; any order works, but listed order is dependency-friendly. Phase 6 needs 1–5 done. Phase 6.5 should land before Phase 8 (bucket infrastructure first, then the evolution loop on top). Phase 7 needs 6 + 6.5 + 8.
 
@@ -252,6 +261,16 @@ This table grows as each phase lands. Each new file added here when it's written
 | `skills/core/op-add-skill/bucket-skill-template.md` | new | 6.5 | written 2026-05-27 |
 | `global/commands/refresh-bucket.md` | new | 6.5 | written 2026-05-27 |
 | `global/commands/add-skill.md` | new | 6.5 | written 2026-05-27 |
+| `chapters/personalization/19a-overview.md` | new | 8a | written 2026-05-27 |
+| `chapters/personalization/19b-profile-and-onboarding.md` | new | 8a | written 2026-05-27 |
+| `chapters/personalization/19c-suggestion-loop.md` | new | 8a | written 2026-05-27 |
+| `chapters/personalization/19d-curation-session.md` | new | 8a | written 2026-05-27 |
+| `chapters/personalization/19e-extending-the-bucket.md` | new | 8a | written 2026-05-27 |
+| `bucket/SUGGESTIONS.md` | new | 8a | written 2026-05-27 |
+| `bucket/CHANGELOG.md` | new | 8a | written 2026-05-27 |
+| `bucket/chapters/.gitkeep` | new | 8a | written 2026-05-27 |
+| `skills/core/op-suggest/SKILL.md` | new | 8b | written 2026-05-27 |
+| `global/commands/suggest.md` | new | 8b | written 2026-05-27 |
 
 ---
 
@@ -383,6 +402,30 @@ This replaces the earlier hard-coded `/Users/macbook/claude-op-manual/...` paths
 - **`install.sh` needed zero changes.** Section 2 already globs `skills/core/op-*/`, section 3 already globs `global/commands/*.md`. Both new skills and both new commands are picked up automatically. Verified by `./install.sh --dry-run` — the new symlink lines appear without code edits.
 - **Bucket folder is NOT symlinked into `~/.claude/`.** Bucket skills are deliberately *not* auto-loaded — they're routed-to by `op-bucket-router`. Symlinking them into `~/.claude/skills/` would make Claude Code auto-load them as core-equivalents, defeating the routing pattern (and risking trigger noise as the user's library grows to 30+ entries). The bucket lives at `~/.claude-spine/bucket/` and is reached only through `op-bucket-router` reading `bucket/INDEX.md`.
 - **No chapter content touched.** Phase 6.5 was infrastructure-only: folders, INDEX seed, two skills, two slash commands. Exactly the planned scope.
+
+### Phase 8b notes (2026-05-27)
+
+- **`op-suggest` is a single-file skill** (`SKILL.md` only, no adjacent files). The entry schema is small enough to pin inline; `SUGGESTIONS.md` itself already documents the same schema with its own example block. No template duplication needed. Skill body lands at 58 lines — three over the ~55 soft cap, but the description is intentionally rich (Session B locks the trigger description as the failure-prone surface — bloating *here* means noise everywhere, so the literal trigger phrases need to be in the frontmatter for the matcher to catch them). Body content is all routing, not operational data — no candidate to move to an adjacent file.
+- **Trigger description is locked.** Four fire conditions: (1) explicit user signal with quoted phrases ("we should add this to the manual," "remember this," "next time we hit this, let's…"); (2) same friction 2+ times this session — same mistake, same direction, same correction; (3) end-of-session reflection ("what did we learn here?," "anything worth capturing?"); (4) `/suggest`. Five no-fires explicitly listed: speculation, one-off friction, mid-task ideation, Claude's own hunches, already-pending duplicates. The "prefer silence over capture" bias from 19c is encoded directly: "Missed signal is $0; queue noise wrecks curation."
+- **Entry schema pinned in the body** as a literal markdown block matching `SUGGESTIONS.md`'s example. Type enum: `new-skill | new-chapter | profile-update | observation`. `profile-update` is explicitly logs-only (never auto-applied; user runs `/onboard`) — this resolves the Session B open question about "profile-affecting suggestions" cleanly: capture them but never act on them.
+- **`/suggest` slash command at `global/commands/suggest.md`.** Bypasses the high-threshold gate (the slash command IS the gate — user explicitly opted in). Walks the user through title → type → proposed change → append. Same shape as `/add-skill`.
+- **Dry-run walked 8 scenarios** through the locked description: 4 should-fire (explicit signal, repeated friction, end-of-session reflection, `/suggest`) and 4 no-fires (one-off correction, mid-task ideation, Claude hunch, speculation). All classified correctly. The "orthogonal contexts" carve-out from 19c is handled by the "same mistake, same direction, same correction — you can quote both corrections" line: if both corrections can't be quoted side-by-side as the same statement, it's not a pattern.
+- **`install.sh` needed zero changes.** Sections 2 (`skills/core/op-*/`) and 3 (`global/commands/*.md`) already glob the new files. Same as Phase 6.5 — the install architecture is correctly future-proofed against new skills and commands landing.
+- **Open question for 8c:** SUGGESTIONS.md status updates on resolution — does `op-curate` flip `Status: pending` in-place (preserving chronological order) or move the entry under "Applied / rejected (archive)"? The current SUGGESTIONS.md skeleton supports either path; the schema-in-body for `op-suggest` doesn't take a position (it only writes the initial `pending` entry). 8c decides — Session C will make the call when implementing the curation skill body.
+- **No chapter content touched.** Phase 8b was skill + slash command only — exactly the planned scope.
+
+### Phase 8a notes (2026-05-27)
+
+- **Five chapters written under `chapters/personalization/`.** Each answers a distinct user question: 19a is "what is personalization here?", 19b is "how does the profile work?", 19c is "when does Claude capture a suggestion?", 19d is "what happens in a curation session?", 19e is "when do I extend the bucket — and how?". Decomposition-rule check: each piece stands alone; none read as paired-only; the router will load one per user question. Line counts: 19a 76, 19b 96, 19c 94, 19d 112, 19e 99 — all comfortably under the 150 cap.
+- **Voice carried forward** from the existing chapters (12a/13d as references). Direct, table-heavy, internal cross-links via `[19x](19x-slug.md)` short form, "TL;DR" footer per file. No tone drift.
+- **Personalization section added to top-level INDEX.md** between "Anti-patterns" and "Fallback: personal skill library." Five rows for 19a–19e. The fallback section still points at `bucket/INDEX.md` — unchanged from 6.5.
+- **`bucket/SUGGESTIONS.md` skeleton** ships with the entry-format example baked in (so 8b's `op-suggest` has a target schema already documented in-file), a `<!-- op-suggest appends new entries above this comment -->` marker (same convention as `bucket/INDEX.md`), and a "Pending" / "Applied / rejected (archive)" split per the curation pattern in 19d. Entries don't auto-archive on resolution — 8c can either move them under the archive heading or leave them inline with status flipped; both shapes work and the decision lives in `op-curate`'s body.
+- **`bucket/CHANGELOG.md` skeleton** mirrors the SUGGESTIONS.md shape with its own append-marker. Format-by-example, same as the suggestion entries.
+- **`bucket/chapters/.gitkeep`** placeholder so the folder is tracked. No content — personal chapters land there as users add them.
+- **`bucket/README.md` updated** to mention `bucket/chapters/`, `SUGGESTIONS.md`, `CHANGELOG.md` — the "Phase 8 will add..." parenthetical is gone now that those exist. Cross-references to 19c/19d/19e added.
+- **No skill bodies touched.** Phase 8a was content + scaffolding only — exactly the planned scope. `op-suggest` and `op-curate` land in 8b/8c.
+- **Open question carried into 8d:** unified `bucket/INDEX.md` vs split skills/chapters INDEX files. 8a leaves the existing single `bucket/INDEX.md` from 6.5 alone (currently scoped to skills). 8d decides whether to extend it or split — both routes are still viable, and 19e is written agnostically ("`op-bucket-router` reads `bucket/INDEX.md`") so the chapter doesn't need a re-edit either way.
+- **Cross-references** in the new files: same convention as Phases 1–5. Sibling files use `[19x](19x-slug.md)`; cross-folder uses `[13d](../persistence/13d-skill-anti-patterns.md)`, `[14a](../persistence/14a-settings-cascade.md)`, `[14b](../persistence/14b-hook-recipes.md)`. All targets exist.
 
 ### Phase 6b notes (2026-05-27)
 

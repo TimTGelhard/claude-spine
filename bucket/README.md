@@ -11,7 +11,9 @@ That's the bucket. It's append-mostly, you own it, no one else writes here.
 ## What goes here
 
 - **Bucket skills** (`bucket/skills/<name>/SKILL.md`) — narrow `op-*`-style routers for your patterns. Triggers fire only on *your* work, content rarely overlaps with the core. Examples: "deploy this app's infrastructure," "run my favorite codegen pipeline," "review a Rails migration the way I like reviews done."
-- _(Phase 8 will add `bucket/chapters/`, `bucket/SUGGESTIONS.md`, `bucket/CHANGELOG.md` — personal chapters, the suggestion queue, and a curation audit log. Not here yet.)_
+- **Bucket chapters** (`bucket/chapters/<slug>.md`) — personal atomic chapters for explanations and references you'll re-read. Same atomic-file shape as the core: one concept per file, ≤150 lines. See [chapters/personalization/19e](../chapters/personalization/19e-extending-the-bucket.md) for the skill vs chapter split.
+- **`bucket/SUGGESTIONS.md`** — the capture queue. `op-suggest` appends high-signal moments during normal work; `op-curate` reads pending entries and proposes bucket changes. See [19c](../chapters/personalization/19c-suggestion-loop.md).
+- **`bucket/CHANGELOG.md`** — append-only audit log of applied changes. See [19d](../chapters/personalization/19d-curation-session.md).
 
 ## How Claude finds your bucket
 

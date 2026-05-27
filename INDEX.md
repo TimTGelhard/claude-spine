@@ -133,6 +133,16 @@
 | Long-term project anti-patterns | `chapters/anti-patterns/18h-long-term.md` | 18 | written |
 | Meta anti-patterns (extending the manual, etc.) + cross-catalog TL;DR | `chapters/anti-patterns/18-meta-patterns.md` | 18 | written |
 
+## Personalization — how the spine becomes personal
+
+| Topic / Trigger | Atomic file | Source | Status |
+|---|---|---|---|
+| Personalization overview — three layers, the loop | `chapters/personalization/19a-overview.md` | new | written |
+| Profile file + `/onboard` interview + when to re-run | `chapters/personalization/19b-profile-and-onboarding.md` | new | written |
+| Suggestion-capture loop (`op-suggest`, `SUGGESTIONS.md` schema, trigger rules) | `chapters/personalization/19c-suggestion-loop.md` | new | written |
+| Curation sessions (`/curate`, read-before-write, diff preview, CHANGELOG) | `chapters/personalization/19d-curation-session.md` | new | written |
+| Extending the bucket — skill vs chapter, gates, GC, git-pull interaction | `chapters/personalization/19e-extending-the-bucket.md` | new | written |
+
 ---
 
 ## Fallback: personal skill library
