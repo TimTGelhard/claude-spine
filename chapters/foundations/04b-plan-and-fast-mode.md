@@ -43,7 +43,10 @@ If the plan is bad, fix the plan, not the code that comes out of executing a bad
 **Use when:** you want speed and aren't waiting for deeply considered responses (e.g., quick file reads, routine edits).
 **Skip when:** you want Claude to think carefully (architecture, debugging hard bugs).
 
+Framing shifts by plan: for Free / Pro users, fast mode is an occasional treat (it doesn't downgrade the model but it does consume tokens faster). For Max users on long sessions, it's a sensible default. See [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md) (lever 4) for the per-plan stance.
+
 ## Related
 
 - Picking a model (Opus / Sonnet / Haiku): [04a-model-tiers.md](04a-model-tiers.md)
 - Planner collaboration mode (the mindset, not the toggle): [07d-planner-mode.md](../workflow/07d-planner-mode.md)
+- Per-plan defaults across model / fan-out / loop / fast mode: [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md)

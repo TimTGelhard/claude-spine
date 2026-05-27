@@ -16,6 +16,8 @@ Beyond model choice, the biggest cost is *how much context you load*.
 
 Whether you're on Pro, Max, Max 20x, or Team, the shape is the same: generous but not infinite. Heavy daily Opus + 1M-context use can still hit limits. Limits reset on a fixed cadence (usually weekly). You'll feel a hard wall, not a soft slowdown.
 
+The eight per-plan recommendation rows (default model, ultra-review, fan-out, fast mode, loops, restart cadence, end-of-session verify, 1M-context) live in [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md). When the recommendation in this chapter feels generic, that's where the per-plan version lives.
+
 ### Stretching the budget
 
 1. **Default to Sonnet.** Save Opus for the cases that need it.

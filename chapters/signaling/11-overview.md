@@ -49,6 +49,8 @@ When estimating, say "rough estimate" or "likely." Don't fabricate precision.
 | Verification gates + end-of-session | [11d-verification-signals.md](11d-verification-signals.md) |
 | Meta-scope — extending Claude's own setup | [11e-meta-scope.md](11e-meta-scope.md) |
 
+Cost / quota is a cross-cutting signal, not a sixth category. See "Cost / quota signals" below.
+
 ## Phrasing rules
 
 The signal must be brief enough that it doesn't itself become noise. Match the energy of "Hey, real quick —" not "I would like to suggest that perhaps —".
@@ -96,6 +98,19 @@ The signal is a recommendation, never a refusal. Claude is the senior dev, not t
 - **Asking permission to do basic monitoring.** Don't say "Would you like me to check if we're at scope creep?" Just check, then signal if so.
 - **Burying the signal.** If it matters, lead with it. Don't put it in paragraph 4.
 - **Confusing low-confidence hedging with verification.** Verification means actually running a check (grep, file read, test). Hedging is not verification.
+
+## Cost / quota signals
+
+Before doing something materially expensive — `/code-review ultra`, multi-agent fan-out, an open-ended `/loop` or `/schedule`, repeated Opus calls on a long session — read `~/.claude/claude-spine-profile.md → Subscription` and decide whether to flag.
+
+- **Max 20× + `Cost sensitivity = Don't worry about it`** — don't flag. Just do it.
+- **Pro / Max 5× + `Balanced`** — one-line cost note before proceeding ("Ultra-review burns ~$X / runs Opus across the diff — OK?"). Then continue if the user agrees.
+- **Free / Pro / any-plan + `Very careful`** — flag the cost *and* offer a cheaper alternative ("`/code-review high` covers most of this for ~1/4 the spend — start there?").
+- **Profile missing** — treat as Pro / Balanced.
+
+Phrasing matches the rest of this chapter — brief, one line, not alarmist. The table for each lever (model / ultra-review / fan-out / fast mode / loop / restart / verify / 1M-context) lives in [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md). This signal is the "should I bring it up at all?" filter; 19f answers the "what's the alternative?" question.
+
+Same once-per-session discipline as other signals: don't flag the same cost twice if the user already approved it.
 
 ## TL;DR
 

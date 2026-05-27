@@ -10,6 +10,22 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+### Pillar 1 — Personalization payload (Session 2 of 3)
+
+Session 1 (in `[0.10.0]`) shipped `chapters/personalization/19f-subscription-aware.md` and wired four routing skills to it. The chapters those routers point *into*, though, still read generically — a Free user reading `04a-model-tiers.md` got the same "default to Sonnet" framing as a Max 20× user with cheap Opus access. Session 2 closes that gap by adding bidirectional cross-references from five high-leverage chapters back into 19f, so the per-plan branch surfaces wherever a generic recommendation sits.
+
+#### Changed
+
+- `chapters/foundations/04a-model-tiers.md` — new "Plan-aware default" subsection between the mental rule of thumb and Related. Two paragraphs + a link into 19f (lever 1). Related section grows one bullet.
+- `chapters/foundations/04b-plan-and-fast-mode.md` — fast-mode section gains one paragraph framing the per-plan stance (occasional treat for Free / Pro, default for Max). Related section grows one bullet.
+- `chapters/foundations/04c-budget-and-cost.md` — "Plan budgets" section adds one paragraph pointing at 19f as the authoritative per-plan recommendation source, since 04c already enumerates plan tiers but doesn't surface the per-plan defaults table.
+- `chapters/subagents/16c-parallel-and-background.md` — new "Plan-aware fan-out budget" subsection after Anti-patterns, with the four-row fan-out table (Free / Pro / Max 5× / Max 20×) and the `Cost sensitivity` modifier rule. TL;DR gains one bullet.
+- `chapters/signaling/11-overview.md` — "five signal categories" framing preserved, with a clarifying line that cost/quota is cross-cutting, not a sixth category. New "Cost / quota signals" subsection between Anti-patterns and TL;DR — four-row decision table (Max 20× + Don't worry / Pro/Max 5× + Balanced / Free or Very careful / profile missing) for whether to flag, with 19f as the alternative-suggestion table.
+- `docs/SUBSCRIPTION-AWARENESS.md` — status header marks Sessions 1+2 done; Session 3 (re-onboard as each plan tier + docs sweep) remains open. Records the realistic-injection-path caveat for the external `code-review` / `loop` / `schedule` skills.
+- `FIXES.md` — status header drops Pillar 1 Sessions 2–3 → Pillar 1 Session 3. P1.1 entry annotation updated to credit Session 2.
+
+No new files. No skill changes (the four routers were already wired in Session 1). No INDEX update needed (19f row was already present from Session 1).
+
 ### Still pending pre-launch
 
 - **L4c** — token-efficiency benchmark (spine-on vs spine-off) for demo numbers.

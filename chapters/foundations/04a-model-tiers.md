@@ -48,7 +48,14 @@ For Claude Code interactive work, Haiku is often *too* shallow — use sparingly
 - "Find every place this is used" → Subagent (Explore)
 - "Why is this broken?" → Opus if you've already tried Sonnet and it's still stuck
 
+## Plan-aware default
+
+The defaults above assume reasonable Opus access. The user's Claude subscription shifts where the line sits — a Free user should default Sonnet harder than a Max 20× user, and a Max 20× user can default Opus on routine work that a Pro user would burn quota on.
+
+Before recommending a model, read `~/.claude/claude-spine-profile.md → Subscription → Plan:` and apply the per-plan row in [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md) (lever 1 — default model recommendation). If the profile is missing, default to the Pro row.
+
 ## Related
 
 - Plan mode and fast mode: [04b-plan-and-fast-mode.md](04b-plan-and-fast-mode.md)
 - Context cost discipline and plan budgets: [04c-budget-and-cost.md](04c-budget-and-cost.md)
+- Per-plan model + fan-out + loop defaults: [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md)

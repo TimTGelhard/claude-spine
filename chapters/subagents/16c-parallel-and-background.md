@@ -43,9 +43,21 @@ You get notified when it completes. **Don't poll.** Just keep working.
 - **Spawning a subagent inside another subagent.** It works, but it's almost always a sign you should restructure.
 - **Sleep-polling a background subagent.** You'll be notified — keep working.
 
+## Plan-aware fan-out budget
+
+Before proposing 2+ parallel agents, read the user's `~/.claude/claude-spine-profile.md → Subscription → Plan:` and apply the row in [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md) (lever 3 — parallel subagents). Free / Pro plans burn quota fast on fan-out; Max plans absorb it. The table:
+
+- **Free:** avoid parallel fan-out; one subagent at a time.
+- **Pro:** up to 2 parallel; flag at 3+.
+- **Max (5×):** up to 4 parallel; flag at 5+.
+- **Max (20×):** no soft cap; fan-out is the default for breadth-first work.
+
+Default to the Pro row if the profile is missing. `Cost sensitivity = Very careful` shifts one tier cheaper. Don't gate — the user can override; the table just sets the right default.
+
 ## TL;DR
 
 - Independent tasks → parallel agents in one turn.
 - Long-running tasks → background, get notified on completion.
 - Don't poll. Don't nest unnecessarily. Don't re-do the agent's work.
 - If the summary isn't trustworthy, the brief was wrong — fix the brief, don't second-guess the result.
+- Check the user's plan before fanning out 2+ agents — see [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md).

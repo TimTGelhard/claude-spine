@@ -1,12 +1,14 @@
 # FIXES — senior review pass, 2026-05-27 (closed 2026-05-28)
 
-> **Status as of 2026-05-28:** Pillars 1 (Sessions 1 of 3), 2, 4, 5, 6 + the
-> HIGH/MEDIUM drift sweep + M4 have shipped — all under the `[0.10.0]` cut. The
-> open queue at this point is **Pillar 3** (workflow auto-inference — P3.1–P3.5,
-> all P2 / post-launch), **Pillar 1 Sessions 2–3** (per-chapter/per-skill
-> subscription-aware adjustments tracked in `docs/SUBSCRIPTION-AWARENESS.md`),
-> **P4.4** (landing-page screenshot + profile example, post-launch content
-> work), **P6.4 + P6.5** (opt-in onboard-deep hooks), and the LOW items L2–L8.
+> **Status as of 2026-05-28:** Pillars 1 (Sessions 1+2 of 3), 2, 4, 5, 6 + the
+> HIGH/MEDIUM drift sweep + M4 have shipped — Sessions 1 + Pillars 2/4/5/6
+> landed in `[0.10.0]`; Pillar 1 Session 2 (chapter-level cross-references to
+> 19f) lands in the next `[Unreleased]` block. The open queue at this point is
+> **Pillar 3** (workflow auto-inference — P3.1–P3.5, all P2 / post-launch),
+> **Pillar 1 Session 3** (verify across all four plan tiers + docs sweep,
+> tracked in `docs/SUBSCRIPTION-AWARENESS.md`), **P4.4** (landing-page
+> screenshot + profile example, post-launch content work), **P6.4 + P6.5**
+> (opt-in onboard-deep hooks), and the LOW items L2–L8.
 > Each shipped item below has a `**[shipped …]**` annotation; unfixed items
 > have no annotation. Two passes are stacked in this file:
 >
@@ -277,15 +279,23 @@ access."* The branding on `README.md:15` is ahead of the implementation.
 
 #### P1.1 [P0] — Ship `19f-subscription-aware.md` and wire the routing skills
 
-**[shipped 2026-05-27 — commit `187ddbe`, landed in `[0.10.0]`]** Session 1 of
-the 3-session plan in `docs/SUBSCRIPTION-AWARENESS.md`. Created
+**[Sessions 1+2 shipped — Session 1 in `187ddbe` / `[0.10.0]`; Session 2 lands
+in the next `[Unreleased]` block]** Session 1 of the 3-session plan in
+`docs/SUBSCRIPTION-AWARENESS.md` created
 `chapters/personalization/19f-subscription-aware.md` (8 levers × 4 plan-rows
-each, plus Cost sensitivity modifier + default-to-Pro fallback). INDEX row
-added. Four routing skills wired to read 19f and branch on `Plan:` /
+each, plus Cost sensitivity modifier + default-to-Pro fallback), added the
+INDEX row, and wired four routing skills to read 19f and branch on `Plan:` /
 `Cost sensitivity:` (`op-foundations`, `op-tools`, `op-subagents`,
-`op-signaling`). Sessions 2 + 3 (per-chapter / per-skill body adjustments
-across `04a-model-tiers`, ch 16, ch 11, `code-review` / `loop` / `schedule`)
-deferred — see `docs/SUBSCRIPTION-AWARENESS.md` for the queued list.
+`op-signaling`). Session 2 added bidirectional cross-references from
+`04a-model-tiers`, `04b-plan-and-fast-mode`, `04c-budget-and-cost`,
+`16c-parallel-and-background`, and `11-overview` back into 19f — chapter
+content now surfaces the per-plan branch wherever a generic recommendation
+sits. The `code-review` / `loop` / `schedule` skills called out in the
+Session 2 plan are **external plugin skills** (not in this repo); the
+realistic injection path is through `op-tools` and `op-signaling`, both
+wired in Session 1. Session 3 (re-onboard as each plan tier to verify the
+shift + final CHANGELOG sweep) deferred — see
+`docs/SUBSCRIPTION-AWARENESS.md` for the open list.
 
 ---
 

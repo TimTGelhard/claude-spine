@@ -1,6 +1,10 @@
 # Subscription-aware adjustments — planning doc
 
-> **Status:** Session 1 done (2026-05-27 — `chapters/personalization/19f-subscription-aware.md` shipped + `op-foundations` / `op-tools` / `op-subagents` / `op-signaling` wired to it). Sessions 2 + 3 still open — see "Sketch of the implementation" below.
+> **Status:** Sessions 1 + 2 done. Session 3 (verify across all four plan tiers + final docs sweep) still open — see "Sketch of the implementation" below.
+>
+> - **Session 1 (2026-05-27).** `chapters/personalization/19f-subscription-aware.md` shipped (8 levers × 4 plan-rows + Cost sensitivity modifier + Pro fallback). Four routing skills wired to read it (`op-foundations`, `op-tools`, `op-subagents`, `op-signaling`).
+> - **Session 2 (2026-05-28).** Five chapters cross-reference 19f: `04a-model-tiers` ("Plan-aware default" subsection + related-link), `04b-plan-and-fast-mode` (fast-mode framing note), `04c-budget-and-cost` ("Plan budgets" pointer paragraph), `16c-parallel-and-background` ("Plan-aware fan-out budget" subsection + TL;DR bullet), `11-overview` ("Cost / quota signals" cross-cutting subsection). Bidirectional linking complete.
+> - **Skills caveat.** The `code-review` / `loop` / `schedule` skills listed in the Session 2 plan are **external plugin skills** (not in this repo). The realistic injection path was the op-* routers wired in Session 1 — `op-tools` and `op-signaling` both point at 19f when those slash commands come up.
 
 ## Why
 
