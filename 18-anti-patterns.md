@@ -1,1 +1,0 @@
-> **DEPRECATED** — v2 atomic version: [`chapters/anti-patterns/`](chapters/anti-patterns/). Full body (preserved for cross-reference): [`docs/v1-archive/18-anti-patterns.md`](docs/v1-archive/18-anti-patterns.md). Full v1→v2 map: [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md).

@@ -61,6 +61,19 @@ Defaults today assume a Max-tier user with cheap Opus and 1M-context access. Tha
 - `global/commands/onboard.md` — description updated to 6-question essentials / ~17-question deep.
 - `skills/core/op-onboard/questions-deep.md` — every existing deep question rewritten in the same plain-language non-coder style as the essentials (parenthetical glosses for jargon, situational labels instead of survey buckets). Matches the style note added at the top of the file.
 
+### Pre-launch cleanup — v1 root stubs removed
+
+The 18 one-line redirect files at the repo root (`01-first-principles.md` … `18-anti-patterns.md`) have been deleted. They were kept earlier on the theory that external links (blog posts, gists, agent prompts) might point at them, but with public launch (L7) not yet shipped there are no external links to break. The original v1 bodies remain in `docs/v1-archive/` and the v1 → v2 navigation map in `V1-CHAPTERS-DEPRECATED.md` is unchanged — only the root stubs are gone.
+
+#### Removed
+
+- 18 v1 redirect stubs at repo root: `01-first-principles.md`, `02-context-window-truth.md`, `03-limits.md`, `04-models-and-economics.md`, `05-workflow.md`, `06-feature-sizing.md`, `07-collaboration-modes.md`, `08-brownfield.md`, `09-prompting.md`, `10-visuals.md`, `11-proactive-signaling.md`, `12-skills-memory-claudemd.md`, `13-custom-skills.md`, `14-hooks-and-automation.md`, `15-tool-palette.md`, `16-subagents.md`, `17-recovery-playbook.md`, `18-anti-patterns.md`.
+
+#### Changed
+
+- `V1-CHAPTERS-DEPRECATED.md` — top paragraph and "Why" passage rewritten to describe the new reality (bodies in `docs/v1-archive/`, no root stubs). Trailing "When are v1 stubs going away?" section replaced with "Where do the v1 bodies live now?" pointing at the archive directory.
+- `docs/SUBSCRIPTION-AWARENESS.md` — table reference to `04-models-and-economics.md` repointed at `chapters/foundations/04a-model-tiers.md`.
+
 ### Pre-launch gates
 
 Remaining gates before public launch (tracked in [`LAUNCH.md`](LAUNCH.md)):

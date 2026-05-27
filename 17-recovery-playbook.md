@@ -1,1 +1,0 @@
-> **DEPRECATED** — v2 atomic version: [`chapters/recovery/`](chapters/recovery/). Full body (preserved for cross-reference): [`docs/v1-archive/17-recovery-playbook.md`](docs/v1-archive/17-recovery-playbook.md). Full v1→v2 map: [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md).

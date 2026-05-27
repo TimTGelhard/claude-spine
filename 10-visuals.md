@@ -1,1 +1,0 @@
-> **DEPRECATED** — v2 atomic version: [`chapters/prompting/10-visuals.md`](chapters/prompting/10-visuals.md). Full body (preserved for cross-reference): [`docs/v1-archive/10-visuals.md`](docs/v1-archive/10-visuals.md). Full v1→v2 map: [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md).

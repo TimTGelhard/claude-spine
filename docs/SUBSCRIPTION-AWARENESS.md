@@ -18,7 +18,7 @@ Each row is a candidate change. Not all of these need to ship together — pick 
 
 | Lever | Free / Pro behavior | Max 5×–20× behavior | Where it lives today |
 |---|---|---|---|
-| Default model recommendation | Steer toward Sonnet for most work; flag Opus as a deliberate choice | Default to Opus unless task is trivial | `04-models-and-economics.md`, chapter 03 |
+| Default model recommendation | Steer toward Sonnet for most work; flag Opus as a deliberate choice | Default to Opus unless task is trivial | `chapters/foundations/04a-model-tiers.md`, chapter 03 |
 | Ultra-review (`/code-review ultra`) | Warn that it's billable + heavy; suggest cheaper effort levels first | Suggest it freely on PRs | `code-review` skill, chapter 16 |
 | Parallel subagents | Caution against fanning out 4+ agents — burns the daily limit | Encourage parallel agents for breadth | chapter 16 (subagents) |
 | Fast mode | Mention as occasional treat | Mention as default for long sessions | chapter 03 |

@@ -1,1 +1,0 @@
-> **DEPRECATED** — v2 atomic version: [`chapters/foundations/02-context-budget.md`](chapters/foundations/02-context-budget.md). Full body (preserved for cross-reference): [`docs/v1-archive/02-context-window-truth.md`](docs/v1-archive/02-context-window-truth.md). Full v1→v2 map: [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md).

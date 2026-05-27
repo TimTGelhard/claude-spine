@@ -1,1 +1,0 @@
-> **DEPRECATED** — v2 atomic version: [`chapters/tools/`](chapters/tools/). Full body (preserved for cross-reference): [`docs/v1-archive/15-tool-palette.md`](docs/v1-archive/15-tool-palette.md). Full v1→v2 map: [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md).

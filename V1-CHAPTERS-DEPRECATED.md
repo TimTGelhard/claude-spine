@@ -1,14 +1,14 @@
 # v1 chapters — deprecation index
 
-The 18 numbered chapters at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) are now **one-line redirect stubs**, kept at root for external-link preservation. The full v1 bodies live in [`docs/v1-archive/`](docs/v1-archive/) for cross-reference. New work should read the v2 atomic files in [`chapters/`](chapters/) (the router map is [`INDEX.md`](INDEX.md)).
+The 18 numbered chapters that lived at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) have been **removed** from the root tree. The full v1 bodies are preserved in [`docs/v1-archive/`](docs/v1-archive/) for cross-reference. New work should read the v2 atomic files in [`chapters/`](chapters/) (the router map is [`INDEX.md`](INDEX.md)).
 
-This file is the inverse of [`INDEX.md`](INDEX.md): the router groups files by topic; this file groups them by *source* v1 chapter so an old link can find its new home in one step.
+This file is the inverse of [`INDEX.md`](INDEX.md): the router groups files by topic; this file groups them by *source* v1 chapter so an old reference can find its new home in one step.
 
 ## Why v1 chapters were deprecated
 
 v2 organizes content by *the question being answered*, not by chapter number. A single v1 chapter typically held 3–5 distinct concepts that lived together because the original drafting batched them; v2 splits each chapter on real seams (the [decomposition rule](RECONSTRUCTION.md#architecture-frozen-decisions)) so Claude loads one slice per task instead of an entire chapter.
 
-The v1 files aren't deleted because external links — blog posts, gists, agent prompts, bookmarks — may already point at them. Each root stub carries a pointer to the v2 location, the archived body in `docs/v1-archive/`, and a link back to this index.
+The original v1 bodies are kept in `docs/v1-archive/` rather than deleted so the historical drafts remain readable side-by-side with the v2 split. The root-level stub files that previously redirected to v2 were dropped pre-launch; there are no public external links yet, so a navigation page (this file) is enough.
 
 ## v1 → v2 map
 
@@ -132,6 +132,6 @@ Five files in `chapters/personalization/` are net-new in v2 (Phase 8, shipped 20
 
 One file in `chapters/tools/` is also new: `15i-slash-commands.md` (above). The rest of `chapters/` traces back to a v1 chapter.
 
-## When are v1 stubs going away?
+## Where do the v1 bodies live now?
 
-Not on a fixed timeline. They cost ~5 KB of repo size and a few extra entries in `ls`. The deprecation header at the top of each file points readers at the v2 equivalents; this index gives the full map. Removing the root files would break any external link (blog posts, gists, agent prompts) that points at them. The trade-off favors keeping them until v2 has been canonical long enough that v1 links are rare in the wild.
+The 18 v1 chapter files have been removed from the repo root. The full bodies remain in [`docs/v1-archive/`](docs/v1-archive/) (e.g. [`docs/v1-archive/01-first-principles.md`](docs/v1-archive/01-first-principles.md) for the original first-principles chapter). This file is the navigation map — use the section above to look up where any v1 chapter's content was split.

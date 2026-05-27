@@ -1,1 +1,0 @@
-> **DEPRECATED** — v2 atomic version: [`chapters/persistence/`](chapters/persistence/). Full body (preserved for cross-reference): [`docs/v1-archive/13-custom-skills.md`](docs/v1-archive/13-custom-skills.md). Full v1→v2 map: [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md).

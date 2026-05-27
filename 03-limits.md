@@ -1,1 +1,0 @@
-> **DEPRECATED** — v2 atomic version: [`chapters/foundations/`](chapters/foundations/). Full body (preserved for cross-reference): [`docs/v1-archive/03-limits.md`](docs/v1-archive/03-limits.md). Full v1→v2 map: [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md).
