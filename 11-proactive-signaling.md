@@ -1,6 +1,4 @@
-> **DEPRECATED — v1 single-file chapter.**
-> v2 atomic version: see [`chapters/signaling/`](chapters/signaling/) — split into smaller, independently-loadable files.
-> Content here is preserved for cross-reference until v2 launch.
+> **DEPRECATED** — v2 atomic version: [`chapters/signaling/`](chapters/signaling/). Full v1→v2 map: [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md). Body kept for cross-reference.
 
 # 11 — Proactive signaling: be the senior dev in the room
 

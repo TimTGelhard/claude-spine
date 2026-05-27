@@ -1,6 +1,4 @@
-> **DEPRECATED — v1 single-file chapter.**
-> v2 atomic version: see [`chapters/anti-patterns/`](chapters/anti-patterns/) — split into smaller, independently-loadable files.
-> Content here is preserved for cross-reference until v2 launch.
+> **DEPRECATED** — v2 atomic version: [`chapters/anti-patterns/`](chapters/anti-patterns/). Full v1→v2 map: [`V1-CHAPTERS-DEPRECATED.md`](V1-CHAPTERS-DEPRECATED.md). Body kept for cross-reference.
 
 # 18 — Anti-patterns: the explicit "never do this" reference
 

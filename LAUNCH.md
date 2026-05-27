@@ -39,7 +39,7 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 | L4a | Testing harness — skill-trigger benchmarks | L7 confidence | done (2026-05-27) |
 | L4b | Testing harness — hook fixture + install dry-run + CI | L7 confidence | done (2026-05-27) |
 | L5 | Clean-room install on fresh VM / Docker | L7 (launch gate) | not started |
-| L6 | CHANGELOG.md + archive v1 root files + repo URL verify | L7 polish | not started |
+| L6 | CHANGELOG.md + archive v1 root files + repo URL verify | L7 polish | done (2026-05-27) |
 | L7 | Launch assets — domain, landing page, demo, waitlist signup | nothing — launches | not started |
 | L8 | Tim's personal migration | — | unblocked after L1+L2 |
 
@@ -309,6 +309,34 @@ All 18, flagged in `tests/skill-triggers/results/needs-tightening.md`. The flag 
 3. Verify the GitHub repo URL — if missing, file a separate task to create the repo (or pick a real URL).
 
 **Definition of done:** Root has a `CHANGELOG.md`. v1 root clutter resolved one way or the other. README URL is real.
+
+### L6 notes (2026-05-27)
+
+**Decisions made:**
+
+- **v1 root: keep with trimmed headers + add `V1-CHAPTERS-DEPRECATED.md` index.** Chose this over `git mv` to `docs/v1-archive/`. The launch doc flagged it as the lowest-cost compromise; on inspection, it really is — `git mv` would either break every external link to `01-first-principles.md` through `18-anti-patterns.md` (blog posts, gists, ChatGPT-shared agent prompts) or require 18 redirect stubs at root, which adds back exactly the noise the move was supposed to remove. Trimmed headers + one index file = zero broken links, one new root file, eighteen 4-line → 2-line diffs in the v1 chapters. Net root file count goes up by 1 (CHANGELOG.md, V1-CHAPTERS-DEPRECATED.md are both new), but the visual weight of the v1 files drops from a 3-line warning block to a one-line "deprecated, see X" pointer.
+- **Version scheme: v0.9.0 as the current pre-launch tag.** Future versions go forward from there; v1.0.0 is the launch (L7). Single `[0.9.0]` entry covers v2 reconstruction + L0–L4b + L6 — no retconning history into version slots that didn't exist at the time. `[Unreleased]` block names what's still open per LAUNCH.md (L5, L7, L8).
+- **Repo URL verified live:** `https://github.com/TimTGelhard/claude-spine` returns 200. No follow-up needed for L7.
+
+**Scope of edits actually done:**
+
+- 18 v1 chapter deprecation headers — collapsed from 3 lines (`DEPRECATED — v1 single-file chapter` + `v2 atomic version: see ...` + `Content here is preserved for cross-reference until v2 launch`) to one line linking the v2 destination and the new index. Three chapters that stayed single-file in v2 (`02-context-window-truth.md`, `06-feature-sizing.md`, `10-visuals.md`) point at the specific file; the other 15 point at the folder. All 18 carry a pointer back to `V1-CHAPTERS-DEPRECATED.md`.
+- `V1-CHAPTERS-DEPRECATED.md` — new root file. Inverse of `INDEX.md`: groups atomic files by *source v1 chapter* so an old link can find its v2 home in one hop. Lists all 75+ atomic files broken down by v1 source (01–18), plus a "v2 content with no v1 source" section for the five `chapters/personalization/19a–e` files and `15i-slash-commands.md`. Closes with a short "When are v1 stubs going away?" answering "not on a fixed timeline; the external-link cost dominates."
+- `CHANGELOG.md` — new root file. Keep-a-Changelog format, single `[0.9.0]` entry for current state plus an `[Unreleased]` block pointing at LAUNCH.md. Sections: Added (v2 architecture / personalization loop / bucket / installer / tests / docs), Changed (v1 chapter deprecation, legacy `op-manual-*` cutover, settings tuning, naming sweeps, 18f rewrite), Fixed (the env-leak hook regex bug from L4b), Decided (no-skill-sharing stance from L0).
+- `global/INSTALL.md` — fixed the stale "currently `/onboard`" line in the install table. The spine now ships 5 commands (`/onboard`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket`); the table row now enumerates them. L2 notes flagged this for L6 — landed here.
+
+**DoD verification:**
+
+- `CHANGELOG.md` exists at repo root, lists 0.9.0 with Added/Changed/Fixed sections + an Unreleased block.
+- `V1-CHAPTERS-DEPRECATED.md` exists at repo root and maps all 18 v1 chapters to their v2 atomic files. `grep -l "V1-CHAPTERS-DEPRECATED" 0*-*.md 1*-*.md` returns all 18 v1 files — each carries a pointer to the new index.
+- `head -1 0*-*.md 1*-*.md` shows every v1 deprecation header is now one line; `grep -c "Content here is preserved" 0*-*.md 1*-*.md` returns 0 across all 18 (the old line 3 is gone).
+- `curl -s -o /dev/null -w "%{http_code}" https://github.com/TimTGelhard/claude-spine` → `200`. Repo URL is real.
+
+**Out of scope, not done in this phase:**
+
+- v0.9.0 git tag — CHANGELOG.md lists `[0.9.0] — 2026-05-27` but the actual tag isn't created here. Tagging is a release ritual; the right moment is at L7 (the public launch), not now. The CHANGELOG entry exists so that *when* L7 tags it, the changelog already reflects what the tag means.
+- Trimming the v1 chapters further (e.g., removing the body content beyond the header) — out of scope and breaks the entire point of keeping them at root. Bodies stay for external-link compatibility; only the header was trimmed.
+- README rewrite — README is already public-facing-ready from Phase 6c. No changes warranted here.
 
 ---
 
