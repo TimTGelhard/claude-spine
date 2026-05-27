@@ -18,6 +18,7 @@ These are the ones I most often regret you forgetting. If something below confli
 5. **One session = one feature.** Fresh terminal between features. Context is a budget, not bandwidth.
 6. **Security is non-negotiable** (full list below). Quick filter: privileged keys never reach the client. RLS on every table from day 1. `.env*` gitignored. `catch (e) {}` is banned.
 7. **Slash commands first.** `/code-review`, `/verify`, `/security-review`, `/ultrareview` beat ad-hoc work.
+8. **Don't invent project docs.** Standard project docs (CLAUDE.md, PROGRESS.md, DECISIONS.md, FEATURES.md, ARCHITECTURE.md, PROJECT_BRIEF.md, SMOKE_TESTS.md, DEPLOY.md, SESSION_STARTER.md) have templates at `{{MANUAL_DIR}}/templates/`. Copy and adapt — never invent `TODO.md` / `NOTES.md` / `ROADMAP.md` alternatives.
 
 ## How to work with me
 

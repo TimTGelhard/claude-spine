@@ -1,5 +1,7 @@
 # Claude Code — Advanced Operator's Manual
 
+> **v2 reconstruction in progress.** This manual is being rebuilt into a public Claude Code toolbox — atomized chapters, skill-based routing, personalization, an empty user-contributed skill bucket. Current state: `RECONSTRUCTION.md`. Target architecture: `INDEX.md`. Everything below describes v1, still the authoritative source until each phase lands.
+
 For solo founders, indie hackers, and vibecoders shipping MVPs and client work with Claude Code at high velocity. Not a tutorial — a discipline manual for people already running real sessions for real users, who want their workflow to stop leaking quality.
 
 Read-only for you; loadable by Claude at session start.

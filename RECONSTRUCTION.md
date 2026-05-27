@@ -1,0 +1,271 @@
+# Reconstruction State — v2 Public Toolbox
+
+**If you're a Claude session reading this cold, this file is your first read. It tells you exactly where the v2 reconstruction stands and what to do next.**
+
+---
+
+## What v2 is
+
+The manual is being reconstructed from a private 18-chapter operating guide into a **public Claude Code toolbox** that anyone in the world can install. Three problems being solved:
+
+1. **Granularity** — current chapters cluster multiple concepts (one chapter is 290 lines, several are >200). Reconstruction breaks them into ~55 atomic files (<150 lines each), one concept per file, organized by topic folder.
+2. **Public-readiness** — founder-specific language (solo founder, Solvero, Dutch tradespeople, Next.js+Supabase opinions) is being neutralized. Stack opinions move to an explicit `global/opinionated/` variant; defaults become `global/neutral/`.
+3. **Sophisticated routing** — instead of Claude loading whole chapters, a layer of skills + an index router picks the right atomic file for the task. Aim: Claude reads only what it needs.
+
+Plus two novel mechanics:
+- **Personalization** — first-run interview (`op-onboard` skill) calibrates Claude to user experience level, stack, push-back intensity, verbosity. Writes `~/.claude/op-manual-profile.md`.
+- **Personal skill library (the "bucket")** — `skills/bucket/` ships empty. Each user builds their own library over time via `op-add-skill`. Not a sharing mechanism — purely personal. A core skill `op-bucket-router` reads `skills/bucket/INDEX.md` (auto-maintained), picks the right bucket skills for the current task, loads only those. Core skills age slowly (discipline); bucket skills can age fast (stacks/projects) without rotting the spine.
+
+Full plan: `/Users/macbook/.claude/plans/i-want-to-make-parallel-knuth.md`.
+
+Phase 8 plan (personalization + self-evolution loop): `PERSONALIZATION.md` in this repo.
+
+---
+
+## Current phase
+
+**Phase 4 — Persistence + tools + subagents — done** (2026-05-27)
+
+**Next:** Phase 5 — Recovery + anti-patterns. Open a fresh terminal, read this file + `INDEX.md` + the plan, then atomize chapters 17–18 into `chapters/recovery/` and `chapters/anti-patterns/`, and add `op-recovery` (expanded from existing `op-manual-recovery`) and `op-anti-patterns` skills.
+
+---
+
+## Architecture (frozen decisions)
+
+- **5-layer architecture:** core skills → bucket → index → atomic chapters → templates → global setup.
+- **Folder structure:** see "Target folder structure" below.
+- **Variant policy:** `global/neutral/` is the default install; `global/opinionated/` is the founder-flavored example users can opt into.
+- **Distribution:** bash `install.sh` only for v1. No npm, no MCP, no auto-update.
+- **Bucket policy:** ships empty. Never pre-seeded. The whole point is to avoid the speculative-library trap.
+- **Decomposition rule:** split a chapter when its sub-topics are *independently load-bearing* — i.e., a user asking a focused question should be able to read one slice and get a complete answer without the others. Line count is not the test. The questions to ask before splitting:
+  1. Do the candidate pieces answer different user questions? (Not "different paragraphs" — different *questions*.)
+  2. Does each piece stand alone — readable without its siblings?
+  3. Does splitting actually reduce what Claude loads per task, or does the router end up loading two of them together anyway?
+  4. Is anything load-bearing only when read with another piece? If yes, those belong in one file.
+
+  If the answer to 1–3 is yes and 4 is no → split. Otherwise keep as one file regardless of size. A 200-line file on one tight topic beats five 40-line files that always get read together.
+- **Skill body cap:** 40 lines. Skills are routers, not content.
+- **Atomic file cap:** 150 lines. A hard ceiling, not a decision rule — if you'd exceed it, the content is almost certainly load-bearing for multiple distinct questions and the decomposition rule above will tell you where the seams are. If it doesn't, leave the file at 150+ rather than splitting on a fake seam.
+- **Naming (locked 2026-05-27):** the public name is **`claude-spine`**. Tagline: "The spine of every Claude Code project." Local folder, GitHub repo, all internal references rename together in Phase 6. Current folder `claude-op-manual` and remote `claude-code-operators-manual` are both pre-rename names — don't update them yet.
+- **Onboarding mechanic (re-locked 2026-05-27):** both mechanisms — `op-onboard` auto-fires when no profile file exists; `/onboard` slash command re-runs / edits the profile. The interview is **deep, not shallow** — this profile is meant to last across all of the user's projects long-term, so the upfront cost is justified. Target ~15–25 questions, branching by experience level. Captured dimensions (designed in Phase 6):
+  - **Developer profile** — years of experience, self-assessed level, comfort areas
+  - **Stack preferences** — primary, secondary, "avoid," version pinning where it matters
+  - **Project context** — typical project types, solo vs team, production user scale, time pressure
+  - **Working style** — verbosity, push-back intensity, mentor vs peer tone, signal preferences (context-filling, scope-creep, drift, verification gaps)
+  - **Output format** — diffs vs full files, commenting density, emoji policy, diagram style
+  - **Risk + safety** — production-app strictness, version-control hygiene, command-execution tolerance
+
+  Profile written to `~/.claude/op-manual-profile.md` (renames in Phase 6 to `~/.claude/claude-spine-profile.md`). Global CLAUDE.md references it; Claude reads it every session. **Open design question:** all upfront vs progressive (5 essential up front + Claude asks 1–2 more when relevant decisions come up in real work). Decide in Phase 6 — instinct says progressive, since 25-question walls scare off new users.
+- **Bucket sharing (re-locked 2026-05-27):** **no sharing model at all.** The bucket is each user's *personal* skill library. They write their own skills into it; they keep them. No companion repo, no GitHub topic convention, no fork-and-share community story. If someone wants to share, that's their problem — claude-spine doesn't ship any sharing infrastructure. The earlier "fork-and-share" framing was misleading and is removed.
+- **Bucket index (re-locked 2026-05-27):** **yes, there's a `skills/bucket/INDEX.md`.** Same pattern as the chapter `INDEX.md` — Claude reads the index, picks the matching skills for the task, loads only those. This keeps per-task reads small even when the user's library grows to 50+ skills. Maintenance: `op-add-skill` updates `INDEX.md` automatically whenever it writes a new skill. For users who drop files into `skills/bucket/` manually, a `/refresh-bucket` slash command regenerates the index by scanning the folder. `op-bucket-router` trusts the index (no scan-on-fire). This matches the chapter-routing pattern; one mental model for routing instead of two.
+
+---
+
+## Progress by phase
+
+| Phase | Scope | Status |
+|---|---|---|
+| 0 | Bootstrap — `RECONSTRUCTION.md`, `INDEX.md` skeleton, folder skeleton, README banner | **done (2026-05-27)** |
+| 1 | Foundations — `chapters/foundations/` (atomize ch 01–04) + `op-foundations` skill | **done (2026-05-27)** |
+| 2 | Workflow core — `chapters/workflow/` (atomize ch 05–08) + workflow/modes/brownfield skills | **done (2026-05-27)** |
+| 3 | Prompting + signaling — `chapters/prompting/`, `chapters/signaling/` + skills | **done (2026-05-27)** |
+| 4 | Persistence + tools — `chapters/persistence/`, `chapters/tools/`, `chapters/subagents/` + skills. **Includes the ch 13 thesis revision.** | **done (2026-05-27)** |
+| 5 | Recovery + anti-patterns — `chapters/recovery/`, `chapters/anti-patterns/` + skills | not started |
+| 6 | Public-readiness + install — neutral global template, opinionated example, `install.sh`, `op-onboard` skill, README rewrite | not started |
+| 6.5 | Skill bucket — `op-bucket-router`, `op-add-skill`, bucket INDEX regeneration. **Note:** Phase 8 promotes the bucket to top-level `bucket/` (was `skills/bucket/`). Coordinate folder structure between 6.5 and 8. | not started |
+| 7 | Demo + launch — end-to-end dry-run, video script outline, launch checklist | not started |
+| 8 | Personalization + self-evolution loop — `op-suggest`, `op-curate`, `bucket/SUGGESTIONS.md`, `bucket/chapters/`, personalization chapter. **Full plan: `PERSONALIZATION.md`.** Splits into sub-phases 8a–8e (one per session). | not started |
+
+Phases 1–5 are content-independent; any order works, but listed order is dependency-friendly. Phase 6 needs 1–5 done. Phase 6.5 should land before Phase 8 (bucket infrastructure first, then the evolution loop on top). Phase 7 needs 6 + 6.5 + 8.
+
+---
+
+## Target folder structure
+
+```
+claude-op-manual/
+├── README.md                      # public-facing
+├── INDEX.md                       # router map for atomic chapters
+├── RECONSTRUCTION.md              # this file
+├── CONTRIBUTING.md                # how outsiders propose changes
+├── LICENSE                        # MIT
+├── install.sh                     # one-shot installer (Phase 6)
+├── chapters/
+│   ├── foundations/               # Phase 1
+│   ├── workflow/                  # Phase 2
+│   ├── prompting/                 # Phase 3
+│   ├── signaling/                 # Phase 3
+│   ├── persistence/               # Phase 4
+│   ├── tools/                     # Phase 4
+│   ├── subagents/                 # Phase 4
+│   ├── recovery/                  # Phase 5
+│   └── anti-patterns/             # Phase 5
+├── skills/
+│   ├── core/                      # shipped + maintained by the manual
+│   └── bucket/                    # empty by design — each user's personal library
+│       └── INDEX.md               # router map for bucket skills (Phase 6.5)
+│                                  # auto-updated by op-add-skill, /refresh-bucket for manual adds
+├── templates/                     # existing — neutralize in Phase 6
+└── global/
+    ├── neutral/                   # default install (Phase 6)
+    ├── opinionated/               # founder-flavored example (Phase 6)
+    └── hooks/                     # existing — keep
+```
+
+Current state (post-Phase 0): all `chapters/` and `skills/` subfolders exist as `.gitkeep`-only placeholders. `global/neutral/` and `global/opinionated/` exist empty. Existing files (18 chapters at repo root, `templates/`, `global/CLAUDE.md.template`, etc.) remain in their old locations until their phase touches them.
+
+---
+
+## Atomic-file map
+
+This table grows as each phase lands. Each new file added here when it's written.
+
+| File | Source chapter | Phase | Status |
+|---|---|---|---|
+| `chapters/foundations/01a-llm-loop.md` | 01 | 1 | written 2026-05-27 |
+| `chapters/foundations/01b-three-levers.md` | 01 | 1 | written 2026-05-27 |
+| `chapters/foundations/01c-failure-modes.md` | 01 | 1 | written 2026-05-27 |
+| `chapters/foundations/02-context-budget.md` | 02 | 1 | written 2026-05-27 (no split, renamed only) |
+| `chapters/foundations/03a-hard-limits.md` | 03 | 1 | written 2026-05-27 |
+| `chapters/foundations/03b-soft-limits.md` | 03 | 1 | written 2026-05-27 |
+| `chapters/foundations/03c-project-fit.md` | 03 | 1 | written 2026-05-27 |
+| `chapters/foundations/04a-model-tiers.md` | 04 | 1 | written 2026-05-27 |
+| `chapters/foundations/04b-plan-and-fast-mode.md` | 04 | 1 | written 2026-05-27 |
+| `chapters/foundations/04c-budget-and-cost.md` | 04 | 1 | written 2026-05-27 |
+| `skills/core/op-foundations/SKILL.md` | new | 1 | written 2026-05-27 |
+| `chapters/workflow/05-overview.md` | 05 | 2 | written 2026-05-27 |
+| `chapters/workflow/05a-stage-0-decide.md` | 05 | 2 | written 2026-05-27 |
+| `chapters/workflow/05b-stage-1-prep.md` | 05 | 2 | written 2026-05-27 |
+| `chapters/workflow/05c-stage-2-architect.md` | 05 | 2 | written 2026-05-27 |
+| `chapters/workflow/05d-stage-3-build.md` | 05 | 2 | written 2026-05-27 |
+| `chapters/workflow/05e-stage-4-integrate.md` | 05 | 2 | written 2026-05-27 |
+| `chapters/workflow/05f-stage-5-harden.md` | 05 | 2 | written 2026-05-27 |
+| `chapters/workflow/05g-stage-6-ship.md` | 05 | 2 | written 2026-05-27 |
+| `chapters/workflow/06-feature-sizing.md` | 06 | 2 | written 2026-05-27 (no split, renamed only) |
+| `chapters/workflow/07a-executor-mode.md` | 07 | 2 | written 2026-05-27 |
+| `chapters/workflow/07b-reviewer-mode.md` | 07 | 2 | written 2026-05-27 |
+| `chapters/workflow/07c-explainer-mode.md` | 07 | 2 | written 2026-05-27 |
+| `chapters/workflow/07d-planner-mode.md` | 07 | 2 | written 2026-05-27 |
+| `chapters/workflow/07-mode-switching.md` | 07 | 2 | written 2026-05-27 |
+| `chapters/workflow/08a-discovery-sequence.md` | 08 | 2 | written 2026-05-27 |
+| `chapters/workflow/08b-safety-patterns.md` | 08 | 2 | written 2026-05-27 |
+| `chapters/workflow/08c-teaching-unfamiliar.md` | 08 | 2 | written 2026-05-27 |
+| `chapters/workflow/08d-rewrites.md` | 08 | 2 | written 2026-05-27 |
+| `skills/core/op-workflow/SKILL.md` | new (supersedes `op-manual-workflow`) | 2 | written 2026-05-27 |
+| `skills/core/op-collaboration-modes/SKILL.md` | new | 2 | written 2026-05-27 |
+| `skills/core/op-brownfield/SKILL.md` | new | 2 | written 2026-05-27 |
+| `chapters/prompting/09a-five-principles.md` | 09 | 3 | written 2026-05-27 |
+| `chapters/prompting/09b-prompt-structure.md` | 09 | 3 | written 2026-05-27 |
+| `chapters/prompting/09c-examples-and-anti-examples.md` | 09 | 3 | written 2026-05-27 |
+| `chapters/prompting/10-visuals.md` | 10 | 3 | written 2026-05-27 (no split, moved into prompting/) |
+| `chapters/signaling/11-overview.md` | 11 | 3 | written 2026-05-27 |
+| `chapters/signaling/11a-context-signals.md` | 11 | 3 | written 2026-05-27 |
+| `chapters/signaling/11b-scope-signals.md` | 11 | 3 | written 2026-05-27 |
+| `chapters/signaling/11c-drift-signals.md` | 11 | 3 | written 2026-05-27 |
+| `chapters/signaling/11d-verification-signals.md` | 11 | 3 | written 2026-05-27 (verification + end-of-session merged) |
+| `chapters/signaling/11e-meta-scope.md` | 11 | 3 | written 2026-05-27 |
+| `skills/core/op-prompting/SKILL.md` | new | 3 | written 2026-05-27 |
+| `skills/core/op-visuals/SKILL.md` | new | 3 | written 2026-05-27 |
+| `skills/core/op-signaling/SKILL.md` | new | 3 | written 2026-05-27 |
+| `chapters/persistence/12a-three-layers-overview.md` | 12 | 4 | written 2026-05-27 |
+| `chapters/persistence/12b-claudemd.md` | 12 | 4 | written 2026-05-27 |
+| `chapters/persistence/12c-memory.md` | 12 | 4 | written 2026-05-27 |
+| `chapters/persistence/13a-skill-anatomy.md` | 13 | 4 | written 2026-05-27 |
+| `chapters/persistence/13b-trigger-descriptions.md` | 13 | 4 | written 2026-05-27 |
+| `chapters/persistence/13c-skill-design-patterns.md` | 13 | 4 | written 2026-05-27 |
+| `chapters/persistence/13d-skill-anti-patterns.md` | 13 | 4 | written 2026-05-27 (revised library thesis) |
+| `chapters/persistence/14a-settings-cascade.md` | 14 | 4 | written 2026-05-27 |
+| `chapters/persistence/14b-hook-recipes.md` | 14 | 4 | written 2026-05-27 |
+| `chapters/tools/15-selection-principles.md` | 15 | 4 | written 2026-05-27 |
+| `chapters/tools/15a-file-ops.md` | 15 | 4 | written 2026-05-27 |
+| `chapters/tools/15b-search.md` | 15 | 4 | written 2026-05-27 |
+| `chapters/tools/15c-execution.md` | 15 | 4 | written 2026-05-27 |
+| `chapters/tools/15d-planning.md` | 15 | 4 | written 2026-05-27 |
+| `chapters/tools/15e-delegation.md` | 15 | 4 | written 2026-05-27 |
+| `chapters/tools/15f-scheduling.md` | 15 | 4 | written 2026-05-27 |
+| `chapters/tools/15g-web.md` | 15 | 4 | written 2026-05-27 |
+| `chapters/tools/15h-mcp.md` | 15 | 4 | written 2026-05-27 |
+| `chapters/tools/15i-slash-commands.md` | 15 | 4 | written 2026-05-27 (not in original INDEX skeleton — added to INDEX) |
+| `chapters/subagents/16a-when-to-delegate.md` | 16 | 4 | written 2026-05-27 |
+| `chapters/subagents/16b-agent-types.md` | 16 | 4 | written 2026-05-27 |
+| `chapters/subagents/16c-parallel-and-background.md` | 16 | 4 | written 2026-05-27 |
+| `skills/core/op-persistence/SKILL.md` | new | 4 | written 2026-05-27 |
+| `skills/core/op-hooks/SKILL.md` | new | 4 | written 2026-05-27 |
+| `skills/core/op-tools/SKILL.md` | new | 4 | written 2026-05-27 |
+| `skills/core/op-subagents/SKILL.md` | new | 4 | written 2026-05-27 |
+
+---
+
+## Pre-existing assets to preserve
+
+- **The 4 already-working skills** (`op-manual-workflow`, `op-manual-tactics`, `op-manual-templates`, `op-manual-recovery`) — these are the seed. Don't recreate; rename/expand as their phases land.
+- **Current 18 chapters at repo root** — source material. Each gets atomized and moved into `chapters/<topic>/`. Voice and examples carry over.
+- **Existing templates** — content stays; neutralize the Tim/Solvero-specific examples in Phase 6.
+- **`global/hooks/block-env-staging.sh`** — keep, ship in both neutral and opinionated variants.
+
+---
+
+## Operating rules for execution sessions
+
+When you're picking up a phase:
+
+1. **Read this file first.** It's the cold-read entry point.
+2. **Then read `INDEX.md`.** It shows the target router map for atomic chapters.
+3. **Then read the plan** at `/Users/macbook/.claude/plans/i-want-to-make-parallel-knuth.md` — the full architecture, decisions, and roadmap.
+4. **Stay in your phase's scope.** No cross-phase work. If you spot something off-scope, note it in "Open questions" below — don't bundle.
+5. **Update this file at end of session:**
+   - Flip the phase status (in-progress → done).
+   - Add new files to the atomic-file map.
+   - Add anything you learned to "Open questions."
+6. **Atomize on real seams, not on size.** The point of v2 is small per-task reads — Claude loads one slice per question. Run the chapter through the decomposition rule (above): independently load-bearing sub-topics that answer different user questions → split. One tight topic that always lands together → keep as one file even if it's long. The failure mode is in *both* directions: leaving a multi-topic chapter as one file because it reads smoothly end-to-end **and** chopping a single-topic chapter into stubs that always get loaded together.
+7. **Voice consistency.** Carry the current manual's voice forward. Atomization is structural; tone shouldn't shift.
+
+---
+
+## Open questions
+
+To be resolved in their phase.
+
+- Public landing page / docs site for v1, or GitHub README only? (Phase 7.)
+- Domain registration for `claudespine.dev` / `.com` — desirable for the launch/video, not blocking. (Phase 7.)
+- **Cross-reference back-fill.** Foundations files (01a–04c) link to chapters 05, 06, 07, 10, 16, 17, 11 at the repo root (the authoritative source per INDEX). When phases 2–5 atomize those chapters, sweep these foundations links to point at the new atomic files. Same applies in reverse to every later phase.
+- **Skill install path is currently hard-coded** to `/Users/macbook/claude-op-manual/...` inside `op-foundations/SKILL.md`. `install.sh` (Phase 6) needs to template this for the actual install location, or we standardize on `~/.claude-spine/` and rewrite paths at install.
+
+(Resolved 2026-05-27: repo name → `claude-spine`; onboarding → auto-fire + slash command; bucket sharing → fork-and-share v1; bucket index → on-fire folder scan, no index file.)
+
+### Phase 2 notes (2026-05-27)
+
+- Chapter 06 (feature sizing) stayed as a single file — sizing rules, the smell tests, and the split heuristics all answer the same question ("does this fit one session?") and only land when read together. No independent slices to extract.
+- Chapter 07 atomized into 4 mode files + a `07-mode-switching.md` because each mode answers a distinct question ("when is executor right?", "when is planner right?", etc.) that a user asks one at a time, and the cross-cutting "switch modes within a session" content is its own question. Each file is independently load-bearing.
+- `op-manual-workflow` (the still-loaded legacy skill) is not deleted — Phase 2 adds the new `op-workflow` / `op-collaboration-modes` / `op-brownfield` in `skills/core/` alongside it. The cutover happens at Phase 6's `install.sh`.
+- Same hard-coded-path issue noted in Phase 1's open questions still applies to the three new skills here. Phase 6 needs to template these.
+
+### Phase 3 notes (2026-05-27)
+
+- Chapter 09 split into 09a (principles), 09b (structure), 09c (examples). Each answers a different user question: 09a is "what are the rules?", 09b is "how do I structure a non-trivial prompt?", 09c is "show me good vs bad on a real task — and which patterns do I memorize?". A user typically loads exactly one. The split is content-driven, not length-driven.
+- Chapter 10 stayed as a single file — when/why to use visuals, how to pair them with text, ASCII vs Mermaid, mockups, mobile screenshots. All answer one question ("how do I use visuals well?") and land together. No independent slices.
+- Chapter 11 atomized into 5 category files plus a new `11-overview.md`. Each category file answers a distinct in-the-moment question Claude itself faces ("is context filling?", "is this scope creep?", "is this meta-scope?") and fires from a different trigger. The overview holds the cross-cutting "how does proactive signaling work as a discipline" content — premise, phrasing, cadence, anti-patterns — which is its own question (typically the user's, not Claude's). Same shape as `07-mode-switching.md`. **INDEX updated** to add the overview row.
+- Verification-gates and end-of-session signals merged into one file (`11d-verification-signals.md`) — INDEX listed them as separate categories, but both answer the same in-the-moment question: "is this actually done, or just compiled?" The end-of-session triggers are the closing case of the verification check, not a different category. Splitting would have produced two pieces that always get read together, which fails decomposition-rule question 3.
+- All three new skills (`op-prompting`, `op-visuals`, `op-signaling`) sit alongside the legacy `op-manual-tactics` skill, which still covers prompting today. Cutover at Phase 6's `install.sh`, same as Phase 2's pattern.
+- Same hard-coded-path issue (open question carried from Phase 1/2) applies to the three new skill files. Phase 6 must template.
+- Cross-references in `09b`, `09c`, `11c`, `11d`, `11e` still point at original root-level chapters (e.g., `../../17-recovery-playbook.md`, `../../13-custom-skills.md`, `../../18-anti-patterns.md`) because those chapters aren't atomized yet. Sweep when phases 4–5 land — already noted in "Open questions / Cross-reference back-fill."
+
+### Phase 4 notes (2026-05-27)
+
+- **Chapter 12 split into 3 (12a overview, 12b CLAUDE.md, 12c memory).** Each answers a distinct user question — "where does X go?", "how do I write CLAUDE.md?", "how does memory work?" The "skills" section of ch 12 was *not* given its own file because ch 13 covers skills deeply; 12a contains only the routing fact that skills exist alongside the other two layers, which is enough for the decision-tree question 12a answers.
+- **Chapter 13 split into 4 (13a anatomy, 13b triggers, 13c patterns, 13d anti-patterns with revised thesis).** Each is a different question a user lands on individually. 13d contains the **revised library thesis** the plan calls for: the "don't ship libraries" framing is wrong — the right rule is "ship libraries with narrow triggers and slow-aging content." The manual itself is the existence proof. The personal-collection 3+-paste-ins rule still stands.
+- **Chapter 14 split into 2 (14a cascade, 14b recipes).** Different questions ("where do settings live?" vs "what should I hook?"). 14a also absorbs the keybindings-help mention since it's an adjacent settings concern at the same level of abstraction. The full chapter is only ~148 lines, but the split is content-driven, not length-driven — a user on the cascade question doesn't need recipes loaded.
+- **Chapter 15 split into 10 files (15 selection + 15a-i).** INDEX had 9 planned splits (no slash-commands file). Added `15i-slash-commands.md` because slash commands are substantial in the source, don't fit cleanly into any other category, and answer a distinct "which command for this work" question. **INDEX updated to add the 15i row.** The brief "skills" recap in ch 15 was *not* given its own file — it was already a cross-reference to ch 12, so the cross-reference is sufficient (now to `op-persistence` 13a). The "choosing between similar tools" matrix was absorbed into `15-selection-principles.md` rather than getting its own file — same question as the principles.
+- **Chapter 16 split into 3 (16a when, 16b types, 16c parallel/background).** "Writing a good subagent prompt" was placed in 16a (same question as "should I delegate") rather than its own file — when a user decides to delegate, prompt-writing is the immediate next step. The orchestrator-with-specialists trap went in 16b (it's a *pattern of custom subagents*, which is the question 16b answers).
+- **Cross-references inside Phase 4 files use relative paths** between sibling atomic files (`[13b](13b-trigger-descriptions.md)`) and cross-folder paths (`[14b](../persistence/14b-hook-recipes.md)`). Phase 5 should follow the same convention. Earlier-phase files that still point to root-level chapters can now be swept to point at the new atomic files — open question "Cross-reference back-fill" is still pending; do it in Phase 5 or 6.
+- **All four new skills (`op-persistence`, `op-hooks`, `op-tools`, `op-subagents`) use hardcoded `/Users/macbook/claude-op-manual/...` paths**, same as every prior phase. The "Skill install path is hard-coded" open question remains; Phase 6's `install.sh` must template.
+- **The legacy `op-manual-*` skills still load** — Phase 4 added new core skills alongside them, did not replace. Cutover happens at Phase 6's `install.sh`.
+
+---
+
+## Critical context for cold-read sessions
+
+- The plan file is canonical. This RECONSTRUCTION.md is the running state of executing that plan.
+- The 4 existing `op-manual-*` skills are loaded in every Claude Code session today. The user already uses them. Don't break their triggers when renaming or expanding.
+- "Auto mode" is active for the user — bias toward execution, ask only when genuinely blocked.
+- Today's date: 2026-05-27. Always use absolute dates when updating progress.
