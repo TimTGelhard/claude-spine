@@ -115,7 +115,6 @@ claude-spine/
 ├── README.md                    # this file
 ├── INDEX.md                     # router map for all atomic chapters
 ├── RECONSTRUCTION.md            # v2 reconstruction status (start here if you're a Claude session)
-├── PERSONALIZATION.md           # Phase 8 plan — self-evolution loop on top of v2
 ├── EXPLAINER.md                 # background reading on the v1 → v2 thinking
 ├── install.sh                   # one-shot installer
 ├── chapters/                    # atomic operating-discipline files

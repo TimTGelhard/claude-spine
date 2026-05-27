@@ -1,8 +1,12 @@
 # Personalization + Self-Evolution Plan
 
-**Status:** planning — not started. Execution begins in Phase 8 after Phases 3–6.5 land.
+> **Archived 2026-05-27.** This was the Phase 8 planning document. The work has shipped — the live, as-built mechanic lives in [`chapters/personalization/19a-overview.md`](../../chapters/personalization/19a-overview.md) → 19b–19e and the `op-onboard` / `op-suggest` / `op-curate` / `op-bucket-router` skills. Kept here as the design audit trail for what was decided and why. **Do not rely on it as a current spec** — drift between the plan and ship is normal; chapter 19 and the skill bodies are authoritative.
 
-**If you're a Claude session reading this cold:** read `RECONSTRUCTION.md` first for the v2 reconstruction state, then this file. This document plans the *personalization and self-evolution loop* that sits on top of the v2 architecture.
+---
+
+**Status (as written):** planning — not started. Execution begins in Phase 8 after Phases 3–6.5 land.
+
+**If you're a Claude session reading this cold (historical framing):** read `RECONSTRUCTION.md` first for the v2 reconstruction state, then this file. This document plans the *personalization and self-evolution loop* that sits on top of the v2 architecture.
 
 ---
 

@@ -91,7 +91,7 @@ First tagged release. Architecture frozen, personalization loop shipped, plan-dr
 - `CONTRIBUTING.md` — single-maintainer policy, what's welcome / unlikely, commit style.
 - `EXPLAINER.md` — long-form architecture for skeptics.
 - `RECONSTRUCTION.md` — v2 build history (Phases 0–8e), frozen architectural decisions.
-- `PERSONALIZATION.md` — personalization loop design (Phase 8).
+- `docs/archive/PERSONALIZATION-plan-2026-05.md` — personalization loop design (Phase 8 planning doc, archived 2026-05-27 once the loop shipped).
 - `LAUNCH.md` — gap-fixing roadmap from v2 to public launch.
 - 9 project-doc templates under `templates/` (project CLAUDE.md, PROGRESS.md, DECISIONS.md, FEATURES.md, ARCHITECTURE.md, PROJECT_BRIEF.md, SMOKE_TESTS.md, DEPLOY.md, SESSION_STARTER.md).
 

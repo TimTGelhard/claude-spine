@@ -4,7 +4,7 @@
 
 Companion docs:
 - `RECONSTRUCTION.md` — v2 build history, frozen architectural decisions, pre-launch cleanup pass (items 1–8 done, item 9 still open).
-- `PERSONALIZATION.md` — personalization loop design (Phase 8, shipped).
+- `docs/archive/PERSONALIZATION-plan-2026-05.md` — personalization loop design (Phase 8 planning doc, archived once the loop shipped).
 - `README.md` — public-facing entry point (already rewritten in Phase 6c).
 
 ---
