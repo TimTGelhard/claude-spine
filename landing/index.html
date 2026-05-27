@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>claude-spine — the spine of every Claude Code project</title>
+  <meta name="description" content="Installable skills, atomic discipline chapters, and personalization for operators already shipping with Claude Code.">
+
+  <meta property="og:title" content="claude-spine">
+  <meta property="og:description" content="The spine of every Claude Code project. Installable skills, atomic discipline chapters, and personalization.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://claudespine.dev/">
+  <meta name="twitter:card" content="summary">
+  <!-- TODO L7e: og:image (1200x630) before public posts -->
+
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='14' y='4' width='4' height='24' fill='%23818cf8' rx='2'/%3E%3C/svg%3E">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    body { font-feature-settings: "ss01", "cv11"; }
+    ::selection { background: #6366f1; color: #fff; }
+    a:focus-visible, button:focus-visible, [tabindex="0"]:focus-visible {
+      outline: 2px solid #818cf8;
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-slate-950 text-slate-200 font-sans antialiased">
+
+  <a href="#main" class="sr-only focus:not-sr-only focus:absolute focus:top-2 focus:left-2 focus:bg-slate-100 focus:text-slate-900 focus:px-3 focus:py-2 focus:rounded">Skip to content</a>
+
+  <header class="max-w-3xl mx-auto px-6 pt-8 flex items-center justify-between">
+    <span class="font-mono text-sm text-slate-500">claude-spine</span>
+    <a href="https://github.com/TimTGelhard/claude-spine"
+       class="text-sm text-slate-400 hover:text-slate-100 transition-colors">
+      GitHub <span aria-hidden="true">→</span>
+    </a>
+  </header>
+
+  <main id="main" class="max-w-3xl mx-auto px-6 pt-20 sm:pt-28 pb-24">
+
+    <section aria-labelledby="hero">
+      <h1 id="hero" class="text-5xl sm:text-6xl font-semibold tracking-tight text-slate-50 leading-[1.05]">
+        The spine of every<br>Claude&nbsp;Code project.
+      </h1>
+
+      <p class="mt-8 text-lg text-slate-300 leading-relaxed max-w-2xl">
+        Installable skills, atomic discipline chapters, and personalization for operators already shipping with Claude Code.
+      </p>
+
+      <p class="mt-3 text-base text-slate-500 max-w-2xl">
+        Not a tutorial. Not a marketplace. The toolbox a senior dev would build for themselves, made install-shareable.
+      </p>
+
+      <div class="mt-10 relative" aria-labelledby="install-heading">
+        <h2 id="install-heading" class="sr-only">Install</h2>
+        <pre tabindex="0" class="font-mono text-sm text-slate-200 bg-zinc-900 border border-slate-800 rounded-md p-5 pr-20 overflow-x-auto leading-relaxed"><code id="install-cmd">git clone https://github.com/TimTGelhard/claude-spine ~/.claude-spine
+cd ~/.claude-spine
+./install.sh</code></pre>
+        <button id="copy-btn" type="button"
+                class="absolute top-3 right-3 text-xs font-medium text-slate-300 hover:text-slate-50 hover:bg-zinc-700 bg-zinc-800 border border-slate-700 rounded px-2.5 py-1 transition-colors"
+                aria-label="Copy install command to clipboard">
+          Copy
+        </button>
+      </div>
+
+      <p class="mt-4 text-sm text-slate-500">
+        macOS or Linux (Windows via WSL). Requires <code class="font-mono text-xs text-slate-400">bash</code>, <code class="font-mono text-xs text-slate-400">jq</code>, <code class="font-mono text-xs text-slate-400">git</code>. Existing <code class="font-mono text-xs text-slate-400">~/.claude/</code> files are backed up before any change. Re-running is safe.
+      </p>
+    </section>
+
+    <section class="mt-24" aria-labelledby="what-you-get-heading">
+      <h2 id="what-you-get-heading" class="text-xs font-mono text-slate-500 uppercase tracking-[0.18em]">What you get</h2>
+
+      <ul class="mt-6 space-y-10">
+        <li>
+          <h3 class="text-xl font-semibold text-slate-100 tracking-tight">
+            18 <code class="font-mono text-lg text-indigo-300">op-*</code> skills
+          </h3>
+          <p class="mt-2 text-slate-300 leading-relaxed">
+            Each routes Claude to the right atomic chapter on demand — never the whole folder. Descriptions are the trigger; bodies stay small. Loaded only when relevant.
+          </p>
+        </li>
+        <li>
+          <h3 class="text-xl font-semibold text-slate-100 tracking-tight">~70 atomic chapters</h3>
+          <p class="mt-2 text-slate-300 leading-relaxed">
+            One concept per file, &lt;150 lines each. Foundations, workflow, prompting, signaling, persistence, tools, subagents, recovery, anti-patterns. Indexed and discoverable.
+          </p>
+        </li>
+        <li>
+          <h3 class="text-xl font-semibold text-slate-100 tracking-tight">Personalization layer</h3>
+          <p class="mt-2 text-slate-300 leading-relaxed">
+            <code class="font-mono text-sm text-indigo-300">/onboard</code> writes a profile that calibrates the entire spine — your stack, push-back intensity, output style. Plus a bucket loop that grows your personal library one curated addition at a time.
+          </p>
+        </li>
+      </ul>
+    </section>
+
+    <section class="mt-24 border-t border-slate-800/80 pt-12">
+      <p class="text-slate-300 max-w-2xl leading-relaxed">
+        Single-maintainer, opinionated repo. Fork it freely; upstream PRs welcome for factual errors and universal patterns.
+      </p>
+      <p class="mt-6">
+        <a href="https://github.com/TimTGelhard/claude-spine"
+           class="inline-flex items-center gap-2 text-base font-medium text-slate-100 hover:text-white border-b border-slate-700 hover:border-slate-300 pb-1 transition-colors">
+          View source on GitHub
+          <span aria-hidden="true">→</span>
+        </a>
+      </p>
+    </section>
+
+  </main>
+
+  <footer class="max-w-3xl mx-auto px-6 pb-12 text-sm text-slate-500">
+    <p>
+      MIT License · <a href="https://github.com/TimTGelhard/claude-spine" class="hover:text-slate-300 transition-colors">github.com/TimTGelhard/claude-spine</a>
+    </p>
+  </footer>
+
+  <script>
+    (function () {
+      const btn = document.getElementById('copy-btn');
+      const code = document.getElementById('install-cmd');
+      if (!btn || !code || !navigator.clipboard) return;
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(code.textContent.trim());
+          const orig = btn.textContent;
+          btn.textContent = 'Copied';
+          btn.classList.add('text-emerald-300');
+          setTimeout(() => {
+            btn.textContent = orig;
+            btn.classList.remove('text-emerald-300');
+          }, 1500);
+        } catch (err) {
+          btn.textContent = 'Copy failed';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

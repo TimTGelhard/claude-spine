@@ -38,9 +38,10 @@ Plus: Tim wants to migrate his personal setup off the standalone `~/.claude/CLAU
 | L3 | settings.json default tuning (effortLevel, autoCompactWindow) | nothing | done (2026-05-27) |
 | L4a | Testing harness — skill-trigger benchmarks | L7 confidence | done (2026-05-27) |
 | L4b | Testing harness — hook fixture + install dry-run + CI | L7 confidence | done (2026-05-27) |
+| L4c | Token-efficiency benchmark — spine-on vs spine-off | L7 (demo numbers) | not started |
 | L5 | Clean-room install on fresh VM / Docker | L7 (launch gate) | done (2026-05-27) |
 | L6 | CHANGELOG.md + archive v1 root files + repo URL verify | L7 polish | done (2026-05-27) |
-| L7 | Launch assets — domain, landing page, demo, waitlist signup | nothing — launches | not started |
+| L7 | Launch assets — L7a domain, L7b landing, L7c waitlist, L7d demo, L7e public | nothing — launches | L7b draft done (2026-05-27); L7a / L7c / L7d / L7e pending Tim |
 | L8 | Tim's personal migration | — | done (2026-05-27) — restart + /onboard + fresh-session verify pending Tim |
 
 Dependency graph: `L0 → L7`. `L1 → L8 → ...`. `L2 → L8 → ...`. `L4 + L5 → L7 confidence (not strict blocker)`. `L3, L6 can land anytime`.
@@ -274,6 +275,41 @@ All 18, flagged in `tests/skill-triggers/results/needs-tightening.md`. The flag 
 
 ---
 
+## L4c — Token-efficiency benchmark (spine-on vs spine-off)
+
+**Problem.** The repo claims the spine saves tokens by loading chapters on-demand instead of stuffing context up front. No measurement exists. The L4a skill-trigger harness measures routing accuracy (a *proxy* for token efficiency); it does not log token counts at all. A demo on the launch page needs numbers, not assertions.
+
+**One session.** Two deliverables: a curated task set, and a harness that runs it twice (spine-on, spine-off) and emits a report.
+
+**Where it lives.** New directory `benchmarks/tokens/` at repo root. Do **not** extend `tests/skill-triggers/` — separate concerns (triggering vs. cost), separate cadence, separate cost profile.
+
+**Tasks:**
+1. **Task set first, harness second.** Draft `benchmarks/tokens/eval-set.json` — ~15 prompts spanning the spine's claimed value areas: workflow scoping ("how should I size this feature?"), recovery ("you said the opposite earlier"), persistence ("where should I remember this?"), tool choice ("Bash or Edit?"), anti-patterns ("let me also add Redis while I'm here"), brownfield orientation, signaling moments. Plus 3–5 negative-control prompts where the spine should add zero value (e.g. "fix this YAML indent"). Show the list to Tim for approval *before* writing harness code — the prompts are the experiment design, not a detail.
+2. **Verify the `claude -p` JSON schema** is what we think it is — run `claude -p --output-format json "hi"` once and document the actual `usage` field shape (`input_tokens`, `output_tokens`, `cache_creation_input_tokens`, `cache_read_input_tokens`, `total_cost_usd`). Do **not** invent field names from memory — schemas change.
+3. **Write `benchmarks/tokens/run.sh`.** Pattern after `tests/skill-triggers/run.sh`: stash + restore on EXIT/INT/TERM. But the stash target is **different** — for spine-off we stash `~/.claude/skills/op-*` (the new skills) **and** `~/.claude/CLAUDE.md` (replace with empty stub for the duration), then restore. Each prompt runs N times per condition (default `--runs 3`) for variance.
+4. **Write `benchmarks/tokens/aggregate.py`** — reads per-prompt JSON, writes `REPORT.md` with a table: prompt | spine-off mean tokens | spine-on mean tokens | delta | delta % | cost-USD delta. Plus a totals row. Plus a `## Per-condition variance` section (stddev across runs) so noise is visible.
+5. **Honesty section in REPORT.md.** Mandatory paragraph titled "What this doesn't measure": single-shot `claude -p` undercounts routing-skill triggering (cross-link to `tests/skill-triggers/README.md`); the spine's compounding value across multi-turn sessions is not captured; cache-hit rates differ between conditions and the report should call this out per-prompt.
+6. **`benchmarks/tokens/README.md`** — usage, prerequisites, cost estimate, when to re-run, link to the report.
+
+**Definition of done:**
+- Eval-set approved by Tim before harness work begins.
+- `./benchmarks/tokens/run.sh && python3 aggregate.py` produces a `REPORT.md` with at least 15 prompts × 2 conditions × 3 runs of data.
+- Total run cost ≤ $15 on Sonnet 4.6 (~90 calls + spine context overhead).
+- Honest caveats section present and accurate.
+- Root `README.md` "Running the tests" section gets a third subsection pointing at the new harness, with the same "manual, costs API spend, not in CI" framing the skill-trigger benchmarks already have.
+
+**Out of scope (followups, not L4c):**
+- Multi-turn interactive token measurement (would need MCP-based capture or SDK driver, not `claude -p`).
+- Per-skill attribution ("which chapter was responsible for the savings").
+- A landing-page chart from the data — that's L7.
+
+**Reference reading for the next session:**
+- This phase entry.
+- `tests/skill-triggers/run.sh` + `tests/skill-triggers/README.md` — pattern to mirror, including the stash-and-restore trap idiom.
+- L4a notes above — explains why `claude -p` undercounts and what that means for honest reporting.
+
+---
+
 ## L5 — Clean-room install on fresh VM / Docker
 
 **Problem.** Pre-launch cleanup item 9: never done. `--dry-run` on Tim's machine is not the same as a real install on a host with no prior state.
@@ -379,6 +415,35 @@ Both fit one small PR post-launch (~10 lines combined). Not rolling into L6 beca
 - **L7e — Public launch.** Twitter/X thread, Hacker News, r/ClaudeAI. Coordinate with L7a–L7d going live the same day.
 
 **Definition of done:** Landing page live, waitlist accepting signups, demo embedded, public posts up.
+
+### L7b notes (2026-05-27)
+
+**Scope of edits actually done:**
+
+- `landing/index.html` (new) — single-page static site, ~160 lines. Plain HTML5 + Tailwind via the Play CDN + Inter / JetBrains Mono via Google Fonts (preconnect-hinted, `display=swap`). Dark theme on `bg-slate-950`. Sections: header (claude-spine wordmark + GitHub link), hero (H1 tagline "The spine of every Claude Code project.", a subhead, an audience callout, an install code block with copy button, a one-line requirements footer), "What you get" with three bullets matching the README's framing (18 `op-*` skills / ~70 atomic chapters / personalization layer), a secondary CTA paragraph + "View source on GitHub →" link, footer with MIT license. No images shipped — OG image is a `<!-- TODO L7e -->` placeholder. Skip-to-content link, semantic landmarks, `aria-labelledby` on sections, visible focus rings on every interactive element. Copy button is vanilla JS using `navigator.clipboard.writeText`, gracefully no-ops when the API is missing, flashes "Copied" (emerald) for 1.5s on success. Inline SVG favicon (a tiny indigo vertical bar — the "spine" hint, encoded as a data URI so no extra HTTP request).
+
+**Verification (Playwright headless, viewports 1280×900 + 375×812):**
+
+- Page loads, title renders ("claude-spine — the spine of every Claude Code project").
+- Console: 0 errors after favicon fix. One remaining warning is the Tailwind Play CDN production notice — expected for a draft, see "Pending for L7e" below.
+- Desktop layout: type hierarchy reads top-to-bottom in one scroll; install block sits prominently below the headline; "What you get" stacks vertically; section divider before the secondary CTA.
+- Mobile (iPhone-class 375 px): H1 wraps to four lines (intentional, editorial weight), install block scrolls horizontally inside the code box; the Copy button stays pinned top-right with `pr-20` reserving its space; all body copy reads cleanly without overflow.
+- Copy button: click registers, JS handler attached, no errors. The "Copied" state didn't flash in headless because Chromium without an explicit permissions context leaves `navigator.clipboard.writeText` pending — known headless quirk, real browsers grant on user gesture.
+
+**Pending for L7e (don't ship to production without these):**
+
+1. **Replace Tailwind Play CDN with a built CSS file.** The CDN script is fine for a draft (one `<script src>`, no build step), but it warns in production and ships a much larger payload than a built file. Switch to a `tailwindcss --input ./src.css --output ./style.css --minify` build, or compile via Vercel's build step.
+2. **Generate an `og:image`.** A 1200×630 PNG — wordmark + tagline, dark slate background, indigo accent. Either statically (Figma → PNG) or via `@vercel/og` at build time. Without it, link previews on X / Slack / Discord look bare. The TODO marker is already in the `<head>`.
+3. **Update `og:url`** from the placeholder `https://claudespine.dev/` once L7a registers the actual domain.
+4. **Domain setup + DNS** — that's L7a, not L7b.
+5. **Waitlist form** — that's L7c. L0's decision means the copy reads "get notified when the spine stabilizes," not "join the community." Section would slot between "What you get" and the secondary CTA.
+6. **Demo embed** — that's L7d. A 90-second Loom or self-hosted MP4 below the hero install block, autoplay-muted-loop with a play overlay.
+
+**Why no `landing/README.md`:** the deploy instructions are these L7b notes plus the launch.md L7a spec. A `landing/README.md` would just duplicate that and rot. When Tim deploys via `vercel` from `landing/`, no config is needed — Vercel auto-detects static HTML.
+
+**DoD verification (against the L7b sub-spec, not the full L7 DoD):** the spec asked for tagline + three "what you get" bullets + install one-liner + GitHub link, in plain HTML + Tailwind CDN, hosted on Vercel. The file carries all four content beats; the stack matches Tim's `landing pages` default; the page is one `vercel deploy` away from a live URL. The full L7 DoD (waitlist live, demo embedded, public posts up) still needs L7a/c/d/e.
+
+**Out of scope, not done in this phase:** the deploy itself (Tim's account + L7a domain), a CSS build pipeline (Play CDN is the draft choice), the OG image, the waitlist form, the demo video, anti-pattern guards on the Tailwind Play CDN warning (it's the right tool for a draft — replacing it pre-deploy is part of L7e). Playwright leftover artifacts (`landing-{desktop,mobile,copy-state}.png`, `.playwright-mcp/`) live in the working tree but are not staged; deleting them was deferred to Tim.
 
 ---
 
