@@ -11,7 +11,7 @@ The capture/curate flywheel ([19c](../../../chapters/personalization/19c-suggest
 
 ALL four conditions must be true:
 
-0. **Bucket loop is on.** Read `~/.claude/claude-spine-profile.md` `## Spine defaults` → `Bucket loop:`. If the value is `off`, silently exit. Default if the field is absent: `on`.
+0. **Bucket loop is on.** Read `~/.claude/claude-spine-profile.md` `## Spine defaults` → `Bucket loop:`. If the value is `off`, silently exit. Default if the field is absent: `off` (the audit-recommended default after the round-6 flip — a user who never ran `/onboard` shouldn't get nudges from a bucket loop they never opted into).
 1. `~/.claude-spine/bucket/SUGGESTIONS.md` exists.
 2. The file has **N+ pending entries**, where **N = `Curate nudge pending threshold`** in `~/.claude/claude-spine-profile.md`'s `## Spine defaults` section, or **5** if the profile doesn't set it. Count lines that match `- **Status:** pending` (case-insensitive). The `Status:` field is mandatory in every entry — `op-suggest` writes it on every append. If a file has `## ` entries under the **Pending** section but zero `Status:` lines, the file shape is unrecognized: emit one warning line at conversation start and skip the nudge:
 

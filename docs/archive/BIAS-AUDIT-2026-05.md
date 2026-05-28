@@ -1,5 +1,7 @@
 # BIAS-AUDIT — restrictive or biased content in claude-spine
 
+> **Archived 2026-05-28.** This is the original full-repo audit. Most findings (~75 of ~85) shipped across rounds 1–5 of the [`FIXES.md`](../../FIXES.md) Pass-4 sweep — see the per-round narrative + the "Shipped vs remaining" table there. The handful of still-open items have been folded into [`FIXES.md`](../../FIXES.md) **Pass 5 — folded from the archived BIAS-AUDIT** as `BA1`–`BA5`. Kept here as the original audit trail. **Do not file new fixes here** — file them in `FIXES.md`. References elsewhere in the repo that name "BIAS-AUDIT P0 #3", "P1 #7", "P3 #13", etc. resolve to the section IDs below.
+
 > Generated 2026-05-28 by a full-repo audit pass. Scope: places where the spine narrows the experience to *one operator's* tools and workflow (Next.js + Supabase + Vercel + Stripe on macOS, GitHub, single-developer feature-build cadence, Anthropic Pro/Max subscription) rather than serving the global audience the README aspires to.
 >
 > Each finding ends with one of three labels:

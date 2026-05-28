@@ -1,0 +1,22 @@
+{
+  "_comment": "Merge into ~/.claude/settings.json when you deploy to Azure. Adds Azure CLI read patterns + Azure docs WebFetch. Write/destroy patterns are intentionally NOT pre-allowed — they require an explicit per-action prompt for safety.",
+  "permissions": {
+    "allow": [
+      "Bash(az account show:*)",
+      "Bash(az account list:*)",
+      "Bash(az group list:*)",
+      "Bash(az resource list:*)",
+      "Bash(az webapp list:*)",
+      "Bash(az webapp show:*)",
+      "Bash(az functionapp list:*)",
+      "Bash(az functionapp show:*)",
+      "Bash(az storage account list:*)",
+      "Bash(az monitor log-analytics query:*)"
+    ],
+    "WebFetch": [
+      "domain:azure.microsoft.com",
+      "domain:learn.microsoft.com",
+      "domain:portal.azure.com"
+    ]
+  }
+}

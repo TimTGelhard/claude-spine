@@ -1,6 +1,6 @@
 # 18a — Prompting anti-patterns
 
-The "never do this" reference for how you write prompts and how you communicate across turns. Each entry: the anti-pattern, why it fails, what to do instead.
+A catalog of prompting patterns that fail in the contexts this spine targets. Each entry: the pattern, why it fails, what to do instead. These are strong defaults, not universal laws — most have an edge case where they're the right move (e.g., pasting a whole file when Claude needs to see a specific format choice that wouldn't survive a paths-only reference). When you knowingly hit one of those edges, ignore the rule.
 
 ## "Just figure it out"
 

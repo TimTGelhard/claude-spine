@@ -13,6 +13,20 @@ Hooks are how the *harness* enforces automatic behavior. Not Claude. Not CLAUDE.
 |---|---|
 | Where do settings live — global / project / local? Cascade rules? | `~/.claude-spine/chapters/persistence/14a-settings-cascade.md` |
 | What should I actually hook? Starter set, anti-hooks, verifying | `~/.claude-spine/chapters/persistence/14b-hook-recipes.md` |
+| What hooks does claude-spine ship out of the box? | `~/.claude/settings.json` (read directly) — or have the user run `/hooks` for a formatted view |
+
+## Spine-shipped hooks (default install)
+
+| Script | Event | What it does |
+|---|---|---|
+| `block-env-staging.sh` | `PreToolUse` (Bash · `if Bash(git add*)`) | Blocks staging `.env*` files; surfaces the path it caught |
+| `block-env-commit.sh` | `PreToolUse` (Bash · `if Bash(git commit*)`) | Backstop for the above — blocks the commit itself if a `.env*` slipped past staging |
+| `notify-long-task.sh` | `Notification` | Desktop notification (macOS `osascript`, Linux `notify-send`, fallback terminal bell) when a turn waits on the user |
+| `spine-writeback.sh` | `Stop` | Heartbeat on each turn into the active section plan, cross-session-note cue capture, long-session signal |
+| `typecheck-after-edit.sh` | `PostToolUse` — **opt-in via `/onboard --deep`** | Runs the project's typechecker (TS / Python / Go / Rust / C# / Ruby / PHP detected) after each Edit/Write; advisory-only, never blocks |
+| `format-on-save.sh` | `PostToolUse` — **opt-in via `/onboard --deep`** | Runs the project's formatter (Prettier / Black / gofmt / rustfmt / 10+ more detected); silent skip when no formatter is configured |
+
+The two opt-in hooks ship as files on disk but are NOT wired into `settings.json` until the user accepts the prompt in `/onboard --deep`'s Hook-tuning pass. `/hooks` reflects the live wired set.
 
 ## How to use
 

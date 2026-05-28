@@ -12,7 +12,7 @@ For people already running real Claude Code sessions on real projects who want t
 
 - **22 `op-*` skills** (19 task-routers + 3 ambient: cold-start, first-run welcome, curation nudge) that load only when relevant. Each one is a router that points Claude at the atomic chapter for the question — never the whole folder. See `skills/core/`.
 - **~80 atomic chapters** (<150 lines each), one concept per file, organized by topic (foundations, workflow, prompting, signaling, persistence, tools, subagents, recovery, anti-patterns). Indexed by [`INDEX.md`](INDEX.md).
-- **Personalization layer** — a profile (`/onboard`) that calibrates Claude to you. Optionally, a capture/curate **bucket loop** that grows your personal skill library as patterns emerge — opt out by setting `Bucket loop: off` in your profile if you'd rather just have the spine + your profile. See [Personalization](#personalization) below.
+- **Personalization layer** — a profile (`/onboard`) that calibrates Claude to you. Optionally, a capture/curate **bucket loop** that grows your personal skill library as patterns emerge — opt **in** by setting `Bucket loop: on` in your profile if you want the self-improvement flywheel (default since round 6 is **off** — the spine + your profile work without it). See [Personalization](#personalization) below.
 - **Empty personal bucket** (`bucket/`). Ships empty by design — your skill and chapter library grows one curated addition at a time. No pre-seeded "popular skills" trap.
 - **Templates** (`templates/`) — `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `PROGRESS.md`, etc. Copy into each project's `docs/`; Claude maintains them across sessions.
 - **Neutral default + per-stack opinionated globals** (`global/`) — pick the thin stub (default) or a heavy stack-flavored template under `global/stacks/<name>/` (`ts-next-supabase`, `python-django`; add your own).
@@ -94,7 +94,7 @@ Net effect: every session starts lean. Claude loads heavy content on-demand, fil
 
 ## Personalization
 
-Two layers sit on top of the static spine. The **profile** is always on. The **bucket loop** is opt-in — keep it for the full self-improvement flywheel, or disable it (`Bucket loop: off` in `~/.claude/claude-spine-profile.md` under `## Spine defaults`) if you want the spine + your profile only and nothing capturing in the background:
+Two layers sit on top of the static spine. The **profile** is always on. The **bucket loop** is opt-in and **defaults off** — turn it on (`Bucket loop: on` in `~/.claude/claude-spine-profile.md` under `## Spine defaults`, or answer "On" to H1 in `/onboard --deep`) when you want the full self-improvement flywheel. Most users start with the spine + profile only and turn the bucket loop on later:
 
 - **Profile** (`~/.claude/claude-spine-profile.md`) — written by `/onboard`. Captures who you are: subscription, experience level, primary stack, push-back intensity, answer length, reasoning depth, project type. Loaded every session via the global stub. Claude treats a senior backend engineer differently from a CS student.
 - **Bucket loop** (`bucket/`) — optional. Your personal skill and chapter library. Three slash commands wire it:

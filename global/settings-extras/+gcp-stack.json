@@ -1,0 +1,26 @@
+{
+  "_comment": "Merge into ~/.claude/settings.json when you deploy to GCP or Firebase. Adds gcloud + Firebase CLI read patterns + GCP / Firebase docs WebFetch. Write/destroy patterns are intentionally NOT pre-allowed — they require an explicit per-action prompt for safety.",
+  "permissions": {
+    "allow": [
+      "Bash(gcloud auth list:*)",
+      "Bash(gcloud config list:*)",
+      "Bash(gcloud projects list:*)",
+      "Bash(gcloud projects describe:*)",
+      "Bash(gcloud services list:*)",
+      "Bash(gcloud run services list:*)",
+      "Bash(gcloud run services describe:*)",
+      "Bash(gcloud logging read:*)",
+      "Bash(gcloud functions list:*)",
+      "Bash(gcloud functions describe:*)",
+      "Bash(firebase projects:list:*)",
+      "Bash(firebase use:*)",
+      "Bash(firebase functions:list:*)",
+      "Bash(firebase hosting:channel:list:*)"
+    ],
+    "WebFetch": [
+      "domain:cloud.google.com",
+      "domain:firebase.google.com",
+      "domain:console.cloud.google.com"
+    ]
+  }
+}

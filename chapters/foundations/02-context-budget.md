@@ -35,7 +35,7 @@ What's actually true:
 When Claude Code approaches the context limit, it summarizes older messages into a compressed snapshot and continues. The new context = summary + recent messages.
 
 **What survives compaction:**
-- High-level decisions ("we chose Supabase over Firebase")
+- High-level decisions ("we chose Postgres + RLS over Firestore + rules", "we picked a managed BaaS over rolling our own auth")
 - The current task and recent state
 - Files you read very recently
 

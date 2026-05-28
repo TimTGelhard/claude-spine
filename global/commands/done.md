@@ -8,6 +8,17 @@ Follow the writeback protocol from `~/.claude-spine/chapters/workflow/05j-cold-s
 
 ## What to do
 
+### Step 0 — Parse-error preflight
+
+Before anything else, check for `docs/.spine-parse-error`. The Stop hook writes this marker when it can't parse PROGRESS.md's Section/Session bullets (format drift). If present:
+
+1. Read the marker and surface its contents to the user verbatim — it names the missing bullet shape.
+2. Note that heartbeats this session were not logged (the Stop hook silently no-ops on parse failure), so Step 3 will have less to roll up than usual — recover from `git diff` and conversation context instead.
+3. Offer to fix the PROGRESS.md bullets *now* — once they parse, the next assistant turn's Stop hook will clear the marker automatically.
+4. Then continue with Step 1.
+
+If the marker file does NOT exist, skip this step silently and proceed to Step 1.
+
 ### Step 1 — Walk the verify list
 
 Open `docs/plans/<active-section>.md` and find the active session entry's "Verify" list. Walk it with the user, item by item:

@@ -14,7 +14,7 @@ Read `~/.claude/claude-spine-profile.md` `## Spine defaults` → `Bucket loop:`.
 - Implicit fallback fires (no core skill matched) → silent skip; treat as "no bucket support" and answer from the spine + chapters alone.
 - Explicit user request ("use my bucket", "do this the way I usually do") → still route. The user knows the bucket exists; honor the ask one-shot. The profile setting changes the *automatic fallback* behavior, not explicit invocation.
 
-Default if the field is absent: `on`.
+Default if the field is absent: `off` (the audit-recommended default after the round-6 flip — a user who never ran `/onboard` shouldn't have implicit bucket fallback firing on every uncaught task; explicit invocation still works).
 
 ## When this fires
 

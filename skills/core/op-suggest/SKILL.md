@@ -14,7 +14,7 @@ Before doing anything else: read `~/.claude/claude-spine-profile.md` `## Spine d
 - Implicit triggers (friction-counter, end-of-session reflection) → silently exit; do not append.
 - Explicit triggers (`/suggest` slash command, user said "remember this") → still append. Treat explicit user invocation as overriding the profile setting one-shot; the user knows they're capturing.
 
-Default if the field is absent: `on`.
+Default if the field is absent: `off` (the audit-recommended default after the round-6 flip — a user who never ran `/onboard` shouldn't have the bucket loop firing in the background; the spine + profile still work without it).
 
 ## When to fire — exactly four conditions
 

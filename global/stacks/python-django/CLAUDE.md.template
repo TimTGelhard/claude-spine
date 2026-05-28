@@ -176,7 +176,7 @@ Apply at every level. Project-level CLAUDE.md can add to these, never weaken the
 - Editing a migration after it's been applied to a remote DB.
 
 ### Anthropic API
-- Default: `claude-sonnet-4-6`. Escalate to `claude-opus-4-7` only for hard multi-file reasoning.
+- Default model: the current Sonnet ID per `docs/MODELS.md` (today `claude-sonnet-4-6`); escalate to the current Opus ID (today `claude-opus-4-7`) only for hard multi-file reasoning.
 - Set `max_tokens` explicitly. System prompts for role, not prefixed user messages.
 - Prompt caching for anything re-sent 3+ times in a session.
 - Key never reaches the browser or device.

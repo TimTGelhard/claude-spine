@@ -77,7 +77,7 @@ For essentials-only runs (deep deferred), keep the deep section headings but wri
 
 ### Bucket loop
 
-- **Bucket loop:** on (default: on — set to `off` to silence `op-suggest`, `op-curate-nudge`, `op-add-skill`, `op-bucket-router`; the profile + spine still load every session, just nothing captures, nothing nudges, nothing routes through the personal library)
+- **Bucket loop:** off (default: off — set to `on` to enable `op-suggest`, `op-curate-nudge`, `op-add-skill`, `op-bucket-router`; the profile + spine always load every session, this toggle just controls whether the personal-library capture/curate/nudge layer runs in the background. Off is the audit-recommended default — many users want the spine + profile and nothing else; turn on later from the `/onboard --deep` H1 prompt or by hand-editing this line.)
 - **Curate nudge pending threshold:** 5 (default: 5)
 - **Curate nudge cooldown days:** 30 (default: 30)
 - **Stale review never-fired age days:** 90 (default: 90)

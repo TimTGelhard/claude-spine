@@ -9,7 +9,7 @@ A multi-step procedure with a clear start and end.
 ```markdown
 ---
 name: pre-deploy-audit
-description: Run a pre-deploy audit on a Next.js + Supabase project. Use before pushing to production, when the user mentions "deploy", "ship", "go live", or "production release".
+description: Run a pre-deploy audit on this project's stack (substitute your real stack here — e.g. "Next.js + Supabase project" or "Django + Postgres service"). Use before pushing to production, when the user mentions "deploy", "ship", "go live", or "production release".
 ---
 
 # Pre-deploy audit

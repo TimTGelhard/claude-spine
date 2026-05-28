@@ -8,7 +8,12 @@ When a recommendation has a cost / quota / model component, **consult `~/.claude
 
 If the profile is missing or any field is unfilled, default to the Pro row in every table below. **Never gate features** — describe what's *available*, then shift the recommended choice. The spine is advice, not enforcement.
 
-> Other-plan handling: treat `Other` (Team / Enterprise / API / pay-as-you-go) like Max 20× **unless** `Cost sensitivity = Very careful`, in which case treat like Pro. API users on heavy spend behave like Pro despite high tier — that's what Cost sensitivity captures.
+> **Plan-tier names + registry.** The plan names used in the tables below match `docs/MODELS.md`'s plan-tier registry (the canonical list). When Anthropic renames a tier, the registry moves first and this chapter follows.
+>
+> **Other-plan handling.** For `Other` free-text answers, map by canonical class per `docs/MODELS.md`'s plan tiers:
+> - **Team** → behave like **Pro** (per-seat plan, Pro-class limits).
+> - **Enterprise** → behave like **Max (5×)** unless cost-aware.
+> - **API / pay-as-you-go / Bedrock / Vertex / OpenRouter / self-hosted gateway** → behavior depends entirely on `Cost sensitivity` — treat like **Pro** if `Very careful`, like **Max 20×** if `Don't worry about it`, like **Max (5×)** if `Balanced`. API users on heavy spend behave like Pro despite high tier — that's what Cost sensitivity captures.
 
 ## The eight levers
 

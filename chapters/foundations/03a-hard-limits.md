@@ -8,7 +8,7 @@ Even with 1M context, multi-week projects don't fit in one session — and they 
 
 ## 2. Know what's in your installed package versions
 
-Frameworks move fast. Claude's training has a cutoff. Even with recent knowledge updates, version-specific syntax (Next.js 16 specifics, library APIs that changed last month) is *guessed* if Claude doesn't check. Always have it verify against actual installed code when it's uncertain — and call it out when something "feels confident but might be made up."
+Frameworks and libraries move fast. Claude's training has a cutoff. Even with recent knowledge updates, version-specific syntax (a framework's latest major-version specifics, library APIs that changed in the last few months, breaking changes in a runtime release) is *guessed* if Claude doesn't check. Always have it verify against actual installed code when it's uncertain — and call it out when something "feels confident but might be made up."
 
 ## 3. See your running app
 

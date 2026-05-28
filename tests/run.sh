@@ -6,6 +6,7 @@
 #   - hooks/test-block-env-commit.sh     (git commit guard against staged .env)
 #   - hooks/test-typecheck-after-edit.sh (opt-in PostToolUse typecheck contract)
 #   - hooks/test-format-on-save.sh       (opt-in PostToolUse formatter routing)
+#   - onboard/test-extras-merge.sh       (jq merge for settings-extras fragments)
 #   - installer/test-dry-run.sh          (install.sh --dry-run output contract)
 #
 # Skipped here: tests/skill-triggers/ — it costs real money (API calls) and
@@ -36,6 +37,7 @@ suites=(
   "hooks/test-block-env-commit.sh"
   "hooks/test-typecheck-after-edit.sh"
   "hooks/test-format-on-save.sh"
+  "onboard/test-extras-merge.sh"
   "installer/test-dry-run.sh"
 )
 

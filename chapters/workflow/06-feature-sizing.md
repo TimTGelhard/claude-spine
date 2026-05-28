@@ -2,6 +2,21 @@
 
 The core rule: **one session = one cohesive goal.** Not one app, not five small features, not "the whole dashboard." Pick a slice, do it, ship it, start fresh. "Feature" is the right word for product-build sessions; substitute as fits — for libraries it's "one subsystem", for CLIs "one command + its flags", for ML "one experiment", for refactors "one cleanup goal", for debugging "one investigation".
 
+## Session types — sizing isn't one shape
+
+Different sessions have different ideas of "done." The discipline ("one cohesive goal, then stop") generalizes; the *units* and *capacity* don't. Six recognizable shapes:
+
+| Type | "Done" looks like | Typical size signals | Where the capacity table below applies |
+|---|---|---|---|
+| **Build** | A new feature / subsystem / command works end-to-end and ships | Files, components, decisions (see table below) | Directly — table is calibrated for this shape |
+| **Debug** | Root cause identified; fix landed OR documented decision to defer | Hypotheses tried, files inspected | Loosely — replace "files modified" with "files inspected"; one investigation = one session |
+| **Refactor** | A named cleanup goal complete; tests still pass; no behavior change | Files moved, names changed, layers crossed | Mechanical refactors: 15–30 files per session; conceptual refactors: 3–8 files |
+| **Explore** | A question answered well enough to commit to a direction (or rule it out) | Spike branches, throwaway prototypes | Doesn't apply — explore sessions are time-boxed (60–90 min), not file-boxed |
+| **Review** | A diff or PR understood; comments / approval / rejection written | Lines reviewed, comments left | Roughly: ~500 lines of dense code or ~2000 lines of mechanical change |
+| **Explain** | A reader leaves with a working mental model | Files walked, diagrams produced | Doesn't apply — measured by the listener's ability to summarize back |
+
+Pick a shape consciously at session start. The `/prep → build → /done` ladder in the rest of the workflow chapter is calibrated for the **build** shape. The other five shapes use lighter scaffolding — typically just `CLAUDE.md` for context, a short note in `PROGRESS.md` at session end, and (for review / debug / explore) the recovery moves in [17b](../recovery/17b-recovery-moves.md). See [05-overview.md](05-overview.md) for which workflow stages each session type maps to.
+
 ## What "one feature / cohesive goal" means
 
 A vertical slice that touches the layers it needs (UI → API → DB for a web feature; parser → AST → emitter for a compiler change; data → train → eval for an ML iteration) and delivers user-visible value or completes a clear technical objective.
@@ -24,9 +39,9 @@ More than one — split these:
 - "Build the whole admin panel." → split per resource (users page, orders page, settings page).
 - "Refactor the entire networking layer." → split per call-site cluster; one PR each.
 
-## Concrete capacity (rules of thumb)
+## Concrete capacity for a build session (rules of thumb)
 
-Per session, in green/yellow zone, Claude Code can comfortably handle:
+Per session, in green/yellow zone, Claude Code can comfortably handle the table below. **Scoped to build sessions** — debug / refactor / explore / review / explain sessions have their own capacity signals (see the session-type table above).
 
 | Scope | Comfortable | Stretch | Too much |
 |-------|-------------|---------|----------|
@@ -98,15 +113,18 @@ A normal feature session rhythm:
 
 If step 3 is taking >2 hours and you're still going, you're probably oversized. Check the signals above.
 
-## What you should NOT try to do in one session
+## Combinations that almost always degrade
 
-Hard "no" list — these always degrade in quality:
+A non-exhaustive "watch out" list — these pairings reliably degrade quality in the contexts this spine targets (small-team / solo build sessions). Each has a valid edge case (you're a senior engineer doing it for the third time, the stack handles it idiomatically, etc.) — when you knowingly hit one of those edges, override.
 
 - Auth + a feature that uses auth (do auth first, verify it, then build on top).
 - DB schema design + the UI that consumes it (let the schema settle first).
 - A net-new feature + a refactor of adjacent code (one bug per change rule).
 - A bug fix + the feature you were "about to add anyway."
 - Building + writing docs/tests for unrelated code.
+- A new public API surface + the migration of internal callers to it (ship the surface, then migrate as a separate session).
+- A new CLI subcommand + a rename of an existing one (each is its own UX-visible change).
+- An ML experiment + a refactor of the surrounding pipeline code (the experiment's result is now confounded by the refactor).
 
 ## TL;DR
 

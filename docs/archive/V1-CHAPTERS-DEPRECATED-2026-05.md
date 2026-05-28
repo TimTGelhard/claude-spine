@@ -1,6 +1,8 @@
 # v1 chapters — deprecation index
 
-The 18 numbered chapters that lived at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) have been **removed** from the root tree. The full v1 bodies are preserved in [`docs/v1-archive/`](docs/v1-archive/) for cross-reference. New work should read the v2 atomic files in [`chapters/`](chapters/) (the router map is [`INDEX.md`](INDEX.md)).
+> **Archived 2026-05-28.** The original "redirect future inbound v1 links" purpose is moot — the 18 root stubs were removed in `[Unreleased]` L1 and GitHub 404s any external link to a v1 path regardless. Kept here as the historical v1 → v2 mapping for anyone with stale notes. Live chapter routing lives in [`INDEX.md`](../../INDEX.md); the canonical v2 atomic content lives under [`chapters/`](../../chapters/); the v1 bodies are still preserved at [`docs/v1-archive/`](../v1-archive/). **Do not file new mappings here** — the live router is `INDEX.md`.
+
+The 18 numbered chapters that lived at the repo root (`01-first-principles.md` through `18-anti-patterns.md`) have been **removed** from the root tree. The full v1 bodies are preserved in [`docs/v1-archive/`](../v1-archive/) for cross-reference. New work should read the v2 atomic files in [`chapters/`](../../chapters/) (the router map is [`INDEX.md`](../../INDEX.md)).
 
 This file is the inverse of [`INDEX.md`](INDEX.md): the router groups files by topic; this file groups them by *source* v1 chapter so an old reference can find its new home in one step.
 

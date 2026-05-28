@@ -18,6 +18,8 @@
 
 ## Foundations — how Claude Code actually works
 
+*Routed by `op-foundations`. When that fires, use its trigger-keyword table instead of reading this section cold.*
+
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
 | The LLM loop, what each turn is | `chapters/foundations/01a-llm-loop.md` | 01 | written |
@@ -32,6 +34,8 @@
 | Budget, weekly limits, API vs Code | `chapters/foundations/04c-budget-and-cost.md` | 04 | written |
 
 ## Workflow — how to organize work
+
+*Routed by `op-workflow` (general workflow + stages 05–07), `op-prepare` (planning a new project or major section — `/prep`), `op-brownfield` (inherited / unfamiliar code, chapter 08), `op-collaboration-modes` (executor / reviewer / explainer / planner — chapter 07), and the ambient `op-spine-active` (cold-start in plan-driven projects, chapter 05j). When any of these fires, use its trigger-keyword table instead of reading this section cold.*
 
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
@@ -61,6 +65,8 @@
 
 ## Prompting — how to interact
 
+*Routed by `op-prompting` (chapter 09) and `op-visuals` (chapter 10 — screenshots, diagrams, when to paste an image vs text). When either fires, use its trigger-keyword table instead of reading this section cold.*
+
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
 | Five prompting principles | `chapters/prompting/09a-five-principles.md` | 09 | written |
@@ -69,6 +75,8 @@
 | Visuals — screenshots, mockups, diagrams | `chapters/prompting/10-visuals.md` | 10 | written |
 
 ## Signaling — proactive senior-dev behavior
+
+*Routed by `op-signaling`. When that fires, use its trigger-keyword table instead of reading this section cold.*
 
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
@@ -80,6 +88,8 @@
 | Meta-scope (proposal vs build mode) | `chapters/signaling/11e-meta-scope.md` | 11 | written |
 
 ## Persistence — make Claude smarter over time
+
+*Routed by `op-persistence` (chapters 12–13 — CLAUDE.md vs skills vs memory) and `op-hooks` (chapter 14 — settings.json + automation). When either fires, use its trigger-keyword table instead of reading this section cold.*
 
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
@@ -94,6 +104,8 @@
 | Hook recipes (typecheck, format, notify, env-leak block) | `chapters/persistence/14b-hook-recipes.md` | 14 | written |
 
 ## Tools — which tool when
+
+*Routed by `op-tools`. When that fires, use its trigger-keyword table instead of reading this section cold.*
 
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
@@ -110,6 +122,8 @@
 
 ## Subagents — when to delegate
 
+*Routed by `op-subagents`. When that fires, use its trigger-keyword table instead of reading this section cold.*
+
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
 | When delegation wins / when it loses (incl. writing a good brief) | `chapters/subagents/16a-when-to-delegate.md` | 16 | written |
@@ -118,6 +132,8 @@
 
 ## Recovery — when things go wrong
 
+*Routed by `op-recovery`. When that fires, use its trigger-keyword table instead of reading this section cold.*
+
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
 | Failure-mode triage table | `chapters/recovery/17a-failure-triage.md` | 17 | written |
@@ -125,6 +141,8 @@
 | High-stakes recovery (secrets leaked, mid-flight migration, auth/RLS data leak, lost comprehension) | `chapters/recovery/17c-high-stakes-cases.md` | 17 | written |
 
 ## Anti-patterns — explicit "never do this"
+
+*Routed by `op-anti-patterns`. When that fires, use its trigger-keyword table instead of reading this section cold.*
 
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
@@ -140,6 +158,8 @@
 
 ## Personalization — how the spine becomes personal
 
+*Routed by `op-onboard` (interview that writes the profile), the bucket-loop trio `op-suggest` / `op-curate` / `op-add-skill` (with ambient `op-curate-nudge` and `op-bucket-router` for the fallback library), and `op-foundations` / `op-tools` / `op-subagents` / `op-signaling` for the subscription-aware levers in 19f. When any of these fires, use its trigger-keyword table instead of reading this section cold.*
+
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
 | Personalization overview — three layers, the loop | `chapters/personalization/19a-overview.md` | new | written |
@@ -148,6 +168,7 @@
 | Curation sessions (`/curate`, read-before-write, diff preview, CHANGELOG) | `chapters/personalization/19d-curation-session.md` | new | written |
 | Extending the bucket — skill vs chapter, gates, GC, git-pull interaction | `chapters/personalization/19e-extending-the-bucket.md` | new | written |
 | Subscription-aware recommendations (the `Plan:` / `Cost sensitivity:` lever table) | `chapters/personalization/19f-subscription-aware.md` | new | written |
+| Profile-field effects — what each line in the profile actually changes downstream | `chapters/personalization/19g-field-effects.md` | new | written |
 
 ---
 

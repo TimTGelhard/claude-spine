@@ -1,0 +1,20 @@
+{
+  "_comment": "Merge into ~/.claude/settings.json when your VCS host is GitLab. Adds the GitLab CLI (`glab`) read patterns + GitLab platform docs WebFetch. Mirrors the GitHub (`gh`) defaults that ship in global/settings.json. See settings-extras/README.md for the jq merge command.",
+  "permissions": {
+    "allow": [
+      "Bash(glab mr view:*)",
+      "Bash(glab mr list:*)",
+      "Bash(glab issue view:*)",
+      "Bash(glab issue list:*)",
+      "Bash(glab repo view:*)",
+      "Bash(glab ci view:*)",
+      "Bash(glab ci list:*)",
+      "Bash(glab auth status:*)"
+    ],
+    "WebFetch": [
+      "domain:gitlab.com",
+      "domain:docs.gitlab.com",
+      "domain:about.gitlab.com"
+    ]
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "_comment": "Merge into ~/.claude/settings.json when Supabase is your backend. Extends the Supabase CLI read patterns shipped in the neutral default and adds Supabase docs WebFetch. Defaults already include `supabase status`, `migration list`, `db diff`, `gen types`; this fragment adds the broader patterns a Supabase-native project tends to want.",
+  "permissions": {
+    "allow": [
+      "Bash(supabase start:*)",
+      "Bash(supabase stop:*)",
+      "Bash(supabase functions list:*)",
+      "Bash(supabase functions deploy:*)",
+      "Bash(supabase secrets list:*)",
+      "Bash(supabase db reset:*)",
+      "Bash(supabase db pull:*)",
+      "Bash(supabase link:*)",
+      "Bash(supabase login:*)",
+      "Bash(supabase projects list:*)"
+    ],
+    "WebFetch": [
+      "domain:supabase.com",
+      "domain:supabase.io"
+    ]
+  }
+}

@@ -219,13 +219,13 @@ Options (single-select):
 
 ### H1 — Bucket loop opt-in
 
-Question: **"Want the bucket loop active? While we work, I can quietly capture high-signal moments (`op-suggest`) so a periodic `/curate` builds your personal skill + chapter library. If off, nothing captures; nothing nudges; the spine + your profile still load every session."**
+Question: **"Want the bucket loop active? While we work, I can quietly capture high-signal moments (`op-suggest`) so a periodic `/curate` builds your personal skill + chapter library. Default is off — the spine + your profile always load; this just controls whether the personal-library capture/curate/nudge layer also runs in the background."**
 Header: `Bucket loop`
 Options (single-select):
-- **On (default)** — capture high-signal moments and nudge me to curate when >5 are pending
-- **Off** — skip the capture/curate/nudge loop entirely (you can still hand-add bucket skills with `/add-skill`)
+- **Off (default)** — skip the capture/curate/nudge loop entirely (you can still hand-add bucket skills with `/add-skill`)
+- **On** — capture high-signal moments and nudge me to curate when >5 are pending
 
-→ Profile: `Spine defaults → Bucket loop:` (writes `on` or `off`; default if unset is `on`). Affects: whether `op-suggest`, `op-curate-nudge`, `op-bucket-router` auto-fire.
+→ Profile: `Spine defaults → Bucket loop:` (writes `on` or `off`; default if unset is `off` — the audit-recommended default after the round-6 flip). Affects: whether `op-suggest`, `op-curate-nudge`, `op-bucket-router` auto-fire.
 
 ### H2 — Team / organization shape
 

@@ -12,16 +12,23 @@ After essentials are saved, propose a `settings.json` tune based on Q1 (subscrip
 | Pro | 180000 | high |
 | Max (5×) | 180000 | high |
 | Max (20×) | **800000** | **xhigh** |
-| Other (free-text) | leave alone | leave alone |
+| Other → Team (free-text matches `team`) | 180000 | high |
+| Other → Enterprise (matches `enterprise`) | **400000** | high |
+| Other → API / Bedrock / Vertex / OpenRouter / self-hosted (matches `api`, `bedrock`, `vertex`, `openrouter`, `pay-as-you-go`) | **400000** | high |
+| Other → anything else | leave alone | leave alone |
 
-(Free-tier values lower the context window before auto-compact and use a less-expensive reasoning depth so Free users hit daily limits less often. A user who hand-tuned will see the diff and can decline.)
+(Free-tier values lower the context window before auto-compact and use a less-expensive reasoning depth so Free users hit daily limits less often. Team treats like Pro per seat. Enterprise and API/cloud-passthrough users get the same mid-class bump as Max 5× because their usage cap is per-organization or per-token rather than per-user-day — `effortLevel: high` is safe; `autoCompactWindow: 400000` is a middle-ground between Pro's 180K and Max 20×'s 800K. A user who hand-tuned will see the diff and can decline.)
+
+The plan-tier names mirror [`docs/MODELS.md`](../../docs/MODELS.md)'s plan registry — see that file for the full list of named tiers Anthropic ships.
 
 ## Flow
 
 1. Read `~/.claude/settings.json`. If it doesn't exist, skip the tune entirely (no install, no settings to touch).
 2. Compute target values from the mapping table using Q1's answer.
+   - For canonical answers (Free / Pro / Max 5× / Max 20×) read the matching row directly.
+   - For Q1 = **Other (free-text)**, case-insensitive substring-match the free-text against the Other-row triggers in the table: `team` → Team row, `enterprise` → Enterprise row, any of (`api`, `bedrock`, `vertex`, `openrouter`, `pay-as-you-go`) → API row. Multiple matches resolve to the *first* match in that list (Team beats API, etc.). No match → the "Other → anything else" row (leave alone, skip silently with a one-line summary note).
 3. If target matches current for both keys → no diff, skip silently.
-4. If Q1 was "Other" → skip silently. Mention in the post-write summary that settings.json was left alone and point at `global/INSTALL.md`'s "Tuning for Max 20×" section.
+4. If the Q1 free-text matched no Other-row trigger → skip silently and note in the post-write summary that settings.json was left alone (point at `docs/MODELS.md`'s plan registry + `global/INSTALL.md`'s "Tuning for Max 20×" section as the hand-tune references).
 5. Otherwise → first print a short **plain-English explanation block** as a normal text message (not inside `AskUserQuestion`), then ask the Apply/Skip question. Template the block like this (substitute the user's subscription name and the current/target numbers):
 
    ```

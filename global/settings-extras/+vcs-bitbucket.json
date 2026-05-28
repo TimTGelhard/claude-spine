@@ -1,0 +1,20 @@
+{
+  "_comment": "Merge into ~/.claude/settings.json when your VCS host is Bitbucket. Adds the Atlassian CLI (`bb`) read patterns + Bitbucket / Atlassian docs WebFetch. See settings-extras/README.md for the jq merge command.",
+  "permissions": {
+    "allow": [
+      "Bash(bb pr view:*)",
+      "Bash(bb pr list:*)",
+      "Bash(bb issue view:*)",
+      "Bash(bb issue list:*)",
+      "Bash(bb repo view:*)",
+      "Bash(bb pipeline view:*)",
+      "Bash(bb pipeline list:*)",
+      "Bash(bb auth status:*)"
+    ],
+    "WebFetch": [
+      "domain:bitbucket.org",
+      "domain:support.atlassian.com",
+      "domain:developer.atlassian.com"
+    ]
+  }
+}

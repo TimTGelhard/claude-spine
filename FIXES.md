@@ -31,13 +31,14 @@
 > 1, 2, 4, 5, 6 are done (with Pillar 1 covering Session 1 of 3); Pillar 3 is
 > deferred to post-launch.
 
-## Live counts on disk (truth source as of 2026-05-28)
+## Live counts on disk (truth source as of 2026-05-28, round-4 sweep)
 
 - `op-*` skills under `skills/core/`: **22** (19 task-routers + 3 ambient: `op-spine-active`, `op-welcome`, `op-curate-nudge`)
-- `.md` files under `chapters/`: **81** (Pillar 1 added `chapters/personalization/19f-subscription-aware.md`)
-- Onboarding questions: **7 essential + 13 deep = 7–20 total** (Pillar 1.2 split Q5 into Q5a + Q5b)
+- `.md` files under `chapters/`: **82** (round-4 added `chapters/personalization/19g-field-effects.md`)
+- Onboarding questions: **10 essential + 18 deep + 2 opt-in hook prompts = 10–30 total** (round-3 added Q7 OS / Q8 VCS / Q9 Artifact essentials + G1 / G2 / H1 / H2 / H3 deep; round-3 also split Q5 into Q5a + Q5b)
 - Slash commands under `global/commands/`: **9** (`/onboard`, `/prep`, `/done`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket`, `/spine`, `/hooks`)
 - Hooks under `global/hooks/`: **6** (`block-env-staging.sh`, `block-env-commit.sh`, `notify-long-task.sh`, `spine-writeback.sh`, plus two default-off opt-ins added by P6.4/P6.5: `typecheck-after-edit.sh`, `format-on-save.sh`)
+- Settings-extras fragments under `global/settings-extras/`: **8** (`+vcs-gitlab.json`, `+vcs-bitbucket.json`, `+vercel-stack.json`, `+supabase-stack.json`, `+aws-stack.json`, `+gcp-stack.json`, `+azure-stack.json`, `+docker-k8s-stack.json`) — round-4 added the directory.
 
 Anywhere a doc claims numbers different from the above and is making a
 *current-state* claim (as opposed to historical/changelog narrative), it's wrong.
@@ -284,7 +285,7 @@ session of work. Items within a pillar are tagged **P0** (launch-blocking),
 The profile is written by `/onboard` and lives at
 `~/.claude/claude-spine-profile.md`, but **no downstream chapter or skill
 conditions on its values.** A Python data scientist on Pro and a Rust systems
-engineer on Max get identical advice. `docs/SUBSCRIPTION-AWARENESS.md:13`
+engineer on Max get identical advice. `docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md:13`
 admits it directly: *"Capturing it is useless if no chapter or skill actually
 reads it. Today every recommendation assumes a Max-tier user with cheap Opus
 access."* The branding on `README.md:15` is ahead of the implementation.
@@ -293,7 +294,7 @@ access."* The branding on `README.md:15` is ahead of the implementation.
 
 **[All 3 sessions shipped — Session 1 in `187ddbe` / `[0.10.0]`; Sessions 2 +
 3 land in the next `[Unreleased]` block]** Session 1 of the 3-session plan in
-`docs/SUBSCRIPTION-AWARENESS.md` created
+`docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md` created
 `chapters/personalization/19f-subscription-aware.md` (8 levers × 4 plan-rows
 each, plus Cost sensitivity modifier + default-to-Pro fallback), added the
 INDEX row, and wired four routing skills to read 19f and branch on `Plan:` /
@@ -1112,10 +1113,19 @@ Total pre-launch: ~3–4 hours. Post-launch L bundle: ~30 min.
 
 # Pass 4 — Global-readiness review (opened 2026-05-28)
 
-> **Progress as of 2026-05-28 (later same day, second sweep):** **B1, B2, B3,
-> B4, B5, B6 (partial), B7, B8, N2, N6 (partial), N7, P1** plus the chapter
-> prose strip (BIAS-AUDIT Priority 0 #3) and the format/typecheck hook
-> expansion (BIAS-AUDIT Priority 1 #7) all landed in `[Unreleased]`.
+> **Progress as of 2026-05-28 (sixth sweep, latest):** rounds 1–5 +
+> round 6 all landed in `[Unreleased]`. Cumulative shipped: **B1, B2, B3,
+> B4, B5, B6 (partial), B7, B8, N2, N3, N4, N5, N6 (partial), N7, N8,
+> P1, U2, U4, U5, U6, M7, M8** plus the BIAS-AUDIT Priority 0/1 chapter +
+> hook expansions, the eight-question onboard expansion, the
+> bucket-loop optional reframe → **now default-off** (round-6 flip), the
+> anti-pattern softening pass (round 3 + round 6 finish), the
+> `global/settings-extras/` directory with eight fragments and the
+> `/onboard --deep` auto-merge pass (round 5), the BIAS-AUDIT P2 #9
+> session-type framing in `06-feature-sizing.md`, the **P3 #15 model +
+> plan-tier registry** at `docs/MODELS.md`, and the **P3 #16
+> subscription "Other" branch defaults** wired through
+> `subscription-tune.md` + `19f`.
 >
 > **Round-1 (earlier 2026-05-28):** neutral-default `global/settings.json`
 > (broadened Bash + WebFetch allowlists, three plugins default-off), Q3
@@ -1123,7 +1133,7 @@ Total pre-launch: ~3–4 hours. Post-launch L bundle: ~30 min.
 > to free-text only, `op-spine-active` accepts four plan-layout conventions +
 > a project-level `Plan layout:` override.
 >
-> **Round-2 (this sweep, derived from `BIAS-AUDIT.md`):** chapter prose
+> **Round-2 (this sweep, derived from `BIAS-AUDIT.md` — now archived to [`docs/archive/BIAS-AUDIT-2026-05.md`](docs/archive/BIAS-AUDIT-2026-05.md); see Pass 5 below for items folded in from there):** chapter prose
 > stripped of Next/Supabase/Stripe specifics (12b-claudemd.md restructured
 > with three multi-stack worked examples; 05b/05c/06/15h prose generalized);
 > `op-prepare/procedure.md` Step 6.1 expanded to an 8-column per-stack file
@@ -1150,21 +1160,94 @@ Total pre-launch: ~3–4 hours. Post-launch L bundle: ~30 min.
 > ("~$5–10 (Sonnet)") replaced with token-count + Anthropic-pricing-link
 > framings (N7).
 >
-> **What remains:** **B9** (un-audited chapter pass for project-type
-> assumptions), **B10** (Windows installer), **B11** (i18n hook), **N1**
-> (profile-settable thresholds — biggest single user-overridable-thresholds
-> win), **N3/N4** (op-curate-nudge + op-suggest parser cleanups), **N5**
-> (jq-based settings.json mutation in op-onboard — tied to P2 op-onboard
-> split), **N8** (cue-phrase config — tied to N1), **C-block** (command
-> consolidation 9 → 6), **U-block** (UX polish — Q1 mapping table extension
-> for Free, onboard preview screen, /profile explain, cheatsheet), **P2-P4**
-> (op-onboard split + skill boilerplate trim + per-stack CLAUDE.md split —
-> the new per-stack templates are still ~260 lines each; P4 says move
-> Sections 2-9 into an `op-tim-flavor`-style skill loaded on demand). The
-> **new-onboard-questions** pass (OS / VCS / project type essentials + the
-> 5 deep follow-ups from BIAS-AUDIT §10) is also still open — it needs
-> count sweeps across 8+ surfaces (README, EXPLAINER, INSTALL, op-welcome,
-> op-onboard, 19a, 19b, landing, /onboard description, install.sh).
+> **Round-3 (third 2026-05-28 sweep):** profile-settable thresholds + cue
+> phrases (N1 + N8), the 8-question onboard expansion (3 new essentials +
+> 5 new deep) + count sweeps across 8+ surfaces, N3 / N4 parser cleanups,
+> Free-tier Q1 mapping (U2), L9 wording, bucket-loop optional reframe,
+> anti-pattern softening (BIAS-AUDIT P3 #13, partial), CHEATSHEET.md (U6).
+>
+> **Round-4 (fourth 2026-05-28 sweep, this update):** M7 (INDEX.md
+> skill-routing column added under each section heading); M8 (op-hooks
+> SKILL.md spine-hooks preview table); N2 (rest) — `docs/.spine-parse-error`
+> marker written when PROGRESS.md format drifts beyond the parser's
+> tolerance; `/done` + `/spine` surface the marker; auto-cleared on next
+> successful parse; U4 (onboard preview screen — structured fenced-block
+> overview of question themes + Cmd+C-is-safe reassurance, in `op-onboard/SKILL.md`
+> Step 1); U5 (new chapter `19g-field-effects.md` mapping every profile
+> field to its consumers + visible behavior change, plus INDEX row +
+> handoff cross-reference); B9 (rest — foundations + persistence
+> chapter audit; `03c-project-fit.md` "handles well" list broadened from
+> 6 web-leaning entries to 11 with CLI / library / docs / data / test
+> fits named; stack-specific examples generalized in `02 / 03a / 03b /
+> 13c`); **per-stack settings extras + VCS-host wiring** — new
+> `global/settings-extras/` directory with 8 drop-in JSON fragments
+> (`+vcs-gitlab.json`, `+vcs-bitbucket.json`, `+vercel-stack.json`,
+> `+supabase-stack.json`, `+aws-stack.json`, `+gcp-stack.json`,
+> `+azure-stack.json`, `+docker-k8s-stack.json`) plus README with the
+> manual + `jq` merge command, smoke-tested end-to-end; handoff VCS line
+> now points at the actual fragment files; INSTALL.md gets a new bullet
+> covering the extras directory.
+>
+> **Round-5 (fifth 2026-05-28 sweep, this update):** the programmatic
+> settings-extras inject layer that round 4 left as future work. Three
+> connected items landed together: **N5** (jq-based `settings.json` mutation
+> — `hook-tune.md` switched from `Edit`-slice replace to `jq` `--argjson` set
+> with shape-guarded pre-flight; same Hand-edit fallback when foreign hooks
+> are present, but the happy path no longer breaks on user-reformatted JSON);
+> **VCS-host auto-merge** (`+vcs-gitlab.json` / `+vcs-bitbucket.json` offered
+> per-fragment in `/onboard --deep` when Q8 matches); **per-stack auto-merge**
+> (`+vercel`, `+supabase`, `+aws`, `+gcp`, `+azure`, `+docker-k8s` offered
+> when Q3 / B1 / Q9 free-text mentions the platform — conservative
+> case-insensitive substring match, never silent, never broader than the
+> shipped fragments). New `skills/core/op-onboard/extras-merge.md` owns the
+> detection + per-fragment Apply/Skip flow; `op-onboard/SKILL.md` step list
+> grew 8 → 9; the write-surface allowlist in `op-onboard/SKILL.md`'s Rules
+> section extended to a third permitted surface (`permissions.allow` +
+> `permissions.WebFetch` append-only, sourced exclusively from the named
+> fragments, deduped via `jq unique`). `op-onboard/handoff.md` VCS-host line
+> and the new Stack-extras line now report actual per-fragment state
+> (`merged` / `declined` / `not suggested`) rather than the round-4
+> "we suggested this" framing. `settings-extras/README.md` rule softened
+> from "Never auto-merge" to "Never silent-merge — explicit Apply/Skip
+> required"; the Future-work paragraph rewritten to point at the
+> now-shipped op-onboard --deep merge pass. New
+> `tests/onboard/test-extras-merge.sh` smoke-tests the `jq` merge across
+> happy-path / idempotency / missing-key resilience / fragment validity /
+> two-fragment sequential / malformed-input fail-fast (8 cases). Wired into
+> `tests/run.sh`.
+>
+> **Round-6 (sixth 2026-05-28 sweep, this update):** the residual
+> Priority-2/3 items from the archived BIAS-AUDIT that weren't deferred.
+> Five connected changes: **P3 #15** (new `docs/MODELS.md` model + plan
+> registry — single source of truth for Opus / Sonnet / Haiku IDs and the
+> Claude.ai plan ladder, including the cloud-passthrough rows for
+> Bedrock / Vertex / OpenRouter; 04a + 19f + both stack stubs now
+> reference the registry rather than duplicating names); **P3 #16**
+> (subscription "Other" branch defaults — `subscription-tune.md` mapping
+> extended with Team / Enterprise / API+cloud-passthrough / fallback
+> rows + case-insensitive substring match on Q1's free-text answer); **P3
+> #13 finish** (anti-pattern softening: 18a opening framing, 18c `cat`
+> edge case, 18e generalized "feature done without seeing it work" with
+> per-artifact verification recipes; 18d/f/h/meta audited as already-fine);
+> **P2 #9** (`06-feature-sizing.md` session-type framing: new "Session
+> types — sizing isn't one shape" table at the top, build-session
+> scoping on the capacity table, broader "Combinations that almost always
+> degrade" list with explicit valid-edge-case framing); **P2 #11**
+> (bucket-loop default flipped `on` → `off` across
+> `profile-template.md` + `questions-deep.md` H1 + the three field-absent
+> fallbacks in `op-suggest` / `op-curate-nudge` / `op-bucket-router`; two
+> README mentions reframed as opt-in flywheel).
+>
+> **What remains:** **B10** (Windows installer — half-day to a day; stretch);
+> **B11** (i18n hook — deferred per finding); **C-block** (command
+> consolidation 9 → 6 — needs broader sign-off); **P4** (per-stack CLAUDE.md
+> split into `op-stack-flavor` — ~260-line variants still under
+> `global/stacks/`, a larger architectural pass); **N2 YAML** (PROGRESS.md
+> YAML frontmatter migration — defer until the round-4 marker proves
+> insufficient in real-session data). The U-block's standalone
+> `/profile explain <field>` command is also still open but the round-4 19g
+> chapter covers the same need via documentation — defer the command as
+> polish.
 
 A different lens from Passes 1–3, which were maintenance / audit. **This pass
 asks: would someone outside the founder's stack feel welcome here? Would the
@@ -1992,7 +2075,7 @@ on first launch.
 
 ---
 
-## Shipped vs remaining (status as of the third 2026-05-28 sweep)
+## Shipped vs remaining (status as of the fifth 2026-05-28 sweep)
 
 **Shipped in `[Unreleased]`:**
 
@@ -2017,23 +2100,182 @@ on first launch.
 | —    | N6 partial (op-spine-active accepts four plan-layout conventions + `Plan layout:` override) | ✅ shipped (round 1) |
 | —    | N2 partial (PROGRESS.md self-documenting marker comment above the parsed bullets) | ✅ shipped (round 2) |
 | —    | N7 (README cost framings → token counts + Anthropic pricing link) | ✅ shipped (round 2) |
+| —    | **M7 (INDEX.md routing column)** — every `## <Section>` heading carries a one-line italic note naming the routing skill(s); Foundations / Workflow / Prompting / Signaling / Persistence / Tools / Subagents / Recovery / Anti-patterns / Personalization all annotated. | ✅ shipped (round 4) |
+| —    | **M8 (op-hooks SKILL.md spine-hooks preview)** — Index table gains a third row pointing at `~/.claude/settings.json` + `/hooks`; new "Spine-shipped hooks (default install)" subsection lists all six scripts with event + behavior + opt-in status. | ✅ shipped (round 4) |
+| —    | **N2 (rest) — visible parse-error surface** — `global/hooks/spine-writeback.sh` writes `docs/.spine-parse-error` when SECTION/SESSION extraction fails on a PROGRESS.md that has been edited beyond template state. Marker is auto-removed on the next successful parse. Template-state continues to exit silently. `/done` Step 0 and `/spine` section 8 read and surface the marker. Smoke-tested across drift / fix / template-state cases. | ✅ shipped (round 4) |
+| —    | **U4 (onboard preview screen)** — `op-onboard/SKILL.md` Step 1 expanded from a one-line text to a structured preview in a fenced block. Lists question themes by group (subscription + experience / what you build / how I should talk / environment for essentials; daily usage / coding background / secondary stack / team + scale / signals / output + risk / session + plans / org + currency for deep). Adds explicit Cmd+C-is-safe reassurance — essentials save after Q9 so nothing is lost if the user stops mid-deep. | ✅ shipped (round 4) |
+| —    | **U5 (profile-field downstream effects)** — new chapter `chapters/personalization/19g-field-effects.md` maps every profile field to the chapters / skills / hooks that consume it AND the user-visible behavior change to expect. INDEX.md Personalization row added; `op-onboard/handoff.md` cross-references the chapter as the canonical "what does this field actually change?" answer. No new command needed. | ✅ shipped (round 4) |
+| —    | **B9 (rest) — foundations + persistence chapter audit** — `03c-project-fit.md` "handles well" list broadened from 6 web-leaning entries to 11 (explicitly names CLI tools, libraries / frameworks, documentation projects, data scripts, test suites). Stack-specific examples generalized in `02-context-budget.md`, `03a-hard-limits.md`, `03b-soft-limits.md`, `13c-skill-design-patterns.md`. 12b already had multi-stack worked examples from round 2. | ✅ shipped (round 4) |
+| —    | **VCS-host-aware install (BIAS-AUDIT P3 #14)** — `global/settings-extras/+vcs-gitlab.json` + `+vcs-bitbucket.json` ship the actual JSON fragments. `op-onboard/handoff.md` VCS line now points at the fragment by path instead of just naming the CLI. `global/INSTALL.md` reviewed-settings section gains a sixth bullet covering the extras directory. Floor-level: fragments exist and are merge-ready; programmatic auto-merge from `/onboard --deep` remains future work. | ✅ shipped (round 4) |
+| —    | **Per-stack settings extras (B6 follow-up)** — `global/settings-extras/` directory with `README.md` (manual + `jq` merge command, smoke-tested end-to-end) plus 8 fragments: `+vcs-gitlab.json`, `+vcs-bitbucket.json`, `+vercel-stack.json`, `+supabase-stack.json`, `+aws-stack.json`, `+gcp-stack.json`, `+azure-stack.json`, `+docker-k8s-stack.json`. All validated with `jq empty`. Never auto-merged — explicit user action only. | ✅ shipped (round 4) |
+| PR 8 | **N5 (jq-based settings.json mutation in `op-onboard`)** — `hook-tune.md` rewritten: pre-flight inspects the live `PostToolUse` shape; on owned shape (absent OR matcher `Edit\|Write\|MultiEdit` with only spine-named scripts), the merge runs via `jq --argjson hooks ... | .hooks.PostToolUse = [...]` with atomic `.tmp` + `mv`. `jq empty` gates both input and output. Foreign-hook detection falls to the existing Hand-edit fallback. The Edit-based slice-match approach is gone — the new path survives user-reformatted JSON. | ✅ shipped (round 5) |
+| —    | **VCS-host-aware: `op-onboard --deep` auto-merge of `+vcs-*.json`** — new `skills/core/op-onboard/extras-merge.md` (loaded at SKILL.md step 8) detects Q8 = GitLab → `+vcs-gitlab.json`, Q8 = Bitbucket → `+vcs-bitbucket.json`. Per-fragment plain-English explanation block + Apply/Skip via `AskUserQuestion`; on Apply runs the same `jq` merge as the manual command in `settings-extras/README.md`. Already-merged fragments (full set-difference empty) silent-skip so re-runs are idempotent. Hand-edit fallback when `jq` fails or the merge produces invalid JSON. | ✅ shipped (round 5) |
+| —    | **Per-stack settings extras: programmatic onboard-driven inject (B6 follow-up)** — same `extras-merge.md` flow scans Q3 / B1 / Q9 free-text (case-insensitive substring) for `vercel`, `supabase`, `aws`, `gcp`/`google cloud`/`firebase`, `azure`, `docker`/`kubernetes`/`k8s`. Each match offers the corresponding `+<platform>-stack.json` as a separate Apply/Skip. Conservative on matches — a missed suggestion is fine, the fragments live on disk regardless. `op-onboard/SKILL.md` Rules section gained a third allowlist surface (`permissions.allow` + `permissions.WebFetch` append-only, named fragments only). `handoff.md` updated to report actual per-fragment state. `settings-extras/README.md` "Never auto-merge" rule softened to "Never silent-merge — explicit Apply/Skip required." | ✅ shipped (round 5) |
+| —    | **Round-5 smoke test** — new `tests/onboard/test-extras-merge.sh` (8 cases: happy-path merge / idempotency / missing-key resilience / all 8 fragments valid JSON / two-fragment sequential / malformed-input fail-fast). Wired into `tests/run.sh`. | ✅ shipped (round 5) |
+| —    | **P3 #15 (model + plan-tier registry)** — new `docs/MODELS.md`. Lists current Anthropic models (Opus 4.7 / Sonnet 4.6 / Haiku 4.5) with IDs + context + cost class, older-release rows kept for cross-reference, and a full plan-tier table covering Free / Pro / Max 5× / Max 20× / Team / Enterprise / API+pay-as-you-go / Bedrock / Vertex / OpenRouter / self-hosted gateway. `chapters/foundations/04a-model-tiers.md` + `chapters/personalization/19f-subscription-aware.md` reference the registry as the canonical source; both stack stubs under `global/stacks/` swap their hard-coded `claude-sonnet-4-6` / `claude-opus-4-7` strings for "current Sonnet/Opus ID per `docs/MODELS.md`." Runtime-pinned constants in `tools/token-check.py`, `benchmarks/tokens/run.sh` + README, and `tests/skill-triggers/README.md` documented in the registry's "Runtime constants" section as intentionally-pinned. | ✅ shipped (round 6) |
+| —    | **P3 #16 (subscription `Other` branch defaults)** — `skills/core/op-onboard/subscription-tune.md` mapping table extended with four rows: Team / Enterprise / API+cloud-passthrough / fallback. Case-insensitive substring match on Q1 free-text (`team` → Pro-class 180000+high; `enterprise` → mid-class 400000+high; `api`/`bedrock`/`vertex`/`openrouter`/`pay-as-you-go` → mid-class 400000+high; anything else → silent skip with `docs/MODELS.md` + INSTALL pointer). `19f-subscription-aware.md` Other-plan handling rewritten with the per-tier canonical mapping + Cost-sensitivity override matrix. `questions-essential.md` Q1 free-text hint expanded with the recognized triggers. No more silent-skip on `Other` for the known canonical names. | ✅ shipped (round 6) |
+| —    | **P3 #13 (anti-pattern softening) — round-6 finish** — 18a-prompting opening framing rewritten from `"never do this" reference` to `"strong defaults, not universal laws — most have an edge case where they're the right move."`; 18c-context `cat` entry gains an edge-case note (`cat` is fine in shell pipelines / heredocs); 18e-verification "UI feature done without a browser" generalized to "feature done without seeing it work" with per-artifact recipes (UI / CLI / library / backend service / data-ML). 18d / 18f / 18h / 18-meta audited and left as-is — already conditioned, or security-class absolutes (18f) where the absolute is correct. | ✅ shipped (round 6) |
+| —    | **P2 #9 (`06-feature-sizing.md` session-type framing)** — new "Session types — sizing isn't one shape" section at the top with six-row table (Build / Debug / Refactor / Explore / Review / Explain) covering "done" looks like, what to count, and whether the capacity table below applies. Capacity table re-labeled as "Concrete capacity for a build session." "What you should NOT try" section renamed "Combinations that almost always degrade" with explicit valid-edge-case framing and three new non-web rows (public API + caller migration; CLI subcommand + rename; ML experiment + pipeline refactor). The round-3 "one cohesive goal" universalization completed by the session-type framing. | ✅ shipped (round 6) |
+| —    | **P2 #11 (bucket-loop default flipped `on` → `off`)** — `profile-template.md` `## Spine defaults` default line flipped; `questions-deep.md` H1 option order flipped (Off is now the default-marked option); field-absent fallback in `op-suggest`, `op-curate-nudge`, and `op-bucket-router` all flipped to `off` with rationale ("a user who never ran `/onboard` shouldn't have the bucket loop firing in the background"). README's two bucket-loop mentions reframed as opt-in flywheel with explicit "default off after the round-6 flip" framing. Existing users with `Bucket loop: on` in their profile are unaffected. | ✅ shipped (round 6) |
 
 **Remaining:**
 
 | PR # | Items | Notes |
 |------|-------|-------|
-| PR 7 (rest) | N2 (YAML frontmatter parser + `.parse-error` marker file) | Marker comment landed; structured parsing + visible failure mode separate. ~1h. |
-| PR 8 | N5 (jq-based settings.json mutation in op-onboard) | Tied to P2 (op-onboard split — currently 286 lines); do them together. ~1h on top of P2. |
+| PR 7 (rest, optional) | N2 (YAML frontmatter parser) | Marker comment + `.spine-parse-error` surface both landed; YAML frontmatter migration of PROGRESS.md is the larger separate refactor — defer until the marker proves insufficient in real-session data. |
 | PR 9 | C-block (command consolidation 9 → 6) | Significant UX change; needs broader sign-off. ~3h. |
 | PR 10 | B10 (Windows-native installer) | Stretch goal. ~half-day to a day. |
-| — | B9 (un-audited chapter pass for project-type assumptions) | Anti-pattern partial pass shipped (18b + 18g); foundations + persistence still un-audited. ~30min remaining. |
 | — | B11 (i18n hook in onboarding) | Deferred per finding; not urgent until adoption signals localization. |
-| — | U-block remainder (onboard preview, `/profile explain <field>`) | Polish; ~1h combined. Cheatsheet + Free-tier landed in round 3. |
-| — | P2/P3/P4 (op-onboard split + skill boilerplate trim + per-stack CLAUDE.md split) | M5/M6 from Pass 3, restated for global-readiness. ~4h combined. |
-| — | Per-stack settings extras (B6 follow-up): drop-in `global/settings-extras/+python-stack.json` fragments + onboard inject path | Floor (broadened defaults) landed in round 1; per-stack inject still future. ~2h. |
-| — | VCS-host-aware install (BIAS-AUDIT P3 #14) | Now enabled by new Q8 (VCS host); next pass wires the inject of `gh` / `glab` / `bb` allowlist + per-host WebFetch domains. ~1-2h. |
+| — | U-block — `/profile explain <field>` standalone command | The 19g chapter (round 4) covers the same need via documentation. A standalone slash command for the same lookup is polish; defer. |
+| — | P4 (per-stack CLAUDE.md split into `op-stack-flavor`) | Two stack variants now exist under `global/stacks/`. Splitting them further into a thin CLAUDE.md + on-demand flavor skill is a larger architectural pass. ~3h. |
 
 **Round-3 totals:** ~5-6 hours wall time across N1+N8 (profile-settable
 thresholds), the 8-question onboard expansion + count sweep, N3/N4 parser
 cleanups, Free-tier Q1 mapping, anti-pattern softening, the CHEATSHEET,
 bucket-loop optional reframe, L9 wording fix, plus this FIXES.md update.
+
+**Round-4 totals:** ~3-4 hours wall time across M7 (INDEX routing column),
+M8 (op-hooks spine-hooks preview), N2 finish (parse-error marker +
+`/done` + `/spine` surfaces), U4 (onboard preview expansion), U5 (new
+chapter 19g + handoff cross-reference), B9 (foundations + persistence
+chapter audit), and the new `global/settings-extras/` directory (8
+fragments + README + INSTALL.md cross-reference + handoff cross-reference),
+plus this FIXES.md update. Fast suite (`tests/run.sh`) re-run: 57/57 pass,
+no regressions. Manual smoke test of the spine-writeback parse-error
+surface verified across drift / fix / template-state cases. `jq` merge
+command in `settings-extras/README.md` smoke-tested against a synthetic
+settings.json — non-merge keys preserved, allow + WebFetch arrays uniqued.
+
+**Round-5 totals:** ~3 hours wall time across the three connected items
+(N5 jq mutation, VCS auto-merge, per-stack auto-merge) plus the new
+`extras-merge.md` adjacent file, the SKILL.md write-surface allowlist
+extension, the handoff state-reporting update, the
+`settings-extras/README.md` rule softening, and the new
+`tests/onboard/test-extras-merge.sh` (8 cases). Fast suite re-run after
+the changes (see end-of-session log) covers the new merge test inline.
+
+---
+
+---
+
+# Pass 5 — folded from the archived BIAS-AUDIT (2026-05-28)
+
+> The original `BIAS-AUDIT.md` at the repo root has been archived to
+> [`docs/archive/BIAS-AUDIT-2026-05.md`](docs/archive/BIAS-AUDIT-2026-05.md).
+> Most of its findings landed across rounds 1–5 (see the per-round
+> notes above). The items below are the residue — audit findings that
+> are real, still-open, and not captured elsewhere in this file. They
+> are de-duplicated against the Pass-4 B/N/C/U/P blocks and the
+> Round-5 "Remaining" table above; do not file them again.
+
+Each item lists the original BIAS-AUDIT location and the treatment
+shape. Effort estimates are rough — multiply by 1.5–2× if the work
+turns out to need a sub-chapter rewrite.
+
+### BA1. Conditional deep-mode questions for web/mobile (BIAS-AUDIT §10 "New deep, conditional on PT-new = web/mobile")
+
+The round-3 onboard expansion added 3 essentials + 5 deep but skipped
+the two questions BIAS-AUDIT §10 names as **conditional** on
+`Q9 (Artifact)` being a UI-shipping shape:
+
+- **WM-new — Deploy target.** Vercel / Netlify / Cloudflare / AWS /
+  GCP / Azure / Self-hosted VPS / Docker registry / Mobile app stores /
+  Other. Drives DEPLOY.md variant pick once BA3 below ships per-platform
+  variants.
+- **WM-new2 — Database default.** Postgres / MySQL / SQLite / Mongo /
+  Dynamo / Firestore / None / Other. Drives ARCHITECTURE.md template
+  variant.
+
+Ask only when `Q9` resolves to "An app users open" or similar UI-bearing
+shape; skip for CLI / library / data-pipeline / etc. **Treatment:**
+ONBOARD. **Effort:** ~30 min for the question wiring; the downstream
+template-routing is its own item (BA3 + ARCHITECTURE.md follow-up).
+
+### BA2. Anthropic model + plan registry (BIAS-AUDIT §9 Priority 3 #15) **[✅ shipped 2026-05-28]**
+
+`docs/MODELS.md` shipped as the single source of truth for model IDs +
+plan tiers. Initial table mirrors the lineup that lived duplicated
+across chapters/foundations/04*.md, the onboard skills, benchmarks
+scripts, and tools/token-check.py. The registry sits at the docs root
+(not inside chapters/) so it's the obvious dependency for any spine
+file that names a model. Existing chapters keep their narrative but
+add a cross-reference banner pointing at the registry as authoritative:
+`chapters/foundations/04a-model-tiers.md` and
+`chapters/personalization/19f-subscription-aware.md` both updated;
+`skills/core/op-onboard/questions-essential.md` Q1 free-text mapping
+points at the registry. Future model bumps become a one-file edit in
+`docs/MODELS.md` plus any pinned runtime constants noted in that file.
+
+### BA3. Per-platform DEPLOY.md variants (BIAS-AUDIT §9 Priority 3 #12, partial)
+
+Round-2 rewrote `templates/DEPLOY.md` to a stack-agnostic skeleton and
+moved the worked Next/Vercel/Supabase + static-site/SSH example into
+`templates/examples/web-saas-next-supabase/DEPLOY.md`. The main file
+*names* other shapes the user might fill in for (Docker / k8s / Lambda /
+library publish / mobile store / homebrew) but those variants don't ship
+as worked runbooks.
+
+**Treatment:** add `templates/examples/{docker-registry,k8s-helm,aws-lambda-sam,gcp-cloud-run,library-npm,library-pypi,library-cargo,gh-release-binary,mobile-app-store}/DEPLOY.md` as the audience requests them. Don't ship all nine in one pass — start with the two or three the next inbound user actually asks for, mirror BA1 (Deploy target answer routes the variant pick). **Effort:** ~30 min per shipped variant.
+
+### BA4. Subscription "Other" branch — real defaults (BIAS-AUDIT §9 Priority 3 #16) **[✅ shipped 2026-05-28]**
+
+`skills/core/op-onboard/subscription-tune.md` mapping table extended
+with four new rows for Q1 = `Other` free-text:
+
+- `team` → Pro-class limits (180000 / high)
+- `enterprise` → mid-class with a 400000 autoCompactWindow bump
+- `api` / `bedrock` / `vertex` / `openrouter` / `pay-as-you-go` →
+  mid-class with a 400000 autoCompactWindow bump
+- anything else → leave alone (the original silent-skip behavior)
+
+Matching is case-insensitive substring; multiple matches resolve to the
+first one in the order Team → Enterprise → API. `questions-essential.md`
+Q1 free-text hint updated to surface the recognized triggers without
+turning Q1 into a four-option-plus-four-other multi-select.
+`19f-subscription-aware.md` Other-plan handling rewritten with the
+explicit per-tier mappings + a Cost-sensitivity override matrix.
+
+### BA5. Anti-pattern softening — completeness sweep (BIAS-AUDIT §9 Priority 3 #13, residual) **[✅ partial 2026-05-28]**
+
+Round-3 softened 18g + 18b. Round-6 (parallel) sweep softened the
+remaining over-broad framings in 18a / 18c / 18e:
+
+- **18a-prompting.md** header rewritten from `"never do this" reference`
+  to `A catalog of prompting patterns that fail in the contexts this
+  spine targets... strong defaults, not universal laws — most have an
+  edge case where they're the right move. When you knowingly hit one
+  of those edges, ignore the rule.`
+- **18c-context.md** "Using `cat`..." entry gains an edge-case note
+  (`cat` is fine in shell pipelines / heredocs; the anti-pattern is
+  using `cat` to look at a file, not the unix idiom).
+- **18e-verification.md** "Declaring a UI feature done without a
+  browser" generalized to "Declaring a feature done without seeing it
+  work" with per-artifact-shape verification recipes (UI / CLI /
+  Library / Backend / Data-ML).
+
+`chapters/workflow/06-feature-sizing.md` (BIAS-AUDIT §9 Priority 2 #9)
+also picked up a "Session types — sizing isn't one shape" section in
+the same sweep — six shapes (Build / Debug / Refactor / Explore /
+Review / Explain) each with a "done" definition and a note on whether
+the capacity table applies.
+
+18d / 18f / 18h not yet audited in this pass — 18f security framings
+are mostly *correctly* unconditional (committing secrets, CORS `*` on
+user data) so likely accepted as-is. Carry the residual to a future
+piggy-back pass when those files are next edited.
+
+---
+
+## Pass 5 — current open queue
+
+After the parallel round-6 sweep (2026-05-28), the open BIAS-AUDIT
+residue is:
+
+1. **BA1 (deep conditional questions for web/mobile)** — ~30 min wiring.
+2. **BA3 (per-platform DEPLOY variants)** — pull-driven; one variant at
+   a time as inbound users request them.
+3. **BA5 (residual 18d/18f/18h sweep)** — piggy-back, not dedicated.
+
+BA2 + BA4 + the 06-feature-sizing session-types section landed in the
+parallel sweep alongside this doc cleanup. The archived `BIAS-AUDIT.md`
+under `docs/archive/` is now ~3 items from being fully integrated.

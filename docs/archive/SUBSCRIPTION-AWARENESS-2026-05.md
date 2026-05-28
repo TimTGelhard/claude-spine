@@ -1,6 +1,8 @@
 # Subscription-aware adjustments — planning doc
 
-> **Status:** All three sessions done. Personalization payload closed.
+> **Archived 2026-05-28.** This was the Pillar 1 planning doc. All three sessions shipped — the live mechanic is [`chapters/personalization/19f-subscription-aware.md`](../../chapters/personalization/19f-subscription-aware.md) plus the four routing skills wired to it (`op-foundations`, `op-tools`, `op-subagents`, `op-signaling`). Pillar 1 status + the full payload narrative live in [`CHANGELOG.md`](../../CHANGELOG.md) under `[Unreleased]` / `[0.10.0]` and in [`FIXES.md`](../../FIXES.md) under Pillar 1. Kept here as the design audit trail.
+
+> **Status (frozen):** All three sessions done. Personalization payload closed.
 >
 > - **Session 1 (2026-05-27).** `chapters/personalization/19f-subscription-aware.md` shipped (8 levers × 4 plan-rows + Cost sensitivity modifier + Pro fallback). Four routing skills wired to read it (`op-foundations`, `op-tools`, `op-subagents`, `op-signaling`).
 > - **Session 2 (2026-05-28).** Five chapters cross-reference 19f: `04a-model-tiers` ("Plan-aware default" subsection + related-link), `04b-plan-and-fast-mode` (fast-mode framing note), `04c-budget-and-cost` ("Plan budgets" pointer paragraph), `16c-parallel-and-background` ("Plan-aware fan-out budget" subsection + TL;DR bullet), `11-overview` ("Cost / quota signals" cross-cutting subsection). Bidirectional linking complete.

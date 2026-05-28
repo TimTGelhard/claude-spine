@@ -17,7 +17,7 @@ Options (single-select):
 - **Max (5×)** — the ~$100/month plan; more usage, occasional Opus
 - **Max (20×)** — the ~$200/month plan; heavy usage, Opus most of the time
 
-(Other = free-text — e.g. "Team plan", "Enterprise", "API / pay-as-you-go".)
+(Other = free-text. Recognized free-text triggers for the settings-tune mapping — match case-insensitively: `Team` → Pro-class limits; `Enterprise` → mid-class; `API` / `pay-as-you-go` / `Bedrock` / `Vertex` / `OpenRouter` / self-hosted gateway → mid-class. Any other free-text leaves settings alone. Full registry in [`docs/MODELS.md`](../../../docs/MODELS.md).)
 
 → Profile: `Subscription → Plan`.
 

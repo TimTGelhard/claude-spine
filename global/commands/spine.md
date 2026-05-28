@@ -66,6 +66,17 @@ Pending suggestions: K (run /curate to review)
 
 Otherwise omit this line.
 
+### 8. Parse-error surface
+
+If `docs/.spine-parse-error` exists in the current working directory, print a one-line warning followed by the marker contents indented two spaces:
+
+```
+⚠ spine-writeback parse-error in this project — heartbeats are silently no-opping.
+  <contents of docs/.spine-parse-error, indented>
+```
+
+This is the only line `/spine` is allowed to print that isn't pure inventory — it surfaces a silent failure mode the user otherwise has no way to notice. If the marker file doesn't exist, omit the section entirely.
+
 ## Hard rules
 
 1. **Read-only.** This command never writes anything to disk.

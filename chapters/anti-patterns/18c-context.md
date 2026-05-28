@@ -12,6 +12,8 @@ The context window is a budget, not bandwidth. Each entry: the anti-pattern, why
 **Fails because:** plain text dump, no syntax handling, no IDE integration, bypasses the file-state tracking the Read tool maintains.
 **Instead:** the `Read` tool. See [15a-file-ops.md](../tools/15a-file-ops.md).
 
+(Edge: when a shell pipeline genuinely needs the file body in a heredoc or as input to another command, `cat` is fine — the anti-pattern is using `cat` to *look at* a file, not the unix idiom.)
+
 ## Running verbose commands without filtering
 
 **Fails because:** install output (1000+ lines) lands in context for the session.

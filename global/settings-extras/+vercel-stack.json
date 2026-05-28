@@ -1,0 +1,22 @@
+{
+  "_comment": "Merge into ~/.claude/settings.json when you deploy to Vercel. Extends the Vercel CLI read patterns shipped in the neutral default and adds Vercel platform docs WebFetch. Defaults already include `vercel ls`, `inspect`, `logs`, `env ls`, `project ls`; this fragment adds the broader patterns a Vercel-native project tends to want.",
+  "permissions": {
+    "allow": [
+      "Bash(vercel domains:*)",
+      "Bash(vercel certs:*)",
+      "Bash(vercel teams:*)",
+      "Bash(vercel whoami:*)",
+      "Bash(vercel link:*)",
+      "Bash(vercel pull:*)",
+      "Bash(vercel env pull:*)",
+      "Bash(vercel build:*)",
+      "Bash(vercel dev:*)"
+    ],
+    "WebFetch": [
+      "domain:vercel.com",
+      "domain:nextjs.org",
+      "domain:vercel-storage.com",
+      "domain:edge-config.com"
+    ]
+  }
+}

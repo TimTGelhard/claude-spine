@@ -1,0 +1,25 @@
+{
+  "_comment": "Merge into ~/.claude/settings.json when you deploy to AWS. Adds AWS CLI + Elastic Beanstalk read patterns + AWS docs WebFetch. Note: write/destroy patterns (deploy, terminate, delete) are intentionally NOT pre-allowed — they require an explicit per-action prompt for safety.",
+  "permissions": {
+    "allow": [
+      "Bash(aws sts get-caller-identity:*)",
+      "Bash(aws configure list:*)",
+      "Bash(aws s3 ls:*)",
+      "Bash(aws ec2 describe-instances:*)",
+      "Bash(aws lambda list-functions:*)",
+      "Bash(aws logs describe-log-groups:*)",
+      "Bash(aws logs get-log-events:*)",
+      "Bash(aws cloudwatch list-metrics:*)",
+      "Bash(aws iam list-roles:*)",
+      "Bash(aws iam get-role:*)",
+      "Bash(eb status:*)",
+      "Bash(eb list:*)",
+      "Bash(eb logs:*)"
+    ],
+    "WebFetch": [
+      "domain:aws.amazon.com",
+      "domain:docs.aws.amazon.com",
+      "domain:console.aws.amazon.com"
+    ]
+  }
+}

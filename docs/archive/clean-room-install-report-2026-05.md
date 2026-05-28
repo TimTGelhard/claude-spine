@@ -1,5 +1,7 @@
 # Clean-room install report — L5
 
+> **Archived 2026-05-28.** This is the frozen verification report for [`LAUNCH.md`](../../LAUNCH.md) phase L5 (clean-room install across nine scenarios on Ubuntu 22.04). The verdict ("installer is launch-ready; three Claude-Code-required checks deferred to a manual session after L8") is recorded as historical evidence. Kept here so future readers can see what was tested + what passed. **Do not rely on the report as a current spec** — installer behavior drift is normal and any new install issues should be filed in [`FIXES.md`](../../FIXES.md), not added to this report.
+
 **Date:** 2026-05-27
 **Tester:** Claude (Opus 4.7) executing LAUNCH.md phase L5
 **Spine commit at time of test:** `177e9d5` (L6 landed)

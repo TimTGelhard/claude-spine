@@ -83,8 +83,51 @@ SESSION=$(grep -E '^\s*-?\s*\*\*Session\*\*:' "$PROGRESS" 2>/dev/null \
   | sed -E 's/^[^`]*`([^`]+)`.*/\1/' \
   | tr -d '\n' || true)
 
-[ -z "$SECTION" ] && exit 0
-[ -z "$SESSION" ] && exit 0
+# ---------- parse-error surface (N2) ----------
+#
+# If PROGRESS.md exists but SECTION/SESSION extraction failed, write a marker
+# at $CWD/docs/.spine-parse-error. `/done` and `/spine` read it and surface a
+# visible warning. On the next successful parse, the marker is removed.
+#
+# We distinguish two empty-extract cases:
+#   • Template state — Section/Session bullets still hold `<section-name>` /
+#     `<N>` placeholders. Silent exit (waiting for user to fill in).
+#   • Format drift — the bullets have been edited but no longer match the
+#     parser's expected shape (`- **Section**: \`<name>\``). Write the marker.
+
+PARSE_ERROR_MARKER="$CWD/docs/.spine-parse-error"
+
+HAS_TEMPLATE_PLACEHOLDERS=0
+if grep -qE '\*\*Section\*\*:[^`]*`<[^>]+>`' "$PROGRESS" 2>/dev/null || \
+   grep -qE '\*\*Session\*\*:[^`]*`<[^>]+>`' "$PROGRESS" 2>/dev/null; then
+  HAS_TEMPLATE_PLACEHOLDERS=1
+fi
+
+if [ -z "$SECTION" ] || [ -z "$SESSION" ]; then
+  if [ "$HAS_TEMPLATE_PLACEHOLDERS" -eq 0 ]; then
+    {
+      echo "spine-writeback could not parse $PROGRESS @ $(date '+%Y-%m-%d %H:%M:%S')"
+      echo ""
+      echo "Expected bullet shape (literal — see templates/PROGRESS.md):"
+      echo "  - **Section**: \`<section-name>\` (from \`docs/PROJECT_PLAN.md\`)"
+      echo "  - **Session**: \`<N>\` — \`<one-line goal>\`"
+      echo ""
+      [ -z "$SECTION" ] && echo "Missing: Section bullet — bold **Section**, colon, backtick-quoted name."
+      [ -z "$SESSION" ] && echo "Missing: Session bullet — bold **Session**, colon, backtick-quoted N."
+      echo ""
+      echo "Until the bullets parse, the Stop hook silently no-ops:"
+      echo "  - Per-turn heartbeats are NOT logged to the active section plan."
+      echo "  - Cross-session-note capture is paused."
+      echo "  - Long-session signaling is paused."
+      echo ""
+      echo "Fix the PROGRESS.md bullets (template at \`templates/PROGRESS.md\` shows the literal shape); this marker auto-clears on the next successful parse. This file is safe to ignore in git — it is runtime state, not source."
+    } > "$PARSE_ERROR_MARKER" 2>/dev/null || true
+  fi
+  exit 0
+fi
+
+# Successful parse on real values — clear any stale marker.
+[ -f "$PARSE_ERROR_MARKER" ] && rm -f "$PARSE_ERROR_MARKER" 2>/dev/null || true
 
 # Template placeholders (e.g. `<section-name>`) — surface nothing, exit.
 case "$SECTION" in *"<"*">"*) exit 0 ;; esac

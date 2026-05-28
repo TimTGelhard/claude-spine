@@ -86,6 +86,7 @@ For projects that pre-date this workflow, the older `docs/SESSION_STARTER.md` pa
    - **enabledPlugins** — `skill-creator` and `github` ship on by default. Stack-specific plugins (`vercel`, `playwright`, `frontend-design`) ship off by default — enable per-stack only when you actually need them.
    - **effortLevel** is `high` (opinionated but Pro-plan-safe). Raise to `xhigh` for deepest reasoning on Max 20x; lower to `medium` for faster, cheaper turns. See "Tuning for Max 20x / 1M context" below.
    - **autoCompactWindow** is `180000` (auto-compact fires at 180K tokens — sized for 200K-context models). Raise to `800000` if you have a 1M-context model. Same section below.
+   - **Optional stack/VCS extras**: drop-in JSON fragments at `~/.claude-spine/global/settings-extras/+<name>.json` add allowlist entries for specific stacks (Vercel, Supabase, AWS, GCP, Azure, Docker/k8s) and non-GitHub VCS hosts (GitLab, Bitbucket). Merge what you need — see `global/settings-extras/README.md` for the `jq` merge command. The fragments are never auto-merged; you opt in by hand.
 
 ### Verify
 

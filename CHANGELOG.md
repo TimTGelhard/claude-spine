@@ -10,6 +10,138 @@ Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/). Versioning: [S
 
 ## [Unreleased]
 
+### Bias-audit + FIXES sweep — round 6 (2026-05-28)
+
+Pre-launch cleanup of the BIAS-AUDIT Priority-2/3 residuals that weren't already shipped or deferred to a separate session. Five items land together: a single source of truth for Anthropic models + plan tiers, sensible defaults for `Other` (Team / Enterprise / API / Bedrock / Vertex / OpenRouter / self-hosted) instead of silent-skip, anti-pattern softening across the remaining catalog entries that read as universal laws, session-type framing for `06-feature-sizing.md`, and the bucket-loop default flip from `on` to `off`.
+
+#### Added
+
+- `docs/MODELS.md` (new) — single source of truth for Anthropic model IDs (Opus 4.7 / Sonnet 4.6 / Haiku 4.5 lineup, current 1M-context variant, older-release rows kept for cross-reference) and Claude plan tiers (Free / Pro / Max 5× / Max 20× / Team / Enterprise / API / Bedrock / Vertex / OpenRouter / self-hosted-gateway). Chapters and templates link here instead of duplicating names; a "Runtime constants (intentionally pinned, may lag this file)" section lists the four places where runtime defaults live in source (`tools/token-check.py`, `benchmarks/tokens/run.sh` + README, `tests/skill-triggers/README.md`) so a maintainer doing a model-rename sweep has the punch list in one place. Closes BIAS-AUDIT P3 #15.
+
+#### Changed
+
+- `chapters/foundations/04a-model-tiers.md` — table caption now points at `docs/MODELS.md` as the canonical registry; "Related" section adds a row pointing there. Mirrors the registry; if the two disagree, the registry wins.
+- `global/stacks/ts-next-supabase/CLAUDE.md.template` + `global/stacks/python-django/CLAUDE.md.template` (the two shipped stack stubs) — the "Anthropic API" line no longer hard-codes the model IDs in marketing prose. Now reads "Default model: the current Sonnet ID per `docs/MODELS.md` (today `claude-sonnet-4-6`); escalate to the current Opus ID (today `claude-opus-4-7`) only for hard multi-file reasoning." Same advice, single source of truth, no date-rot when Anthropic ships Sonnet 4.7.
+- `chapters/personalization/19f-subscription-aware.md` — `Other`-plan handling rewritten. The single-line "treat like Max 20× unless cost-aware" rule expanded into a canonical mapping (Team → Pro; Enterprise → Max 5×; API / pay-as-you-go / Bedrock / Vertex / OpenRouter / self-hosted → cost-sensitivity-dependent: Pro if Very careful, Max 20× if Don't worry, Max 5× if Balanced). Mirrors `docs/MODELS.md`'s plan-tier registry. Closes BIAS-AUDIT P3 #16 (the audit's "subscription Other branch defaults" item).
+- `skills/core/op-onboard/subscription-tune.md` — mapping table extended with four new rows (Team / Enterprise / API+cloud-passthrough / Other-anything-else) plus a case-insensitive substring-match flow for the free-text Q1 answer. Team → Pro-class settings (180000 / high); Enterprise → mid-class (400000 / high); API / Bedrock / Vertex / OpenRouter / pay-as-you-go → mid-class (same). Anything that doesn't match a trigger silent-skips with a hand-tune pointer at `docs/MODELS.md` + INSTALL. The Edit-based flow itself is unchanged (the N5 round-5 jq-merge applies to hook tuning, not subscription tuning).
+- `skills/core/op-onboard/questions-essential.md` — Q1 free-text hint expanded with the recognized triggers so a user re-running `/onboard` sees what answers the spine will branch on.
+- `chapters/anti-patterns/18a-prompting.md` — opening framing softened from `"never do this" reference` to `"a catalog of prompting patterns that fail in the contexts this spine targets ... strong defaults, not universal laws — most have an edge case where they're the right move."` Same entries, conditioned framing. Closes BIAS-AUDIT P3 #13 for 18a.
+- `chapters/anti-patterns/18c-context.md` — `cat` entry gets an edge-case note: `cat` is fine in shell pipelines (heredoc input, etc.); the anti-pattern is using it to *look at* a file. Closes P3 #13 for 18c.
+- `chapters/anti-patterns/18e-verification.md` — "Declaring a UI feature done without running it in a browser" generalized to "Declaring a feature done without seeing it work" with per-artifact verification recipes (UI / CLI / library / backend service / data-or-ML). The browser-only framing was a leak. Closes P3 #13 for 18e. (The two-session auth/RLS check stays a hard no-exceptions rule — security-class absolute, intentional.)
+- `chapters/anti-patterns/18d-tools.md`, `18f-security.md`, `18h-long-term.md`, `18-meta-patterns.md` — audited; entries already either explicitly conditioned or security-class absolutes. No edits.
+- `chapters/workflow/06-feature-sizing.md` — new "Session types — sizing isn't one shape" section near the top with a six-row table (Build / Debug / Refactor / Explore / Review / Explain) covering what "done" looks like, what to count for sizing, and whether the existing capacity table applies. Existing capacity table re-labeled as "Concrete capacity for a build session." "What you should NOT try to do in one session" → "Combinations that almost always degrade" with explicit "valid edge case" framing and three new non-web rows (public API + migration; CLI subcommand + rename; ML experiment + pipeline refactor). Closes BIAS-AUDIT P2 #9. Universal "one cohesive goal" principle was already softened in round 3; this completes the framing.
+- **Bucket-loop default flipped `on` → `off`.** `skills/core/op-onboard/profile-template.md` `## Spine defaults` line, `skills/core/op-onboard/questions-deep.md` H1 option order, `skills/core/op-suggest/SKILL.md` + `skills/core/op-curate-nudge/SKILL.md` + `skills/core/op-bucket-router/SKILL.md` field-absent fallback all now default to `off`. README's two bucket-loop mentions reframed: opt-in flywheel, "default off after the round-6 flip." Existing users with `Bucket loop: on` in their profile keep the loop running; new users get spine + profile only unless they opt in via `/onboard --deep` H1 or hand-edit. Closes BIAS-AUDIT P2 #11.
+
+#### Verification
+
+- Fast suite (`tests/run.sh`) — re-run after the round-6 edits; expected 57/57 (no test fixtures touched; documentation + skill bodies + one template field flip + one registry doc only).
+- Manual smoke: `op-onboard` re-run mentally walked end-to-end — Q1 with free-text `Team` resolves to Pro-class settings tune; Q1 with `API` resolves to mid-class; `Anonymous-corp custom plan` silent-skips with hand-tune pointer. `19f`'s lever-1 table no longer goes blank on `Other`. `06-feature-sizing.md` build-session table still anchors correctly; debug / refactor / explore / review / explain rows give the reader a recognizable shape without misapplying the capacity numbers.
+
+#### What's deliberately deferred
+
+- **N2 (YAML frontmatter parser for PROGRESS.md)** — the marker comment + `.spine-parse-error` surface are sufficient for now; YAML migration only earns its keep if real-session data shows the marker insufficient.
+- **C-block (command consolidation 9 → 6)** — significant UX change; needs broader sign-off before shipping.
+- **B10 (Windows-native installer)** — stretch goal; opens a meaningful percentage of the addressable user base but is a half-day-to-a-day of work and needs Windows test capacity the maintainer doesn't have today.
+- **B11 (i18n hook in onboarding)** — deferred per finding; revisit when adoption signals localization is worth it.
+- **P4 (per-stack CLAUDE.md split into `op-stack-flavor`)** — the two stack variants under `global/stacks/` work as is; further splitting into thin-CLAUDE.md + on-demand flavor skill is a larger architectural pass.
+- **`/profile explain <field>` standalone command** — the round-4 19g chapter covers the same need via documentation; the command is polish.
+
+### Doc cleanup — 2026-05-28
+
+Followed the existing `docs/archive/` pattern (JANITOR / PLAN-AMBIENT-WORKFLOW / PERSONALIZATION) for three frozen-in-time documents that were still living at the repo root or under `docs/`. Goal: one source of truth for the open fix queue (`FIXES.md`), no point-in-time audits cluttering the live surface.
+
+#### Changed
+
+- **`BIAS-AUDIT.md` archived** → `docs/archive/BIAS-AUDIT-2026-05.md`. The original full-repo bias audit. The bulk of its findings shipped across rounds 1–5 of `FIXES.md`. The residue is folded into `FIXES.md` as a new "Pass 5 — folded from the archived BIAS-AUDIT" section with five labeled items (`BA1`–`BA5`); a parallel sweep on 2026-05-28 shipped `BA2` (Anthropic model registry — new `docs/MODELS.md`), `BA4` (subscription Other branch in `op-onboard/subscription-tune.md` + Q1 free-text mapping), and most of `BA5` (anti-pattern softening across 18a / 18c / 18e + a new Session-types section in `chapters/workflow/06-feature-sizing.md`). `BA1` (conditional deep questions for web/mobile) and `BA3` (per-platform DEPLOY variants) remain open. Cross-references in CHANGELOG / global/settings-extras/README / round narratives unchanged — they cite `BIAS-AUDIT P0 #3`, `P3 #14` etc. as stable section IDs that still resolve inside the archived file.
+- **`docs/SUBSCRIPTION-AWARENESS.md` archived** → `docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md`. The Pillar 1 planning doc; all three sessions shipped (the live mechanic is `chapters/personalization/19f-subscription-aware.md` + the four routing skills wired to it). Path references in CHANGELOG + FIXES updated to the archive path so links still resolve.
+- **`docs/clean-room-install-report.md` archived** → `docs/archive/clean-room-install-report-2026-05.md`. The frozen `LAUNCH.md` phase-L5 verification report. Verdict at the time ("installer is launch-ready"); kept as evidence, not a live spec. LAUNCH.md path references updated.
+
+#### Net effect
+
+- Repo root markdown files: 11 → 10 (BIAS-AUDIT moved out). FIXES.md grew by one Pass-5 section folding in the five still-open items.
+- `docs/` live files: 2 → 0. `docs/` now contains only `docs/archive/` and `docs/v1-archive/`.
+- Single source of truth for the open fix queue: `FIXES.md`. Anything that was actionable in `BIAS-AUDIT.md` is now either landed in a round or named in Pass 5 as a `BA*` item.
+
+### Bias-audit + FIXES sweep — round 5 (2026-05-28)
+
+The programmatic settings-extras inject layer that round 4 left as future work. Three connected items shipped together: **N5** (jq-based `settings.json` mutation in `op-onboard`), **VCS-host auto-merge** (`+vcs-gitlab.json` / `+vcs-bitbucket.json` proposed in `/onboard --deep` when Q8 matches), and **per-stack auto-merge** (the six `+<platform>-stack.json` fragments proposed when Q3 / B1 / Q9 free-text mentions the platform). All three feed through a new `extras-merge.md` adjacent file with explicit Apply/Skip per fragment — never silent, always per-fragment.
+
+#### Added
+
+- `skills/core/op-onboard/extras-merge.md` (new on-demand file) — owns the detection + per-fragment merge flow. Detects fragments from Q8 (VCS host = GitLab → `+vcs-gitlab.json`; Bitbucket → `+vcs-bitbucket.json`) and from case-insensitive substring scans of Q3 / B1 / Q9 free-text (`vercel`, `supabase`, `aws`, `gcp`/`google cloud`/`firebase`, `azure`, `docker`/`kubernetes`/`k8s`). Per-fragment plain-English explanation block + `AskUserQuestion` Apply/Skip. On Apply runs the same `jq` merge as the manual command in `settings-extras/README.md` (atomic `.tmp` + `mv`, `jq empty` gates input and output). Hand-edit fallback when `jq` fails or the merge produces invalid JSON. Already-merged fragments (full set-difference empty) silent-skip so re-runs are idempotent.
+- `tests/onboard/test-extras-merge.sh` (new fixture, wired into `tests/run.sh`) — 8 cases: happy-path merge / idempotency / missing-key resilience (`// []` fallback) / all 8 shipped fragments valid JSON / two-fragment sequential merge / malformed settings.json fails fast. Mirrors the shape of the existing hook fixtures.
+
+#### Changed
+
+- `skills/core/op-onboard/hook-tune.md` (**N5**) — replaced the Edit-based PostToolUse insertion with a `jq --argjson hooks` set. Pre-flight inspects the live `PostToolUse` shape: absent OR matcher `Edit|Write|MultiEdit` with only spine-named scripts ⇒ safe to merge; anything else ⇒ Hand-edit fallback. The new path survives user-reformatted JSON (the Case A/B/C slice-match fragility is gone). Same Apply/Skip discipline, same fail-fast behavior. The G1/G2 question text was lightly broadened to reflect the round-2 hook-detection expansion (TypeScript / Python with mypy → pyright → ruff → py_compile / Go / Rust / Ruby / PHP / C# for typecheck; ~14 language detection paths for format).
+- `skills/core/op-onboard/SKILL.md` — adjacent-files table gains a row for `extras-merge.md` (step 8). Existing handoff step renumbered 8 → 9. "Write surface is allow-listed" rule extended to a third permitted surface: append-only additions to `permissions.allow` and `permissions.WebFetch`, sourced exclusively from the eight files under `global/settings-extras/+*.json`, deduplicated via `jq unique`. The `/onboard --deep` preview block in step 1 now mentions the Apply/Skip prompts the user will see for any matching fragment.
+- `skills/core/op-onboard/handoff.md` — VCS-host line and a new Stack-extras line both report **actual per-fragment state** (`merged` / `declined` / `not suggested`) rather than the round-4 "we suggested this — go merge it yourself" framing. Updated hard-rule #6 explains that the lines must reflect the Apply/Skip answers captured during the extras-merge pass.
+- `global/settings-extras/README.md` — "How fragments relate to `op-onboard`" rewritten: the "Future work — opt-in `--apply-extras` flag" paragraph removed, replaced with the now-shipped flow (detection from Q3/Q8/Q9, per-fragment Apply/Skip, idempotent re-runs). The "Never auto-merge" rule softened to "Never silent-merge — explicit Apply/Skip required either inside `/onboard --deep`'s extras-merge pass or via a hand-run `jq` command outside it." Append-only / no-new-top-level-keys / one-fragment-per-layer rules unchanged.
+- `tests/run.sh` — header comment updated to list the new `onboard/test-extras-merge.sh` suite. Suites array gains the new entry. The fast suite is now 6 sub-suites instead of 5.
+- `FIXES.md` — Pass-4 status preamble updated to reflect N5 + VCS-auto-merge + per-stack-auto-merge as shipped in round 5. The "What remains" list trims accordingly; "Shipped vs remaining" table moves the three items from `Remaining` to `Shipped`.
+
+#### Verification
+
+- `tests/onboard/test-extras-merge.sh` — 8/8 pass standalone (happy-path / idempotency / missing-key resilience / fragment validity / two-fragment sequential / malformed-input fail-fast).
+- Full fast suite (`tests/run.sh`) — see end-of-session log; no regressions expected from the changes (the only modified hook fixture is the new one).
+
+#### What's deliberately deferred
+
+These remained un-shipped this round per the FIXES.md audit's own recommendation:
+
+- **C-block** (command consolidation 9 → 6) — needs broader sign-off; the existing 9 commands aren't a launch blocker.
+- **B10** (Windows-native installer) — half-day to full-day effort; stretch goal.
+- **B11** (i18n hook in onboarding) — deferred per the original finding.
+- **P4** (per-stack CLAUDE.md split into `op-stack-flavor` skill) — two stack variants already exist under `global/stacks/`; the further "thin CLAUDE.md, fat skills" refactor is a larger architectural pass.
+- **U-block** `/profile explain <field>` standalone slash command — the `19g-field-effects.md` chapter (round 4) covers the same need via documentation; the standalone command is polish.
+
+### Bias-audit + FIXES sweep — round 4 (2026-05-28)
+
+A focused follow-through pass against the remaining Pass-3 / Pass-4 items in `FIXES.md`. The earlier rounds shipped most of the BIAS-AUDIT and FIXES backlog (op-onboard split, profile-settable thresholds, neutral templates, broadened settings.json, the 8-question onboard expansion, etc.); this round closes the smaller-but-visible gaps left over.
+
+#### Added
+
+- `chapters/personalization/19g-field-effects.md` (new chapter — **U5**) — reference table mapping every profile field to the chapters / skills / hooks that consume it AND the user-visible behavior change to expect. Closes the "I changed X and nothing seems different" complaint pattern. INDEX.md gets a new row under Personalization; `op-onboard/handoff.md` cross-references it as the answer to "what does each field actually change?". No new command.
+- `global/settings-extras/` (new directory — **B6 follow-up / VCS-host wiring**) — opt-in drop-in JSON fragments for stack-specific or VCS-host-specific Bash + WebFetch allowlist entries. Ships with `README.md` (manual + `jq` merge command, validated end-to-end) plus 8 fragments: `+vcs-gitlab.json`, `+vcs-bitbucket.json`, `+vercel-stack.json`, `+supabase-stack.json`, `+aws-stack.json`, `+gcp-stack.json`, `+azure-stack.json`, `+docker-k8s-stack.json`. Never auto-merged — explicit user action only. Closes the BIAS-AUDIT B6 follow-up "per-stack inject path" item at the floor level (fragments shipped as files; programmatic inject from `/onboard` remains future work).
+
+#### Changed
+
+- `INDEX.md` (**M7**) — each `## <Section>` heading now carries a one-line italic annotation naming the routing skill(s). Foundations → `op-foundations`; Workflow → `op-workflow` + `op-prepare` + `op-brownfield` + `op-collaboration-modes` + ambient `op-spine-active`; Prompting → `op-prompting` + `op-visuals`; Signaling → `op-signaling`; Persistence → `op-persistence` + `op-hooks`; Tools → `op-tools`; Subagents → `op-subagents`; Recovery → `op-recovery`; Anti-patterns → `op-anti-patterns`; Personalization → `op-onboard` + bucket-loop trio + bucket-router. Closes the M7 gap (Claude falling through to INDEX manually couldn't tell where the routing skill lived).
+- `skills/core/op-hooks/SKILL.md` (**M8**) — Index table gains a third row pointing at `~/.claude/settings.json` / `/hooks` for "what hooks does claude-spine ship?". New "Spine-shipped hooks (default install)" subsection lists all six scripts with event + behavior, marking the two opt-in PostToolUse hooks (typecheck / format) as wired by `/onboard --deep` only.
+- `global/hooks/spine-writeback.sh` (**N2**) — parse-error surface added. When PROGRESS.md exists but the Section / Session bullets can't be extracted AND no `<section-name>` / `<N>` template placeholders remain, the hook now writes `$CWD/docs/.spine-parse-error` describing the missing bullet shape, the consequences (heartbeats / cue capture / long-session signal silently no-op until fixed), and a pointer to `templates/PROGRESS.md`. On the next successful parse, the marker is removed automatically. Template-state (`<section-name>` still present) continues to exit silently — only real format drift writes the marker. Smoke-tested across drift / fix / template-state cases.
+- `global/commands/done.md` (**N2 — surface**) — new Step 0 "Parse-error preflight" reads `docs/.spine-parse-error` if present, surfaces its contents verbatim, and notes that heartbeats this session were not logged (the hook silently no-opped) so Step 3's rollup will be lean. Offers to fix the bullets immediately so the next assistant turn clears the marker.
+- `global/commands/spine.md` (**N2 — surface**) — new section 8 "Parse-error surface" reads `docs/.spine-parse-error` and prints a one-line warning with the marker contents indented. The only line `/spine` is allowed to emit that isn't pure inventory — it surfaces a silent failure mode the user otherwise has no way to notice.
+- `skills/core/op-onboard/SKILL.md` (**U4**) — Step 1 "Print the preview block" expanded from a one-line text to a structured preview in a fenced block. Lists the question themes by group (subscription + experience / what you build / how I should talk / environment for essentials; plus daily usage / coding background / secondary stack + avoid / team + scale / signals / output + risk / session + plans / org + currency for deep) and explicitly says Cmd+C is safe — essentials save after Q9 so nothing is lost if the user stops in the deep block. Same shape for both `/onboard` and `/onboard --deep`.
+- `skills/core/op-onboard/handoff.md` — VCS-host line now points at `global/settings-extras/+vcs-gitlab.json` / `+vcs-bitbucket.json` as the concrete merge artifact, not just "add `Bash(glab:*)` to settings". Adds a final paragraph cross-referencing `19g-field-effects.md` for "what each profile field actually changes".
+- `global/INSTALL.md` — `~/.claude/settings.json` review section gains a sixth bullet covering the optional `settings-extras/` fragments (when to merge, how to merge, the never-auto-merged stance).
+- **B9 — foundations + persistence chapter audit** (the un-audited tail of the BIAS-AUDIT chapter-prose pass):
+  - `chapters/foundations/03c-project-fit.md` — "Project types Claude handles well" list broadened from 6 web-leaning entries to 11, explicitly naming **CLI tools with a bounded command surface**, **Library / framework design**, **Documentation, content, and config projects**, **Data scripts and notebook → script consolidation**, and **Test suites and fixtures** as strong fits. "Greenfield MVPs" gains a parenthetical noting the discipline applies across web SaaS, backend services, CLIs, and libraries — not only the canonical web shape.
+  - `chapters/foundations/03a-hard-limits.md` — version-specifics example generalized from "Next.js 16 specifics, library APIs that changed last month" to "a framework's latest major-version specifics, library APIs that changed in the last few months, breaking changes in a runtime release."
+  - `chapters/foundations/03b-soft-limits.md` — debugging-hop example generalized from "Webhook from Stripe → ngrok → Next.js → Supabase" to "Webhook from a payment provider → tunnel (ngrok / Cloudflare Tunnel / smee) → your web framework → your datastore."
+  - `chapters/foundations/02-context-budget.md` — survives-compaction example generalized from "(we chose Supabase over Firebase)" to "(we chose Postgres + RLS over Firestore + rules", "we picked a managed BaaS over rolling our own auth)."
+  - `chapters/persistence/13c-skill-design-patterns.md` — pre-deploy-audit worked skill description now reads "this project's stack (substitute your real stack here — e.g. 'Next.js + Supabase project' or 'Django + Postgres service')" instead of hard-coding the Next + Supabase example.
+- `FIXES.md` — status header at the top of Pass 4 updates the "Remaining" table: M7, M8, N2 (visible failure mode), U4, U5, B9 (rest), VCS-host wiring, and per-stack settings extras all annotated `[shipped 2026-05-28]`. Pass-4 totals and Pass-3 PR-7 footnote updated.
+
+#### Verification
+
+- `tests/run.sh` — fast suite: **57/57 pass** across 5 sub-suites (no regressions from the hook or INDEX changes).
+- `global/hooks/spine-writeback.sh` — manual smoke test of N2 across three cases:
+  1. **Format drift** (bold → italic on Section / Session bullets) → `.spine-parse-error` written, content names the missing bullet shape and the silenced subsystems.
+  2. **Fix applied** (bullets restored) → marker auto-removed on the next successful Stop event.
+  3. **Template state** (`<section-name>` placeholder still present) → no marker written; silent exit as before.
+- `global/settings-extras/+vcs-gitlab.json` — merge command from `README.md` executed against a synthetic settings.json — output preserves non-merge keys (e.g. `effortLevel`) and uniques both `permissions.allow` and `permissions.WebFetch`. All 8 JSON fragments validated with `jq empty`.
+
+#### What's deliberately deferred
+
+These remained un-shipped this round per the FIXES.md audit's own recommendation:
+
+- **C-block** (command consolidation 9 → 6) — needs broader sign-off; the existing 9 commands aren't a launch blocker.
+- **B10** (Windows-native installer) — half-day to full-day effort; stretch goal, not in this round's scope.
+- **B11** (i18n hook in onboarding) — deferred per the original finding (not urgent until adoption signals localization is worth shipping for).
+- **N5** (jq-based `settings.json` mutation in `op-onboard`) — current Edit-based path works under the now-split `op-onboard/hook-tune.md`; a `jq` rewrite is a minor robustness gain, not visible to users.
+- **P4** (per-stack CLAUDE.md split into `op-stack-flavor` skill) — two stack variants already exist under `global/stacks/`; the further "thin CLAUDE.md, fat skills" refactor is a larger architectural pass.
+- **Onboard-driven auto-merge of settings-extras** — current floor is the fragments exist as files; programmatic merge from `/onboard --deep`'s Q3/Q8/Q9 answers is the next layer up.
+
 ### Pillar 1 — Personalization payload (Sessions 2 + 3 of 3)
 
 Session 1 (in `[0.10.0]`) shipped `chapters/personalization/19f-subscription-aware.md` and wired four routing skills to it. The chapters those routers point *into*, though, still read generically — a Free user reading `04a-model-tiers.md` got the same "default to Sonnet" framing as a Max 20× user with cheap Opus access. Session 2 closes that gap by adding bidirectional cross-references from five high-leverage chapters back into 19f, so the per-plan branch surfaces wherever a generic recommendation sits.
@@ -25,7 +157,7 @@ Session 3 closes the personalization payload — a read-through verification acr
 - `chapters/signaling/11-overview.md` — "five signal categories" framing preserved, with a clarifying line that cost/quota is cross-cutting, not a sixth category. New "Cost / quota signals" subsection between Anti-patterns and TL;DR — four-row decision table (Max 20× + Don't worry / Pro/Max 5× + Balanced / Free or Very careful / profile missing) for whether to flag, with 19f as the alternative-suggestion table.
 - `chapters/prompting/09c-examples-and-anti-examples.md` — new "The subscription line — read from your profile, not your prompt" section between the high-leverage patterns and the visuals section. Shows the same `/code-review ultra` question producing different answers for a Free vs Max 20× profile, names the eight per-plan levers, and gives two practical consequences (keep `/onboard` fresh; override per-prompt when needed). TL;DR gains one bullet. *(Session 3 — the `09-prompting` examples update from the planning doc.)*
 - `chapters/personalization/19f-subscription-aware.md` — fixed a stale lever-3 link (`16d-parallel-and-background.md` → `16c-`) and clarified the "How to consult this chapter" wording: the `code-review` / `loop` / `schedule` slash commands are external plugin skills, not editable from the spine, so the per-plan branch reaches them indirectly through `op-tools` and `op-signaling` (both wired in Session 1). The link fix shipped in Session 1; the wording clarification is the Session 3 sweep.
-- `docs/SUBSCRIPTION-AWARENESS.md` — status header marks all three sessions done.
+- `docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md` — status header marks all three sessions done.
 - `FIXES.md` — status header drops Pillar 1 Session 3 from the open queue. P1.1 entry annotation updated to credit Sessions 2 + 3.
 
 No new files. No skill changes (the four routers were already wired in Session 1). No INDEX update needed (19f row was already present from Session 1).
@@ -234,9 +366,9 @@ P1.1 (the read path — Session 1 of the SUBSCRIPTION-AWARENESS plan):
 - `skills/core/op-tools/SKILL.md` — adds 19f for cost-sensitive tool choices (ultra review, long loop, fan-out, repeated WebFetch / MCP) + matching common-trigger lines.
 - `skills/core/op-subagents/SKILL.md` — adds 19f for the per-plan fan-out budget; updates the parallel-audits trigger to point at 19f after 16c.
 - `skills/core/op-signaling/SKILL.md` — adds 19f for "about to do something materially expensive" framing; new common-trigger line specifies the Max 20× + "Don't worry about it" → no flag rule and the Free / Pro or "Very careful" → one-line warning + cheaper alternative rule.
-- `docs/SUBSCRIPTION-AWARENESS.md` — status updated: Session 1 done, Sessions 2 + 3 remain.
+- `docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md` — status updated: Session 1 done, Sessions 2 + 3 remain.
 
-Sessions 2 + 3 (adjusting individual chapters like `04a-model-tiers`, `chapter 16`, `chapter 11`, and the `code-review` / `loop` / `schedule` skill bodies, plus re-onboard verification across plan tiers) deferred to follow-up sessions — see `docs/SUBSCRIPTION-AWARENESS.md`.
+Sessions 2 + 3 (adjusting individual chapters like `04a-model-tiers`, `chapter 16`, `chapter 11`, and the `code-review` / `loop` / `schedule` skill bodies, plus re-onboard verification across plan tiers) deferred to follow-up sessions — see `docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md`.
 
 ### Pillar 4 — First-run discovery surface
 
@@ -296,14 +428,14 @@ Vibecoder default fully realized: no escape-hatch commands, no two-doors-to-one-
 
 ### Onboarding — Claude subscription awareness
 
-Defaults today assume a Max-tier user with cheap Opus and 1M-context access. That misreads the Free / Pro segment and under-uses what Max users could be doing. Step one: ask the user which plan they're on; capture daily usage and cost sensitivity in the deep interview. Behavior changes that actually consume the captured field are queued separately ([`docs/SUBSCRIPTION-AWARENESS.md`](docs/SUBSCRIPTION-AWARENESS.md)) so the question can land without waiting on the multi-session implementation work.
+Defaults today assume a Max-tier user with cheap Opus and 1M-context access. That misreads the Free / Pro segment and under-uses what Max users could be doing. Step one: ask the user which plan they're on; capture daily usage and cost sensitivity in the deep interview. Behavior changes that actually consume the captured field are queued separately ([`docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md`](docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md)) so the question can land without waiting on the multi-session implementation work.
 
 #### Added
 
 - `skills/core/op-onboard/questions-essential.md` — new Q1 "Which Claude subscription do you use?" with Free / Pro / Max 5× / Max 20× options (Other = free-text for Team / Enterprise / API). Existing Q1–Q5 renumber to Q2–Q6.
 - `skills/core/op-onboard/questions-deep.md` — new Section 0 (subscription) with 0A "daily Claude usage" and 0B "cost sensitivity". Deep-question count 15 → 17.
 - `skills/core/op-onboard/profile-template.md` — new `Subscription` section at the top of the profile with `Plan`, `Daily usage`, `Cost sensitivity` fields.
-- `docs/SUBSCRIPTION-AWARENESS.md` — planning doc tracking the multi-session work to actually adjust behavior based on the captured plan (model recommendations, ultra-review framing, parallel-subagent caution, fresh-terminal cadence, etc.). Status: queued, not started.
+- `docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md` — planning doc tracking the multi-session work to actually adjust behavior based on the captured plan (model recommendations, ultra-review framing, parallel-subagent caution, fresh-terminal cadence, etc.). Status: queued, not started.
 
 #### Changed
 
@@ -322,7 +454,7 @@ The 18 one-line redirect files at the repo root (`01-first-principles.md` … `1
 #### Changed
 
 - `V1-CHAPTERS-DEPRECATED.md` — top paragraph and "Why" passage rewritten to describe the new reality (bodies in `docs/v1-archive/`, no root stubs). Trailing "When are v1 stubs going away?" section replaced with "Where do the v1 bodies live now?" pointing at the archive directory.
-- `docs/SUBSCRIPTION-AWARENESS.md` — table reference to `04-models-and-economics.md` repointed at `chapters/foundations/04a-model-tiers.md`.
+- `docs/archive/SUBSCRIPTION-AWARENESS-2026-05.md` — table reference to `04-models-and-economics.md` repointed at `chapters/foundations/04a-model-tiers.md`.
 
 ---
 

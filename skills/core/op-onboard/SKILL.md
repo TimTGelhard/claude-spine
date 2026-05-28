@@ -23,16 +23,63 @@ Captures and maintains `~/.claude/claude-spine-profile.md`. The profile shapes C
 | `~/.claude-spine/skills/core/op-onboard/profile-template.md` | Before writing the profile file |
 | `~/.claude-spine/skills/core/op-onboard/subscription-tune.md` | Step 5 — propose autoCompactWindow + effortLevel tune based on Q1 |
 | `~/.claude-spine/skills/core/op-onboard/hook-tune.md` | Step 7 (deep only) — opt-in PostToolUse hooks (auto-typecheck + auto-format) |
-| `~/.claude-spine/skills/core/op-onboard/handoff.md` | Step 8 — emit the closing "you're all set" message |
+| `~/.claude-spine/skills/core/op-onboard/extras-merge.md` | Step 8 (deep only) — opt-in `permissions.allow` + `permissions.WebFetch` extensions from `settings-extras/+*.json` fragments based on Q3/B1/Q8/Q9 |
+| `~/.claude-spine/skills/core/op-onboard/handoff.md` | Step 9 — emit the closing "you're all set" message |
 
 ## How to run the interview
 
 1. **Print the preview block** (only on first-run, i.e. profile is missing). On re-runs (profile exists), skip — the user knows what they're getting into. Adapt the text to the mode:
 
-   - `/onboard` essentials, first-run: *"I'll ask 10 quick questions across ~3 minutes. After saving the essentials, I'll offer the deep pass (18 more, ~5 more minutes). You can stop after the essentials and run `/onboard --deep` later — nothing about this is locked in."*
-   - `/onboard --deep`, first-run: *"This is the full pass — 10 essentials (~3 min) + 18 deep (~5 min) + 2 opt-in hook prompts at the end. ~8 minutes total. Profile is plain markdown — hand-edit anything later."*
+   - `/onboard` essentials, first-run:
 
-   Emit as a normal text message, not inside `AskUserQuestion`. No "press enter" gate — the next AskUserQuestion is itself the continue affordance.
+     ```
+     I'll ask 10 essential questions, one at a time. ~3 minutes.
+
+     What they cover:
+       • subscription + experience          (Q1, Q2)
+       • what you build (stack + projects)  (Q3, Q6, Q9)
+       • how I should talk to you           (Q4, Q5a, Q5b)
+       • your environment                   (Q7 OS, Q8 VCS host)
+
+     After the essentials are saved, I'll offer the deep pass — 18 more
+     questions + 2 opt-in hook prompts (~5 more minutes).
+
+     You can stop any time. The profile saves after the last essential, so
+     nothing is lost if you Cmd+C mid-deep — re-run `/onboard --deep` later.
+     ```
+
+   - `/onboard --deep`, first-run:
+
+     ```
+     Full pass: 10 essentials + 18 deep + 2 opt-in hook prompts. ~8 minutes.
+
+     Essentials block (~3 min):
+       • subscription + experience          (Q1, Q2)
+       • what you build (stack + projects)  (Q3, Q6, Q9)
+       • how I should talk to you           (Q4, Q5a, Q5b)
+       • your environment                   (Q7 OS, Q8 VCS host)
+
+     Deep block (~5 min):
+       • daily usage + cost sensitivity     (0A, 0B)
+       • coding background                  (A1, A2, A3)
+       • secondary stack + avoid list       (B1, B2)
+       • team + user scale                  (C1, C2)
+       • when I should flag things          (D1)
+       • output format + risk tolerance     (E1, E2, F1)
+       • session shape + plans dir          (G1, G2)
+       • org shape + currency               (H1, H2, H3)
+
+     Plus two opt-in hook prompts at the end (auto-typecheck, auto-format)
+     and — when your Q3/Q8 answers match a known platform — one Apply/Skip
+     prompt per `settings-extras/+*.json` fragment (e.g. `glab` allowlist if
+     you said GitLab, Vercel CLI patterns if your stack mentions Vercel).
+
+     Profile is plain markdown at ~/.claude/claude-spine-profile.md —
+     hand-edit anything later. Cmd+C any time; the essentials block writes
+     after Q9 so nothing is lost if you stop in the deep pass.
+     ```
+
+   Emit as a normal text message in a fenced block, not inside `AskUserQuestion`. No "press enter" gate — the next `AskUserQuestion` (Q1) is itself the continue affordance.
 
 2. Read the relevant question file.
 3. Ask **one question at a time** via `AskUserQuestion` — each question's options are pre-defined in the file. Use `multiSelect: true` where the question file says so.
@@ -40,15 +87,17 @@ Captures and maintains `~/.claude/claude-spine-profile.md`. The profile shapes C
 5. Run the **subscription-based settings tune** — load `subscription-tune.md` and follow its flow. Proposes adjusting `autoCompactWindow` and `effortLevel` to match the user's plan.
 6. Ask: "Want to continue into the deep interview, or save now and run `/onboard --deep` later?" If yes → load `questions-deep.md` and continue; update the profile file with deep values when done. If no → leave deep sections marked `(unfilled — run /onboard --deep to capture)`.
 7. **If deep ran:** run the **Hook tuning** pass — load `hook-tune.md` and follow its flow. Proposes wiring two opt-in PostToolUse hooks (auto-typecheck, auto-format) into `~/.claude/settings.json`. Skipped on essentials-only runs.
-8. **Emit the handoff message** — load `handoff.md` and emit the closing block. This is the only place the user gets a complete picture of what was captured and what's now possible — don't skip it, even on re-runs.
+8. **If deep ran:** run the **Settings-extras merge** pass — load `extras-merge.md` and follow its flow. Detects which `global/settings-extras/+*.json` fragments match the user's Q8 (VCS host) and stack free-text (Q3 / B1 / Q9 / B2), then proposes a per-fragment `jq` merge into `~/.claude/settings.json`. Skipped on essentials-only runs.
+9. **Emit the handoff message** — load `handoff.md` and emit the closing block. This is the only place the user gets a complete picture of what was captured and what's now possible — don't skip it, even on re-runs.
 
 ## Rules
 
 - **One question at a time.** No walls. Deep mode is opt-in, never default.
 - **Don't infer.** Skipped or "Other" answers stay as the user wrote them; don't guess.
 - **Don't capture sensitive data.** No client names, addresses, API keys. Working-style only.
-- **Write surface is allow-listed.** This skill writes to exactly two files: `~/.claude/claude-spine-profile.md` (always) and `~/.claude/settings.json`. In `settings.json`, only two write surfaces are permitted, both with explicit per-run approval:
+- **Write surface is allow-listed.** This skill writes to exactly two files: `~/.claude/claude-spine-profile.md` (always) and `~/.claude/settings.json`. In `settings.json`, only three write surfaces are permitted, all with explicit per-run approval:
   1. The top-level keys `autoCompactWindow` and `effortLevel` — see `subscription-tune.md`.
   2. A `hooks.PostToolUse` block with matcher `Edit|Write|MultiEdit`, containing only the named entries `typecheck-after-edit.sh` and/or `format-on-save.sh` — see `hook-tune.md`.
+  3. Append-only additions to the `permissions.allow` and `permissions.WebFetch` arrays, sourced exclusively from the eight files under `~/.claude-spine/global/settings-extras/+*.json`, deduplicated against existing entries — see `extras-merge.md`.
 
-  No other files. No other keys. No other hooks. No edits to existing hook entries.
+  No other files. No other keys. No other hooks. No edits to existing hook entries. No removal of existing array entries.

@@ -10,7 +10,7 @@ Picking the right model is the difference between paying for the reasoning you n
 | Sonnet 4.6 | `claude-sonnet-4-6` | 200K | Workhorse — fast, capable, sufficient for most tasks | Mid |
 | Haiku 4.5 | `claude-haiku-4-5-20251001` | 200K | Fast and cheap for narrow, well-specified tasks | Low |
 
-Note: the model lineup moves fast. Verify the current options before committing to "always use X" — you may be missing a newer version.
+Note: the model lineup moves fast. Verify the current options before committing to "always use X" — you may be missing a newer version. **Canonical registry:** the table above mirrors [`docs/MODELS.md`](../../docs/MODELS.md), which is the single source of truth for model IDs and plan tiers across the spine. When this chapter and the registry disagree, the registry wins; this chapter's table is a convenience read.
 
 ## Opus — use when
 
@@ -59,3 +59,4 @@ Before recommending a model, read `~/.claude/claude-spine-profile.md → Subscri
 - Plan mode and fast mode: [04b-plan-and-fast-mode.md](04b-plan-and-fast-mode.md)
 - Context cost discipline and plan budgets: [04c-budget-and-cost.md](04c-budget-and-cost.md)
 - Per-plan model + fan-out + loop defaults: [`19f-subscription-aware.md`](../personalization/19f-subscription-aware.md)
+- Model + plan-tier registry (the canonical names): [`docs/MODELS.md`](../../docs/MODELS.md)

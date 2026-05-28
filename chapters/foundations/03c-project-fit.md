@@ -4,12 +4,17 @@ Knowing where Claude shines vs struggles saves you from realizing mid-project th
 
 ## Project types Claude handles well
 
-- **Greenfield MVPs** with a defined stack. Excellent.
+- **Greenfield MVPs** with a defined stack. Excellent. (Applies to web SaaS, backend services, CLIs, libraries — any project where the shape is clear up-front.)
 - **Static client sites** (landing pages, small-business sites). Excellent.
-- **Dashboards with CRUD + auth.** Strong.
-- **Single-feature additions** to existing codebases. Strong.
-- **Mechanical refactors** (rename, restructure, type tightening). Strong.
+- **CRUD-shaped apps with auth** — dashboards, internal tools, admin panels. Strong.
+- **CLI tools with a bounded command surface** — `<bin> <verb> [flags]`-style utilities, well-typed inputs and outputs. Strong.
+- **Library / framework design** with a clear public API and a documented contract. Strong when the API surface is the spec.
+- **Single-feature additions** to existing codebases. Strong (with `op-brownfield` discipline — chapter 08).
+- **Mechanical refactors** (rename, restructure, type tightening, API migration). Strong across most languages.
 - **Migrations between framework versions** when codemods exist. Good with the right skill loaded.
+- **Documentation, content, and config projects** — markdown sites, API docs, infrastructure-as-code reviews. Strong; Claude reads + writes prose and YAML/HCL well.
+- **Data scripts and notebook → script consolidation** — turning exploratory notebooks into reusable scripts is a good Claude fit. Goes sideways the moment empirical validation against real data is the bottleneck (see "struggles with" below).
+- **Test suites and fixtures** — unit, integration, contract tests. Strong when the spec is clear; weaker when "is this the right thing to test" is unclear.
 
 ## Project types Claude struggles with
 

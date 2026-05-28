@@ -371,17 +371,17 @@ All three are now wired alongside the existing env-staging fixture and the insta
 6. Run `/curate` with an empty bucket — verify the empty-state messaging is sensible.
 7. Capture every divergence between README and reality. Each divergence is an issue to fix in a follow-up session (or roll into L6).
 
-**Definition of done:** A documented run report exists (commit it as `docs/clean-room-install-report.md`). Any divergence is either fixed in-session (small) or filed (large).
+**Definition of done:** A documented run report exists (commit it as `docs/archive/clean-room-install-report-2026-05.md`). Any divergence is either fixed in-session (small) or filed (large).
 
 ### L5 notes (2026-05-27)
 
 **Environment used:** `ubuntu:22.04` Docker container (aarch64 via Docker Desktop on Apple Silicon), bash 5.1.16, git 2.34.1, jq 1.6, non-root user `tester`. A second image with jq stripped out covered the preflight case. Both Dockerfiles are reproducible from the report; not committed.
 
 **Scope of edits actually done:**
-- `docs/clean-room-install-report.md` (new) — full run report. 9 scenarios numbered (1–9), each with verbatim outputs of the key moments: default neutral install, deep post-install verification, idempotency re-run, `--opinionated` variant, legacy `op-manual-*` cleanup including `--keep-legacy`, full uninstall + dry-run, jq-missing preflight + `--skip-hook` bypass, the flag matrix (dry-run / help / unknown / all-skip / clean-uninstall), and scenario 9 (live GitHub clone) which was *deferred* on purpose — see below. Two cosmetic divergences filed with one-paragraph rationale + ~5-line fix sketches; three checks deferred to a manual session after L8. Recommendations table at the end.
+- `docs/archive/clean-room-install-report-2026-05.md` (new) — full run report. 9 scenarios numbered (1–9), each with verbatim outputs of the key moments: default neutral install, deep post-install verification, idempotency re-run, `--opinionated` variant, legacy `op-manual-*` cleanup including `--keep-legacy`, full uninstall + dry-run, jq-missing preflight + `--skip-hook` bypass, the flag matrix (dry-run / help / unknown / all-skip / clean-uninstall), and scenario 9 (live GitHub clone) which was *deferred* on purpose — see below. Two cosmetic divergences filed with one-paragraph rationale + ~5-line fix sketches; three checks deferred to a manual session after L8. Recommendations table at the end.
 
 **Definition of done verification:**
-- The run report exists at `docs/clean-room-install-report.md` per the spec.
+- The run report exists at `docs/archive/clean-room-install-report-2026-05.md` per the spec.
 - The 8 scenarios that ran inside the container all returned exit 0 (or the expected error exit for the negative cases — 1 for jq-missing, 2 for unknown flag).
 - Both divergences are *filed*, not fixed in-session: each is a 5–10 line polish that doesn't block launch; rolling them into L6 (already shipped) would have been retconning. They're small enough to land together post-launch.
 

@@ -12,7 +12,7 @@ External API quotas, time-of-day-specific behavior, race conditions. Claude can 
 
 ## 3. Cross-process / cross-machine interactions
 
-Webhook from Stripe arriving at your local dev → ngrok → Next.js → Supabase. Claude can build it. Claude can't always tell you *which hop* is failing.
+Webhook from a payment provider arriving at your local dev → tunnel (ngrok / Cloudflare Tunnel / smee) → your web framework → your datastore. Claude can build it. Claude can't always tell you *which hop* is failing.
 
 ## 4. Performance optimization without measurement
 

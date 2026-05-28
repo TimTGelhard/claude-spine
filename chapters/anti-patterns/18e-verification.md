@@ -17,10 +17,15 @@
 **Fails because:** the failure mode that leaks one user's data to another is the worst possible bug. Compiles fine. Doesn't show up in single-session testing.
 **Instead:** for ANY auth-touching change, two-session check — owner and non-owner. No exceptions. See also [17c-high-stakes-cases.md](../recovery/17c-high-stakes-cases.md).
 
-## Declaring a UI feature done without running it in a browser
+## Declaring a feature done without seeing it work
 
-**Fails because:** Claude has no eyes. Compiled UI can be broken UI. Screenshots Claude generated from a mock don't reflect the live render.
-**Instead:** run the dev server, walk it manually, on desktop AND mobile. See [17b-recovery-moves.md](../recovery/17b-recovery-moves.md) Move G for the full browser-verification pattern.
+**Fails because:** Claude has no eyes (for UI) or hands (for CLIs). Compiled code can be broken code. Screenshots Claude generated from a mock don't reflect the live render; `cargo build --release` doesn't prove the binary does what the user asked.
+**Instead:** verify shape-appropriate to the artifact:
+- **UI features** — run the dev server, walk it manually on desktop AND mobile. See [17b-recovery-moves.md](../recovery/17b-recovery-moves.md) Move G for the full browser-verification pattern.
+- **CLI tools** — run the actual binary with the actual flags; capture the output; eyeball it. `--help` should render; the golden-output test should match.
+- **Libraries / SDKs** — write or run the demo program that calls the new public surface. "Tests pass" is necessary, not sufficient — the library has to be usable from a fresh import.
+- **Backend services** — `curl` (or equivalent) the endpoint, check the status code AND body shape; check that the side effect (DB row, queue message, file written) actually happened.
+- **Data / ML** — run the script end-to-end on a real input; verify the output file or model artifact exists and has the expected shape.
 
 ## Merging diffs you didn't read
 
