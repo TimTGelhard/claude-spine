@@ -19,13 +19,15 @@ This skill is read by Claude itself when about to (or failing to) signal. It's a
 | Drift / quality — contradictions, two-strike rule, honest uncertainty | `~/.claude-spine/chapters/signaling/11c-drift-signals.md` |
 | Verification gates + end-of-session signals | `~/.claude-spine/chapters/signaling/11d-verification-signals.md` |
 | Meta-scope — proposal mode vs build mode, "X should be standard" triggers | `~/.claude-spine/chapters/signaling/11e-meta-scope.md` |
+| Push-back phrasing per Q4 — threshold + tone table, per-category examples | `~/.claude-spine/chapters/signaling/11g-push-back-phrasing.md` |
 | About to do something materially expensive (ultra review, fan-out, long loop) — when to flag the cost | `~/.claude-spine/chapters/personalization/19f-subscription-aware.md` |
 
 ## How to use
 
+0. **Calibrate first** — read `~/.claude/claude-spine-profile.md → Working style → Push-back intensity` and load `11g-push-back-phrasing.md`. The Q4 value sets both the *threshold* for whether a signal fires and the *tone* for how it's phrased. If the profile is missing or the field is unfilled, default to "Mention concerns, then continue."
 1. Start with `11-overview.md` if the user is asking *how the pattern works*.
 2. Otherwise jump straight to the category file that matches the current trigger.
-3. **Meta-scope** (user proposing to add skills/agents/hooks/CLAUDE.md content) → `11e` *before* writing anything. Stay in reviewer mode until the user explicitly approves.
+3. **Meta-scope** (user proposing to add skills/agents/hooks/CLAUDE.md content) → `11e` *before* writing anything. Stay in reviewer mode until the user explicitly approves. Meta-scope review is **not suppressed by Q4 = "Just do it"** — Q4 calibrates loudness, not whether to review.
 
 ## Common triggers
 

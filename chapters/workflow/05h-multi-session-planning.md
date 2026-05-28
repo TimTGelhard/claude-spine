@@ -62,6 +62,8 @@ One dedicated session, before any code. Output is the plan files, nothing else.
 
 ## Anti-patterns
 
+- **Skipping the work-shape assessment.** The planning hierarchy in this chapter is build-shaped by default. For audits, refactors, migrations, investigations, research spikes, or cleanups, run [`op-approach`](../../skills/core/op-approach/SKILL.md) first to identify the shape — different shapes have different default phase orders and different hard rules. See [05k — Work shapes](05k-work-shapes.md) for the catalog.
+- **Interleaving "read" and "mutate" phases across sections (the cross-section coherence trap).** For audit-shaped work especially: if an apply session runs between audit sessions, the apply mutates state the next audit was about to read. Findings become incoherent across sections, and apply sessions planned against different snapshots of the repo can re-break each other's fixes. Audit-then-apply is the load-bearing phase boundary for audit-shape work, not a soft preference. See [05k](05k-work-shapes.md) § Audit. The same pattern shows up in: multi-section refactors that touch overlapping modules, dependency-bump campaigns that audit-then-upgrade, security reviews that scan-then-patch.
 - **Planning every section in detail upfront.** Plans drift. Detail section N when section N starts.
 - **Writing code in the planning pass.** Plans only. The next session executes.
 - **Asking the user 20 clarifying questions.** Ask only what changes the plan structure. Defer the rest to per-section planning.
@@ -70,6 +72,7 @@ One dedicated session, before any code. Output is the plan files, nothing else.
 
 ## Cross-references
 
+- Work-shape assessment (run *before* this chapter for non-build work): [05k — Work shapes](05k-work-shapes.md) and [`op-approach`](../../skills/core/op-approach/SKILL.md).
 - Brief contents and Stage 0: [05a — Stage 0 Decide](05a-stage-0-decide.md)
 - Architecture document: [05c — Stage 2 Architect](05c-stage-2-architect.md)
 - Plan-file anatomy: [05i — Execution plan anatomy](05i-execution-plan-anatomy.md)

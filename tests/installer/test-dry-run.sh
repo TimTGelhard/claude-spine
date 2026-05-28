@@ -88,6 +88,10 @@ assert_contains "$log" "claude-spine symlink step" "==> ensuring ~/.claude-spine
 assert_contains "$log" "core skills step"          "==> linking core skills into"
 assert_contains "$log" "slash commands step"       "==> linking slash commands into"
 assert_contains "$log" "neutral global step"       "==> installing global CLAUDE.md (neutral variant)"
+# Neutral default ships NO op-stack-flavor skill — no banner, no link target.
+assert_not_contains "$log" "no flavor banner (neutral)"  "==> linking stack-flavor skill into"
+assert_not_contains "$log" "no flavor target (neutral)"  "global/stacks/ts-next-supabase/flavor-skill"
+assert_not_contains "$log" "no python flavor target"     "global/stacks/python-django/flavor-skill"
 assert_contains "$log" "settings.json step"        "==> installing settings.json"
 assert_contains "$log" "hooks step"                 "==> installing hooks"
 assert_contains "$log" "summary done"              "==> claude-spine is installed."
@@ -110,6 +114,11 @@ echo "scenario 2: --opinionated"
 log="$(run_install opinionated --opinionated)"
 assert_contains    "$log" "opinionated → stack banner"   "==> installing global CLAUDE.md (stack:ts-next-supabase variant)"
 assert_not_contains "$log" "no neutral banner"            "==> installing global CLAUDE.md (neutral variant)"
+# Stack-flavor skill should be wired alongside the CLAUDE.md.
+assert_contains    "$log" "ts-flavor section banner"     "==> linking stack-flavor skill into ~/.claude/skills/op-stack-flavor"
+assert_contains    "$log" "ts-flavor link target"        "global/stacks/ts-next-supabase/flavor-skill"
+# Summary line should call out the +1 stack skill.
+assert_contains    "$log" "summary mentions stack skill" "22 universal op-* skills + 1 stack-flavor skill"
 echo
 
 # ---------- scenario 2b: --stack=python-django routes to the python sibling ----------
@@ -118,6 +127,11 @@ echo "scenario 2b: --stack=python-django"
 log="$(run_install stack-python --stack=python-django)"
 assert_contains    "$log" "stack:python-django banner"   "==> installing global CLAUDE.md (stack:python-django variant)"
 assert_not_contains "$log" "no neutral banner"            "==> installing global CLAUDE.md (neutral variant)"
+# Stack-flavor skill should now point at the python flavor.
+assert_contains    "$log" "py-flavor section banner"     "==> linking stack-flavor skill into ~/.claude/skills/op-stack-flavor"
+assert_contains    "$log" "py-flavor link target"        "global/stacks/python-django/flavor-skill"
+# And NOT at the TS flavor.
+assert_not_contains "$log" "no ts flavor target"         "global/stacks/ts-next-supabase/flavor-skill"
 echo
 
 # ---------- scenario 2c: --stack=<nonexistent> exits non-zero with a listing ----------
@@ -138,6 +152,37 @@ else
   fail=$((fail + 1))
 fi
 rm -f err.tmp
+echo
+
+# ---------- scenario 2d: --stack=<name> with a CLAUDE.md.template but no flavor-skill is rejected ----------
+
+# The pair is mandatory: install.sh refuses an unpaired stack. We simulate one
+# by creating a temp stack dir with only the template, no flavor-skill. To do
+# that without writing into the spine, we work against a synthetic SPINE_DIR
+# Sandbox built under TMP_HOME. (BSD `mktemp -d` plays nicely on macOS.)
+
+echo "scenario 2d: --stack=<paired-but-missing-flavor-skill> rejected"
+fake_spine="$TMP_HOME/fake-spine"
+mkdir -p "$fake_spine/global/stacks/lonely/"
+echo "# placeholder template" > "$fake_spine/global/stacks/lonely/CLAUDE.md.template"
+# Run install.sh from inside the fake spine root so SCRIPT_PATH resolves there.
+# (install.sh derives SPINE_DIR from its own location, so we copy it in.)
+cp "$INSTALL" "$fake_spine/install.sh"
+chmod +x "$fake_spine/install.sh"
+# Also copy global/neutral so other steps don't crash before reaching the
+# validation check we care about.
+mkdir -p "$fake_spine/global/neutral"
+echo "# neutral placeholder" > "$fake_spine/global/neutral/CLAUDE.md.template"
+if HOME="$TMP_HOME" "$fake_spine/install.sh" --dry-run --stack=lonely --skip-hook \
+    >"$TMP_HOME/lonely.log" 2>&1; then
+  echo "  FAIL  unpaired stack should exit non-zero"
+  fail=$((fail + 1))
+else
+  echo "  PASS  unpaired stack exits non-zero"
+  pass=$((pass + 1))
+fi
+assert_contains "$TMP_HOME/lonely.log" "rejection names flavor-skill" \
+  "has no flavor skill at global/stacks/lonely/flavor-skill/SKILL.md"
 echo
 
 # ---------- scenario 3: legacy cleanup actually fires when legacy dirs exist ----------
@@ -174,6 +219,14 @@ echo "scenario 5: --skip-* flags"
 log="$(run_install skip-skills --skip-skills)"
 assert_contains    "$log" "skip-skills notice"     "==> skipping skill symlinks (--skip-skills)"
 assert_not_contains "$log" "no link section"       "==> linking core skills into"
+
+# --skip-skills + --stack=<name> should also skip the op-stack-flavor link.
+log="$(run_install skip-skills-with-stack --skip-skills --stack=ts-next-supabase)"
+assert_contains    "$log" "skip-skills + stack notice"    "==> skipping skill symlinks (--skip-skills)"
+assert_not_contains "$log" "no stack-flavor link"         "==> linking stack-flavor skill into"
+# The stack-flavored CLAUDE.md still gets installed (--skip-skills doesn't
+# disable that — only --skip-global would).
+assert_contains    "$log" "stack CLAUDE.md still wires"   "==> installing global CLAUDE.md (stack:ts-next-supabase variant)"
 
 log="$(run_install skip-commands --skip-commands)"
 assert_contains "$log" "skip-commands notice"      "==> skipping slash commands (--skip-commands)"

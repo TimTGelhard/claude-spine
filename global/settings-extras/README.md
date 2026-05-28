@@ -38,8 +38,9 @@ Back up `~/.claude/settings.json` first; the `jq` path overwrites in place.
 |---|---|
 | `+vcs-gitlab.json` | You push to GitLab. Adds `Bash(glab:*)` patterns + GitLab docs WebFetch. |
 | `+vcs-bitbucket.json` | You push to Bitbucket. Adds `Bash(bb:*)` (Atlassian CLI) + Bitbucket docs WebFetch. |
-| `+vercel-stack.json` | You deploy to Vercel. Adds broader `vercel` subcommand patterns + Vercel-platform docs not in defaults. |
-| `+supabase-stack.json` | You use Supabase as your backend. Adds broader `supabase` CLI patterns + Supabase-platform docs not in defaults. |
+| `+vercel-stack.json` | You deploy to Vercel. Adds `Bash(vercel:*)` read+write patterns + Vercel / Next.js / edge-config docs WebFetch. |
+| `+supabase-stack.json` | You use Supabase as your backend. Adds `Bash(supabase:*)` read+write patterns + supabase.com / supabase.io WebFetch. |
+| `+python-django-stack.json` | Your backend is Django or FastAPI. Adds `docs.djangoproject.com` + `fastapi.tiangolo.com` WebFetch. |
 | `+aws-stack.json` | You deploy to AWS. Adds `Bash(aws:*)`, `Bash(eb:*)`, AWS docs + console WebFetch. |
 | `+gcp-stack.json` | You deploy to GCP / Firebase. Adds `Bash(gcloud:*)`, `Bash(firebase:*)`, GCP docs WebFetch. |
 | `+azure-stack.json` | You deploy to Azure. Adds `Bash(az:*)` patterns + Azure docs WebFetch. |
@@ -49,7 +50,8 @@ The neutral default in `global/settings.json` already covers:
 
 - All major language toolchains (`node`, `npm`, `pnpm`, `python`, `pip`, `pytest`, `cargo`, `go`, `mvn`, `gradle`, `bundle`, `gem`, `composer`, `php`, `dotnet`, `mix`, `swift`, `deno`, `bun`, `make`)
 - GitHub CLI (`gh pr view`, `gh issue view`, `gh repo view`, `gh run view`, etc.)
-- Documentation domains for the top 10 ecosystems (MDN, docs.python.org, pkg.go.dev, doc.rust-lang.org, rubyonrails.org, laravel.com, learn.microsoft.com, kotlinlang.org, swift.org, etc.)
+- Broad-language documentation domains (MDN, `docs.python.org`, `pypi.org`, `pkg.go.dev`, `doc.rust-lang.org`, `crates.io`, `rubyonrails.org`, `rubygems.org`, `laravel.com`, `packagist.org`, `learn.microsoft.com`, `kotlinlang.org`, `swift.org`, Apple / Android dev docs, `react.dev`, `tailwindcss.com`, `npmjs.com`)
+- **Not** in the default (stack-specific — merge a fragment if you need them): `vercel.com`, `nextjs.org`, `supabase.com`, `docs.djangoproject.com`, `fastapi.tiangolo.com`, cloud-provider domains
 
 So you should rarely need more than 1–2 fragments. If you find yourself wanting to grant broad `Bash(*)` patterns for a CLI not listed above, file an issue — that's a candidate for the default allowlist.
 
@@ -59,7 +61,7 @@ So you should rarely need more than 1–2 fragments. If you find yourself wantin
 
 - **Q8 (VCS host) = GitLab** → proposes `+vcs-gitlab.json`
 - **Q8 (VCS host) = Bitbucket** → proposes `+vcs-bitbucket.json`
-- **Q3 / B1 / Q9 free-text mentions a known platform** (`vercel`, `supabase`, `aws`, `gcp`/`firebase`/`google cloud`, `azure`, `docker`/`kubernetes`/`k8s`) → proposes the matching `+<platform>-stack.json`
+- **Q3 / B1 / Q9 free-text mentions a known platform** (`vercel`, `supabase`, `django`/`fastapi`, `aws`, `gcp`/`firebase`/`google cloud`, `azure`, `docker`/`kubernetes`/`k8s`) → proposes the matching `+<platform>-stack.json`
 
 The merge runs the `jq` command shown above against each fragment the user accepts; nothing is touched on Skip. Already-merged fragments are silently dropped from the candidate list, so a re-run of `/onboard --deep` is idempotent.
 

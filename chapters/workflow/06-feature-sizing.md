@@ -12,7 +12,7 @@ Different sessions have different ideas of "done." The discipline ("one cohesive
 | **Debug** | Root cause identified; fix landed OR documented decision to defer | Hypotheses tried, files inspected | Loosely — replace "files modified" with "files inspected"; one investigation = one session |
 | **Refactor** | A named cleanup goal complete; tests still pass; no behavior change | Files moved, names changed, layers crossed | Mechanical refactors: 15–30 files per session; conceptual refactors: 3–8 files |
 | **Explore** | A question answered well enough to commit to a direction (or rule it out) | Spike branches, throwaway prototypes | Doesn't apply — explore sessions are time-boxed (60–90 min), not file-boxed |
-| **Review** | A diff or PR understood; comments / approval / rejection written | Lines reviewed, comments left | Roughly: ~500 lines of dense code or ~2000 lines of mechanical change |
+| **Review** | A diff or {{PR_OR_MR}} understood; comments / approval / rejection written | Lines reviewed, comments left | Roughly: ~500 lines of dense code or ~2000 lines of mechanical change |
 | **Explain** | A reader leaves with a working mental model | Files walked, diagrams produced | Doesn't apply — measured by the listener's ability to summarize back |
 
 Pick a shape consciously at session start. The `/prep → build → /done` ladder in the rest of the workflow chapter is calibrated for the **build** shape. The other five shapes use lighter scaffolding — typically just `CLAUDE.md` for context, a short note in `PROGRESS.md` at session end, and (for review / debug / explore) the recovery moves in [17b](../recovery/17b-recovery-moves.md). See [05-overview.md](05-overview.md) for which workflow stages each session type maps to.
@@ -37,7 +37,7 @@ More than one — split these:
 - "Build auth + onboarding + dashboard." → 3 sessions, minimum.
 - "Add a payment integration." → split into: webhook handling, checkout flow, customer portal, plan management. Each is a session.
 - "Build the whole admin panel." → split per resource (users page, orders page, settings page).
-- "Refactor the entire networking layer." → split per call-site cluster; one PR each.
+- "Refactor the entire networking layer." → split per call-site cluster; one {{PR_OR_MR}} each.
 
 ## Concrete capacity for a build session (rules of thumb)
 

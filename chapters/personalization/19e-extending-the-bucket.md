@@ -52,9 +52,9 @@ Both gates exist for the same reason: the speculative-library trap from [13d](..
 
 **Skills** follow the core `op-*` naming convention if it makes them feel familiar — `op-deploy-rails`, `op-review-migration`. The prefix isn't required; what matters is sharp triggers and slow-aging content (same rule as core skills).
 
-**Chapters** use whatever atomic-file shape fits — short slug, single concept, ≤150 lines. The numbering convention from core (`NNx-slug.md`) isn't necessary for bucket chapters; a plain `<topic-slug>.md` is fine. Don't try to match the core numbering — the bucket is a flat namespace, not a continuation of the chapter numbering.
+**Chapters** use whatever atomic-file shape fits — short slug, single concept, lean but complete. The numbering convention from core (`NNx-slug.md`) isn't necessary for bucket chapters; a plain `<topic-slug>.md` is fine. Don't try to match the core numbering — the bucket is a flat namespace, not a continuation of the chapter numbering.
 
-The atomic-file cap (~150 lines) applies. If you're writing a 300-line bucket chapter, you're writing two chapters that always get read together — or one that has a real seam.
+Size each chapter to what its one concept actually needs. The discipline is "one concept per file, no padding, no truncation to hit a number." If a chapter is growing past the size of its concept, that's the signal you're holding two concepts and should split on the real seam — not that you've hit an arbitrary ceiling.
 
 ## The bucket INDEX as the gatekeeper
 

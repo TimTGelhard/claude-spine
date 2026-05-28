@@ -126,8 +126,17 @@ The point isn't which stack — it's that *every* CLAUDE.md needs Stack, Layout,
 
 ## How big should CLAUDE.md be?
 
-- Global: 200–300 lines is reasonable.
-- Project: aim for 50–150 lines. Over 200 and it's competing too hard with the actual work.
+Sized to what the rules genuinely need. Both bloat and truncation are bugs:
+
+- **Bloat** — Claude reloads CLAUDE.md every session. A 600-line global CLAUDE.md is paying 600 lines of context tax on every conversation you'll ever have. If a rule isn't load-bearing every session, it doesn't belong here.
+- **Truncation** — leaving out a rule that you'll keep hand-correcting Claude on every session is paying the cost in friction, not tokens. Worse trade.
+
+Soft sanity checks (not targets):
+
+- Global CLAUDE.md typically lands in the 200–300 range. Heavier if you've genuinely accumulated cross-project rules; lighter if you live in one stack and let project files do the work.
+- Project CLAUDE.md typically lands in the 50–150 range. The stack stubs the spine ships under `global/stacks/<name>/CLAUDE.md.template` run ~40 lines (always-on rules only) and pair with a `flavor-skill/SKILL.md` (~170–240 lines, on-demand) that loads as `op-stack-flavor` when the user installs with `--stack=<name>` — the same "thin CLAUDE.md, fat skills" split applied to the spine's own globals.
+
+The right size is whatever makes Claude behave correctly across the sessions you actually run — not a number target. When something feels too long, the question is *which rules earn their context cost*, not *how do I get under N lines*.
 
 ## Override hierarchy
 

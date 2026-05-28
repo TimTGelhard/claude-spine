@@ -14,10 +14,11 @@ Cold-start protocol reference: `~/.claude-spine/chapters/workflow/05j-cold-start
 This skill fires when the current working directory has a plan layout the skill recognizes. Try paths in this order; the first match wins:
 
 1. **Project override.** If the project's `CLAUDE.md` or `.claude/CLAUDE.md` contains a line of the form `Plan layout: <plans-dir> <progress-file>` (e.g., `Plan layout: roadmap/ roadmap/STATUS.md`), use those paths.
-2. **`docs/plans/` + `docs/PROGRESS.md`** — the canonical spine convention.
-3. **`docs/specs/` + `docs/PROGRESS.md`** — common spec-first variant.
-4. **`plans/` + `PROGRESS.md`** — repo-root variant.
-5. **`specs/` + `PROGRESS.md`** — repo-root spec-first variant.
+2. **Profile field.** If `~/.claude/claude-spine-profile.md` has a `- **Plans dir:** <plans-dir> + <progress-file>` line under `## Environment` (written by `/onboard --deep` Q2 — see `questions-deep.md` G2), use those paths. Skip if the value is `(unfilled — ...)` or one of the paths doesn't exist on disk.
+3. **`docs/plans/` + `docs/PROGRESS.md`** — the canonical spine convention.
+4. **`docs/specs/` + `docs/PROGRESS.md`** — common spec-first variant.
+5. **`plans/` + `PROGRESS.md`** — repo-root variant.
+6. **`specs/` + `PROGRESS.md`** — repo-root spec-first variant.
 
 If none of those match, do NOT fire — let the conversation start cold. (A user without any plan layout is probably doing exploratory or one-off work; ambient cold-start is for repeat plan-driven sessions.)
 
@@ -59,6 +60,23 @@ That's the announcement. Do NOT ask "confirm scope?" — the announcement IS the
 ### Step 4 — Proceed to build
 
 Continue immediately to the session's build steps. Stay inside the scope list. If a needed change falls outside scope, pause and ask (per the cold-start protocol's hard rules).
+
+## Chapter `{{PR_OR_MR}}` substitution (Q8-driven)
+
+When you load any chapter under `chapters/workflow/` or `chapters/anti-patterns/` that contains the literal `{{PR_OR_MR}}`, substitute the placeholder at read-time before quoting any line back. The rule mirrors `op-onboard/handoff.md`'s table — read `VCS host` from `~/.claude/claude-spine-profile.md` and resolve:
+
+- `GitHub` → `pull request` / `PR`
+- `GitLab` → `merge request` / `MR`
+- `Bitbucket` → `pull request` / `PR`
+- `None — local-only` → reframe to `commit` / `branch` (the concept doesn't apply)
+- `Other (free-text)` → `MR` if the free-text mentions `gitlab` or `merge request`; otherwise `PR`
+- No profile or unfilled → `PR`
+
+Never strip the placeholder from the chapter source — the substitution is a render-time concern, not a source edit.
+
+## Stub `{{Q4}}` substitution (Q4-driven)
+
+If the user's `~/.claude/CLAUDE.md` was installed from a stack template (`global/stacks/<name>/CLAUDE.md.template`), rule 2 of its always-on block carries the literal `{{Q4}}` placeholder. Substitute at read-time based on `~/.claude/claude-spine-profile.md → Working style → Push-back intensity`. The four variants and the substitution table live in `op-onboard/handoff.md` (canonical) and `chapters/signaling/11g-push-back-phrasing.md` (mirror) — read either before quoting the rule. If profile is missing or the field is unfilled, use the "Mention concerns, then continue" variant as the baseline.
 
 ## Hard rules
 

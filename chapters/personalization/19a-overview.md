@@ -58,7 +58,7 @@ This is the same shape as the rest of the spine: reviewer mode first, then execu
 
 - **Not a sharing model.** Your bucket is yours. No companion repo, no community library, no fork-and-share. If you want to share, that's a manual operation outside the spine.
 - **Not auto-modification.** Claude never writes to `chapters/` or `skills/core/`. Never edits the profile silently. Never adds bucket entries without `/curate` approval.
-- **Not infinite growth.** Bucket has the same atomic-file cap (~150 lines) as core chapters. Curation surfaces stale entries; you prune them.
+- **Not infinite growth.** Bucket files follow the same discipline as core chapters: one concept per file, sized to what the concept needs, no padding. Curation surfaces stale entries; you prune them.
 - **Not a feature factory.** Phase 8 ships *this* loop. Future extensions need their own justification — the chapter [13/18 anti-patterns](../persistence/13d-skill-anti-patterns.md) apply to the personalization mechanic, not just to user skills.
 
 ## Where to go from here

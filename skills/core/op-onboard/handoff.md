@@ -22,8 +22,14 @@ Here's what just happened:
   • Deep profile: [completed | skipped — run `/onboard --deep` when you want
     to capture stack details, signal preferences, output format, risk
     tolerance, session shape, plans-dir location, team/org shape, currency,
-    plus two opt-in hooks (auto-typecheck, auto-format) — 18 personal
-    questions + 2 hook prompts, ~5 min].
+    plus (for UI apps) deploy target + database default, plus two opt-in
+    hooks (auto-typecheck, auto-format) — 18 personal questions + up to
+    2 conditional follow-ups + 2 hook prompts, ~5–6 min].
+  • Deploy target + database: [{{W1, W2 verbatim}} | not asked — your
+    Artifact wasn't a UI app, so Section W was skipped (hand-edit
+    `Project context → Deploy target` / `Database` in the profile if
+    your project has one you want me to remember) | not asked — deep
+    was skipped].
   • VCS host: [GitHub — `gh` already in your Bash allowlist, no extras
     needed | GitLab — `+vcs-gitlab.json` {{merged into ~/.claude/settings.json |
     available but declined the auto-merge — re-run /onboard --deep to revisit}}
@@ -40,7 +46,7 @@ What you have available now:
   /spine            see everything that's loaded (skills, commands, chapters)
   /hooks            list every hook configured for this session (event + script)
   /prep             plan a new project or a major feature  (run in a project dir)
-  /onboard          re-run essentials  (`--deep` for the full 28-question pass)
+  /onboard          re-run essentials  (`--deep` for the full ~28-question pass; +2 conditional follow-ups for UI apps)
   /suggest          capture a high-signal moment to your personal bucket
   /curate           review captured moments and apply approved ones
   /add-skill        add a new skill to your personal bucket
@@ -61,6 +67,37 @@ Want to know what each profile field actually changes? Ask me to read
 chapters/personalization/19g-field-effects.md — it maps every field to the
 chapters / skills / hooks that consume it.
 ```
+
+## Placeholder substitution at chapter-read time
+
+Two literal placeholders the spine carries are substituted at read-time (never stripped from the source): `{{PR_OR_MR}}` in chapter prose, and `{{Q4}}` in stack-template CLAUDE.md stubs.
+
+### `{{PR_OR_MR}}` — Q8-driven (chapter source-prose)
+
+Chapter source-prose under `chapters/workflow/` and `chapters/anti-patterns/` uses the literal placeholder `{{PR_OR_MR}}` where it would otherwise lean GitHub-first ("PR" / "pull request"). When you load one of these chapters, substitute the placeholder at read-time before quoting any line back to the user:
+
+- **Q8 = GitHub** → `pull request` (lowercase prose) or `PR` (acronym contexts — headings, short phrasing)
+- **Q8 = GitLab** → `merge request` / `MR`
+- **Q8 = Bitbucket** → `pull request` / `PR` (Bitbucket uses the GitHub vocabulary)
+- **Q8 = None — local-only** → fall back to `commit` / `branch` in prose; the `{{PR_OR_MR}}` concept doesn't apply, so reframe rather than substitute literally
+- **Q8 = Other (free-text)** → use `PR` as the safe default unless the free-text mentions `gitlab` or `merge request`, in which case use `MR`
+- **No profile** → `PR` as the safe default (GitHub is the dominant host in this audience)
+
+### `{{Q4}}` — Q4-driven (stack-template push-back bullet)
+
+`global/stacks/<name>/CLAUDE.md.template` carries the literal `{{Q4}}` placeholder in rule 2 of the always-on block. The installed `~/.claude/CLAUDE.md` keeps the placeholder — substitute at read-time based on the user's `Working style → Push-back intensity` value:
+
+- **Q4 = Just do it** → "**Just do it.** Senior dev, not order-taker. Make a reasonable assumption, state it in one line, ship it. Only stop if something is genuinely going to break — security, data loss, hard-to-reverse decisions."
+- **Q4 = Mention concerns, then continue** → "**Mention concerns, then continue.** Senior dev, not order-taker. If you see a real issue, flag it once with the action you'll take, then proceed. Don't make me ask for the concerns; don't ask permission to surface them."
+- **Q4 = Argue your side** → "**Push back. Spar with me.** Senior dev, not order-taker. Weak ideas get challenged. On non-trivial choices, surface 1–2 alternatives with honest tradeoffs *before* building. Never silently pick the first thing."
+- **Q4 = Teach me along the way** → "**Teach me along the way.** Senior dev, not order-taker. Surface what you'd correct or refine — even small things — and name the underlying principle. Tradeoffs explicit, not implicit. The point is for me to learn the why, not just get the diff."
+- **No profile / unfilled** → use the "Mention concerns, then continue" variant (matches the shipped chapters' baseline tone).
+
+The same four variants live in `chapters/signaling/11g-push-back-phrasing.md` so the chapter and the substitution table agree. If you edit one, edit both.
+
+### Discipline for both placeholders
+
+Both placeholders are intentional — never strip them from the source. The source is the source of truth; the substitution is a render-time concern that happens whenever the file is read into context.
 
 ## Hard rules for the handoff
 

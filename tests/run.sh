@@ -6,6 +6,7 @@
 #   - hooks/test-block-env-commit.sh     (git commit guard against staged .env)
 #   - hooks/test-typecheck-after-edit.sh (opt-in PostToolUse typecheck contract)
 #   - hooks/test-format-on-save.sh       (opt-in PostToolUse formatter routing)
+#   - hooks/test-spine-writeback.sh      (plan-layout resolution: project / profile / built-ins)
 #   - onboard/test-extras-merge.sh       (jq merge for settings-extras fragments)
 #   - installer/test-dry-run.sh          (install.sh --dry-run output contract)
 #
@@ -37,6 +38,7 @@ suites=(
   "hooks/test-block-env-commit.sh"
   "hooks/test-typecheck-after-edit.sh"
   "hooks/test-format-on-save.sh"
+  "hooks/test-spine-writeback.sh"
   "onboard/test-extras-merge.sh"
   "installer/test-dry-run.sh"
 )

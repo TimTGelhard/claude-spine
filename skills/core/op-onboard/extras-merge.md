@@ -23,6 +23,7 @@ Scan the captured answers in order:
    |---|---|
    | `vercel` | `+vercel-stack.json` |
    | `supabase` | `+supabase-stack.json` |
+   | `django`, `fastapi` | `+python-django-stack.json` |
    | `aws`, `amazon web services`, ` ec2`, ` lambda`, ` dynamodb`, ` rds`, ` s3 ` | `+aws-stack.json` |
    | `gcp`, `google cloud`, `firebase`, `cloud run`, `cloud functions` | `+gcp-stack.json` |
    | `azure` | `+azure-stack.json` |
@@ -121,7 +122,7 @@ The skill does not attempt any further write after printing this — the user is
 ## Rules
 
 - **Never modify entries.** Append-only. Never replace, never reorder, never remove.
-- **Only the named fragments.** Only the eight files under `global/settings-extras/`. Never invent or import new ones. Never resolve a user-typed `Other` answer into a fragment path.
+- **Only the named fragments.** Only the nine files under `global/settings-extras/`. Never invent or import new ones. Never resolve a user-typed `Other` answer into a fragment path.
 - **Only `permissions.allow` and `permissions.WebFetch`.** Never touch any other keys (`hooks`, `model`, `theme`, `enabledPlugins`, env, etc.) — those keys belong to other passes or to the user.
 - **Atomic writes.** Always write to `.tmp` first, then `mv`. Never edit settings.json in-place — a failed `jq` invocation otherwise corrupts the live file.
 - **One question per fragment.** Don't batch multiple Apply/Skip into one prompt — a user should be able to opt into `+vcs-gitlab.json` and decline `+docker-k8s-stack.json` independently.

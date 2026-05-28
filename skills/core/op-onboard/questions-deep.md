@@ -1,6 +1,8 @@
-# Deep questions (18, grouped by section)
+# Deep questions (18 always + 2 conditional, grouped by section)
 
 Ask in order. Use `AskUserQuestion` for each. Skip a question if the essentials already implied the answer (e.g., don't re-ask experience level). Each question has up to 4 explicit options; "Other" is added by the tool for free-text. Where the question says `multi-select`, set `multiSelect: true`.
+
+**Section W is conditional.** W1 + W2 only fire when the essentials Q9 (Artifact) resolved to **"An app users open"** — or a free-text variant that names a UI-bearing shape (web app, mobile app, desktop app, browser extension, dashboard with users, etc.). For backend service / CLI / library / data-pipeline / other artifacts, skip Section W entirely; the profile's `Deploy target:` and `Database:` lines stay unfilled and the user can hand-edit them later if relevant.
 
 **Writing style for these questions:** plain language, no jargon. Assume the user might be brand new. If a technical term has to appear, gloss it in plain English in parentheses. Options should describe a situation, not just a label.
 
@@ -253,7 +255,43 @@ Options (single-select):
 
 ---
 
-## After H3
+## Section W — Web / mobile / desktop app specifics (conditional)
+
+**Run W1 + W2 only if Q9 (Artifact) = "An app users open" or a UI-bearing free-text variant.** Otherwise jump straight to the post-H3 wrap-up below.
+
+If the user picked "Other" in Q9, judge from the free-text — phrases like "web app", "mobile app", "desktop app", "browser extension", "Chrome / Firefox plugin", "PWA", "internal dashboard with users" are UI-bearing. Phrases like "Unity game", "Salesforce / Apex package", "WordPress theme", "infrastructure module" are also UI-bearing in spirit (users open them) — ask in those cases too. When genuinely ambiguous, skip — Section W is the smaller miss; a UI user can hand-edit the profile fields, and Claude can still recommend the agnostic DEPLOY / ARCHITECTURE templates without these answers.
+
+### W1 — Deploy target
+
+Question: **"Where does this app actually run when users use it? (Drives which deploy runbook the spine points you at and which environment-variable conventions appear in examples.)"**
+Header: `Deploy`
+Options (single-select):
+- **Managed web platform** — Vercel / Netlify / Cloudflare Pages / Fly.io / Render / Railway / similar PaaS
+- **Cloud provider** — AWS / GCP / Azure (Lambda, ECS / Cloud Run / App Service, EKS / GKE / AKS, or raw VMs)
+- **Self-hosted VPS or container** — DigitalOcean droplet, Hetzner box, on-prem server, your own Kubernetes cluster, Docker on a NAS
+- **Mobile app stores** — App Store / Play Store (with or without a small web/PWA on the side)
+
+(Other = free-text — e.g. "GitHub Pages", "Vercel + Cloudflare Workers split", "internal company hosting only", "Tauri-packaged desktop binary", "Electron app distributed via direct download", "Chrome Web Store / Firefox add-ons".)
+
+→ Profile: `Project context → Deploy target`. Affects: which `templates/examples/.../DEPLOY.md` variant the spine recommends (once those variants ship — see BA3 in [`FIXES.md`](../../../FIXES.md)), which CLI commands appear in deploy examples (`vercel`, `aws`, `kubectl`, `flyctl`, `fastlane`, etc.), which environment-variable conventions show up (`NEXT_PUBLIC_*`, `EXPO_PUBLIC_*`, `VITE_*`, plain `process.env`, `AWS_PROFILE`, etc.).
+
+### W2 — Database default
+
+Question: **"What's the main place this app keeps its data? Pick the one that holds the bulk of your user / business data — a small Redis or in-memory cache alongside Postgres still counts as Postgres for this question."**
+Header: `Database`
+Options (single-select):
+- **Postgres** — Supabase / Neon / RDS / Cloud SQL / local Postgres
+- **Other SQL** — MySQL / MariaDB / SQLite / SQL Server / CockroachDB / Turso
+- **NoSQL / document / KV** — MongoDB / DynamoDB / Firestore / Redis-as-primary / Cassandra
+- **None / not yet** — no persistent database, or this is a static / file-based / API-proxy app
+
+(Other = free-text — e.g. "BigQuery for analytics + Postgres for OLTP", "Snowflake", "FaunaDB", "EdgeDB", "Couchbase", "Datomic", "platform-local storage only (mobile)".)
+
+→ Profile: `Project context → Database`. Affects: which migration tooling shows up in examples (`alembic` / `prisma` / `drizzle` / `flyway` / native SQL), which "Per-row authorization" pattern the spine reaches for first (RLS for Postgres, security rules for Firestore, IAM for Dynamo, decorator-based for ORMs), which ARCHITECTURE.md variant feels right.
+
+---
+
+## After H3 (or W2 if Section W ran)
 
 Update the profile file (rewrite with all deep answers + bump `Last updated:`).
 

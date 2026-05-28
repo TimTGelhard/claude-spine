@@ -1,5 +1,5 @@
 ---
-description: Run or re-run the claude-spine personal profile interview. Pass --deep for the full ~28-question pass plus two opt-in `settings.json` tweaks (auto-typecheck + auto-format hooks); otherwise runs the 10-question essentials. The essentials path also proposes a one-time `settings.json` tune sized to your Claude plan.
+description: Run or re-run the claude-spine personal profile interview. Pass --deep for the full ~28-question pass (+ up to 2 conditional follow-ups when your artifact is a UI app — deploy target + database default) plus two opt-in `settings.json` tweaks (auto-typecheck + auto-format hooks); otherwise runs the 10-question essentials. The essentials path also proposes a one-time `settings.json` tune sized to your Claude plan.
 argument-hint: [--deep]
 ---
 

@@ -1,4 +1,8 @@
-# Launch Plan — Path from "v2 complete" to "global product"
+# Launch Plan — Path from "v2 complete" to "global product" (archived 2026-05-28)
+
+> **Archived 2026-05-28.** This is the frozen pre-launch phase log for the v2 → v1.0 transition. **Most of the work shipped before this archive** — almost all phases are marked `done (2026-05-27)`. The remaining open items (L4c baseline run, L7a/c/d/e launch assets, L8 verification, all manual user-actions) have been pulled into [`FIXES.md`](../../FIXES.md) under the new **"Pre-launch checklist"** section so the open queue lives in one file. Kept here as the audit trail for what was decided + verified during pre-launch.
+>
+> **For cold Claude sessions:** the original "this file is your first read" directive no longer applies. Start with [`README.md`](../../README.md) for what the project is, [`FIXES.md`](../../FIXES.md) for the open queue (including pre-launch tasks), and [`RECONSTRUCTION.md`](../../RECONSTRUCTION.md) for the *why* behind frozen architectural decisions.
 
 **If you're a Claude session reading this cold, this file is your first read.** It's the gap-fixing plan between the end of `RECONSTRUCTION.md` (v2 architecture shipped 2026-05-27) and a public launch. Each phase is sized for one focused session.
 

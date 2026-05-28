@@ -45,7 +45,7 @@ The rule that holds across stages: one session = one focused job. Don't combine 
 
 - **"Just have Claude figure it out."** Without Stage 0 you'll discover what you wanted only after building the wrong thing.
 - **"I'll write the markdown files after the MVP works."** You won't, and every session re-derives the project from scratch.
-- **"One big PR at the end."** Massive diffs hide bugs — commit per feature.
+- **"One big {{PR_OR_MR}} at the end."** Massive diffs hide bugs — commit per feature.
 - **"Skip Stage 5, the user won't notice."** They will. Missing-state bugs are the most common production issues.
 - **Combining stages in one session** — especially prep + first feature.
 

@@ -18,6 +18,7 @@ One dedicated planning session before any code. Output is plan files in `docs/`,
 - User just wants to code now — push back once on the upfront cost; if still no, hand off to `op-workflow`.
 - Plans already exist and section work is mid-flight — the ambient `op-spine-active` skill carries the session.
 - Brownfield codebase the user hasn't explored — fire `op-brownfield` first; plan rewrites/extensions only after discovery.
+- **Work shape is not Build** (audit, refactor, migration, investigation, research, cleanup) — `op-approach` fires *before* this skill on those shapes, identifies the shape, and routes back here informed by the shape's phase structure + hard rule. See [`chapters/workflow/05k-work-shapes.md`](../../../chapters/workflow/05k-work-shapes.md).
 
 ## What to read first
 
@@ -38,6 +39,7 @@ These templates are the output shape — load as references when drafting:
 
 ## Sibling skills
 
+- **Before** this fires (for non-build work): `op-approach` — identifies work shape (Build / Audit / Refactor / Migration / Investigation / Research / Cleanup), surfaces phase structure + hard rule + traps from [`chapters/workflow/05k-work-shapes.md`](../../../chapters/workflow/05k-work-shapes.md), then routes back here informed by the shape.
 - Per-session execution: `op-workflow` (chapter 05d) — what each session does inside its scope.
 - Brownfield discovery before planning: `op-brownfield`.
 - Collaboration mode (planner / executor / reviewer): `op-collaboration-modes`.

@@ -6,11 +6,11 @@
 #
 # Usage:
 #   ./install.sh                            # neutral global stub (default)
-#   ./install.sh --stack=ts-next-supabase   # heavy stack-flavored template (TS + Next.js + Supabase)
-#   ./install.sh --stack=python-django      # heavy stack-flavored template (Python + Django + DRF)
+#   ./install.sh --stack=ts-next-supabase   # thin stack-flavored CLAUDE.md + op-stack-flavor skill (TS + Next.js + Supabase)
+#   ./install.sh --stack=python-django      # thin stack-flavored CLAUDE.md + op-stack-flavor skill (Python + Django + DRF)
 #   ./install.sh --opinionated              # alias for --stack=ts-next-supabase (backward compat)
 #   ./install.sh --skip-global              # skip ~/.claude/CLAUDE.md
-#   ./install.sh --skip-skills              # skip skill symlinks
+#   ./install.sh --skip-skills              # skip skill symlinks (incl. op-stack-flavor)
 #   ./install.sh --skip-commands            # skip slash-command symlinks
 #   ./install.sh --skip-settings            # skip ~/.claude/settings.json
 #   ./install.sh --skip-hook                # skip installing hooks (env-leak + spine-writeback)
@@ -19,10 +19,14 @@
 #   ./install.sh --dry-run                  # print actions, change nothing
 #   ./install.sh -h | --help
 #
-# Available stacks (anything under global/stacks/ with a CLAUDE.md.template):
+# Available stacks (anything under global/stacks/<name>/ with a CLAUDE.md.template
+# AND a flavor-skill/SKILL.md):
 #   ts-next-supabase   — TypeScript + Next.js + Supabase + Stripe + Vercel
 #   python-django      — Python + Django + DRF + Postgres + Celery
-# Add a new stack by dropping global/stacks/<name>/CLAUDE.md.template into the repo.
+# Add a new stack by dropping global/stacks/<name>/{CLAUDE.md.template,flavor-skill/SKILL.md}
+# into the repo. The thin CLAUDE.md.template + the heavy flavor-skill/ pair stay in
+# lock-step: the always-on rules ship in CLAUDE.md, the rest loads on-demand via the
+# skill.
 
 set -euo pipefail
 
@@ -65,7 +69,7 @@ for arg in "$@"; do
     --force-global) FORCE_GLOBAL=1 ;;
     --dry-run) DRY_RUN=1 ;;
     -h|--help)
-      sed -n '2,26p' "$0"
+      sed -n '2,29p' "$0"
       exit 0
       ;;
     *)
@@ -78,14 +82,25 @@ done
 
 # Validate --stack=<name> picks a real directory before doing anything.
 # Note: SPINE_DIR is already set above (resolve spine root), so use it directly.
-if [ -n "$STACK" ] && [ ! -f "$SPINE_DIR/global/stacks/$STACK/CLAUDE.md.template" ]; then
-  echo "ERROR: --stack=$STACK has no template at global/stacks/$STACK/CLAUDE.md.template" >&2
-  echo "       Available stacks:" >&2
-  for d in "$SPINE_DIR"/global/stacks/*/; do
-    [ -f "$d/CLAUDE.md.template" ] || continue
-    echo "         $(basename "$d")" >&2
-  done
-  exit 2
+# Both the thin CLAUDE.md.template AND the flavor-skill/SKILL.md must exist —
+# the two ship together as the per-stack flavor pair.
+if [ -n "$STACK" ]; then
+  if [ ! -f "$SPINE_DIR/global/stacks/$STACK/CLAUDE.md.template" ]; then
+    echo "ERROR: --stack=$STACK has no template at global/stacks/$STACK/CLAUDE.md.template" >&2
+    echo "       Available stacks:" >&2
+    for d in "$SPINE_DIR"/global/stacks/*/; do
+      [ -f "$d/CLAUDE.md.template" ] || continue
+      [ -f "$d/flavor-skill/SKILL.md" ] || continue
+      echo "         $(basename "$d")" >&2
+    done
+    exit 2
+  fi
+  if [ ! -f "$SPINE_DIR/global/stacks/$STACK/flavor-skill/SKILL.md" ]; then
+    echo "ERROR: --stack=$STACK has no flavor skill at global/stacks/$STACK/flavor-skill/SKILL.md" >&2
+    echo "       Every stack ships its thin CLAUDE.md.template and a matching flavor-skill/SKILL.md" >&2
+    echo "       — the latter holds the heavy stack-flavor content that loads on-demand." >&2
+    exit 2
+  fi
 fi
 
 # ---------- preflight ----------
@@ -261,6 +276,45 @@ else
   echo
 fi
 
+# ---------- 2b. op-stack-flavor symlink (only when --stack=<name>) ----------
+
+# The thin CLAUDE.md.template pairs with a heavy flavor-skill/ that loads
+# on-demand. Link it as op-stack-flavor so a single skill name handles
+# whichever stack the user picked. Neutral installs ship no flavor skill —
+# the user gets only the universal op-* set.
+#
+# When --skip-skills is set we don't touch ~/.claude/skills/ at all; an
+# existing op-stack-flavor link (if any) survives untouched. The same flag
+# protects the neutral-install cleanup branch below.
+
+if [ "$SKIP_SKILLS" -eq 0 ]; then
+  STACK_FLAVOR_LINK="$CLAUDE_DIR/skills/op-stack-flavor"
+  if [ -n "$STACK" ]; then
+    echo "==> linking stack-flavor skill into ~/.claude/skills/op-stack-flavor"
+    ensure_dir "$CLAUDE_DIR/skills"
+    symlink_force "$SPINE_DIR/global/stacks/$STACK/flavor-skill" "$STACK_FLAVOR_LINK"
+    echo
+  else
+    # Neutral install: if a previous --stack=<name> install left an
+    # op-stack-flavor symlink pointing into this spine clone, remove it so
+    # the user isn't running a stale stack flavor against a neutral CLAUDE.md.
+    # A symlink pointing somewhere else (the user's own flavor) is left alone.
+    if [ -L "$STACK_FLAVOR_LINK" ]; then
+      stale_target="$(readlink "$STACK_FLAVOR_LINK")"
+      case "$stale_target" in
+        "$SPINE_DIR"/global/stacks/*/flavor-skill)
+          echo "==> removing stale op-stack-flavor symlink (neutral install)"
+          backup_path "$STACK_FLAVOR_LINK"
+          run rm -f "$STACK_FLAVOR_LINK"
+          echo "  removed: $STACK_FLAVOR_LINK"
+          echo "  (left over from a prior --stack=<name> install; neutral CLAUDE.md doesn't expect it)"
+          echo
+          ;;
+      esac
+    fi
+  fi
+fi
+
 # ---------- 3. slash commands ----------
 
 if [ "$SKIP_COMMANDS" -eq 0 ]; then
@@ -413,8 +467,14 @@ fi
 
 echo "==> claude-spine is installed."
 echo
-echo "  What just happened: 22 skills, 9 slash commands, a thin global"
-echo "  CLAUDE.md, settings, and safety hooks were linked into ~/.claude/."
+if [ -n "$STACK" ] && [ "$SKIP_SKILLS" -eq 0 ]; then
+  echo "  What just happened: 22 universal op-* skills + 1 stack-flavor skill"
+  echo "  ($STACK), 9 slash commands, a thin stack-flavored global CLAUDE.md,"
+  echo "  settings, and safety hooks were linked into ~/.claude/."
+else
+  echo "  What just happened: 23 skills, 9 slash commands, a thin global"
+  echo "  CLAUDE.md, settings, and safety hooks were linked into ~/.claude/."
+fi
 echo "  Claude Code will pick them up on its next launch."
 echo
 echo "  ┌── Next steps ─────────────────────────────────────────────────┐"

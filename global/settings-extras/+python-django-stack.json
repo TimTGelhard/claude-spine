@@ -1,0 +1,10 @@
+{
+  "_comment": "Merge into ~/.claude/settings.json when your backend is Django or FastAPI. The neutral default ships docs.python.org + pypi.org (broad-language); this fragment adds the framework-specific docs domains. Paired with the `python-django` stack flavor under global/stacks/.",
+  "permissions": {
+    "allow": [],
+    "WebFetch": [
+      "domain:docs.djangoproject.com",
+      "domain:fastapi.tiangolo.com"
+    ]
+  }
+}

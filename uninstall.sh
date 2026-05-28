@@ -84,6 +84,14 @@ echo
 
 # ---------- 1. skill symlinks ----------
 
+# Two symlink targets count as "spine-installed" under ~/.claude/skills/op-*:
+#   - skills/core/op-*/                       (the universal op-* set, 22 of them)
+#   - global/stacks/*/flavor-skill/           (the op-stack-flavor symlink — only
+#                                              present when install was run with
+#                                              --stack=<name>)
+# Anything else under op-* — a hand-rolled skill, a skill pointing into a
+# different spine clone — is left alone.
+
 echo "==> removing spine skill symlinks from $CLAUDE_DIR/skills/"
 removed_skills=0
 skipped_skills=0
@@ -93,6 +101,10 @@ if [ -d "$CLAUDE_DIR/skills" ]; then
     if points_into_spine "$link" "skills/core"; then
       run rm -f "$link"
       echo "  removed: $link"
+      removed_skills=$((removed_skills + 1))
+    elif points_into_spine "$link" "global/stacks"; then
+      run rm -f "$link"
+      echo "  removed: $link (stack-flavor)"
       removed_skills=$((removed_skills + 1))
     else
       echo "  skipped: $link (not pointing into this spine clone)"

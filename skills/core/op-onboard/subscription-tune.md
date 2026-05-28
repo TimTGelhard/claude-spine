@@ -2,7 +2,7 @@
 
 Loaded on-demand from `op-onboard/SKILL.md`'s step 5 (after the essentials are saved and the profile written, before offering the deep interview).
 
-After essentials are saved, propose a `settings.json` tune based on Q1 (subscription). The spine ships Pro-safe defaults; Free users burn limits faster than necessary on those defaults, and Max 20× users with 1M-context models leave performance on the table unless these get raised. The tune is symmetric — propose *lowering* for Free and *raising* for Max 20× from the same flow.
+After essentials are saved, propose a `settings.json` tune based on Q1 (subscription). The spine ships Free-class defaults (`medium` / `120000`) so a brand-new Free user doesn't burn the daily limit on day one. Every paid tier should raise from there — this pass proposes the right target per plan and writes both keys in one shot if the user accepts.
 
 ## Mapping table (Q1 answer → target settings)
 
@@ -17,7 +17,7 @@ After essentials are saved, propose a `settings.json` tune based on Q1 (subscrip
 | Other → API / Bedrock / Vertex / OpenRouter / self-hosted (matches `api`, `bedrock`, `vertex`, `openrouter`, `pay-as-you-go`) | **400000** | high |
 | Other → anything else | leave alone | leave alone |
 
-(Free-tier values lower the context window before auto-compact and use a less-expensive reasoning depth so Free users hit daily limits less often. Team treats like Pro per seat. Enterprise and API/cloud-passthrough users get the same mid-class bump as Max 5× because their usage cap is per-organization or per-token rather than per-user-day — `effortLevel: high` is safe; `autoCompactWindow: 400000` is a middle-ground between Pro's 180K and Max 20×'s 800K. A user who hand-tuned will see the diff and can decline.)
+(The shipped defaults are Free-class — `medium` + `120000`. The Free row in the table matches that exactly, so a Free user gets "no diff, skip silently" and pays no Pro tax. Every other row raises one or both keys. Team treats like Pro per seat. Enterprise and API/cloud-passthrough users get the same mid-class bump as Max 5× because their usage cap is per-organization or per-token rather than per-user-day — `effortLevel: high` is safe; `autoCompactWindow: 400000` is a middle-ground between Pro's 180K and Max 20×'s 800K. A user who hand-tuned will see the diff and can decline.)
 
 The plan-tier names mirror [`docs/MODELS.md`](../../docs/MODELS.md)'s plan registry — see that file for the full list of named tiers Anthropic ships.
 
@@ -32,8 +32,9 @@ The plan-tier names mirror [`docs/MODELS.md`](../../docs/MODELS.md)'s plan regis
 5. Otherwise → first print a short **plain-English explanation block** as a normal text message (not inside `AskUserQuestion`), then ask the Apply/Skip question. Template the block like this (substitute the user's subscription name and the current/target numbers):
 
    ```
-   You're on {{plan}}. The defaults ship Pro-safe — let me propose two tweaks
-   so you get the most out of your plan:
+   You're on {{plan}}. The defaults ship Free-class so a Free user doesn't
+   burn the daily limit on day one — let me propose two tweaks so you get
+   the most out of your plan:
 
      • autoCompactWindow:  {{current}} → {{target}} tokens
        (how full the conversation gets before Claude auto-compresses earlier

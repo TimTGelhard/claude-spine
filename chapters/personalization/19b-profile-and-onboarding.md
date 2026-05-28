@@ -34,7 +34,7 @@ Strict structure so future tooling can read the file. Hand-editing is fine — i
 
 ## Two-tier interview
 
-The whole point of the hybrid model is to not scare new users with a 28-question wall while still letting committed users get a fully-loaded profile from day 1.
+The whole point of the hybrid model is to not scare new users with a 28-question wall (30 if you ship a UI app and the two conditional follow-ups in Section W run) while still letting committed users get a fully-loaded profile from day 1.
 
 **Essentials (10 questions, default first-run):**
 
@@ -51,9 +51,11 @@ The whole point of the hybrid model is to not scare new users with a 28-question
 
 Captured up front, written immediately. The deep section headings are still in the file with `(unfilled — run /onboard --deep to capture)` under each, so you can see what's missing.
 
-**Deep (18 more questions, opt-in):**
+**Deep (18 more questions, opt-in; +2 conditional follow-ups for UI apps):**
 
-Daily Claude usage and cost sensitivity, comfort/lean-in areas, secondary stack and avoid list, team/scale context, active signal preferences, output format details, risk tolerance, plus the new Section G/H pass (typical session shape, plans-dir location, bucket-loop opt-in, team/org shape, currency hint), and an optional free-text notes follow-up. Branches off the essentials — won't repeat questions you already answered.
+Daily Claude usage and cost sensitivity, comfort/lean-in areas, secondary stack and avoid list, team/scale context, active signal preferences, output format details, risk tolerance, plus the Section G/H pass (typical session shape, plans-dir location, bucket-loop opt-in, team/org shape, currency hint), and an optional free-text notes follow-up. Branches off the essentials — won't repeat questions you already answered.
+
+**Section W is conditional.** If Q9 (Artifact) was "An app users open" (or a UI-bearing free-text variant), two more questions fire at the end of the deep pass — W1 (Deploy target) and W2 (Database default) — and write to `Project context → Deploy target` + `Database` in the profile. Skipped automatically for backend service / CLI / library / data-pipeline artifacts; those fields stay unfilled in the profile and can be hand-edited if the user wants to capture them anyway.
 
 **Hook tuning (2 opt-in prompts at the end of deep, writes to settings.json — not the profile):**
 
@@ -71,7 +73,7 @@ Both are opt-in only via `/onboard --deep`; default-off otherwise. Each adds one
 | Profile file missing | `op-welcome` emits a one-block greeting pointing the user at `/onboard`. `op-onboard` does **not** auto-launch the interview. |
 | `/onboard` (no profile) | Runs essentials; offers deep at the end |
 | `/onboard` (profile present) | Re-runs essentials only; shows current values, asks which to change |
-| `/onboard --deep` | Runs the 18 deep questions (after essentials if profile is missing), then 2 opt-in hook prompts |
+| `/onboard --deep` | Runs the 18 deep questions (after essentials if profile is missing); +2 conditional follow-ups (Section W — deploy target + database) when Q9 = UI app; then 2 opt-in hook prompts |
 | "Change my push-back to spar with me" | Direct edit to the matching section; no interview |
 | Hand-editing the file | Always fine — plain markdown, strict structure |
 
@@ -110,7 +112,7 @@ More specific wins. Security rules apply at every level — the profile cannot w
 
 - Profile lives at `~/.claude/claude-spine-profile.md`, outside the spine, survives reinstalls.
 - Seven fixed sections, machine-parseable; hand-editing fine, don't rename headings.
-- Essentials first run (10 Qs), deep opt-in (18 more + 2 opt-in hook prompts that touch settings.json, not the profile), re-runnable via `/onboard` and `/onboard --deep`.
+- Essentials first run (10 Qs), deep opt-in (18 more, +2 conditional follow-ups for UI apps, + 2 opt-in hook prompts that touch settings.json, not the profile), re-runnable via `/onboard` and `/onboard --deep`.
 - `op-welcome` owns the first-run greeting; `op-onboard` runs the interview only on explicit invocation.
 - Re-run when something about *you* shifts long-term. Don't re-run for session-level noise.
 - Profile is who-you-are; the bucket is what-you've-added. The suggestion loop doesn't touch the profile.

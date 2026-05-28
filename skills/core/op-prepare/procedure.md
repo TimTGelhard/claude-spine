@@ -2,11 +2,11 @@
 
 Loaded from [`SKILL.md`](SKILL.md). One dedicated session before any code. Output is plan files in `docs/`, nothing else. Done right, every subsequent session is cold-start-resistant and scope-locked.
 
-## Step 1 — Confirm we're planning, not coding
+## Step 1 — Announce the contract, then proceed
 
-State to the user: "This is a planning pass. Output will be plan files in `docs/`, no code. Continue?"
+Open with a one-line statement of the contract: *"Planning pass — plan files only this session, no code. Scaffolding now."* **Do not ask "Continue?" or otherwise gate on a Y/N answer.** Claude cannot meaningfully wait for the answer mid-turn (the procedure runs in the same turn the user invoked `/prep` in), so a gate creates fake friction — the user already chose to run `/prep`; trust the choice.
 
-If user says "just start coding," push back once: this session locks scope for many future sessions — the upfront cost pays back 10x. If they still insist, hand off to `op-workflow` instead.
+If the user pushes back *during the flow* with "just start coding," push back once: this session locks scope for many future sessions — the upfront cost pays back 10x. If they still insist, hand off to `op-workflow` instead.
 
 ## Step 2 — Establish the brief
 

@@ -8,7 +8,7 @@ You are running the **planning pass** for a plan-driven project. Follow the proc
 
 0. **Scaffold if needed.** If `docs/` doesn't exist in the cwd, run `~/.claude-spine/init.sh .` first to scaffold project docs from spine templates. `init.sh` is idempotent — it won't overwrite existing files, so it's safe to run even on partial setups. Skip this step only if `docs/` already exists.
 
-1. **State the contract**: "This is a planning pass. Output will be plan files in `docs/`. No code this session. Continue?"
+1. **Announce the contract** in one line, then proceed — no Y/N gate. The user already invoked `/prep`; a "Continue?" gate is fake friction (Claude can't actually pause for the answer mid-turn). Say something like: *"Planning pass — plan files only this session, no code. Scaffolding now."* The user interrupts if they didn't mean to run `/prep`. If they push back mid-flow with "just start coding," follow the procedure's Step 1 escalation rule (push back once; if they still insist, hand off to `op-workflow`).
 
 2. **Read the spine** to load the planning model:
    - `~/.claude-spine/chapters/workflow/05h-multi-session-planning.md`

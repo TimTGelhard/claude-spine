@@ -41,7 +41,7 @@ Higher stakes. Things to look for early:
 - **Outdated dependencies with known CVEs.** `npm audit` early.
 - **RLS disabled** on tables with user data (or the equivalent for whatever DB you have). Critical-priority fix.
 - **No `.env.example`** but a working `.env.local` somewhere. The example is what new devs (you, now) need.
-- **`master` / `main` directly committed-to**, no PR history. The team didn't have a review process. Expect surprises.
+- **`master` / `main` directly committed-to**, no {{PR_OR_MR}} history. The team didn't have a review process. Expect surprises.
 - **No tests.** Plan a smoke-test-first approach: walk flows manually, write down what they should do.
 - **Code style chaos** — multiple paradigms in one codebase. Don't unify everything. Pick one for *new* code, leave existing alone.
 

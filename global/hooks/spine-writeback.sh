@@ -56,15 +56,109 @@ spine_default_int() {
   if [[ "$val" =~ ^[0-9]+$ ]]; then echo "$val"; else echo "$fallback"; fi
 }
 
+# Read a string field from the profile (e.g. `- **Plans dir:** docs/plans/`).
+# Strips the value's leading/trailing whitespace and any trailing parenthetical
+# annotation like "(unfilled — run /onboard --deep to capture)". Returns the
+# empty string when the field is missing or matches an unfilled marker — the
+# caller falls back to the shipped default.
+spine_default_str() {
+  local key="$1"
+  if [ ! -f "$PROFILE" ]; then echo ""; return; fi
+  local val
+  val=$(grep -E "^- \*\*${key}:\*\*" "$PROFILE" 2>/dev/null \
+    | head -n1 \
+    | sed -E "s/^- \*\*${key}:\*\*[[:space:]]*//; s/[[:space:]]+$//" \
+    || true)
+  case "$val" in
+    ""|"(unfilled"*|*"unfilled —"*) echo ""; return ;;
+  esac
+  echo "$val"
+}
+
 LONG_TURNS=$(spine_default_int "Long-session turn threshold" 30)
 LONG_SECS=$(spine_default_int "Long-session elapsed seconds" 7200)
 
-# ---------- preflight: is this a plan-driven project? ----------
+# ---------- preflight: resolve plan layout ----------
+#
+# Precedence (first match wins):
+#   1. Project override — `Plan layout: <plans-dir> <progress-file>` in
+#      $CWD/CLAUDE.md or $CWD/.claude/CLAUDE.md.
+#   2. Profile field — `- **Plans dir:** <plans-dir>+<progress-file>` parsed
+#      out of ~/.claude/claude-spine-profile.md. The Q2 onboarding form
+#      writes paired options like `docs/plans/ + docs/PROGRESS.md` or
+#      `plans/ + PROGRESS.md`; we accept either ` + ` or ` ` as separator.
+#   3. Built-in conventions, in order: docs/plans/+docs/PROGRESS.md,
+#      docs/specs/+docs/PROGRESS.md, plans/+PROGRESS.md, specs/+PROGRESS.md.
+#
+# A malformed value at any level falls through to the next.
 
-[ -d "$CWD/docs/plans" ] || exit 0
-[ -f "$CWD/docs/PROGRESS.md" ] || exit 0
+PLANS_DIR=""
+PROGRESS=""
 
-PROGRESS="$CWD/docs/PROGRESS.md"
+# (1) Project override.
+for cm in "$CWD/CLAUDE.md" "$CWD/.claude/CLAUDE.md"; do
+  [ -f "$cm" ] || continue
+  layout_line=$(grep -E '^[[:space:]]*Plan layout:' "$cm" 2>/dev/null | head -n1 || true)
+  [ -z "$layout_line" ] && continue
+  layout_value=$(echo "$layout_line" | sed -E 's/^[[:space:]]*Plan layout:[[:space:]]*//' || true)
+  # Tokens are whitespace-separated: <plans-dir> <progress-file>.
+  set -- $layout_value
+  if [ $# -ge 2 ] && [ -d "$CWD/$1" ] && [ -f "$CWD/$2" ]; then
+    # Strip a trailing slash from the dir so path composition stays clean.
+    proj_dir=$(echo "$1" | sed -E 's:/+$::')
+    PLANS_DIR="$CWD/$proj_dir"
+    PROGRESS="$CWD/$2"
+    break
+  fi
+done
+
+# (2) Profile field — onboarding writes the Q2 option string verbatim
+# (e.g. `docs/plans/ + docs/PROGRESS.md`). Parse both halves.
+if [ -z "$PROGRESS" ]; then
+  plans_raw=$(spine_default_str "Plans dir")
+  if [ -n "$plans_raw" ]; then
+    # Accept "<dir> + <file>" or "<dir> <file>" or just "<dir>" (in which
+    # case we infer PROGRESS.md inside that dir's parent — mirrors the
+    # built-in conventions below).
+    dir_part=$(echo "$plans_raw" | sed -E 's/[[:space:]]*\+[[:space:]]*/ /' | awk '{print $1}')
+    file_part=$(echo "$plans_raw" | sed -E 's/[[:space:]]*\+[[:space:]]*/ /' | awk '{print $2}')
+    # Strip a trailing slash from dir_part so paths compose cleanly.
+    dir_part=$(echo "$dir_part" | sed -E 's:/+$::')
+    if [ -n "$dir_part" ] && [ -d "$CWD/$dir_part" ]; then
+      if [ -n "$file_part" ] && [ -f "$CWD/$file_part" ]; then
+        PLANS_DIR="$CWD/$dir_part"
+        PROGRESS="$CWD/$file_part"
+      elif [ -f "$CWD/${dir_part%/*}/PROGRESS.md" ]; then
+        # dir_part = `docs/plans` → PROGRESS at `docs/PROGRESS.md`
+        PLANS_DIR="$CWD/$dir_part"
+        PROGRESS="$CWD/${dir_part%/*}/PROGRESS.md"
+      elif [ -f "$CWD/PROGRESS.md" ]; then
+        PLANS_DIR="$CWD/$dir_part"
+        PROGRESS="$CWD/PROGRESS.md"
+      fi
+    fi
+  fi
+fi
+
+# (3) Built-in conventions.
+if [ -z "$PROGRESS" ]; then
+  for pair in \
+    "docs/plans:docs/PROGRESS.md" \
+    "docs/specs:docs/PROGRESS.md" \
+    "plans:PROGRESS.md" \
+    "specs:PROGRESS.md"; do
+    d="${pair%%:*}"
+    f="${pair##*:}"
+    if [ -d "$CWD/$d" ] && [ -f "$CWD/$f" ]; then
+      PLANS_DIR="$CWD/$d"
+      PROGRESS="$CWD/$f"
+      break
+    fi
+  done
+fi
+
+# No layout matched any source → not a plan-driven project; exit silently.
+[ -z "$PROGRESS" ] && exit 0
 
 # ---------- parse active section + session from PROGRESS.md ----------
 
@@ -95,7 +189,9 @@ SESSION=$(grep -E '^\s*-?\s*\*\*Session\*\*:' "$PROGRESS" 2>/dev/null \
 #   • Format drift — the bullets have been edited but no longer match the
 #     parser's expected shape (`- **Section**: \`<name>\``). Write the marker.
 
-PARSE_ERROR_MARKER="$CWD/docs/.spine-parse-error"
+# Marker lives alongside PROGRESS.md (whichever layout resolved), so /done
+# and /spine find it in the same directory regardless of the layout.
+PARSE_ERROR_MARKER="$(dirname "$PROGRESS")/.spine-parse-error"
 
 HAS_TEMPLATE_PLACEHOLDERS=0
 if grep -qE '\*\*Section\*\*:[^`]*`<[^>]+>`' "$PROGRESS" 2>/dev/null || \
@@ -133,17 +229,25 @@ fi
 case "$SECTION" in *"<"*">"*) exit 0 ;; esac
 case "$SESSION" in *"<"*">"*) exit 0 ;; esac
 
-SECTION_FILE="$CWD/docs/plans/${SECTION}.md"
+SECTION_FILE="$PLANS_DIR/${SECTION}.md"
 [ -f "$SECTION_FILE" ] || exit 0
 
 # ---------- compute changed files this turn ----------
+#
+# Filter out PLANS_DIR + PROGRESS from the touched-files list so a turn that
+# only updates plan/progress isn't a noisy heartbeat. Paths are made repo-relative
+# (strip the CWD prefix) so the awk-printed paths match git status's repo-relative output.
 
 CHANGED=""
 if command -v git >/dev/null 2>&1 && [ -d "$CWD/.git" ]; then
+  PLANS_REL="${PLANS_DIR#$CWD/}"
+  PROGRESS_REL="${PROGRESS#$CWD/}"
+  PLANS_REL_ESC=$(printf '%s' "$PLANS_REL" | sed -E 's/[.[\*^$/]/\\&/g')
+  PROGRESS_REL_ESC=$(printf '%s' "$PROGRESS_REL" | sed -E 's/[.[\*^$/]/\\&/g')
   CHANGED=$(cd "$CWD" && git status --porcelain 2>/dev/null \
     | awk '{print $NF}' \
-    | grep -Ev '^docs/plans/' \
-    | grep -Ev '^docs/PROGRESS\.md$' \
+    | grep -Ev "^${PLANS_REL_ESC}/" \
+    | grep -Ev "^${PROGRESS_REL_ESC}$" \
     | head -n 8 \
     | tr '\n' ' ' \
     | sed -E 's/[[:space:]]+$//' || true)
@@ -248,7 +352,8 @@ fi
 # ---------- emit heartbeat stdout (deferred until after silent cue capture) ----------
 
 if [ "$HEARTBEAT_FIRED" = "1" ]; then
-  echo "spine: heartbeat → docs/plans/${SECTION}.md (session ${SESSION}; touched: ${CHANGED})"
+  SECTION_FILE_REL="${SECTION_FILE#$CWD/}"
+  echo "spine: heartbeat → ${SECTION_FILE_REL} (session ${SESSION}; touched: ${CHANGED})"
 fi
 
 # ---------- 3. Long-session signal (single-fire per session_id) ----------

@@ -46,6 +46,8 @@ For essentials-only runs (deep deferred), keep the deep section headings but wri
 
 - **Typical work:** {{Q6 answer}}
 - **Artifact:** {{Q9 answer}}
+- **Deploy target:** {{W1, or "(unfilled — UI-app field; hand-edit if your project has one)" if Q9 wasn't UI-bearing, or "(unfilled — run /onboard --deep to capture)" if deep was skipped}}
+- **Database:** {{W2, or "(unfilled — UI-app field; hand-edit if your project uses one)" if Q9 wasn't UI-bearing, or "(unfilled — run /onboard --deep to capture)" if deep was skipped}}
 - **Team size:** {{C1, or unfilled}}
 - **User scale:** {{C2, or unfilled}}
 - **Org shape:** {{H2, or "(unfilled — run /onboard --deep to capture)"}}

@@ -10,7 +10,7 @@
 
 ## How files are organized
 
-- `chapters/<topic>/<NNx>-<slug>.md` — atomic content files, one concept each, <150 lines.
+- `chapters/<topic>/<NNx>-<slug>.md` — atomic content files, one concept each, sized to what the concept needs (lean but complete, no artificial ceiling).
 - The leading number matches the original chapter (01–18); the letter (`a`, `b`, …) marks the split when one chapter became several files.
 - "Source" column shows which original chapter the content came from, for cross-reference until v1 is stable.
 
@@ -35,7 +35,7 @@
 
 ## Workflow — how to organize work
 
-*Routed by `op-workflow` (general workflow + stages 05–07), `op-prepare` (planning a new project or major section — `/prep`), `op-brownfield` (inherited / unfamiliar code, chapter 08), `op-collaboration-modes` (executor / reviewer / explainer / planner — chapter 07), and the ambient `op-spine-active` (cold-start in plan-driven projects, chapter 05j). When any of these fires, use its trigger-keyword table instead of reading this section cold.*
+*Routed by `op-approach` (work-shape assessment before planning — chapter 05k, fires before `op-prepare` for non-build work), `op-workflow` (general workflow + stages 05–07), `op-prepare` (planning a new project or major section — `/prep`), `op-brownfield` (inherited / unfamiliar code, chapter 08), `op-collaboration-modes` (executor / reviewer / explainer / planner — chapter 07), and the ambient `op-spine-active` (cold-start in plan-driven projects, chapter 05j). When any of these fires, use its trigger-keyword table instead of reading this section cold.*
 
 | Topic / Trigger | Atomic file | Source | Status |
 |---|---|---|---|
@@ -56,6 +56,7 @@
 | Multi-session planning hierarchy (brief → master plan → section plans → sessions) | `chapters/workflow/05h-multi-session-planning.md` | new | written |
 | Execution-plan anatomy (PROJECT_PLAN, SECTION_PLAN, session entry, PROGRESS shape) | `chapters/workflow/05i-execution-plan-anatomy.md` | new | written |
 | Cold-start protocol — 6 steps + 6 hard rules, the per-session contract | `chapters/workflow/05j-cold-start-protocol.md` | new | written |
+| Work-shape catalog — Build / Audit / Refactor / Migration / Investigation / Research / Cleanup (phase order + hard rule + traps per shape; routed by `op-approach`) | `chapters/workflow/05k-work-shapes.md` | new | written |
 | Brownfield discovery sequence | `chapters/workflow/08a-discovery-sequence.md` | 08 | written |
 | Brownfield safety patterns | `chapters/workflow/08b-safety-patterns.md` | 08 | written |
 | Teaching Claude unfamiliar code | `chapters/workflow/08c-teaching-unfamiliar.md` | 08 | written |

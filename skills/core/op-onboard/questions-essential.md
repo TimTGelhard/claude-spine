@@ -162,7 +162,7 @@ Options (single-select):
 
 (Other = free-text — e.g. "embedded firmware for STM32", "Unity game", "Salesforce/Apex package", "WordPress theme", "infrastructure module".)
 
-→ Profile: `Project context → Artifact`. Drives: which `templates/` variant the spine points you at (`web-saas-next-supabase` for app-shape; library + CLI + data variants are paths-not-yet-shipped — Claude falls back to the agnostic skeleton until they land), which deploy runbook makes sense, which smoke-test shape is right.
+→ Profile: `Project context → Artifact`. Drives: which `templates/` variant the spine points you at (`web-saas-next-supabase` for app-shape; library + CLI + data variants are paths-not-yet-shipped — Claude falls back to the agnostic skeleton until they land), which deploy runbook makes sense, which smoke-test shape is right. **In `/onboard --deep`:** if Q9 = "An app users open" (or a UI-bearing free-text variant), two conditional follow-ups also fire at the end of the deep pass — Section W (W1 Deploy target, W2 Database) — that narrow the template + ARCHITECTURE picks further.
 
 ---
 
@@ -174,7 +174,7 @@ Options (single-select):
 
 3. **Then ask about the deep interview:**
 
-   Question: **"Want to answer 18 more questions so I can tailor things further? Plus two optional opt-ins at the end for auto-typecheck and auto-format hooks. You can also do this later."**
+   Question: **"Want to answer 18 more questions so I can tailor things further (+2 short follow-ups if you ship a UI app — deploy target + database)? Plus two optional opt-ins at the end for auto-typecheck and auto-format hooks. You can also do this later."**
    Header: `Continue?`
 
    Options (single-select):

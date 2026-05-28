@@ -1,5 +1,7 @@
 # Cheatsheet
 
+> **Archived 2026-05-28.** The dynamic `/spine` command (introduced round 4) does this same job at runtime — listing the active skills, commands, profile path, and chapter root from disk so it never drifts. The cheatsheet shipped in round 3 to close BIAS-AUDIT U6 (the 4-hop discovery tree) but quickly became maintenance overhead against `/spine`'s live truth. Kept here as the historical one-page overview. **For current state:** run `/spine` after install, or browse [`INDEX.md`](../../INDEX.md).
+
 One page. Bookmark it.
 
 The spine has 22 skills, 9 slash commands, ~80 chapters. Most of the time you don't need to know any of them by name — the right one loads on demand. Use this when you *do* want to reach for something explicitly.

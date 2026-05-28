@@ -6,6 +6,7 @@ What ages well vs what compounds badly over months. Each entry: the anti-pattern
 
 **Fails because:** can't maintain, can't fix bugs in it, can't extend it. Every future change has to re-learn what should already be in your head.
 **Instead:** if you don't understand a Claude-produced block, ask for an explanation (not modification), then refactor for clarity. See [17c-high-stakes-cases.md](../recovery/17c-high-stakes-cases.md), "I'm scared to touch the codebase."
+*(Edge: third-party library internals, well-audited OSS dependencies, and battle-tested framework code earn a different treatment — you don't need a line-by-line mental model of how React's reconciler works to ship a React app. The anti-pattern is shipping your own application code you can't read, not depending on libraries you trust.)*
 
 ## Letting CLAUDE.md drift
 

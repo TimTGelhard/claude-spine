@@ -2,6 +2,8 @@
 
 Security failures are the ones you can't undo. Each entry: the anti-pattern, why it fails, what to do instead. This catalog is the authoritative checklist — your global `CLAUDE.md` may carry a short version for quick reference, but the long form lives here.
 
+Unlike the other 18x files (where most rules are strong defaults with edge cases), most entries below are **intentionally absolute** — the cost of getting them wrong (secret exfiltration, SQL injection, auth bypass) is too high to leave to judgment. The few entries with legitimate variation (CORS `*` on public endpoints, when `catch (e)` makes sense, when `throw new Error('failed')` is acceptable as an intermediate-wrap) name the variation inline. If you find yourself wanting to relax a rule that has no inline edge case, double-check whether you're actually in one of the rare exceptions — most attempts at "this case is different" turn out to be the exact pattern this file warns against.
+
 ## Hardcoded secrets in source
 
 **Fails because:** secrets in source survive deletion (git history), spread on every clone, and leak the moment a repo flips public. Rotating them is painful.
