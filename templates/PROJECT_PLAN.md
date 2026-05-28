@@ -10,43 +10,43 @@
 
 ## Constraints
 
-- **Stack**: <e.g., Next.js 16 + Supabase + Vercel>
-- **Timeline**: <if there's a deadline, name it; else "no deadline">
-- **Team**: <solo / N devs>
-- **Non-negotiables**: <e.g., RLS from day 1, no client-side privileged keys, Lighthouse 90+ mobile>
+- **Stack**: `<language + framework + datastore + deploy target — example: "Next.js 16 + Supabase + Vercel" or "Python 3.12 + Django + Postgres + Fly.io" or "Go 1.23 + sqlite + single static binary">`
+- **Timeline**: `<if there's a deadline, name it; else "no deadline">`
+- **Team**: `<solo / N devs / OSS contributors / agency engagement>`
+- **Non-negotiables**: `<e.g., "per-row authorization from day 1", "no client-side privileged keys", "Lighthouse 90+ mobile", "single static binary, no runtime deps", "must support cancellation across every async path">`
 
 ## Sections (ordered)
 
 | # | Section | Goal (one line) | Depends on | Status |
 |---|---|---|---|---|
-| 1 | foundation | Project scaffolding + first deploy | — | planned |
-| 2 | auth | Email + Google login, RLS baseline | 1 | planned |
-| 3 | <resource-1> | CRUD for <resource> | 2 | planned |
-| 4 | <resource-2> | CRUD for <resource> | 2 | planned |
-| 5 | <integration> | e.g., Stripe billing | 3 or 4 | planned |
-| 6 | landing | Public landing page + SEO | — | planned |
-| 7 | hardening | States, perf, a11y, security review | 1-6 | planned |
-| 8 | ship | Pre-deploy review + production cutover | 7 | planned |
+| 1 | foundation | `<scaffolding + first deploy / first published version / first run>` | — | planned |
+| 2 | `<core-capability-1>` | `<one-line goal>` | 1 | planned |
+| 3 | `<core-capability-2>` | `<one-line goal>` | 1 or 2 | planned |
+| 4 | … | … | … | planned |
+| N | hardening | `<edge cases, perf, security review, observability>` | 1-N-1 | planned |
+| N+1 | ship | `<pre-deploy review + production cutover / first public release>` | N | planned |
+
+(For section ordering templates by project type — web SaaS, backend service, CLI / library, ML pipeline — see `~/.claude-spine/skills/core/op-prepare/procedure.md` Step 5.)
 
 Statuses: `planned` / `in-progress` / `done` / `blocked`.
 
 ## Order rationale
 
-<1-2 sentences. Example: "Auth precedes resources because RLS depends on user identity. Landing has no code dependencies on the app and can run in parallel with resource sections.">
+`<1-2 sentences. Example: "Auth precedes resources because per-row authorization depends on user identity. Landing has no code dependencies on the app and can run in parallel with resource sections.">`
 
 ## Open questions
 
 Decisions needed before specific sections kick off. Move to `DECISIONS.md` when resolved.
 
-- <e.g., "Self-host auth or use Supabase Auth? — needed before section 2">
-- <e.g., "Stripe Checkout vs Elements? — needed before section 5">
+- `<e.g., "Self-host auth or use a managed provider? — needed before section 2">`
+- `<e.g., "Which payment provider? — needed before section 5">`
 
 ## Risks
 
 Known unknowns that could change the plan.
 
-- <e.g., "If Supabase RLS perf is a problem at scale, fall back to row-level filtering in API layer. Verify in section 3.">
-- <e.g., "Stripe KYC approval may delay section 5 by N days.">
+- `<e.g., "If the chosen datastore's per-row-authorization perf is a problem at scale, fall back to API-layer filtering. Verify in section 3.">`
+- `<e.g., "External-provider KYC may delay section 5 by N days.">`
 
 ---
 

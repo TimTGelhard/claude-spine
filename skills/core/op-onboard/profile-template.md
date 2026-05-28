@@ -35,11 +35,20 @@ For essentials-only runs (deep deferred), keep the deep section headings but wri
 - **Secondary:** {{B1, or unfilled}}
 - **Avoid:** {{B2 list, or unfilled}}
 
+## Environment
+
+- **OS:** {{Q7 answer}}
+- **VCS host:** {{Q8 answer}}
+- **Plans dir:** {{G2, or "(unfilled — run /onboard --deep to capture)"}}
+- **Currency:** {{H3, or "(unfilled — run /onboard --deep to capture)"}}
+
 ## Project context
 
 - **Typical work:** {{Q6 answer}}
+- **Artifact:** {{Q9 answer}}
 - **Team size:** {{C1, or unfilled}}
 - **User scale:** {{C2, or unfilled}}
+- **Org shape:** {{H2, or "(unfilled — run /onboard --deep to capture)"}}
 
 ## Working style
 
@@ -47,6 +56,7 @@ For essentials-only runs (deep deferred), keep the deep section headings but wri
 - **Answer length:** {{Q5a answer}}
 - **Reasoning depth:** {{Q5b answer}}
 - **Active signals:** {{D1 list, or "All four (default)"}}
+- **Session shape:** {{G1, or "(unfilled — run /onboard --deep to capture)"}}
 
 ## Output format
 
@@ -60,6 +70,32 @@ For essentials-only runs (deep deferred), keep the deep section headings but wri
 ## Notes
 
 {{free-text from post-F1 follow-up. Omit this section entirely if the user had nothing to add.}}
+
+## Spine defaults
+
+> Optional thresholds and cue phrases the spine's skills + hooks read at runtime. Comment out (or delete) a line to fall back to the shipped default in parentheses. These survive `git pull` because they live in your profile, not the spine source.
+
+### Bucket loop
+
+- **Bucket loop:** on (default: on — set to `off` to silence `op-suggest`, `op-curate-nudge`, `op-add-skill`, `op-bucket-router`; the profile + spine still load every session, just nothing captures, nothing nudges, nothing routes through the personal library)
+- **Curate nudge pending threshold:** 5 (default: 5)
+- **Curate nudge cooldown days:** 30 (default: 30)
+- **Stale review never-fired age days:** 90 (default: 90)
+- **Stale review last-fired age months:** 6 (default: 6)
+- **Add-skill minimum fire count:** 3 (default: 3)
+
+### Planning
+
+- **Prep clarifying questions cap:** 7 (default: 5-7)
+- **Prep section count target range:** 5-12 (default: 5-12)
+- **Prep session entry split lines:** 100 (default: 100)
+
+### Writeback (Stop hook)
+
+- **Long-session turn threshold:** 30 (default: 30)
+- **Long-session elapsed seconds:** 7200 (default: 7200)
+- **Cross-session note cues:** (default — see `spine-writeback.sh` `CUES_RE`)
+  - (one regex alternative per bullet — append your phrasing if Claude misses your idiolect; e.g. `note this for tomorrow`, `remember next week`)
 ````
 
 ---

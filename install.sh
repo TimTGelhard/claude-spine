@@ -5,17 +5,24 @@
 # the global stub, the settings allowlist, and the env-leak hook.
 #
 # Usage:
-#   ./install.sh                     # neutral global stub (default)
-#   ./install.sh --opinionated       # the heavy founder-flavored template instead
-#   ./install.sh --skip-global       # skip ~/.claude/CLAUDE.md
-#   ./install.sh --skip-skills       # skip skill symlinks
-#   ./install.sh --skip-commands     # skip slash-command symlinks
-#   ./install.sh --skip-settings     # skip ~/.claude/settings.json
-#   ./install.sh --skip-hook         # skip installing hooks (env-leak + spine-writeback)
-#   ./install.sh --keep-legacy       # don't remove pre-v2 op-manual-* skills
-#   ./install.sh --force-global      # overwrite ~/.claude/CLAUDE.md even if user-customized
-#   ./install.sh --dry-run           # print actions, change nothing
+#   ./install.sh                            # neutral global stub (default)
+#   ./install.sh --stack=ts-next-supabase   # heavy stack-flavored template (TS + Next.js + Supabase)
+#   ./install.sh --stack=python-django      # heavy stack-flavored template (Python + Django + DRF)
+#   ./install.sh --opinionated              # alias for --stack=ts-next-supabase (backward compat)
+#   ./install.sh --skip-global              # skip ~/.claude/CLAUDE.md
+#   ./install.sh --skip-skills              # skip skill symlinks
+#   ./install.sh --skip-commands            # skip slash-command symlinks
+#   ./install.sh --skip-settings            # skip ~/.claude/settings.json
+#   ./install.sh --skip-hook                # skip installing hooks (env-leak + spine-writeback)
+#   ./install.sh --keep-legacy              # don't remove pre-v2 op-manual-* skills
+#   ./install.sh --force-global             # overwrite ~/.claude/CLAUDE.md even if user-customized
+#   ./install.sh --dry-run                  # print actions, change nothing
 #   ./install.sh -h | --help
+#
+# Available stacks (anything under global/stacks/ with a CLAUDE.md.template):
+#   ts-next-supabase   — TypeScript + Next.js + Supabase + Stripe + Vercel
+#   python-django      — Python + Django + DRF + Postgres + Celery
+# Add a new stack by dropping global/stacks/<name>/CLAUDE.md.template into the repo.
 
 set -euo pipefail
 
@@ -35,7 +42,7 @@ SPINE_DIR="$(cd "$(dirname "$SCRIPT_PATH")" && pwd -P)"
 
 # ---------- parse flags ----------
 
-OPINIONATED=0
+STACK=""
 SKIP_GLOBAL=0
 SKIP_SKILLS=0
 SKIP_COMMANDS=0
@@ -47,7 +54,8 @@ DRY_RUN=0
 
 for arg in "$@"; do
   case "$arg" in
-    --opinionated) OPINIONATED=1 ;;
+    --opinionated) STACK="ts-next-supabase" ;;        # backward-compat alias
+    --stack=*) STACK="${arg#--stack=}" ;;
     --skip-global) SKIP_GLOBAL=1 ;;
     --skip-skills) SKIP_SKILLS=1 ;;
     --skip-commands) SKIP_COMMANDS=1 ;;
@@ -57,7 +65,7 @@ for arg in "$@"; do
     --force-global) FORCE_GLOBAL=1 ;;
     --dry-run) DRY_RUN=1 ;;
     -h|--help)
-      sed -n '2,18p' "$0"
+      sed -n '2,26p' "$0"
       exit 0
       ;;
     *)
@@ -67,6 +75,18 @@ for arg in "$@"; do
       ;;
   esac
 done
+
+# Validate --stack=<name> picks a real directory before doing anything.
+# Note: SPINE_DIR is already set above (resolve spine root), so use it directly.
+if [ -n "$STACK" ] && [ ! -f "$SPINE_DIR/global/stacks/$STACK/CLAUDE.md.template" ]; then
+  echo "ERROR: --stack=$STACK has no template at global/stacks/$STACK/CLAUDE.md.template" >&2
+  echo "       Available stacks:" >&2
+  for d in "$SPINE_DIR"/global/stacks/*/; do
+    [ -f "$d/CLAUDE.md.template" ] || continue
+    echo "         $(basename "$d")" >&2
+  done
+  exit 2
+fi
 
 # ---------- preflight ----------
 
@@ -267,13 +287,13 @@ fi
 # ---------- 4. global CLAUDE.md ----------
 
 if [ "$SKIP_GLOBAL" -eq 0 ]; then
-  if [ "$OPINIONATED" -eq 1 ]; then
-    SRC_TEMPLATE="$SPINE_DIR/global/opinionated/CLAUDE.md.template"
+  if [ -n "$STACK" ]; then
+    SRC_TEMPLATE="$SPINE_DIR/global/stacks/$STACK/CLAUDE.md.template"
     OTHER_TEMPLATE="$SPINE_DIR/global/neutral/CLAUDE.md.template"
-    VARIANT="opinionated"
+    VARIANT="stack:$STACK"
   else
     SRC_TEMPLATE="$SPINE_DIR/global/neutral/CLAUDE.md.template"
-    OTHER_TEMPLATE="$SPINE_DIR/global/opinionated/CLAUDE.md.template"
+    OTHER_TEMPLATE=""
     VARIANT="neutral"
   fi
   echo "==> installing global CLAUDE.md ($VARIANT variant)"
@@ -286,10 +306,11 @@ if [ "$SKIP_GLOBAL" -eq 0 ]; then
   DEST="$CLAUDE_DIR/CLAUDE.md"
 
   # Render each template to a temp file so we can detect an untouched prior install (safe to overwrite) vs a user-customized file (preserve unless --force-global).
+  # OTHER_TMP holds a candidate "other variant" — used so a user who installed the neutral default and now passes --stack=X (or vice versa) gets a clean variant-swap rather than the "appears user-customized" branch.
   RENDERED_TMP="$(mktemp)"
   OTHER_TMP="$(mktemp)"
   sed "s|{{SPINE_DIR}}|$SPINE_DIR|g" "$SRC_TEMPLATE" > "$RENDERED_TMP"
-  [ -f "$OTHER_TEMPLATE" ] && sed "s|{{SPINE_DIR}}|$SPINE_DIR|g" "$OTHER_TEMPLATE" > "$OTHER_TMP"
+  [ -n "$OTHER_TEMPLATE" ] && [ -f "$OTHER_TEMPLATE" ] && sed "s|{{SPINE_DIR}}|$SPINE_DIR|g" "$OTHER_TEMPLATE" > "$OTHER_TMP"
 
   SHOULD_WRITE=1
   if [ -e "$DEST" ] && [ "$FORCE_GLOBAL" -ne 1 ]; then
@@ -300,9 +321,25 @@ if [ "$SKIP_GLOBAL" -eq 0 ]; then
       echo "  variant swap: $DEST matches the untouched other variant — overwriting"
       backup_path "$DEST"
     else
-      echo "  preserved: $DEST appears user-customized — leaving it alone"
-      echo "             pass --force-global to overwrite (existing file will still be backed up first)"
-      SHOULD_WRITE=0
+      # Also check whether $DEST matches any other shipped stack template (handy if a user previously installed --stack=ts-next-supabase and now passes --stack=python-django).
+      MATCHED_STACK=""
+      for tpl in "$SPINE_DIR"/global/stacks/*/CLAUDE.md.template; do
+        [ -f "$tpl" ] || continue
+        [ "$tpl" = "$SRC_TEMPLATE" ] && continue
+        sed "s|{{SPINE_DIR}}|$SPINE_DIR|g" "$tpl" > "$OTHER_TMP"
+        if cmp -s "$DEST" "$OTHER_TMP"; then
+          MATCHED_STACK="$(basename "$(dirname "$tpl")")"
+          break
+        fi
+      done
+      if [ -n "$MATCHED_STACK" ]; then
+        echo "  variant swap: $DEST matches the untouched stacks/$MATCHED_STACK template — overwriting"
+        backup_path "$DEST"
+      else
+        echo "  preserved: $DEST appears user-customized — leaving it alone"
+        echo "             pass --force-global to overwrite (existing file will still be backed up first)"
+        SHOULD_WRITE=0
+      fi
     fi
   elif [ -e "$DEST" ] || [ -L "$DEST" ]; then
     backup_path "$DEST"
@@ -314,8 +351,8 @@ if [ "$SKIP_GLOBAL" -eq 0 ]; then
     else
       cat "$RENDERED_TMP" > "$DEST"
       echo "  wrote: $DEST"
-      if [ "$OPINIONATED" -eq 1 ]; then
-        echo "  NOTE: opinionated template has {{placeholders}} (name, intro, stack)."
+      if [ -n "$STACK" ]; then
+        echo "  NOTE: stack template has {{placeholders}} (name, intro, stack defaults)."
         echo "        Open $DEST and fill them in."
       fi
     fi
@@ -386,7 +423,7 @@ echo "  │  1. Restart Claude Code  (so it loads the new skills)         │"
 echo "  │  2. Open any Claude Code session                              │"
 echo "  │  3. Type  /onboard                                            │"
 echo "  │                                                               │"
-echo "  │  /onboard is a ~2-minute, 7-question interview that calibrates│"
+echo "  │  /onboard is a ~3-minute, 10-question interview that calibrates│"
 echo "  │  Claude to your subscription, stack, and working style.       │"
 echo "  │  Without it, every session falls back to generic defaults.    │"
 echo "  │                                                               │"

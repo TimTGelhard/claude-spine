@@ -2,67 +2,60 @@
 
 > Fill in before opening Claude Code. If you can't answer these, you're not ready to build.
 >
-> _Examples below pull from a quote-management SaaS for tradespeople — replace with your own domain. The questions are domain-agnostic._
+> _Stack-agnostic shape. For a fully-filled example (a quote-management SaaS for tradespeople), see `templates/examples/web-saas-next-supabase/PROJECT_BRIEF.md`. The questions below work for any project shape — product, library, CLI, ML, research, internal tool._
 
 ## What is this?
 One paragraph. What we're building, what it does, what makes it worth existing.
 
 ## Who is it for?
-The specific user. Not "people." Not "users." A named, real persona.
-
-- Example: "Independent electricians (1-3 person companies) who currently track quotes on paper."
+The specific user. Not "people." Not "developers." A named, real persona.
 
 ## The one outcome
-The single user-visible thing they can do after this exists that they can't do now.
-
-- Example: "Send a professional quote to a customer's phone via WhatsApp in under 60 seconds, from anywhere."
+The single thing they can do (or know, or run, or trust) after this exists that they can't now.
 
 ## Why now
-Why is this worth building, by you, in this moment? Market timing, personal advantage, customer pain.
+Why is this worth building, by you, in this moment? Market timing, personal advantage, customer pain, research opportunity, competitive deadline.
 
 ## Scope — what's IN
 
-The smallest set of features that delivers the outcome above:
+The smallest set that delivers the outcome above:
 
-- [ ] Feature 1
-- [ ] Feature 2
-- [ ] Feature 3
-- [ ] ...
+- [ ] `<feature / capability / experiment 1>`
+- [ ] `<feature / capability / experiment 2>`
+- [ ] `<feature / capability / experiment 3>`
+- [ ] …
 
 ## Scope — what's OUT (non-goals)
 
-Explicit list of what we're *not* building. The discipline file.
+Explicit list of what we're *not* building. The discipline file. Naming the deferral prevents creep.
 
-- Not building: payments (use bank transfer for v1)
-- Not building: multi-user accounts (one user per company for v1)
-- Not building: mobile app (web only for v1)
-- ...
+- Not building: `<thing 1, with a one-line why>`
+- Not building: `<thing 2>`
+- …
 
 ## Kill criteria
-When would you abandon this?
+When would you abandon this? Write the actual conditions, not the polite version.
 
-- "If after 5 paying customers no one renews."
-- "If a competitor with full Stripe integration launches at our price point."
-- "If the legal/regulatory environment shifts."
+- `<concrete kill condition 1>`
+- `<concrete kill condition 2>`
 
 ## Success criteria (v1)
 Specific, measurable, time-bound.
 
-- "10 paying customers within 60 days of launch."
-- "Average time to send a quote < 2 minutes."
+- `<metric 1, by when>`
+- `<metric 2, by when>`
 
 ## Constraints
-- Budget: $X for tools/hosting/month.
-- Timeline: launch by YYYY-MM-DD.
-- Tech: must work on iPhone Safari and Android Chrome.
-- Compliance: applicable privacy regulations (GDPR / CCPA / etc.) and local invoicing rules.
+- Budget: `<$/€/£ for tools, hosting, services per month>`
+- Timeline: `<launch / handoff / freeze date>`
+- Tech: `<must-work-on platforms, performance bounds, deployment constraints>`
+- Compliance / regulation / legal: `<applicable rules — GDPR, HIPAA, SOC2, sector-specific>`
 
 ## Open questions
 The questions still unanswered. List them. Decide before stage 2.
 
-- [ ] How do users sign up — phone or email?
-- [ ] Do we need a customer-facing portal or just PDF generation?
-- [ ] ...
+- [ ] `<open question 1>`
+- [ ] `<open question 2>`
 
 ---
 

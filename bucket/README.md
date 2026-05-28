@@ -4,7 +4,7 @@
 
 ## Why a bucket exists
 
-The core spine stays general. It avoids stack opinions (those go in the opinionated global), avoids speculative skills (chapter 13's "don't ship libraries" rule), and avoids your project-specific patterns. But you'll discover patterns over time that are worth saving — and they belong somewhere that survives `git pull` and doesn't pollute upstream.
+The core spine stays general. It avoids stack opinions (those go in the per-stack opinionated globals under `global/stacks/<name>/`), avoids speculative skills (chapter 13's "don't ship libraries" rule), and avoids your project-specific patterns. But you'll discover patterns over time that are worth saving — and they belong somewhere that survives `git pull` and doesn't pollute upstream.
 
 That's the bucket. It's append-mostly, you own it, no one else writes here.
 
@@ -32,7 +32,7 @@ Three ways:
 - Anything that should be universal — that belongs in `chapters/` or `skills/core/` (upstream PR territory, not personal bucket).
 - Anything that's actually a project doc (`PROGRESS.md`, `DECISIONS.md`, etc.) — those go in the project's own `docs/`.
 - Secrets, API keys, client data. Plain markdown only.
-- One-off snippets you'll never reach for again. The bucket is for patterns you'll *route to* repeatedly. If a skill fires twice ever, delete it.
+- One-off snippets you'll never reach for again. The bucket is for patterns you'll *route to* repeatedly. If a skill *never* fires (or fires only once across many sessions), delete it — see `op-curate/stale-review.md` for the precise stale-review thresholds (never-fired-and->90-days, or last-fired->6-months).
 
 ## On sharing (or the lack of one)
 

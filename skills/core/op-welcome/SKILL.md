@@ -1,6 +1,6 @@
 ---
 name: op-welcome
-description: Auto-fires once at the start of any conversation when `~/.claude/claude-spine-profile.md` does NOT exist (a fresh install with no profile yet). Emits a short welcome block introducing claude-spine and pointing the user at `/onboard` (the ≈2-min essentials interview) so the discovery surface is not "go read the README." If the profile file exists, this skill is silent — do not load its body. Never re-emits within the same conversation.
+description: Auto-fires once at the start of any conversation when `~/.claude/claude-spine-profile.md` does NOT exist (a fresh install with no profile yet). Emits a short welcome block introducing claude-spine and pointing the user at `/onboard` (the ≈3-min essentials interview) so the discovery surface is not "go read the README." If the profile file exists, this skill is silent — do not load its body. Never re-emits within the same conversation.
 ---
 
 # op-welcome — first-run greeting
@@ -30,7 +30,7 @@ Output exactly once, verbatim, at the very top of your first turn — before any
 >
 > claude-spine is an operating-discipline layer for Claude Code — 22 skills, 9 slash commands, and a chapter library that loads on demand. Everything is already linked into `~/.claude/`, ready to use.
 >
-> **One thing first:** run `/onboard` — a ~2-minute, 7-question interview. It calibrates me to your Claude subscription, your stack, and how you like to work. Without it, every session falls back to generic defaults.
+> **One thing first:** run `/onboard` — a ~3-minute, 10-question interview. It calibrates me to your Claude subscription, your stack, your OS / VCS host / artifact shape, and how you like to work. Without it, every session falls back to generic defaults.
 >
 > ↪ Continuing with what you asked — run `/onboard` whenever you're ready.
 

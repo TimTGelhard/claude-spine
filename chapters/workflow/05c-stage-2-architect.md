@@ -7,13 +7,13 @@ Time: 30–90 minutes with Claude.
 ## What goes in ARCHITECTURE.md
 
 - **Stack** (versions pinned)
-- **Data model** — tables + relationships, ASCII or Mermaid diagram
-- **Routes** — URL → page mapping
-- **Server boundaries** — what's a server action, what's an API route, what's an edge function
-- **Auth model** — who can do what, RLS strategy
-- **External services** — Stripe, Resend, R2, an LLM provider — what touches what
+- **Data model** — tables / collections / entities + relationships, ASCII or Mermaid diagram
+- **Routes / surfaces** — URL → page mapping for web; subcommand → handler for CLI; public API surface for libraries; topics + handlers for queue-driven services
+- **Server / process boundaries** — what's a server action vs an API route vs an edge function vs a background worker vs a client call
+- **Auth model** — who can do what, per-row / per-resource authorization strategy (Postgres RLS / Firestore rules / IAM / decorator-based / none-because-single-tenant)
+- **External services** — payment provider, email, storage, an LLM provider, anything you call — what touches what
 - **Cache + invalidation** (if relevant)
-- **Deployment topology** — hosting + database + edge
+- **Deployment topology** — hosting / runtime + database + edge / CDN / queue / etc.
 
 This is the source of truth for every future session. When you open a feature session, Claude reads this first.
 

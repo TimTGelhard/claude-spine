@@ -6,6 +6,8 @@
 > This file does NOT inventory features (use `FEATURES.md`) or list every bug (use issues / `FEATURES.md`).
 > Its job is to answer: *what's the next session, what does it need, what's blocking it?*
 
+<!-- ⚠️ DO NOT REFORMAT THE NEXT 6 LINES (or the **Session** bullet below). They are parsed by `spine-writeback.sh` via a regex that expects the literal `- **Section**:` / `- **Session**:` shape with backticks around the name. If you swap the bold for italics, drop the backticks, change the bullet style, or move these bullets to a different sub-heading, the Stop-hook heartbeat will silently no-op — your session activity won't be logged. -->
+
 ## Active section
 
 - **Section**: `<section-name>` (from `docs/PROJECT_PLAN.md`)

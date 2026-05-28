@@ -7,8 +7,6 @@ description: Use when asking how Claude Code actually works under the hood, how 
 
 The manual has atomic files for each foundational concept. Read ONLY the one that matches the question — don't load the whole folder.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index
 
 | Question / situation | Atomic file |

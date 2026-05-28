@@ -14,17 +14,19 @@ The global stub (installed by `install.sh`) points Claude at the profile every s
 
 ## What the profile captures
 
-Seven fixed sections, machine-parseable structure (don't rename headings):
+Nine fixed sections, machine-parseable structure (don't rename headings):
 
 | Section | What goes here |
 |---|---|
 | **Subscription** | Claude plan, typical daily usage, cost sensitivity |
 | **Developer profile** | Experience level, years coding, comfort areas, lean-in areas |
-| **Stack preferences** | Primary stack, secondary, what to avoid |
-| **Project context** | Typical project type, team size, user scale |
-| **Working style** | Push-back intensity, answer length, reasoning depth, active proactive-signal preferences |
+| **Stack preferences** | Primary stack (product-shape family), secondary, what to avoid |
+| **Environment** | OS, VCS host (GitHub / GitLab / Bitbucket / etc.), plans-dir layout, currency hint |
+| **Project context** | Typical project type, artifact shape (app / service / library / data), team size, user scale, org shape |
+| **Working style** | Push-back intensity, answer length, reasoning depth, active proactive-signal preferences, typical session shape |
 | **Output format** | Code presentation (diffs vs full files), comments / emoji policy |
 | **Risk + safety** | Command-execution tolerance (ask vs run) |
+| **Spine defaults** | User-overridable thresholds + cue phrases for bucket nudges, stale review, planning, and the writeback hook |
 
 Plus an optional **Notes** section for free-text the user added.
 
@@ -32,9 +34,9 @@ Strict structure so future tooling can read the file. Hand-editing is fine — i
 
 ## Two-tier interview
 
-The whole point of the hybrid model is to not scare new users with a 25-question wall while still letting committed users get a fully-loaded profile from day 1.
+The whole point of the hybrid model is to not scare new users with a 28-question wall while still letting committed users get a fully-loaded profile from day 1.
 
-**Essentials (7 questions, default first-run):**
+**Essentials (10 questions, default first-run):**
 
 1. Claude subscription
 2. Experience level
@@ -43,12 +45,15 @@ The whole point of the hybrid model is to not scare new users with a 25-question
 5. Answer length (terse / standard / verbose)
 6. Reasoning depth (just the answer / show the path / teach me the why)
 7. Typical project type
+8. Operating system (macOS / Linux / WSL / Windows native / Other)
+9. VCS host (GitHub / GitLab / Bitbucket / None / Other)
+10. Artifact shape (app / service or CLI / library / data or ML / Other)
 
 Captured up front, written immediately. The deep section headings are still in the file with `(unfilled — run /onboard --deep to capture)` under each, so you can see what's missing.
 
-**Deep (13 more questions, opt-in):**
+**Deep (18 more questions, opt-in):**
 
-Daily Claude usage and cost sensitivity, comfort/lean-in areas, secondary stack and avoid list, team/scale context, active signal preferences, output format details, risk tolerance, optional free-text notes. Branches off the essentials — won't repeat questions you already answered.
+Daily Claude usage and cost sensitivity, comfort/lean-in areas, secondary stack and avoid list, team/scale context, active signal preferences, output format details, risk tolerance, plus the new Section G/H pass (typical session shape, plans-dir location, bucket-loop opt-in, team/org shape, currency hint), and an optional free-text notes follow-up. Branches off the essentials — won't repeat questions you already answered.
 
 **Hook tuning (2 opt-in prompts at the end of deep, writes to settings.json — not the profile):**
 
@@ -66,7 +71,7 @@ Both are opt-in only via `/onboard --deep`; default-off otherwise. Each adds one
 | Profile file missing | `op-welcome` emits a one-block greeting pointing the user at `/onboard`. `op-onboard` does **not** auto-launch the interview. |
 | `/onboard` (no profile) | Runs essentials; offers deep at the end |
 | `/onboard` (profile present) | Re-runs essentials only; shows current values, asks which to change |
-| `/onboard --deep` | Runs the 13 deep questions (after essentials if profile is missing), then 2 opt-in hook prompts |
+| `/onboard --deep` | Runs the 18 deep questions (after essentials if profile is missing), then 2 opt-in hook prompts |
 | "Change my push-back to spar with me" | Direct edit to the matching section; no interview |
 | Hand-editing the file | Always fine — plain markdown, strict structure |
 
@@ -105,7 +110,7 @@ More specific wins. Security rules apply at every level — the profile cannot w
 
 - Profile lives at `~/.claude/claude-spine-profile.md`, outside the spine, survives reinstalls.
 - Seven fixed sections, machine-parseable; hand-editing fine, don't rename headings.
-- Essentials first run (7 Qs), deep opt-in (13 more + 2 opt-in hook prompts that touch settings.json, not the profile), re-runnable via `/onboard` and `/onboard --deep`.
+- Essentials first run (10 Qs), deep opt-in (18 more + 2 opt-in hook prompts that touch settings.json, not the profile), re-runnable via `/onboard` and `/onboard --deep`.
 - `op-welcome` owns the first-run greeting; `op-onboard` runs the interview only on explicit invocation.
 - Re-run when something about *you* shifts long-term. Don't re-run for session-level noise.
 - Profile is who-you-are; the bucket is what-you've-added. The suggestion loop doesn't touch the profile.

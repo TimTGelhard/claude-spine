@@ -7,8 +7,6 @@ description: Use when deciding *where* a behavior or rule should persist across 
 
 The three layers that persist between sessions. Routes here pick exactly one file — load only what you need.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index
 
 | Question / situation | Atomic file |

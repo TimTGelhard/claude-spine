@@ -1,6 +1,6 @@
 ---
 name: op-spine-active
-description: Auto-fires at the start of every conversation in a plan-driven project — a directory containing `docs/plans/` AND `docs/PROGRESS.md`. Silently loads the active session entry, announces scope in 3-4 lines, then proceeds to build (no "confirm scope?" gate — the announcement IS the scope statement; the user interrupts if wrong). If no plan exists or the active section file is missing, suggests `/prep`. Does NOT fire if scope has already been announced in this conversation.
+description: Auto-fires at the start of every conversation in a plan-driven project. Detects plan/progress files at any of four common conventions (`docs/plans/` + `docs/PROGRESS.md`, `docs/specs/` + `docs/PROGRESS.md`, `plans/` + `PROGRESS.md`, `specs/` + `PROGRESS.md`), or whatever the project's `CLAUDE.md` declares under a `Plan layout:` line. Silently loads the active session entry, announces scope in 3-4 lines, then proceeds to build (no "confirm scope?" gate — the announcement IS the scope statement; the user interrupts if wrong). If no plan exists or the active section file is missing, suggests `/prep`. Does NOT fire if scope has already been announced in this conversation.
 ---
 
 # op-spine-active — ambient cold-start
@@ -11,10 +11,19 @@ Cold-start protocol reference: `~/.claude-spine/chapters/workflow/05j-cold-start
 
 ## When this fires
 
-- The current working directory has `docs/plans/` AND `docs/PROGRESS.md`.
-- This is the start of a conversation — no prior orientation announcement has happened.
+This skill fires when the current working directory has a plan layout the skill recognizes. Try paths in this order; the first match wins:
 
-If you've already announced scope earlier in this conversation, do not re-announce. Skip the skill body.
+1. **Project override.** If the project's `CLAUDE.md` or `.claude/CLAUDE.md` contains a line of the form `Plan layout: <plans-dir> <progress-file>` (e.g., `Plan layout: roadmap/ roadmap/STATUS.md`), use those paths.
+2. **`docs/plans/` + `docs/PROGRESS.md`** — the canonical spine convention.
+3. **`docs/specs/` + `docs/PROGRESS.md`** — common spec-first variant.
+4. **`plans/` + `PROGRESS.md`** — repo-root variant.
+5. **`specs/` + `PROGRESS.md`** — repo-root spec-first variant.
+
+If none of those match, do NOT fire — let the conversation start cold. (A user without any plan layout is probably doing exploratory or one-off work; ambient cold-start is for repeat plan-driven sessions.)
+
+In the rest of this skill body, `<plans-dir>` and `<progress-file>` refer to whichever pair was selected above.
+
+Also: if you've already announced scope earlier in this conversation, do not re-announce. Skip the skill body.
 
 ## What to do
 
@@ -22,16 +31,16 @@ If you've already announced scope earlier in this conversation, do not re-announ
 
 Read in order:
 
-1. `docs/PROGRESS.md` — find active section name + active session number.
-2. `docs/plans/<active-section>.md` — locate the active session entry.
+1. `<progress-file>` — find active section name + active session number.
+2. `<plans-dir>/<active-section>.md` — locate the active session entry.
 3. Every file in the session entry's "Files to read" list.
 
 Do NOT pull `ARCHITECTURE.md`, `PROJECT_PLAN.md`, or unrelated repo files. The session entry defines exactly what's needed.
 
 ### Step 2 — Handle missing pieces gracefully
 
-- **`PROGRESS.md` missing active section field** → tell the user: *"No active section in `docs/PROGRESS.md`. Run `/prep` to plan one before starting."* Stop here.
-- **Section file missing** → tell the user: *"Section `<name>` has no plan file. Run `/prep <name>` to plan it before starting."* Stop here.
+- **`<progress-file>` missing active section field** → tell the user: *"No active section in `<progress-file>`. Run `/prep` to plan one before starting."* Stop here.
+- **Section file missing** → tell the user: *"Section `<name>` has no plan file at `<plans-dir>/<name>.md`. Run `/prep <name>` to plan it before starting."* Stop here.
 - **Session entry marked `done` already** → tell the user: *"Active session is marked `done`. Run `/done` to advance the pointer (or `/prep <next-section>` if the section finished)."* Stop here.
 
 ### Step 3 — Announce scope (3-4 lines max)

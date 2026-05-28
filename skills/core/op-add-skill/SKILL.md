@@ -7,8 +7,6 @@ description: Use to add a new skill to the user's personal `bucket/skills/` libr
 
 Guides the user through adding a personal skill to their bucket. The result is a `bucket/skills/<name>/SKILL.md` (or `<name>.md`) file plus an INDEX row that lets `op-bucket-router` find it later.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading. `install.sh` ensures `~/.claude-spine` resolves to the spine clone.
-
 ## Adjacent files
 
 | File | When |
@@ -19,7 +17,7 @@ Guides the user through adding a personal skill to their bucket. The result is a
 
 Bucket skills are personal-library territory. Chapter 13's anti-pattern is shipping speculative libraries. Refuse to add a skill unless **at least one** of these is true:
 
-- The user has reached for this same pattern **3+ times** already.
+- The user has reached for this same pattern **K+ times** already, where **K = `Add-skill minimum fire count`** in `~/.claude/claude-spine-profile.md`'s `## Spine defaults` section, default **3**.
 - The user explicitly states: "I do this every project" / "I always X" / "I've corrected Claude on this multiple times."
 - There's a concrete repeatable workflow (deploy script, review style, codegen pipeline) the user wants captured.
 

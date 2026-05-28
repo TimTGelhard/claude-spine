@@ -20,7 +20,7 @@ How you bound a session determines whether the work converges. Each entry: the a
 ## Trying to do the whole app in one session
 
 **Fails because:** context fills, decisions multiply, drift sets in.
-**Instead:** one session = one feature. See [06-feature-sizing.md](../workflow/06-feature-sizing.md).
+**Instead:** one session = one cohesive goal. For plan-driven feature work, that's typically one feature. For debug / explore / refactor / read-and-explain sessions, substitute "one investigation" / "one hypothesis" / "one cleanup goal" / "one orientation." See [06-feature-sizing.md](../workflow/06-feature-sizing.md).
 
 ## Carrying a long session forward "because I'm in flow"
 
@@ -34,4 +34,4 @@ How you bound a session determines whether the work converges. Each entry: the a
 
 ## TL;DR
 
-Scope creep is the dominant failure of intermediate users. The fix is mechanical: one feature per session, one bug per commit, commit at natural breakpoints, fresh terminal after. If the work won't fit, the work needs splitting — not a longer session.
+Scope creep is the dominant failure of intermediate users. The fix is mechanical: one cohesive goal per session, one bug per commit, commit at natural breakpoints, fresh terminal after. If the work won't fit, the work needs splitting — not a longer session. Note: "one cohesive goal" is the universal rule; "one feature per session" is its plan-driven feature-build variant — useful, but not the only valid shape.

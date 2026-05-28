@@ -17,12 +17,12 @@ Time: 1–2 hours with Claude.
    - `SMOKE_TESTS.md` (the 3–5 critical flows, before you build them)
 5. Lock dependencies (`package.json` + lockfile committed).
 6. `.env.example` with every key you'll need, as placeholders.
-7. First DB migration (auth + base tables if applicable). RLS from day 1.
+7. First data-layer scaffolding (auth + base tables / models if the project has a datastore). Per-row authorization (Postgres RLS, Firestore rules, app-layer permission decorators, IAM — whichever your stack uses) from day 1.
 8. Smoke test the empty app — does it run?
 
 ## What to ask Claude vs decide yourself
 
-- **Ask Claude:** "what's the cleanest schema for this?" "should this be one table or two?" "what's the idiomatic Next.js 16 pattern for this?"
+- **Ask Claude:** "what's the cleanest schema for this?" "should this be one table or two?" "what's the idiomatic `<your-framework>` pattern for this?"
 - **Decide yourself:** brand, color, copy, UX choices, what the product *feels* like.
 
 This is the mode-switching pattern from [07-mode-switching.md](07-mode-switching.md) — planner mode for technical questions, executor for the scaffolding.

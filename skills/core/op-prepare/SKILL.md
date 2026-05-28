@@ -7,8 +7,6 @@ description: Use when starting a new project from scratch, scoping a major new c
 
 One dedicated planning session before any code. Output is plan files in `docs/`, nothing else. Done right, every subsequent session is cold-start-resistant and scope-locked. Full step-by-step pass: [`procedure.md`](procedure.md).
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## When to fire
 
 - `/prep` (with or without a section name) → run the procedure.

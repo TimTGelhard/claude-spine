@@ -7,8 +7,6 @@ description: Use when deciding whether to paste a screenshot vs text, sharing a 
 
 Claude Code is multimodal. The discipline is knowing when an image replaces a paragraph and when text is strictly better.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## File
 
 | Question / situation | Atomic file |

@@ -104,12 +104,40 @@ for skill in op-add-skill op-anti-patterns op-brownfield op-bucket-router \
 done
 echo
 
-# ---------- scenario 2: --opinionated swaps the global variant ----------
+# ---------- scenario 2: --opinionated (backward-compat alias for --stack=ts-next-supabase) ----------
 
 echo "scenario 2: --opinionated"
 log="$(run_install opinionated --opinionated)"
-assert_contains    "$log" "opinionated banner"   "==> installing global CLAUDE.md (opinionated variant)"
-assert_not_contains "$log" "no neutral banner"   "==> installing global CLAUDE.md (neutral variant)"
+assert_contains    "$log" "opinionated → stack banner"   "==> installing global CLAUDE.md (stack:ts-next-supabase variant)"
+assert_not_contains "$log" "no neutral banner"            "==> installing global CLAUDE.md (neutral variant)"
+echo
+
+# ---------- scenario 2b: --stack=python-django routes to the python sibling ----------
+
+echo "scenario 2b: --stack=python-django"
+log="$(run_install stack-python --stack=python-django)"
+assert_contains    "$log" "stack:python-django banner"   "==> installing global CLAUDE.md (stack:python-django variant)"
+assert_not_contains "$log" "no neutral banner"            "==> installing global CLAUDE.md (neutral variant)"
+echo
+
+# ---------- scenario 2c: --stack=<nonexistent> exits non-zero with a listing ----------
+
+echo "scenario 2c: --stack=nonexistent rejected"
+if /Users/macbook/claude-spine/install.sh --dry-run --stack=does-not-exist >/dev/null 2>err.tmp; then
+  echo "  FAIL  unknown stack should exit non-zero"
+  fail=$((fail + 1))
+else
+  echo "  PASS  unknown stack exits non-zero"
+  pass=$((pass + 1))
+fi
+if grep -q "Available stacks:" err.tmp; then
+  echo "  PASS  rejection message lists available stacks"
+  pass=$((pass + 1))
+else
+  echo "  FAIL  rejection should list available stacks"
+  fail=$((fail + 1))
+fi
+rm -f err.tmp
 echo
 
 # ---------- scenario 3: legacy cleanup actually fires when legacy dirs exist ----------

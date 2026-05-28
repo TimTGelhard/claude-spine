@@ -9,11 +9,16 @@ The capture/curate flywheel ([19c](../../../chapters/personalization/19c-suggest
 
 ## When this fires
 
-ALL three conditions must be true:
+ALL four conditions must be true:
 
+0. **Bucket loop is on.** Read `~/.claude/claude-spine-profile.md` `## Spine defaults` → `Bucket loop:`. If the value is `off`, silently exit. Default if the field is absent: `on`.
 1. `~/.claude-spine/bucket/SUGGESTIONS.md` exists.
-2. The file has **5+ pending entries**. Count lines that match `- **Status:** pending` (case-insensitive). If no `Status:` markers exist (older format), count `## ` second-level headings under the **Pending** section instead.
-3. The last `/curate` run was **>30 days ago**, OR no `/curate` has ever run. Read `~/.claude-spine/bucket/CHANGELOG.md` and take the most recent `## YYYY-MM-DD` heading as the last-curate date. If no dated headings exist, treat as never-curated → threshold met.
+2. The file has **N+ pending entries**, where **N = `Curate nudge pending threshold`** in `~/.claude/claude-spine-profile.md`'s `## Spine defaults` section, or **5** if the profile doesn't set it. Count lines that match `- **Status:** pending` (case-insensitive). The `Status:` field is mandatory in every entry — `op-suggest` writes it on every append. If a file has `## ` entries under the **Pending** section but zero `Status:` lines, the file shape is unrecognized: emit one warning line at conversation start and skip the nudge:
+
+   > spine: `bucket/SUGGESTIONS.md` exists but no entries carry `Status:` markers. Run `/curate` once to migrate to the current schema, then re-runs of `op-curate-nudge` will see the queue.
+
+   One warning per conversation maximum, same as the nudge itself.
+3. The last `/curate` run was **>D days ago**, OR no `/curate` has ever run, where **D = `Curate nudge cooldown days`** in the profile's `## Spine defaults`, or **30** if unset. Read `~/.claude-spine/bucket/CHANGELOG.md` and take the most recent `## YYYY-MM-DD` heading as the last-curate date. If no dated headings exist, treat as never-curated → threshold met.
 
 If any condition fails: skip the body silently. No emission. No follow-up.
 

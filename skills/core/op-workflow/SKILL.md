@@ -7,8 +7,6 @@ description: Use when starting a new project from scratch, scoping what to build
 
 The manual has atomic files for each stage of the workflow and for sizing one feature to one session. Read ONLY the one that matches the current decision.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index — workflow stages (chapter 05)
 
 | Question / situation | Atomic file |

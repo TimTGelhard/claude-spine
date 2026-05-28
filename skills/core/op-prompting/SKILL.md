@@ -7,8 +7,6 @@ description: Use when writing or improving a prompt, deciding how to phrase a re
 
 The lever with the highest ROI for output quality. The manual has three atomic files; read ONLY the one that matches the current question.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index
 
 | Question / situation | Atomic file |

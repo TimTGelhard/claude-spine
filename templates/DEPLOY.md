@@ -3,144 +3,90 @@
 > The runbook. Step-by-step for every deploy, every time.
 > If a step is missing, add it after the deploy that revealed the gap.
 >
-> _Example commands assume Next.js on Vercel + Supabase Cloud. Replace with your hosting + DB + migration tooling — the runbook shape (envs / secrets / pre-deploy / deploy / post-deploy / rollback) is platform-agnostic._
+> _Stack-agnostic shape. For a fully-filled Next.js-on-Vercel + Supabase example plus a static-site-via-SSH variant, see `templates/examples/web-saas-next-supabase/DEPLOY.md`. Other shapes you might fill this in for: Docker registry push, Kubernetes / Helm, AWS Lambda / SAM, GCP Cloud Run, library publish (`npm publish` / `cargo publish` / `pypi`), GitHub Releases binary, App Store / Play Store, homebrew / chocolatey._
 
 ## Environments
 
-| Name | URL | Hosted on | Branch / trigger |
-|------|-----|-----------|-------------------|
-| local | http://localhost:3000 | dev machine | `npm run dev` |
-| preview | <pr-slug>.vercel.app | Vercel | every PR |
-| staging | staging.<project>.com | Vercel | `staging` branch |
-| production | <project>.com | Vercel | `main` branch |
+| Name | URL / target | Hosted on | Branch / trigger |
+|------|--------------|-----------|-------------------|
+| local | `<localhost / dev binary>` | dev machine | `<run command>` |
+| preview / branch | `<per-branch URL or build artifact>` | `<host>` | every PR |
+| staging | `<staging URL>` | `<host>` | `<branch / tag>` |
+| production | `<prod URL>` | `<host>` | `<branch / tag>` |
 
-DB:
-- local: Supabase local (`supabase start`)
-- preview/staging/prod: same Supabase project (single env for MVP — split when needed)
+`<datastore environment story — local / preview / staging / prod isolation, branch-based, or shared>`
 
 ## Secrets / env vars
 
 See `.env.example` for the full list. Where each lives:
 
-- **local**: `.env.local` (gitignored)
-- **Vercel**: Vercel dashboard → Settings → Environment Variables (per environment)
-- **Supabase**: only the dashboard secrets (service_role) — never committed
+- **local**: `.env.local` / `.envrc` / shell rc (gitignored)
+- **`<deploy host>`**: dashboard or platform-native env-var store (per environment)
+- **`<datastore / external service>`**: only the secrets that live in the provider dashboard — never committed
 
-Confirm parity before deploy: `vercel env pull .env.preview` and diff against `.env.example`.
+Confirm parity before deploy: pull the deploy env and diff against `.env.example`.
 
 ## Pre-deploy checklist
 
 Before any deploy to production:
 
 - [ ] All smoke tests in `SMOKE_TESTS.md` pass locally.
-- [ ] `npm run typecheck` — clean.
-- [ ] `npm run lint` — clean (or known-acceptable warnings).
-- [ ] `npm audit` — no high/critical (or documented exceptions).
+- [ ] Typecheck / compile / build clean.
+- [ ] Lint clean (or known-acceptable warnings).
+- [ ] Dependency audit clean (no high/critical, or documented exceptions).
 - [ ] `git status` — clean working tree.
-- [ ] PR reviewed (if multi-person) or self-review of `git diff main` complete.
-- [ ] Migrations to be applied? List them: ______.
-- [ ] Env vars to be added? List them: ______.
-- [ ] Schema changes regenerated types? (`supabase gen types typescript`).
+- [ ] Change reviewed (if multi-person) or self-review of `git diff <base>` complete.
+- [ ] Schema / data-model changes to be applied? List them.
+- [ ] Env vars to be added? List them.
+- [ ] Generated artifacts (types, OpenAPI, RPC stubs) regenerated and committed if applicable.
 
-## Deploy steps — production (Vercel + Supabase)
+## Deploy steps — production
 
-### 1. Apply migrations FIRST (if any)
-
-```bash
-# Verify what will be applied
-supabase migration list
-
-# Apply to production
-supabase db push
-
-# Verify on remote
-supabase migration list --linked
-```
-
-⚠️ If migration fails partway, STOP. Don't push the code. Resolve DB state first.
-
-### 2. Push code
+### 1. Apply schema / data changes FIRST (if any)
 
 ```bash
-git checkout main
-git pull
-git merge --ff-only <feature-branch>   # or use PR merge in GitHub
-git push origin main
+# Inspect what will run
+<your migration tool's --dry-run / list>
+
+# Apply
+<your migration tool's apply>
+
+# Verify on the target environment
+<your verification command>
 ```
 
-Vercel auto-deploys from `main`.
+⚠️ If a data-layer change fails partway, STOP. Don't push the code. Resolve datastore state first.
+
+### 2. Push code / publish artifact
+
+```bash
+<the specific publish step for your stack — push to main, build + push container, `npm publish`, `cargo publish`, `gh release create`, `eas submit`, etc.>
+```
+
+`<note any auto-deploy behavior triggered by the push>`
 
 ### 3. Verify deploy
 
-- [ ] Vercel build green (check dashboard).
-- [ ] Production URL loads.
-- [ ] Walk `SMOKE_TESTS.md` against production with real credentials.
-- [ ] Check error monitoring (Sentry/PostHog) for new errors in the next 10 minutes.
+- [ ] Build / publish pipeline green.
+- [ ] Production target reachable / installable.
+- [ ] Walk `SMOKE_TESTS.md` against production.
+- [ ] Check error / metric monitoring for the next 10 minutes.
 
 ### 4. Update PROGRESS.md
 
-Note the deploy: date, commit SHA, what shipped.
-
-## Deploy steps — static client site (VPS via SSH/SCP)
-
-### 1. Build
-
-```bash
-npm run build
-```
-
-### 2. Quality gates
-
-- [ ] Lighthouse mobile ≥ 90 (Performance, Accessibility, Best Practices, SEO).
-- [ ] WCAG AA contrast on all text.
-- [ ] JSON-LD `LocalBusiness` present.
-- [ ] Locale set correctly (`lang="<xx>"`, dates, phone, postcode formats).
-- [ ] Contact form server endpoint working — test with real submission.
-- [ ] All `alt` attributes on images.
-- [ ] Visible focus states on interactive elements.
-
-### 3. Upload to staging
-
-```bash
-# Replace <host> with your VPS hostname
-scp -r dist/* user@<host>:/var/www/staging.<client>/
-```
-
-### 4. Visual check
-
-- [ ] Open staging URL.
-- [ ] Walk every page.
-- [ ] Test on real iPhone Safari AND Android Chrome.
-- [ ] Submit contact form, verify email arrives.
-
-### 5. Promote to production
-
-```bash
-# Replace <host> with your VPS hostname
-ssh user@<host> 'mv /var/www/live.<client> /var/www/archive-<date>'
-ssh user@<host> 'mv /var/www/staging.<client> /var/www/live.<client>'
-```
-
-### 6. Verify production
-
-- [ ] Production URL loads.
-- [ ] Spot-check Lighthouse again on the live URL (CDN can differ from staging).
-- [ ] Send client the link.
+Note the deploy: date, version / commit SHA / artifact ID, what shipped.
 
 ## Rollback
 
-### Vercel (apps)
+### `<primary deploy target>`
 
-In Vercel dashboard → Deployments → find last-known-good → "Promote to Production."
+`<the specific rollback procedure — dashboard "promote previous deployment", `kubectl rollout undo`, `helm rollback`, deploy previous artifact, etc.>`
 
-If the bad deploy included a DB migration: rollback is HARDER. You may need a new migration to undo the change, not a rollback. Forward-only.
+If the bad deploy included an irreversible schema / data change: rollback is HARDER. You may need a forward fix (a new migration that undoes the change), not a rollback. Document the rollback recipe at change-author time.
 
-### Client site (VPS)
+### `<secondary deploy target, if any>`
 
-```bash
-ssh user@<host> 'mv /var/www/live.<client> /var/www/broken-<date>'
-ssh user@<host> 'mv /var/www/archive-<latest> /var/www/live.<client>'
-```
+`<the specific rollback procedure>`
 
 ## Post-incident
 
@@ -152,12 +98,12 @@ If a deploy caused production issues:
 
 The runbook should grow over time. A deploy that surprised you reveals a missing step.
 
-## DNS / domain
+## DNS / domain (if applicable)
 
-- Registrar: <name>
-- DNS records: <Cloudflare / Vercel / etc>
-- TTL: 3600s
-- Cert: managed by Vercel (auto-renewed)
+- Registrar: `<name>`
+- DNS records: `<provider>`
+- TTL: `<value>`
+- Cert: `<managed by / renewal mechanism>`
 
 For DNS changes: make them, but expect 5-60 min propagation. Don't try to verify in the first 5 min.
 

@@ -2,27 +2,27 @@
 
 MCP (Model Context Protocol) servers extend Claude with external capabilities. Some you have loaded; others are worth adding for any serious build setup.
 
-## Must-have MCPs
+## High-leverage MCPs
 
-Install once globally, benefit on every project.
+Install once globally, benefit on every project. The two browser MCPs below are core for browser-driven work (web apps, marketing sites, anything you'd verify by clicking around); skip them for backend, library, ML, or embedded work and Context7 is the only universal pick.
 
-### Chrome DevTools MCP
+### Chrome DevTools MCP *(browser-driven projects)*
 
 **Use for:** Claude driving a real Chrome browser — clicking, typing, screenshots, console messages, network requests, performance traces, running JS in page context.
 
 **Killer use case:** Claude testing the frontend himself before declaring done. Walk a flow in a real browser, screenshot the result, read the console — all from inside the conversation.
 
-**Vs Playwright MCP:** overlapping but different emphasis. Chrome DevTools = debugging-first (performance, devtools panels). Playwright = test-automation-first (assertion-friendly, headless). Having both is fine; if picking one for frontend verification, Chrome DevTools wins for solo MVP work.
+**Vs Playwright MCP:** overlapping but different emphasis. Chrome DevTools = debugging-first (performance, devtools panels). Playwright = test-automation-first (assertion-friendly, headless). Having both is fine; if picking one for frontend verification, Chrome DevTools wins for solo work where you're driving the browser interactively.
 
-### Context7
+### Context7 *(universal)*
 
 **Use for:** up-to-date library documentation injected on demand. Solves "framework moves faster than Claude's training."
 
-**Killer use case:** before writing Next.js / Supabase / Stripe code, Claude queries Context7 for the *current* API rather than guessing from training data. Eliminates a class of hallucinations.
+**Killer use case:** before writing code against any third-party library or framework that may have changed since Claude's training cutoff (web frameworks, ORMs, payment SDKs, ML libraries, container tools, anything fast-moving), Claude queries Context7 for the *current* API rather than guessing from training data. Eliminates a class of hallucinations.
 
 **Fit with the "don't invent" rule:** Context7 is the verification mechanism for library APIs.
 
-### Playwright MCP
+### Playwright MCP *(browser-driven projects)*
 
 **Use for:** programmatic browser automation, repeated test flows. Complements Chrome DevTools.
 
@@ -60,7 +60,7 @@ Heavy MCPs (browser automation with many tools, broad API wrappers) cost more at
 
 ## TL;DR
 
-- Chrome DevTools MCP + Context7 + Playwright = high-leverage baseline.
+- Context7 is the universal pick; add Chrome DevTools + Playwright MCPs for any project where you'd verify by clicking around in a browser.
 - Idle MCPs cost tokens — audit and uninstall.
 - Verify maintenance before installing.
 - Don't stack overlapping MCPs.

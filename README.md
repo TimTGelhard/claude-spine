@@ -2,7 +2,7 @@
 
 > The spine of every Claude Code project. Installable toolbox of skills, atomic operating-discipline chapters, project templates, and a profile-driven personalization layer that calibrates Claude to *you*.
 
-For people already running real Claude Code sessions on real projects who want their workflow to stop leaking quality. Not a tutorial — a discipline manual + an installable harness that wires it into `~/.claude/`.
+For people already running real Claude Code sessions on real projects who want their workflow to stop leaking quality. Not a tutorial — a discipline manual + an installable harness that wires it into `~/.claude/`. **In a hurry? Open [`CHEATSHEET.md`](CHEATSHEET.md) — one page, the 10 most useful triggers.**
 
 > **Status: v2 shipped; launch assets in flight.** All atomic chapters, the `op-*` skill set (now including the ambient `op-spine-active`), neutral + opinionated globals, `install.sh`, the `/onboard` personalization interview, the full capture/curate bucket loop, and the plan-driven workflow (`/prep` → ambient cold-start → `/done`) are shipped. See [`RECONSTRUCTION.md`](RECONSTRUCTION.md) for the build history and [`LAUNCH.md`](LAUNCH.md) for the launch gate tracker. The original 18 single-file chapters at the repo root are deprecated stubs pointing at their v2 atomic versions in `chapters/`.
 
@@ -12,10 +12,10 @@ For people already running real Claude Code sessions on real projects who want t
 
 - **22 `op-*` skills** (19 task-routers + 3 ambient: cold-start, first-run welcome, curation nudge) that load only when relevant. Each one is a router that points Claude at the atomic chapter for the question — never the whole folder. See `skills/core/`.
 - **~80 atomic chapters** (<150 lines each), one concept per file, organized by topic (foundations, workflow, prompting, signaling, persistence, tools, subagents, recovery, anti-patterns). Indexed by [`INDEX.md`](INDEX.md).
-- **Personalization layer** — a profile (`/onboard`) that calibrates Claude to you, plus a capture/curate loop that grows your personal bucket as patterns emerge. See [Personalization](#personalization) below.
+- **Personalization layer** — a profile (`/onboard`) that calibrates Claude to you. Optionally, a capture/curate **bucket loop** that grows your personal skill library as patterns emerge — opt out by setting `Bucket loop: off` in your profile if you'd rather just have the spine + your profile. See [Personalization](#personalization) below.
 - **Empty personal bucket** (`bucket/`). Ships empty by design — your skill and chapter library grows one curated addition at a time. No pre-seeded "popular skills" trap.
 - **Templates** (`templates/`) — `PROJECT_BRIEF.md`, `ARCHITECTURE.md`, `DECISIONS.md`, `PROGRESS.md`, etc. Copy into each project's `docs/`; Claude maintains them across sessions.
-- **Neutral + opinionated global** (`global/`) — pick the thin stub (default) or the heavy founder-flavored template.
+- **Neutral default + per-stack opinionated globals** (`global/`) — pick the thin stub (default) or a heavy stack-flavored template under `global/stacks/<name>/` (`ts-next-supabase`, `python-django`; add your own).
 - **One-shot installer** (`install.sh`) — symlinks everything into `~/.claude/`, idempotent, dry-runnable, backs up existing files.
 
 ---
@@ -30,7 +30,7 @@ cd ~/.claude-spine
 ./install.sh
 ```
 
-Then **restart Claude Code**, open any session, and type **`/onboard`** — a 7-question, ~2-minute interview that calibrates Claude to your subscription, your stack, and how you like to work. It writes `~/.claude/claude-spine-profile.md` and ends with a one-screen "here's what's available now" handoff.
+Then **restart Claude Code**, open any session, and type **`/onboard`** — a 10-question, ~3-minute interview that calibrates Claude to your subscription, your stack, your OS / VCS host / artifact shape, and how you like to work. It writes `~/.claude/claude-spine-profile.md` and ends with a one-screen "here's what's available now" handoff.
 
 After that you can:
 
@@ -42,10 +42,10 @@ That's the full first-run path. The rest of this section is optional.
 
 ### Install variants
 
-- `./install.sh --opinionated` — heavy, kitchen-sink CLAUDE.md instead of the neutral stub
+- `./install.sh --stack=ts-next-supabase` — heavy, kitchen-sink CLAUDE.md for a TypeScript + Next.js + Supabase stack instead of the neutral stub. `--stack=python-django` for the Python sibling. `--opinionated` is a backward-compat alias for `--stack=ts-next-supabase`.
 - `./install.sh --dry-run` — preview every action without writing anything
 - `./install.sh --help` — every flag (`--skip-skills`, `--skip-hook`, `--keep-legacy`, etc.)
-- `/onboard --deep` (after essentials) — full ~20-question pass for stack details, signal preferences, output format, risk tolerance
+- `/onboard --deep` (after essentials) — full ~28-question pass for stack details, signal preferences, output format, risk tolerance, session shape, plans dir, team/org shape, currency
 
 See [`global/INSTALL.md`](global/INSTALL.md) for partial-install flags, the full verification protocol, and uninstall.
 
@@ -65,7 +65,7 @@ Nine commands ship in `global/commands/`:
 
 | Command | What it does |
 |---|---|
-| `/onboard` | Seven-question essentials interview (≈2 min). Writes `~/.claude/claude-spine-profile.md`. `--deep` for the full ~20-question pass. |
+| `/onboard` | Ten-question essentials interview (≈3 min). Writes `~/.claude/claude-spine-profile.md`. `--deep` for the full ~28-question pass. |
 | `/prep` | Planning pass for a new project or major new section. Step 0 auto-runs `init.sh` if `docs/` doesn't exist; then brief → architecture → first section plan. No code this session. |
 | `/done` | Close the active build session. Walks verify list, rolls up Stop-hook heartbeats, updates plan + `PROGRESS.md`, stages doc changes, suggests a commit message. The writeback command. |
 | `/suggest` | Capture a high-signal moment to `bucket/SUGGESTIONS.md`. Locked four-condition trigger. |
@@ -94,10 +94,10 @@ Net effect: every session starts lean. Claude loads heavy content on-demand, fil
 
 ## Personalization
 
-Two layers sit on top of the static spine:
+Two layers sit on top of the static spine. The **profile** is always on. The **bucket loop** is opt-in — keep it for the full self-improvement flywheel, or disable it (`Bucket loop: off` in `~/.claude/claude-spine-profile.md` under `## Spine defaults`) if you want the spine + your profile only and nothing capturing in the background:
 
 - **Profile** (`~/.claude/claude-spine-profile.md`) — written by `/onboard`. Captures who you are: subscription, experience level, primary stack, push-back intensity, answer length, reasoning depth, project type. Loaded every session via the global stub. Claude treats a senior backend engineer differently from a CS student.
-- **Bucket loop** (`bucket/`) — your personal skill and chapter library. Three slash commands wire it:
+- **Bucket loop** (`bucket/`) — optional. Your personal skill and chapter library. Three slash commands wire it:
   - During normal work, `op-suggest` captures high-signal moments (explicit user signal, 2+ same friction, end-of-session reflection, or `/suggest`) to `bucket/SUGGESTIONS.md`. One-line append, no task interruption.
   - `/curate` walks pending entries one at a time, reads existing bucket files to surface overlap, proposes a diff, applies on your explicit approval. Files land under `bucket/skills/` or `bucket/chapters/`; `bucket/INDEX.md` and `bucket/CHANGELOG.md` update mechanically. `/curate --review-stale` walks old entries for prune-or-keep.
   - Later sessions: when no core `op-*` skill matches, `op-bucket-router` reads `bucket/INDEX.md` and loads only the matching bucket file. The bucket helps the work without polluting unrelated sessions.
@@ -147,9 +147,11 @@ claude-spine/
 ├── templates/                   # per-project docs you copy and adapt
 └── global/
     ├── neutral/                 # default: thin stub
-    ├── opinionated/             # opt-in: heavy founder-flavored template
+    ├── stacks/                  # opt-in heavy per-stack templates (--stack=<name>)
+    │   ├── ts-next-supabase/    # TS + Next.js + Supabase + Stripe + Vercel
+    │   └── python-django/       # Python + Django + DRF + Postgres + Celery
     ├── commands/                # slash commands (e.g. /onboard)
-    ├── hooks/                   # env-leak hook
+    ├── hooks/                   # env-leak hook + safety hooks
     ├── settings.json            # Claude Code settings (allowlist, plugins, hooks)
     └── INSTALL.md               # detailed install + verify + uninstall guide
 ```
@@ -181,7 +183,7 @@ Covers the env-leak hook (`global/hooks/block-env-staging.sh` — assert deny/al
 
 ```bash
 cd tests/skill-triggers
-./run.sh                       # all 22 skills, ~5–10 min wall time, ~$5–10 (Sonnet)
+./run.sh                       # all 22 skills, ~5–10 min wall time; per-run input+output token totals printed at the end (cost depends on the model + your region's Anthropic pricing — see https://www.anthropic.com/pricing)
 ./run.sh op-anti-patterns      # one skill
 python3 aggregate.py           # writes results/REPORT.md and needs-tightening.md
 ```
@@ -192,7 +194,7 @@ Requires the `skill-creator` plugin and Python 3.10+ (falls back to `uv run --py
 
 ```bash
 cd benchmarks/tokens
-./run.sh                       # 19 prompts × 3 runs × 2 conditions = 114 calls, ~$9–$15 (Sonnet)
+./run.sh                       # 19 prompts × 3 runs × 2 conditions = 114 calls; per-run token totals printed at the end (cost depends on the model + your region's Anthropic pricing — see https://www.anthropic.com/pricing)
 python3 aggregate.py           # writes REPORT.md
 ```
 

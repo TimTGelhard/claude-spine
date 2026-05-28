@@ -14,14 +14,15 @@ Stages exist because skipping them ships broken software. Each entry: the anti-p
 
 ## "I'll write the markdown files after the MVP works"
 
-**Fails because:** you won't. And without them every session re-derives the project from scratch, which is the most expensive way to start a session.
-**Instead:** templates filled in during stages 0–2, before feature work starts. The cost is tiny up-front, enormous if deferred. See [12a-three-layers-overview.md](../persistence/12a-three-layers-overview.md).
+**Fails because:** in solo MVP and small-team work, you usually won't — and without them every session re-derives the project from scratch, which is the most expensive way to start a session. Teams using Linear / Jira / Notion as the source of truth get the same benefit without per-project markdown — that's a working substitute, not an exception.
+**Instead:** if your tracker isn't already covering this, fill in the spine's templates during stages 0–2, before feature work starts. The cost is tiny up-front, enormous if deferred. See [12a-three-layers-overview.md](../persistence/12a-three-layers-overview.md).
 
-## One big PR at the end
+## One big PR at the end (default — there are exceptions)
 
-**Fails because:** huge diffs hide bugs. You can't review them carefully. Reviewers (including future-you) rubber-stamp because there's no other choice.
-**Instead:** commit per feature. Per stage at the latest. See [18b-scope.md](18b-scope.md) on session bounding.
+**Fails because:** huge diffs hide bugs, are hard to review carefully, and reviewers (including future-you) rubber-stamp because there's no other choice.
+**Instead — for the contexts this spine targets (solo / MVP / small-team):** commit per feature. Per stage at the latest. See [18b-scope.md](18b-scope.md) on session bounding.
+**When the rule doesn't fit:** some teams (long-lived feature branches, fork-and-merge mandates, regulated-industry change windows) deliberately ship one big PR at the end of a multi-week effort. That's a deliberate trade-off — small commits land *behind* the PR, not in main. The anti-pattern is *accidentally* shipping a giant un-reviewable diff, not the practice of single-PR merges from a long-lived branch.
 
 ## TL;DR
 
-The workflow stages are a checklist for a reason: each one catches a class of bug the next one can't. Skipping stage 0 ships the wrong thing. Skipping stage 5 ships a broken thing. Skipping docs ships a thing nobody (including you) can maintain.
+The workflow stages are a checklist for a reason: in plan-driven feature work each one catches a class of bug the next one can't. Skipping stage 0 ships the wrong thing. Skipping stage 5 ships a broken thing. Skipping persistent project context (whether spine templates, Linear, Notion, or a wiki) ships a thing nobody (including future-you) can maintain. Research / exploratory / one-off scripting work runs different math — the stage discipline still applies, but the artifacts can be lighter.

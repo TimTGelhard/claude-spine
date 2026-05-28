@@ -1,9 +1,12 @@
 # Global Claude Code setup — install guide
 
-This folder is the "global upgrade" — a curated `~/.claude/` setup. There are two variants:
+This folder is the "global upgrade" — a curated `~/.claude/` setup. Two flavours:
 
-- **`neutral/`** — a thin stub (~20 lines). Identity + pointer to the spine. The spine's `op-*` skills load discipline on-demand. **Recommended default.**
-- **`opinionated/`** — a heavy, kitchen-sink CLAUDE.md (~260 lines) with stack defaults, security rules, verification gates, and stop conditions all baked in up front. Good if you want everything stated explicitly in the global rather than loaded on demand.
+- **`neutral/`** — a thin stub (~25 lines). Identity + pointer to the spine. The spine's `op-*` skills load discipline on-demand. **Recommended default.**
+- **`stacks/<name>/`** — heavy per-stack CLAUDE.md templates (~250 lines each) with stack defaults, security rules, verification gates, and stop conditions baked in. Good if you want everything stated explicitly in the global rather than loaded on demand. Pick the one closest to your stack with `--stack=<name>`.
+  - `stacks/ts-next-supabase/` — TypeScript + Next.js + Supabase + Stripe + Vercel.
+  - `stacks/python-django/` — Python + Django + DRF + Postgres + Celery.
+  - Add your own: drop `global/stacks/<your-name>/CLAUDE.md.template` and pass `--stack=<your-name>`.
 
 If you only want the spine's chapters and templates without touching `~/.claude/`, you can skip this folder entirely.
 
@@ -11,7 +14,7 @@ If you only want the spine's chapters and templates without touching `~/.claude/
 
 | File | Installs to | What it does |
 |------|-------------|--------------|
-| `neutral/CLAUDE.md.template` (default) or `opinionated/CLAUDE.md.template` (with `--opinionated`) | `~/.claude/CLAUDE.md` | Global instructions every Claude Code session loads. |
+| `neutral/CLAUDE.md.template` (default) or `stacks/<name>/CLAUDE.md.template` (with `--stack=<name>`) | `~/.claude/CLAUDE.md` | Global instructions every Claude Code session loads. |
 | `settings.json` | `~/.claude/settings.json` | Permissions allowlist (so common commands don't prompt), env-file guard hook wiring, plugin enablement, default mode + theme. |
 | `hooks/*.sh` | `~/.claude/hooks/*.sh` | `block-env-staging.sh` blocks `git add .env*` as defence-in-depth against secret leaks. `spine-writeback.sh` is a Stop hook that logs a per-turn heartbeat in plan-driven projects. Both wired via `settings.json`. |
 | `../skills/core/op-*` | `~/.claude/skills/op-*` (symlinked) | The core `op-*` skills. Symlinks so `git pull` in the spine updates them instantly. |
@@ -23,9 +26,11 @@ If you only want the spine's chapters and templates without touching `~/.claude/
 From the spine root:
 
 ```bash
-./install.sh                  # neutral global stub (default)
-./install.sh --opinionated    # heavy template instead
-./install.sh --dry-run        # show what would happen, change nothing
+./install.sh                              # neutral global stub (default)
+./install.sh --stack=ts-next-supabase     # heavy TS / Next.js / Supabase template
+./install.sh --stack=python-django        # heavy Python / Django template
+./install.sh --opinionated                # alias for --stack=ts-next-supabase (backward compat)
+./install.sh --dry-run                    # show what would happen, change nothing
 ```
 
 `settings.json` and `~/.claude/hooks/block-env-staging.sh` are backed up to `~/.claude-backup-<timestamp>/` before being overwritten on every run. `~/.claude/CLAUDE.md` is treated more carefully: if its contents match an untouched shipped template (either variant) it gets overwritten with a backup; if it appears user-customized, it's **preserved** and the installer reports `preserved: ... appears user-customized`. Pass `--force-global` to overwrite anyway (the existing file is still backed up first). The installer is idempotent — re-running it updates the symlinks and re-installs `settings.json` + hook from the spine.
@@ -36,7 +41,8 @@ If you previously had the v1 `op-manual-*` skills installed, they're backed up a
 
 | Flag | Effect |
 |------|--------|
-| `--opinionated` | Install the heavy founder-flavored template instead of the neutral stub. |
+| `--stack=<name>` | Install the heavy stack-flavored template from `global/stacks/<name>/CLAUDE.md.template` instead of the neutral stub. Shipped: `ts-next-supabase`, `python-django`. |
+| `--opinionated` | Backward-compat alias for `--stack=ts-next-supabase`. |
 | `--skip-global` | Don't touch `~/.claude/CLAUDE.md`. |
 | `--skip-skills` | Don't create skill symlinks. |
 | `--skip-commands` | Don't symlink slash commands into `~/.claude/commands/`. |
@@ -49,7 +55,7 @@ If you previously had the v1 `op-manual-*` skills installed, they're backed up a
 ### After install
 
 1. **Restart Claude Code.** Close open sessions and start fresh.
-2. **Run the onboarding interview.** First session will trigger `op-onboard` automatically when it notices no profile exists. Or invoke it yourself: `/onboard` for the 5-question essentials, `/onboard --deep` for the full ~15-question interview. The profile is written to `~/.claude/claude-spine-profile.md` and read every session afterward.
+2. **Run the onboarding interview.** First session, `op-welcome` greets you and points at `/onboard`. Invoke it yourself: `/onboard` for the 10-question essentials, `/onboard --deep` for the full ~28-question interview (essentials + 18 deep + 2 opt-in hook prompts). The profile is written to `~/.claude/claude-spine-profile.md` and read every session afterward.
 
 #### Plan-driven workflow (recommended for new projects)
 
@@ -73,11 +79,11 @@ How the ambient default works:
 For safety-critical sessions (regulated work, paired review, anything where you want to read scope before any code), use Claude Code's built-in plan mode (Shift+Tab Tab). It refuses tool calls until you approve the plan — generic across all work, no separate command to memorize.
 
 For projects that pre-date this workflow, the older `docs/SESSION_STARTER.md` paste-prompts still work — see that file for guidance on when to use which.
-3. **If you installed the opinionated variant:** open `~/.claude/CLAUDE.md` and fill in the `{{placeholders}}` — name, intro line, stack defaults if they don't match yours.
-4. **Review `~/.claude/settings.json`** — the allowlist is opinionated:
-   - **WebFetch allowlist** pre-approves `docs.anthropic.com`, `nextjs.org`, `supabase.com`, `vercel.com`, `tailwindcss.com`, etc. Add your own framework's docs domain; remove any you'll never use.
-   - **Bash allowlist** is opinionated for TS / Next.js / Supabase / Vercel stacks — pre-approves `supabase`, `vercel`, `gh`, `lighthouse`, etc. Remove what you don't use; add `bundler`, `cargo`, `go`, etc. for your stack.
-   - **enabledPlugins** — five plugins from the official marketplace. Disable any you don't want.
+3. **If you installed a `--stack=<name>` variant:** open `~/.claude/CLAUDE.md` and fill in the `{{placeholders}}` — name, intro line, stack defaults if they don't match yours.
+4. **Review `~/.claude/settings.json`** — the allowlist is shipped neutral but you can prune further:
+   - **WebFetch allowlist** pre-approves the major language / framework docs (Anthropic, MDN, Python, Django, FastAPI, Go, Rust, Ruby, PHP, Java, Kotlin, Swift, etc.). Add your own framework's domain; remove any you'll never use.
+   - **Bash allowlist** pre-approves the common build / package tools across the major ecosystems (`npm`, `pip`, `cargo`, `go`, `mvn`, `bundle`, `composer`, `dotnet`, etc.) plus the spine's stack-tooling defaults (`supabase`, `vercel`, `gh`, `lighthouse`). Remove what you don't use; add anything your stack relies on.
+   - **enabledPlugins** — `skill-creator` and `github` ship on by default. Stack-specific plugins (`vercel`, `playwright`, `frontend-design`) ship off by default — enable per-stack only when you actually need them.
    - **effortLevel** is `high` (opinionated but Pro-plan-safe). Raise to `xhigh` for deepest reasoning on Max 20x; lower to `medium` for faster, cheaper turns. See "Tuning for Max 20x / 1M context" below.
    - **autoCompactWindow** is `180000` (auto-compact fires at 180K tokens — sized for 200K-context models). Raise to `800000` if you have a 1M-context model. Same section below.
 
@@ -90,7 +96,7 @@ What's in my global CLAUDE.md? Summarize the section headings.
 ```
 
 For the neutral stub, expect a short list (Where to look, Personalization, Project-level rules, Override hierarchy).
-For the opinionated variant, expect a long list (Always-on, How to work with me, Decisions, First touch, Workflow operating model, Proactive signaling, Code output, Verification, ...).
+For a `--stack=<name>` variant, expect a long list (Always-on, How to work with me, Decisions, First touch, Workflow operating model, Proactive signaling, Code output, Verification, …).
 
 Then:
 
@@ -126,12 +132,14 @@ Restart Claude Code after changing.
 
 ## Customizing further
 
-The opinionated `CLAUDE.md.template` is opinionated for solo-founder / MVP / agency work in TS / Next.js / Supabase. The structure is the point — keep the sections, rewrite the contents:
+Every stack-flavored `CLAUDE.md.template` under `global/stacks/<name>/` is opinionated for the named stack — its concrete advice doesn't translate verbatim to other stacks. The shape (Always-on / How to work with me / Decisions / Workflow / Signaling / Code output / Security / Stack defaults / Project conventions) IS the lesson; rewrite the contents to match your project:
 
-- **Stack defaults** → your actual stack
-- **Stop conditions** → add anything your domain demands (HIPAA boundaries, payment ledger writes, etc.)
-- **Anthropic API** → reflects defaults that work today; verify the model IDs are current when you read this
-- **Forbidden** list → add to, don't remove
+- **Stack defaults** → your actual stack.
+- **Stop conditions** → add anything your domain demands (HIPAA boundaries, payment ledger writes, etc.).
+- **Anthropic API** → reflects defaults that work today; verify the model IDs are current when you read this.
+- **Forbidden** list → add to, don't remove.
+
+To ship a new stack variant: copy an existing one to `global/stacks/<your-name>/CLAUDE.md.template`, rewrite the stack-specific sections, then pass `--stack=<your-name>` at install time. Upstream PRs welcome for any major-stack template not already covered.
 
 The spine chapters (especially `chapters/persistence/12b-claudemd.md` and `chapters/anti-patterns/`) explain the *why* behind these choices.
 

@@ -9,8 +9,6 @@ Anti-patterns are the explicit "never do this" reference. When about to do somet
 
 The single highest-leverage category is **meta** — when the user proposes extending the system itself (skills, agents, hooks, CLAUDE.md, chapters). The manual's rules apply to the manual itself; do not exempt.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index
 
 | Category / about to... | Atomic file |

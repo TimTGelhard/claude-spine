@@ -7,8 +7,6 @@ description: Use when entering a codebase you didn't build, returning to your ow
 
 Greenfield's risk is over-engineering. Brownfield's risk is **breaking working code through ignorant changes.** Different discipline.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index
 
 | Question / situation | Atomic file |

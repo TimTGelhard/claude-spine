@@ -1,14 +1,14 @@
 # Smoke Tests — <PROJECT NAME>
 
-> The 3-5 critical user flows that MUST work before any deploy.
-> Walk these manually before declaring anything done.
+> The 3-5 critical flows that MUST work before any deploy.
+> Walk these manually (or run a green check on an automated proxy) before declaring anything done.
 >
-> _Example flows (signup, dashboard, quote creation, RLS check) come from a Next.js + Supabase quote-management app. Replace with your critical paths — the structure (one flow per section, status legend, steps + expected outcome) is domain-agnostic._
+> _Stack-agnostic shape. For a fully-filled auth-app example (Next.js + Supabase: signup, login, CRUD, RLS isolation, signout), see `templates/examples/web-saas-next-supabase/SMOKE_TESTS.md`. Other shapes you might fill this in for: CLI command exit codes + stdout snapshots; library contract tests + example-snippet compile; service health endpoint + load profile + per-domain contract; ML model evaluation set + regression-vs-baseline + drift signal._
 
 ## How to use
 
-- Before merging to `main`: walk every flow in this file locally.
-- After deploying: walk every flow on the deployed environment with real credentials.
+- Before merging to the deploy branch: walk every flow in this file (locally or against a preview environment).
+- After deploying: walk every flow on the deployed environment with real credentials / real data.
 - If any flow breaks, the deploy is broken — fix or roll back.
 
 Add a new flow when a new critical capability ships. Remove a flow only if the feature is removed.
@@ -21,146 +21,90 @@ Add a new flow when a new critical capability ships. Remove a flow only if the f
 
 ---
 
-## Flow 1: New user signs up and lands on dashboard
+## Flow 1: `<name of the most important flow>`
 
 **Status**: ⚠️
 
 **Steps**:
-1. Open in incognito.
-2. Navigate to `/`.
-3. Click "Sign up."
-4. Enter test email + password.
-5. Complete email verification.
-6. Should land on `/dashboard` with empty state.
+1. `<step 1>`
+2. `<step 2>`
+3. `<step N>`
 
-**Expected**: empty dashboard, no errors in console, session cookie set.
+**Expected**: `<what success looks like — observable, not "it works">`
 
 **Edge cases to also try**:
-- Existing email → clear error message.
-- Invalid password (too short) → clear error.
-- Network slow → loading indicator shows.
+- `<edge case 1 + expected behavior>`
+- `<edge case 2 + expected behavior>`
 
 ---
 
-## Flow 2: Returning user logs in
+## Flow 2: `<next critical flow>`
 
 **Status**: ⚠️
 
 **Steps**:
-1. Open in incognito.
-2. Navigate to `/login`.
-3. Enter existing credentials.
-4. Should land on `/dashboard` with their data.
+1. …
 
-**Expected**: data loads, session persists across refresh.
-
-**Edge cases**:
-- Wrong password → clear error.
-- Logged out elsewhere → handled cleanly.
+**Expected**: …
 
 ---
 
-## Flow 3: Create and view a quote (or your core feature)
+## Flow 3, 4, 5: …
 
-**Status**: ⚠️
-
-**Steps**:
-1. From `/dashboard`, click "New quote."
-2. Fill in form with valid data.
-3. Submit.
-4. Should redirect to `/dashboard/quotes/<id>` showing the new quote.
-5. Back to dashboard — new quote in list.
-
-**Expected**: form submits cleanly, data persists, list updates.
-
-**Edge cases**:
-- Submit with empty required fields → field-level errors.
-- Submit with very large amount → handled correctly (no overflow).
-- Refresh mid-form → no data corruption.
+(Aim for 3-5 flows total. More than 5 and they probably aren't all critical — promote the most important ones, drop the rest into per-feature tests.)
 
 ---
 
-## Flow 4: Authorization — user can't see another user's data
+## Cross-cutting checks (on the deployed environment)
 
-**Status**: ⚠️ — **most-important security flow**
+Pick the ones that apply to your surface:
 
-**Steps**:
-1. Log in as User A.
-2. Note a quote ID owned by A.
-3. Log out.
-4. Log in as User B.
-5. Navigate directly to `/dashboard/quotes/<A's ID>`.
-6. Should get 404 or "not found" — never the actual quote.
-7. Also: hit `/api/quotes/<A's ID>` directly with B's session. Should 403/404.
+- [ ] **All projects**: no leaked secrets in artifacts you ship (binaries, JS bundles, container layers, package archives) — grep for the secret prefixes used by your providers.
+- [ ] **All projects**: dependency audit clean for direct deps + transitive.
+- [ ] **Browser-driven (web apps, marketing sites, dashboards)**: no console errors on any page load; no 404s on assets; Lighthouse mobile ≥ 90 for marketing sites / ≥ 70 for auth apps; works in real mobile browser (not just devtools mobile view); slow-network behavior (Slow 3G) reasonable.
+- [ ] **APIs / services**: health endpoint returns 200 under nominal + degraded conditions; contract test against the consumers green; rate-limit + auth headers behave as specified.
+- [ ] **CLIs**: `<bin> --help` exits 0; `<bin> --version` matches the release tag; the documented happy path on README runs against `testdata/` and matches golden output.
+- [ ] **Libraries**: the example in the README compiles + runs; published artifact has the expected files (no test fixtures, no `.env`, no secrets); CHANGELOG entry exists for this version.
+- [ ] **ML / data**: model evaluation on the held-out set matches or beats the previous version's score; drift signal on production data is within threshold; canary inference passes.
 
-**Expected**: B sees nothing of A's. RLS holds even on direct URL access.
+### Per-stack concrete commands
 
----
-
-## Flow 5: Sign out
-
-**Status**: ⚠️
-
-**Steps**:
-1. Logged in.
-2. Click "Sign out."
-3. Should redirect to `/`.
-4. Try to navigate to `/dashboard`.
-5. Should redirect to `/login`, not show stale data.
-6. Browser back button shouldn't expose cached pages with session data.
-
-**Expected**: clean session termination.
-
----
-
-## Cross-cutting checks (do on the deployed environment)
-
-- [ ] No console errors on any page load.
-- [ ] No 404s on assets in network tab.
-- [ ] Lighthouse mobile score ≥ 90 (for client sites) / ≥ 70 (for apps with auth).
-- [ ] Open in actual mobile browser (not just devtools mobile view).
-- [ ] Test on slow network (Chrome DevTools "Slow 3G").
-- [ ] Dark mode works (if implemented).
-- [ ] No secrets leaked in `_next/static/` JS files.
-
-### Concrete commands
+(Drop the ones that don't apply; add yours.)
 
 ```bash
-# Check no service-role key bled into client bundle
-grep -r "service_role" .next/static/ 2>/dev/null && echo "❌ LEAKED" || echo "✅ clean"
+# JS / TS bundles: check no server-side secret leaked to client
+grep -rE "(service_role|sk_(live|test)_|sk-ant-)" .next/static dist build 2>/dev/null \
+  && echo "❌ LEAKED" || echo "✅ clean"
 
-# Check no Stripe secret key bled into client bundle
-grep -rE "sk_(live|test)_" .next/static/ 2>/dev/null && echo "❌ LEAKED" || echo "✅ clean"
+# Python: dependency audit
+pip-audit  # or: safety check
 
-# Check no Anthropic key bled into client bundle
-grep -r "sk-ant-" .next/static/ 2>/dev/null && echo "❌ LEAKED" || echo "✅ clean"
+# Go: module-level audit
+go list -m -u all ; govulncheck ./...
 
-# Dependency audit
-npm audit --omit=dev
+# Rust: audit advisory DB
+cargo audit
 
-# Typecheck + lint (must be green)
-npm run typecheck && npm run lint
+# Ruby: bundler audit
+bundle audit --update
 
-# Lighthouse from CLI (optional — install: npm i -g lighthouse)
-lighthouse https://<project>.com --only-categories=performance,accessibility,best-practices,seo --form-factor=mobile --output=json --output-path=./lh.json --quiet
+# JS / TS: dependency audit
+npm audit --omit=dev  # or: pnpm audit, yarn audit
+
+# Typecheck / build (must be green for your stack)
+<typecheck command> && <lint command>
 ```
 
-### Two-session RLS verification (auth apps only)
+### Per-user / per-tenant authorization verification (for any multi-user app)
 
-For auth-touching changes, this is the most-important security check.
+For auth-touching changes, this is the most-important security check. The pattern is the same regardless of stack:
 
-```bash
-# Terminal 1: log in as User A, note a resource ID
-# Terminal 2: log in as User B
-# In Terminal 2's browser, navigate directly to User A's resource URL
-# Expected: 404 or "not found", NEVER the resource
+1. Authenticate as User A; note an ID of a resource owned by A.
+2. Authenticate as User B (different account, no shared role).
+3. From B's session, try to read or modify A's resource — direct URL access, direct API call, GraphQL query, RPC, whatever surfaces exist.
+4. **Expected**: B sees nothing of A's. The check must hold even when B knows the exact ID.
 
-# Also test via API directly:
-curl -H "Cookie: <user-B-session-cookie>" https://<project>.com/api/quotes/<user-A-quote-id>
-# Expected: 401, 403, or 404 — never 200 with A's data
-```
-
-If this returns A's data, every other test result is irrelevant — you have a critical security bug. Fix before any deploy.
+If B can read A's data with any technique, every other test result is irrelevant — fix before any deploy.
 
 ---
 
@@ -168,14 +112,14 @@ If this returns A's data, every other test result is irrelevant — you have a c
 
 Before the first real launch:
 
-- [ ] All 5 flows above pass on production with real data.
-- [ ] `npm audit` clean (or known issues documented and accepted).
+- [ ] All flows above pass on production with real data.
+- [ ] Dependency audit clean (or known issues documented and accepted).
 - [ ] Search codebase for "TODO" / "FIXME" / "XXX" — address or accept each.
-- [ ] Check for hardcoded secrets (`grep -r "sk_" .` etc).
-- [ ] RLS verified on every table with user data.
-- [ ] Delete-account flow exists and works.
+- [ ] Check for hardcoded secrets (grep for your provider's secret prefixes).
+- [ ] Per-row / per-resource authorization verified on every multi-user surface.
+- [ ] User-data deletion flow exists and works (if you store user data — required by GDPR / CCPA for many surfaces).
 - [ ] Privacy policy + terms exist (even if minimal).
-- [ ] Error monitoring connected (Sentry or similar) — and confirmed it does NOT log PII.
+- [ ] Error monitoring connected and confirmed it does NOT log PII.
 
 ---
 

@@ -7,8 +7,6 @@ description: Use when deciding how to engage Claude for a task — whether to ju
 
 Four ways to work with Claude. Most users default to executor. The 2x is adding planner; the 4x is adding reviewer for everything that matters.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index
 
 | Question / situation | Atomic file |

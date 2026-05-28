@@ -6,9 +6,9 @@ Loaded only when `/curate --review-stale` fires. This is the prune-or-keep pass 
 
 `bucket/INDEX.md` tracks two dates per row: `Added` (when the row was created) and `Last fired` (when `op-bucket-router` last routed to the row, or `—` if never). Stale-review combines both:
 
-- **Never-fired stale candidate (strongest signal):** `Last fired` is `—` (empty / never) AND `Added` is older than **90 days**. The row has lived in the INDEX for at least three months without `op-bucket-router` ever stamping it — the trigger description and the user's actual work didn't match.
-- **Date-based stale candidate (fallback):** any row whose `Added` date is older than **6 months** *and* whose `Last fired` is either empty or older than 6 months. Older content that hasn't been touched in a while.
-- **Not stale:** anything fired in the last 6 months, OR anything added in the last 90 days with an empty `Last fired` (too new to evaluate yet).
+- **Never-fired stale candidate (strongest signal):** `Last fired` is `—` (empty / never) AND `Added` is older than **N days**, where **N = `Stale review never-fired age days`** in `~/.claude/claude-spine-profile.md`'s `## Spine defaults` section, default **90**. The row has lived in the INDEX for at least N days without `op-bucket-router` ever stamping it — the trigger description and the user's actual work didn't match.
+- **Date-based stale candidate (fallback):** any row whose `Added` date is older than **M months** *and* whose `Last fired` is either empty or older than M months, where **M = `Stale review last-fired age months`** in the profile's `## Spine defaults`, default **6**. Older content that hasn't been touched in a while.
+- **Not stale:** anything fired in the last M months, OR anything added in the last N days with an empty `Last fired` (too new to evaluate yet).
 
 This is intentionally coarse. The user's judgment, not the date, is the actual filter — the dates just narrow the candidate list. The user can override per-session: "show me everything older than 3 months" / "go through anything never-fired regardless of age" / etc.
 

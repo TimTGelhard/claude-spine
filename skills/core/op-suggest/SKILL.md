@@ -7,6 +7,15 @@ description: Use to capture a high-signal moment to the user's personal queue at
 
 Append one entry to `~/.claude-spine/bucket/SUGGESTIONS.md` and stop. Curation (`/curate`) acts later. Rationale (why the threshold is high, why missed signals are free): [`chapters/personalization/19c-suggestion-loop.md`](../../../chapters/personalization/19c-suggestion-loop.md). Expand `~` to `$HOME` before reading; `install.sh` makes `~/.claude-spine` resolve to the spine clone.
 
+## Bucket-loop gate
+
+Before doing anything else: read `~/.claude/claude-spine-profile.md` `## Spine defaults` → `Bucket loop:`. If `off`:
+
+- Implicit triggers (friction-counter, end-of-session reflection) → silently exit; do not append.
+- Explicit triggers (`/suggest` slash command, user said "remember this") → still append. Treat explicit user invocation as overriding the profile setting one-shot; the user knows they're capturing.
+
+Default if the field is absent: `on`.
+
 ## When to fire — exactly four conditions
 
 | Trigger | Confirm before logging |
@@ -47,6 +56,10 @@ Append exactly this shape to `SUGGESTIONS.md`, above the `<!-- op-suggest append
 1. Read `~/.claude-spine/bucket/SUGGESTIONS.md` and confirm the append marker is intact.
 2. Build the entry with today's absolute date.
 3. Append above the marker, one blank line above the new `##` header. If the Pending section body holds only the `_(no pending suggestions yet)_` placeholder, **remove** the placeholder before appending — it exists only so the section renders before any real entries land.
+
+   **If the append marker is missing** (a user hand-edited and removed `<!-- op-suggest appends new entries above this comment. -->` thinking it was cruft): append the new entry at the end of the `## Pending` section instead, then re-insert the marker line immediately after the new entry. Do not fail; do not skip. One line of acknowledgement should also note that the marker was restored, so the user understands what happened.
+
+   **If neither the marker nor a `## Pending` heading exists** (the file was rewritten beyond recognition): emit one warning line — *"spine: `bucket/SUGGESTIONS.md` is missing the `## Pending` section. Recreate it (or run `/refresh-bucket`) and retry."* — and skip the append. Don't crash, don't append to the bottom of a malformed file.
 4. Acknowledge in one line — file path + entry title. No discussion, no "also want to…".
 
 ## Rules

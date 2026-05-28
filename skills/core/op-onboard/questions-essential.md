@@ -1,4 +1,4 @@
-# Essential questions (7)
+# Essential questions (10)
 
 The minimum profile Claude needs to be useful. Ask one at a time via `AskUserQuestion`. Map answers into the matching section of `profile-template.md`. "Other" is automatically added by the tool — let the user free-text whenever the predefined options don't fit.
 
@@ -40,18 +40,18 @@ Options (single-select):
 
 ## Q3 — Primary stack
 
-Question: **"What kind of tools or languages do you use most? (If you're not sure, pick the closest — or use 'Other' to type it in plain words.)"**
+Question: **"What kind of thing are you mostly building? (Pick the closest — these are broad buckets on purpose; 'Other' is fine if none fit, and you can name your exact stack in the free-text.)"**
 Header: `Stack`
 
 Options (single-select):
-- **Websites and web apps** (JavaScript / TypeScript, React, Next.js)
-- **Python** (scripts, data work, web backends like Django or FastAPI)
-- **Go** (backend services or command-line tools)
-- **Phone apps** (iOS with Swift, Android with Kotlin, or cross-platform with Expo / React Native)
+- **Web apps + sites** — anything that runs in a browser: full-stack apps, marketing sites, dashboards. Any language (JS/TS, Python, Ruby, PHP, Java, C#, Go, Elixir).
+- **Mobile + desktop apps** — apps that ship to a device: iOS / Android / cross-platform / Electron / Tauri (Swift, Kotlin, Expo, React Native, Flutter, .NET MAUI).
+- **Backend services, CLIs, systems** — APIs, microservices, command-line tools, daemons, low-level work (Go, Rust, Java, C/C++, .NET, Node, Elixir, JVM stacks).
+- **Data, scripts, ML** — analysis, pipelines, notebooks, training jobs, automation (Python, R, Julia, SQL, shell).
 
-(User may pick "Other" — they can just describe what they use, e.g. "I make WordPress sites" or "I haven't picked one yet".)
+(User may pick "Other" and type a free-text description — e.g. "WordPress sites", "Unity game dev", "embedded C on STM32", "Salesforce/Apex".)
 
-→ Profile: `Stack preferences → Primary`.
+→ Profile: `Stack preferences → Primary`. **Important:** capture the user's free-text in addition to the bucket — the bucket routes generic advice, but the language/framework named in free-text is what should appear in concrete examples.
 
 ---
 
@@ -115,7 +115,58 @@ Options (single-select):
 
 ---
 
-## After Q6
+## Q7 — Operating system
+
+Question: **"What computer are you running this on? This decides which file paths and shell commands I default to (most things work everywhere, but some hooks and install steps are OS-specific)."**
+Header: `OS`
+
+Options (single-select):
+- **macOS** — Apple silicon or Intel Mac
+- **Linux** — any distribution (Ubuntu, Fedora, Arch, etc.)
+- **Windows (WSL)** — Windows with Linux running underneath (most spine users on Windows are here)
+- **Windows (native)** — PowerShell or cmd directly, no WSL
+
+(Other = free-text — e.g. "ChromeOS with crostini", "FreeBSD".)
+
+→ Profile: `Environment → OS`.
+
+---
+
+## Q8 — Version control host
+
+Question: **"Where do you push code? Drives which CLI I'll suggest (`gh`, `glab`, etc.) and which URL patterns I use when I reference issues, PRs, or releases."**
+Header: `VCS host`
+
+Options (single-select):
+- **GitHub** — github.com or GitHub Enterprise (uses `gh` CLI)
+- **GitLab** — gitlab.com or self-hosted GitLab (uses `glab` CLI)
+- **Bitbucket** — bitbucket.org or self-hosted (uses `bb` / Atlassian CLI)
+- **None / local-only** — no remote, no PR/MR review flow, or one of: SVN, Mercurial, Fossil, Perforce, Azure DevOps Repos, AWS CodeCommit
+
+(Other = free-text — name a self-hosted Gitea / Forgejo / cgit / Phabricator / etc.)
+
+→ Profile: `Environment → VCS host`. Affects: Bash allowlist suggestions, "PR" vs "MR" vs "merge request" wording, public-VCS-scanning chapters in 17c.
+
+---
+
+## Q9 — Project type (artifact shape)
+
+Question: **"What kind of thing are you shipping at the end of the project — the artifact? (This is separate from the language/family you picked in Q3 — it routes templates, deploy patterns, and verify checks.)"**
+Header: `Artifact`
+
+Options (single-select):
+- **An app users open** — web app, mobile app, desktop app, or anything with a UI a person interacts with
+- **A backend service or CLI** — API server, daemon, scheduled job, command-line tool, ETL pipeline
+- **A library or framework** — package others install (npm / pip / cargo / maven / nuget / homebrew tap), reusable module, SDK, plugin
+- **Data, models, or analyses** — notebooks, ML training jobs, dashboards, one-off analyses, research outputs
+
+(Other = free-text — e.g. "embedded firmware for STM32", "Unity game", "Salesforce/Apex package", "WordPress theme", "infrastructure module".)
+
+→ Profile: `Project context → Artifact`. Drives: which `templates/` variant the spine points you at (`web-saas-next-supabase` for app-shape; library + CLI + data variants are paths-not-yet-shipped — Claude falls back to the agnostic skeleton until they land), which deploy runbook makes sense, which smoke-test shape is right.
+
+---
+
+## After all 10 essentials (the last one is Q9)
 
 1. **Save the essentials immediately** — write the profile file now, even if deep is coming next. Captures the first-run state.
 
@@ -123,7 +174,7 @@ Options (single-select):
 
 3. **Then ask about the deep interview:**
 
-   Question: **"Want to answer 13 more questions so I can tailor things further? Plus two optional opt-ins at the end for auto-typecheck and auto-format hooks. You can also do this later."**
+   Question: **"Want to answer 18 more questions so I can tailor things further? Plus two optional opt-ins at the end for auto-typecheck and auto-format hooks. You can also do this later."**
    Header: `Continue?`
 
    Options (single-select):

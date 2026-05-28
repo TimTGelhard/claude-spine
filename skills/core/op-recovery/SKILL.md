@@ -7,8 +7,6 @@ description: Use when workflow quality is dropping mid-session, Claude is contra
 
 When the session is going wrong, the manual has a triage table and a set of moves. Diagnose the failure first, then apply the matching move. Don't skip the diagnosis — wrong move on right symptom is still the wrong move.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index
 
 | Question / situation | Atomic file |

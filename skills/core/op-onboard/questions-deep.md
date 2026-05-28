@@ -1,4 +1,4 @@
-# Deep questions (13, grouped by section)
+# Deep questions (18, grouped by section)
 
 Ask in order. Use `AskUserQuestion` for each. Skip a question if the essentials already implied the answer (e.g., don't re-ask experience level). Each question has up to 4 explicit options; "Other" is added by the tool for free-text. Where the question says `multi-select`, set `multiSelect: true`.
 
@@ -73,31 +73,29 @@ Options (`multiSelect: true`): same four as A2.
 
 ### B1 — Secondary stack
 
-Question: **"Is there a second set of tools you sometimes use, besides your main one?"**
+Question: **"Is there a second area of work you sometimes do, besides your main one?"**
 Header: `Secondary`
 Options (single-select):
-- **Websites and web apps** (JavaScript / TypeScript, React, Next.js)
-- **Python**
-- **Go**
-- **No — I stick to my main one**
+- **Web apps + sites** (JS/TS, Python, Ruby, PHP, Java, C#, Go, Elixir for web)
+- **Mobile + desktop apps** (Swift, Kotlin, Expo, React Native, Flutter, Electron, Tauri)
+- **Backend services, CLIs, systems** (Go, Rust, Java, C/C++, .NET, Node, JVM)
+- **Data, scripts, ML** (Python, R, Julia, SQL, shell)
 
-(Other = free-text, e.g. "PHP for an old site" or "SQL only".)
+(Other = free-text, e.g. "PHP for an old site", "SQL only", "Unity game dev", "embedded firmware". Same shape as Q3, so the user can name "No, I stick to my main one" via Other.)
 
-→ Profile: `Stack preferences → Secondary`.
+→ Profile: `Stack preferences → Secondary` — capture free-text alongside the bucket.
 
-### B2 — Stacks to avoid (multi-select)
+### B2 — Stacks to avoid (free-text only)
 
-Question: **"Are there any tools or languages you'd rather I *not* suggest? (Pick any. Skip if you don't have a preference.)"**
+Question: **"Anything you'd rather I *not* suggest — tools, languages, frameworks, patterns? Free-text. Skip if you don't have a preference."**
 Header: `Avoid`
-Options (`multiSelect: true`):
-- PHP / Laravel (older web language and framework)
-- Java / Spring (enterprise web framework)
-- Ruby on Rails (web framework popular in startups)
-- C# / .NET (Microsoft's ecosystem)
 
-(Other = free-text.)
+This question takes **no pre-loaded options**. Present it with `multiSelect: false` and a single option:
+- **No, no strong preference** — skip the avoid field
 
-→ Profile: `Stack preferences → Avoid`.
+Anything else the user wants flagged goes through the `Other` free-text. Reason: pre-loading a list of "stacks to avoid" frames whichever ecosystems we pre-list as the canonical things to flag away from, and the user's specific dislikes are too varied to enumerate. Free-text captures the actual signal (e.g., "no jQuery", "no microservices for MVPs", "don't suggest MongoDB", "skip Tailwind I prefer vanilla CSS").
+
+→ Profile: `Stack preferences → Avoid` — write the free-text verbatim, or omit the field if the user picked the no-preference option.
 
 ---
 
@@ -189,7 +187,73 @@ Options (single-select):
 
 ---
 
-## After F1
+## Section G — Session shape + workspace
+
+### G1 — Typical session shape
+
+Question: **"What does most of your time with me actually look like? Pick the most common — the discipline applies to all, but the defaults adapt."**
+Header: `Session shape`
+Options (single-select):
+- **Building new features** — most sessions are 'here's the next thing on the plan, let's ship it' (the `/prep → build → /done` flow is sized for this)
+- **Debugging + brownfield work** — diagnosing problems in existing code more often than building new
+- **Refactoring + reading** — understanding and reshaping an existing codebase; less feature work
+- **Exploring + prototyping + research** — short throwaway experiments, notebook-style; the plan ladder is heavy
+
+→ Profile: `Working style → Session shape`. Affects: how heavily `/prep` gates the build flow, whether ambient cold-start expects a plan file.
+
+### G2 — Plan files location
+
+Question: **"Where do you want me to put planning files (master plan, section plans, PROGRESS) when `/prep` runs?"**
+Header: `Plans dir`
+Options (single-select):
+- **`docs/plans/` + `docs/PROGRESS.md`** — the spine's canonical default (works for most projects)
+- **`plans/` + `PROGRESS.md` at repo root** — if your project doesn't already use `docs/`
+- **`.claude/plans/` + `.claude/PROGRESS.md`** — tucked under the AI-config dir
+- **I'll set this per project** in each project's `CLAUDE.md` (line: `Plan layout: <plans-dir> <progress-file>`)
+
+→ Profile: `Environment → Plans dir`. Affects: ambient `op-spine-active` cold-start, `/prep` scaffold paths, `spine-writeback.sh` heartbeat target.
+
+---
+
+## Section H — Bucket loop + team context + region
+
+### H1 — Bucket loop opt-in
+
+Question: **"Want the bucket loop active? While we work, I can quietly capture high-signal moments (`op-suggest`) so a periodic `/curate` builds your personal skill + chapter library. If off, nothing captures; nothing nudges; the spine + your profile still load every session."**
+Header: `Bucket loop`
+Options (single-select):
+- **On (default)** — capture high-signal moments and nudge me to curate when >5 are pending
+- **Off** — skip the capture/curate/nudge loop entirely (you can still hand-add bucket skills with `/add-skill`)
+
+→ Profile: `Spine defaults → Bucket loop:` (writes `on` or `off`; default if unset is `on`). Affects: whether `op-suggest`, `op-curate-nudge`, `op-bucket-router` auto-fire.
+
+### H2 — Team / organization shape
+
+Question: **"What's the work context this profile mostly serves? (Tone, signaling, and chapter framing adapt to whether you're solo on a side project vs. coordinating with reviewers vs. shipping into an enterprise CI/CD.)"**
+Header: `Org`
+Options (single-select):
+- **Solo developer** — side projects, MVPs, contractor work where the only reviewer is me
+- **Small team or co-founder pair** — 2–5 people; code-review-by-PR exists; release cadence is informal
+- **Mid-size or large org** — 6+ people; multi-environment deploys; formal review; possibly compliance constraints
+- **OSS / academic / freelance / agency** — work shared with external contributors or rotating clients; documentation matters more than velocity
+
+→ Profile: `Project context → Org shape`. Affects: how often Claude flags "PR description?" / "did anyone else review?" / "should this go in a CHANGELOG?".
+
+### H3 — Region / currency hint
+
+Question: **"For any cost or pricing examples I give (subscription tiers, deploy provider costs, etc.), which currency feels most natural?"**
+Header: `Currency`
+Options (single-select):
+- **USD** — most Anthropic + Vercel + AWS pricing pages
+- **EUR** — Europe-billed services; localized pricing
+- **GBP** — UK-billed services
+- **JPY / other** — pick "Other" and free-text the ISO 4217 code (e.g. CHF, INR, BRL, AUD)
+
+→ Profile: `Environment → Currency`. Affects: which symbol Claude uses in cost framings; optional context only.
+
+---
+
+## After H3
 
 Update the profile file (rewrite with all deep answers + bump `Last updated:`).
 

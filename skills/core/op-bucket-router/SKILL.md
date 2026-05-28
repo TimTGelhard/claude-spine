@@ -7,7 +7,14 @@ description: Use as the fallback router when the user's task isn't covered by an
 
 The bucket holds the user's *personal* library — both **skills** (procedures fired on a trigger) and **chapters** (references loaded for context). This skill is the router into both tables. Core skills always win — this fires only when none of them matched.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading. `install.sh` ensures `~/.claude-spine` resolves to the spine clone.
+## Bucket-loop gate
+
+Read `~/.claude/claude-spine-profile.md` `## Spine defaults` → `Bucket loop:`. If `off`:
+
+- Implicit fallback fires (no core skill matched) → silent skip; treat as "no bucket support" and answer from the spine + chapters alone.
+- Explicit user request ("use my bucket", "do this the way I usually do") → still route. The user knows the bucket exists; honor the ask one-shot. The profile setting changes the *automatic fallback* behavior, not explicit invocation.
+
+Default if the field is absent: `on`.
 
 ## When this fires
 

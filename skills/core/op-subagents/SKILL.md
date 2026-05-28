@@ -7,8 +7,6 @@ description: Use when deciding whether to delegate to a subagent (Agent tool) vs
 
 The biggest underused lever for keeping main-conversation context clean. Routes here pick the file that matches the decision in front of you.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index
 
 | Question / situation | Atomic file |

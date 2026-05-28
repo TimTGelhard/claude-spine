@@ -7,8 +7,6 @@ description: Use when choosing which Claude Code tool fits a task (Read/Edit/Wri
 
 Picking the right tool isn't optional — it's how Claude controls context cost, latency, and correctness. Read ONE category file per task.
 
-> Paths below are written as `~/.claude-spine/...`. Expand `~` to your home directory (`$HOME`) before reading with the Read tool. `install.sh` ensures `~/.claude-spine` resolves to your spine clone.
-
 ## Index
 
 | Question / situation | Atomic file |

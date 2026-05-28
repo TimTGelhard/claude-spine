@@ -62,17 +62,42 @@ Keep it high-level — schemas, route shape, where server/client boundary lives,
 
 Ordered sections with dependencies. Use `~/.claude-spine/templates/PROJECT_PLAN.md` as scaffold.
 
-Typical sections for a CRUD-shaped app:
+The right section list depends on the project type. Some templates:
 
+**CRUD-shaped web app:**
 1. foundation (scaffolding + first deploy)
-2. auth (login + RLS baseline)
+2. auth (login + per-row-authorization baseline)
 3..N. resources (one section per major resource)
-N+1. integrations (Stripe, webhooks, email, file storage)
+N+1. integrations (payment provider, webhooks, email, file storage)
 N+2. landing (public marketing pages — can run in parallel with resources)
 N+3. hardening (states, perf, a11y, security review)
 N+4. ship (deploy + post-deploy smoke)
 
-Adjust order to match real dependencies. Auth always before user-scoped resources. RLS planned in the section that introduces the table, not retro-fitted later.
+**Backend service / API:**
+1. foundation (scaffolding + health endpoint + first deploy)
+2. auth + AuthZ baseline
+3..N. domains (one section per bounded context — `payments`, `users`, `inventory`, etc.)
+N+1. integrations (external SDKs, queues, schedulers)
+N+2. observability (metrics, logs, traces, alerts)
+N+3. hardening (rate limits, idempotency, retry)
+N+4. ship
+
+**CLI tool / library:**
+1. foundation (scaffolding + first binary or first published version)
+2. core API surface (the 1-3 commands or methods everything else depends on)
+3..N. commands or features (one per cohesive capability)
+N+1. distribution (release flow, package registry, install docs)
+N+2. hardening (golden tests, fuzzing, fixture set)
+N+3. ship (first public release)
+
+**ML / data pipeline:**
+1. foundation (data loaders + a baseline that runs end-to-end)
+2. eval set + metrics
+3..N. experiments (one section per hypothesis — "try X loss", "swap optimizer", etc.)
+N+1. productionization (serving, monitoring, drift detection)
+N+2. ship (handoff or first production deploy)
+
+Adjust order to match real dependencies. Auth always before user-scoped resources. Per-row authorization planned in the section that introduces the data, not retro-fitted later. For libraries: lock the public API shape before downstream features depend on it.
 
 Target: 5-12 sections for a typical MVP. More than 15, your sections are too granular — merge.
 
@@ -93,35 +118,39 @@ Keep each session entry under 100 lines. If it needs more, the session is too bi
 
 Read the build steps you just drafted. Propose the "Files to write/edit" list by inferring from them. Surface the proposal and ask "Edit this scope list before I write the session entry?" — the user adds, removes, or corrects. Never silently pick.
 
-These heuristics cover the common cases; the user's stack may differ:
+**Pick the right column from the table below based on the project's stack** (sniff `package.json` / `pyproject.toml` / `go.mod` / `Cargo.toml` / `Gemfile` / `pom.xml` if not already known; if the stack isn't in the table, use the closest match as a template and adapt). The build-step phrases are the rows; the file shapes are per-stack:
 
-| Build-step phrase | Inferred files |
-|---|---|
-| "Create schema" / "Add table" / "Add migration" | `supabase/migrations/YYYYMMDDHHMMSS_<name>.sql` (single file; include RLS in the same migration as the table — see `~/.claude-spine/templates/CLAUDE.md` conventions) |
-| "Add RLS policy" / "Per-user access" | Same migration as the table — no separate file |
-| "Add API route" / "POST/GET/PATCH /api/<x>" | `app/api/<x>/route.ts` |
-| "Add server action" / "Submit / save / update from form" | `app/<route>/actions.ts` (named `action<Verb><Noun>`) |
-| "Wire UI" / "Form" / "Page" | `app/<route>/page.tsx` + `components/<Feature>Form.tsx` (split server vs client) |
-| "Add zod schema" / "Validate input" | `app/<route>/schema.ts` or `lib/schemas/<x>.ts` |
-| "Add a webhook handler" | `app/api/webhooks/<service>/route.ts` |
-| "Add a public/unauth flow" (contact form, public quote-accept) | `app/(public)/<route>/page.tsx` + matching server action |
-| "Send email" | A new template under `lib/email/templates/` + a Resend call from `lib/server/email.ts` |
+| Build-step phrase | Next.js / Supabase | Django / Django REST | FastAPI / SQLAlchemy | Rails | Go (net/http or gin) | Rust (axum / actix) | Java / Spring | Generic CLI (Go / Rust / Python) |
+|---|---|---|---|---|---|---|---|---|
+| **Create schema / Add table / Add migration** | `supabase/migrations/<ts>_<name>.sql` (RLS inline) | `apps/<app>/models.py` + `apps/<app>/migrations/<n>_<name>.py` | `app/models/<x>.py` + `alembic/versions/<rev>_<name>.py` | `db/migrate/<ts>_<name>.rb` + `app/models/<x>.rb` | `db/migrations/<n>_<name>.sql` (raw) or ORM equivalent | `migrations/<ts>_<name>.sql` (sqlx) or ORM equivalent | `src/main/resources/db/migration/V<n>__<name>.sql` (Flyway) | n/a — config or local file shape |
+| **Per-row authorization / Per-user access** | Same migration as the table (RLS policies inline) | Permission class in `apps/<app>/permissions.py` + applied on each ViewSet | Dependency in `app/api/deps.py` checked per route | Pundit policy in `app/policies/<x>_policy.rb` | Middleware or per-handler check, with `userID` in context | Tower middleware + extractor per handler | Method-level `@PreAuthorize`; or service-layer guard | n/a |
+| **Mutation endpoint (POST/PATCH/DELETE) / Server-side write** | `app/<route>/actions.ts` (server action `action<Verb><Noun>`) or `app/api/<x>/route.ts` | ViewSet method or APIView in `apps/<app>/views.py` | Router handler in `app/api/routes/<x>.py` | Controller action in `app/controllers/<x>_controller.rb` | Handler func in `internal/<feature>/handler.go` registered in `cmd/server/main.go` | Handler in `src/routes/<x>.rs` registered in `src/main.rs` | `@RestController` method | New subcommand in `cmd/<bin>/cmd/<x>.go` (cobra) or `src/cli/<x>.rs` (clap) |
+| **Read endpoint / Query / List view** | Server component in `app/<route>/page.tsx` (RSC) or `app/api/<x>/route.ts` for JSON | ViewSet list/retrieve or APIView GET | Router GET handler | Controller `index` / `show` | Handler func + query helper | Handler + query func | `@GetMapping` method | Same subcommand pattern as above |
+| **Input validation** | `app/<route>/schema.ts` or `lib/schemas/<x>.ts` (zod) | DRF serializer in `apps/<app>/serializers.py` | Pydantic model in `app/schemas/<x>.py` | Strong-params in controller + model validations | Struct tags + `validator.v10`; or per-handler decode | `serde` derive + `validator` crate | DTO class + `@Valid` + Bean Validation annotations | `flag` / `cobra` / `clap` argument types + custom validators |
+| **UI surface (form / page / component)** | `app/<route>/page.tsx` + `components/<Feature>Form.tsx` (split server vs client) | Django template in `templates/<app>/<x>.html` + view-rendered form, or React frontend | Frontend separate from API (often Next.js or Vue) | ERB view in `app/views/<x>/`, or Hotwire / Stimulus | Frontend separate; or `templ` / `html/template` for SSR | Frontend separate; or `askama` for SSR | Thymeleaf in `src/main/resources/templates/`, or React frontend | n/a — CLIs render to stdout |
+| **Webhook ingestion (Stripe / GitHub / external sender)** | `app/api/webhooks/<service>/route.ts` (verify signature → ack 2xx → enqueue/process) | View in `apps/<app>/views.py` mounted at a dedicated URL | Router in `app/api/webhooks/<service>.py` | Controller in `app/controllers/webhooks/<service>_controller.rb` | Handler in `internal/webhooks/<service>/handler.go` | Handler in `src/routes/webhooks/<service>.rs` | `@RestController` in `webhooks/<Service>Controller.java` | n/a (typically) |
+| **Public / unauthenticated flow (contact form, public token-accept)** | `app/(public)/<route>/page.tsx` + matching server action | Public-prefix URL in `apps/<app>/urls.py` + `AllowAny` permission | Public router in `app/api/public/<x>.py` | Public namespace in `config/routes.rb` | Public route in router; no auth middleware | Public route; no auth middleware | `permitAll()` in security config for the route | n/a |
+| **Send email / external notification** | Template under `lib/email/templates/` + call from `lib/server/email.ts` | `django.core.mail.send_mail` or `apps/<app>/services/email.py` + template in `templates/email/` | `app/services/email.py` (FastMail / Sendgrid) + Jinja template | `ActionMailer` class + view in `app/views/<mailer>_mailer/` | `internal/email/` package wrapping the provider SDK | `src/services/email.rs` wrapping the provider SDK | `@Service` class wrapping `JavaMailSender` | n/a |
 
-When the project's stack isn't TypeScript + Next.js + Supabase, swap the file shapes — the table is the *recipe*, not the contract. The discipline is: propose, then let the user edit.
+Out-of-table stacks (PHP/Laravel, .NET, Elixir/Phoenix, Kotlin/Ktor, embedded, ML training scripts, data pipelines, etc.): use the closest column as a template and translate the file shapes. The discipline is the same — propose specific files, let the user edit. Never propose a generic "the relevant files" placeholder.
 
 ### Step 6.2 — Scaffold the Verify block from a recognized pattern
 
-Generic "test it works" verify lists are the failure mode this step exists to prevent ([05j](~/.claude-spine/chapters/workflow/05j-cold-start-protocol.md) hard rule #4). Match the session's build steps + scope against the patterns below; when one matches, scaffold the Verify block with the listed concrete checks. The user refines (drops irrelevant rows, adds project-specific ones).
+Generic "test it works" verify lists are the failure mode this step exists to prevent ([05j](../../../chapters/workflow/05j-cold-start-protocol.md) hard rule #4). Match the session's build steps + scope against the patterns below; when one matches, scaffold the Verify block with the listed concrete checks. The user refines (drops irrelevant rows, adds project-specific ones).
+
+The patterns are named for the *concept*, not the framework. The checks are framework-agnostic; substitute "the auth table" / "the mutation endpoint" / "the per-row guard" for whichever object provides that concept in your stack:
 
 | Pattern | Scaffold the Verify block with… |
 |---|---|
-| **Auth flow** (sign-up / sign-in / sign-out / protected route) | (a) sign-up form submits → row appears in `auth.users`; (b) sign-in with wrong password returns error toast, no redirect; (c) sign-out clears session and redirects to `/`; (d) unauth user hitting a protected route is redirected to `/login`. |
-| **CRUD resource** (table + list + form) | (a) Create → row appears in DB; (b) list view renders the new row; (c) edit → row updated in DB and re-rendered; (d) delete → row removed and disappears from list; (e) RLS: a non-owner session cannot SELECT another user's row. |
-| **API + UI** (server action or route handler driving a UI) | (a) Happy path: action returns the expected shape; UI renders it; (b) error path: action returns a user-readable error and UI surfaces it (no raw stack); (c) no PII (email/phone/address) in client logs or error payloads. |
-| **RLS section** (introducing per-user data) | (a) Non-owner session: SELECT returns 0 rows; (b) owner session: SELECT returns the row; (c) admin / service role behaves as designed (full access if intended, denied if not); (d) the migration that creates the table also ships the RLS policy. |
-| **Public form** (unauthenticated input — contact, public quote-accept) | (a) Single-use token validated and consumed; (b) rate-limit returns 429 after N+1 attempts in the rate window; (c) bad input returns 400 with no leaked schema; (d) honeypot/captcha rejects the obvious bot pattern. |
-| **Webhook ingestion** (Stripe, Resend, etc.) | (a) Signature verification passes for a real-payload fixture; (b) verification fails for a tampered payload — 400; (c) duplicate event-id is idempotent (already-processed returns 200, no double write); (d) processing errors are logged with the event id but never surface PII. |
-| **Migration-only session** (no UI surface) | (a) Migration applies forward cleanly; (b) `supabase db diff` shows no drift after apply; (c) regenerated types are committed (`supabase gen types`); (d) one-line rollback recipe captured in the migration file's comments. |
+| **Auth flow** (sign-up / sign-in / sign-out / protected route) | (a) sign-up form submits → user row appears in the auth store (Supabase `auth.users`, Django `auth_user`, custom users table, Cognito pool, etc.); (b) sign-in with wrong password returns a user-readable error, no session created; (c) sign-out clears session + redirects to a public page; (d) unauth client hitting a protected route is redirected / receives 401, not the page content. |
+| **CRUD resource** (entity + list + form) | (a) Create → record appears in the datastore; (b) list view / GET endpoint renders the new record; (c) edit → record updated and re-rendered / re-fetched; (d) delete → record removed and disappears from list; (e) per-row authorization: a non-owner cannot read or mutate another user's record (see "Per-row authorization" pattern below for the precise checks). |
+| **Mutation endpoint + UI** (server-side write driving a client surface) | (a) Happy path: endpoint returns the expected shape; UI / caller renders it; (b) error path: endpoint returns a user-readable error and the UI surfaces it (no raw stack / no leaked schema); (c) no PII (email, phone, address, payment info) in client logs, error payloads, or analytics events. |
+| **Per-row authorization** (per-user / per-tenant data isolation — RLS, rules, IAM, decorators, app-layer guards) | (a) Non-owner session: read returns 0 records / 403; (b) owner session: read returns the record; (c) admin / service role behaves as designed (full access if intended, denied if not); (d) the *write* path that creates the data also ships its authorization rule — never land the table first and the policy in a later session. |
+| **Public form** (unauthenticated input — contact, public token-accept, public webhook submit) | (a) Single-use token (if any) validated and consumed exactly once; (b) rate-limit returns 429 after N+1 attempts in the rate window; (c) bad input returns 400 with no leaked schema or stack; (d) honeypot / CAPTCHA / signed-form-token rejects the obvious bot pattern. |
+| **Webhook ingestion** (Stripe, GitHub, Resend, any external sender) | (a) Signature / HMAC verification passes for a real-payload fixture; (b) verification fails for a tampered payload — 4xx, not 2xx; (c) duplicate event-id is idempotent (already-processed returns the same response, no double write); (d) processing errors logged with the event id but never surface PII or full payload. |
+| **Migration-only session** (no UI surface) | (a) Migration applies forward cleanly on a clean DB; (b) drift check passes (`supabase db diff`, `python manage.py makemigrations --check`, `alembic check`, `bin/rails db:migrate:status`, `flyway info`, whichever your stack uses — no surprise changes); (c) regenerated types / models committed alongside the migration; (d) one-line rollback recipe captured in the migration file's comments or PR description. |
+| **CLI subcommand** (new command on a CLI tool — `<bin> <subcmd>`) | (a) `<bin> <subcmd> --help` exits 0 and prints the subcommand's flags; (b) golden-output test on a `testdata/` fixture passes; (c) non-zero exit code on invalid input + error written to stderr (not stdout); (d) the README / man page row for this command is added or updated. |
+| **Library public method** (new exported function / method on a library) | (a) Method's contract test green; (b) example in the docstring / README compiles and runs; (c) error paths return typed errors (not panic / unwrap / throw `Error("")`); (d) public-API change documented in CHANGELOG with a one-line migration note if breaking. |
 
 If no pattern matches, ask the user for the 2-4 concrete checks — naming what would have to be true for this session's work to count as done. *Don't ship generic "test it works."* That defeats the verify-list discipline and turns `/done` into a rubber stamp.
 
@@ -171,4 +200,4 @@ Don't draft section 2 during the section 1 planning pass — wait for section 1 
 - **Skipping the brief.** "I'll figure it out from chat messages" loses fidelity. Write the brief file.
 - **Bloating session entries.** A session entry should be <100 lines. If it needs more, the session is too big — split.
 - **Silently picking architectural choices.** Per global CLAUDE.md, surface 2-3 alternatives with tradeoffs before deciding.
-- **Locking the plan as a contract.** Plans are working documents. Update them when reality diverges — see [05j](~/.claude-spine/chapters/workflow/05j-cold-start-protocol.md) "Hard rules".
+- **Locking the plan as a contract.** Plans are working documents. Update them when reality diverges — see [05j](../../../chapters/workflow/05j-cold-start-protocol.md) "Hard rules".

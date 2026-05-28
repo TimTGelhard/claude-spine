@@ -119,7 +119,7 @@ When you install this, the very first thing it does is a short **interview**.
 ```
    ╔════════════════════════════════════════════════╗
    ║                                                 ║
-   ║   First-time setup — 7 to 20 questions          ║
+   ║   First-time setup — 10 to 28 questions         ║
    ║                                                 ║
    ║   "How experienced are you?"                    ║
    ║   "What kinds of projects do you usually do?"   ║

@@ -34,6 +34,31 @@ if command -v jq >/dev/null 2>&1 && [ -n "$INPUT" ]; then
 fi
 [ -z "$CWD" ] && CWD="$PWD"
 
+# ---------- profile-overridable defaults ----------
+#
+# Thresholds and cue phrases can be overridden in
+# ~/.claude/claude-spine-profile.md under `## Spine defaults`. Missing or
+# malformed values fall back to the shipped defaults below.
+
+PROFILE="${HOME}/.claude/claude-spine-profile.md"
+
+spine_default_int() {
+  local key="$1"
+  local fallback="$2"
+  if [ ! -f "$PROFILE" ]; then
+    echo "$fallback"; return
+  fi
+  local val
+  val=$(grep -E "^- \*\*${key}:\*\*" "$PROFILE" 2>/dev/null \
+    | head -n1 \
+    | sed -E "s/^- \*\*${key}:\*\*[[:space:]]*([0-9]+).*/\1/" \
+    || true)
+  if [[ "$val" =~ ^[0-9]+$ ]]; then echo "$val"; else echo "$fallback"; fi
+}
+
+LONG_TURNS=$(spine_default_int "Long-session turn threshold" 30)
+LONG_SECS=$(spine_default_int "Long-session elapsed seconds" 7200)
+
 # ---------- preflight: is this a plan-driven project? ----------
 
 [ -d "$CWD/docs/plans" ] || exit 0
@@ -132,7 +157,24 @@ if [ -n "$TRANSCRIPT_PATH" ] && [ -f "$TRANSCRIPT_PATH" ] && command -v jq >/dev
       || true)
 
     if [ -n "$LAST_ASSISTANT_TEXT" ]; then
-      CUES_RE='(cross.?session note|follow.?up:|for (the |a )?(next|later|future) session|FYI for next session|note for next session|need to .{0,80}(in|before) .{0,30}(next|later|future) session|schema (will need|needs to)|carry.?over:)'
+      DEFAULT_CUES='cross.?session note|follow.?up:|for (the |a )?(next|later|future) session|FYI for next session|note for next session|need to .{0,80}(in|before) .{0,30}(next|later|future) session|schema (will need|needs to)|carry.?over:'
+
+      # Append any user-supplied cue phrases from profile (one per bullet under
+      # "Cross-session note cues:"; the help-text bullet starts with `- (` and is skipped).
+      USER_CUES=""
+      if [ -f "$PROFILE" ]; then
+        USER_CUES=$(awk '
+          /^- \*\*Cross-session note cues:\*\*/{flag=1; next}
+          flag && /^- \*\*/{flag=0}
+          flag && /^  - / && !/^  - \(/ {sub(/^  - /,""); print}
+        ' "$PROFILE" 2>/dev/null | tr '\n' '|' | sed 's/|$//' || true)
+      fi
+
+      if [ -n "$USER_CUES" ]; then
+        CUES_RE="(${DEFAULT_CUES}|${USER_CUES})"
+      else
+        CUES_RE="(${DEFAULT_CUES})"
+      fi
 
       CANDIDATES=$(printf '%s' "$LAST_ASSISTANT_TEXT" \
         | grep -iE "$CUES_RE" 2>/dev/null \
@@ -192,7 +234,7 @@ if [ -n "$SESSION_ID" ]; then
     LONG_FIRE=0
     ELAPSED_MIN=0
 
-    if [ "$NEW_COUNT" -ge 30 ]; then
+    if [ "$NEW_COUNT" -ge "$LONG_TURNS" ]; then
       LONG_FIRE=1
     fi
 
@@ -201,7 +243,7 @@ if [ -n "$SESSION_ID" ]; then
     if [ -n "$START_EPOCH" ] && [ -n "$NOW_EPOCH" ]; then
       ELAPSED_SEC=$((NOW_EPOCH - START_EPOCH))
       ELAPSED_MIN=$((ELAPSED_SEC / 60))
-      if [ "$ELAPSED_SEC" -ge 7200 ]; then
+      if [ "$ELAPSED_SEC" -ge "$LONG_SECS" ]; then
         LONG_FIRE=1
       fi
     fi
