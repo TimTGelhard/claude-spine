@@ -9,7 +9,7 @@ A dial for how plainly Claude explains what it changed and why. Three levels:
 
 | Level | What you get |
 |---|---|
-| `simple` | Plain language, minimal jargon. After a change: *what* changed and *why* in a line or two. Technical detail only when you ask. |
+| `simple` | Plain language, minimal jargon. After a change: *what* changed and *why* in a line or two; deeper detail only when you ask. **Always ends with one clearly-recommended next action** as a concrete step (e.g. "open a new terminal and run `/prep`"), with any alternatives demoted to a single line. |
 | `standard` | Balanced — clear explanations, neither stripped down nor exhaustive. The shipped default. |
 | `detailed` | Full technical depth — trade-offs, rationale, and alternatives spelled out. |
 
@@ -37,7 +37,7 @@ Then bump the `> Last updated:` line to today's date (from session context).
 
 Canonical lines:
 
-- simple → `- **Explanation style:** Simple — plain language, minimal jargon; say what changed and why in a line or two. Technical detail only when asked.`
+- simple → `- **Explanation style:** Simple — plain language, minimal jargon; what changed and why in a line or two, deeper detail only when asked. Always end with ONE clearly recommended next action as a concrete step (e.g. open a new terminal and run /prep); if other paths exist, give them one line but keep the recommendation unambiguous.`
 - standard → `- **Explanation style:** Standard — balanced explanations; clear but not exhaustive.`
 - detailed → `- **Explanation style:** Detailed — full technical depth; trade-offs and rationale spelled out.`
 
