@@ -19,13 +19,13 @@ The headline candidate: load-bearing **claim #1** ("token efficiency is the cent
 
 ## Done criteria
 
-- [ ] Each of the **12** anti-drift rules scored pass / fail / partial against repo state, with a `file:line` evidence pointer per verdict (scorecard table; consolidations cite the prior audit's finding, not re-derived).
-- [ ] Each anti-pattern chapter `18a–18h` scanned; per chapter, a "does the spine commit this? Y/N + evidence" verdict (deduped against the rule walk where they overlap — e.g. 18g ≈ rule 1).
-- [ ] PF1–PF5 each confirmed (extent + fix locus) or downgraded with a stated reason; PF2–PF5 escalated to `FIXES.md` (new `A16` cluster — the four audit-infrastructure bugs).
-- [ ] Hard-coded magic numbers (rule 10) grepped across `skills/`, `chapters/`, `global/commands/`; each hit triaged override-worthy (→ profile field) vs intrinsic. A2.5 (`Prep*`) consolidated, not re-found.
-- [ ] Claim-#1 framing check: is `CLAUDE.md` L34 / `EXPLAINER` / `README` "saves tokens" wording contradicted by LC1, and does `FIXES.md` A1's reframe-surface list name every surface (it currently names README + landing — does it omit `CLAUDE.md` L34 / `EXPLAINER`)?
-- [ ] `FIXES.md` verified action-queue-shaped (rule 1) + `CHANGELOG.md` spot-checked for Keep-a-Changelog conformance (rule 2).
-- [ ] Findings appended; blocking entries to `FIXES.md`; cross-section notes for audit-06 populated; read-only compliance verified via `git diff` against the session-start commit.
+- [x] Each of the **12** anti-drift rules scored against repo state with a `file:line` evidence pointer. _3 PASS, 6 PARTIAL, 1 FAIL (rule 4 INDEX), 2 PASS-with-flag; ↻ rows cite, ✎ rows fresh._
+- [x] Each anti-pattern chapter `18a–18h` scanned; per-chapter commit verdict. _7 clean/exemplary; **18h committed** (CLAUDE.md drift); 18g mild (= rule 1, deduped)._
+- [x] PF1–PF5 each confirmed or downgraded. _PF2/PF3/PF5 → A16; PF4 downgraded (instance self-resolved); PF1 confirmed wired._
+- [x] Hard-coded magic numbers (rule 10) grepped; triaged. _Only A2.5 (`Prep*`) — cited, not re-found; 7 other thresholds wired; no new unsurfaced violation._
+- [x] Claim-#1 framing check. _Contradicted wording live at `CLAUDE.md:42/44`; A1's list (README+landing) omits it → **extend A1**. README:92 + EXPLAINER already safe-framed._
+- [x] `FIXES.md` action-queue-shaped (rule 1) + `CHANGELOG.md` Keep-a-Changelog (rule 2) checked. _R1 PARTIAL (A1 LC1-narrative creep); R2 PASS + one accuracy ding (04a overclaim)._
+- [x] Findings appended; blocking → `FIXES.md` (A16 + A1); cross-section notes populated; read-only verified via `git diff de9234d`.
 
 ## Out of scope (do not drift here)
 
@@ -72,6 +72,9 @@ Per pre-flight protocol rule 4 (cross-section notes propagate manually). These a
 - **For audit-06 (tests + docs).** (a) The mechanize-the-discipline-check pattern above — propose a `/discipline verify` (lint the 12 rules: count-claim consistency, FIXES queue-shape, no model-IDs outside `docs/MODELS.md`, an INDEX row per chapter) as the audit-06/apply analog of A12 `/profile verify` + A15 `/trigger verify`. The absence of self-linting is the shared root cause of inter-audit drift. (b) Rule 5: when the audit phase closes, should `docs/plans/audit-0*` move to `docs/archive/`? They're point-in-time audit records living as plan files — borders audit-06's archive-freshness check. (c) Whether `CHANGELOG`/`FIXES` shape needs a test fixture.
 - **For the apply phase.** `A16` = the four audit-infrastructure bugs (PF2 heartbeat delta-tracking, PF3 `op-spine-active` stub-handler, PF4 `/done` section-status sweep, PF5 deny-matcher overreach). **Ordering tension (flag, don't resolve):** PF2 pollutes the audit trail and audit-06 will suffer the same false positives — but the all-six-before-apply hard rule forbids fixing it between audits. Audit-06 lives with the git-diff workaround (as 02–05 did); PF2 is an early-apply candidate the moment the phase closes.
 - **For A1 (token-cost reframe).** If the claim-#1 framing check finds `CLAUDE.md` L34 / `EXPLAINER` carry the contradicted "saves tokens" wording and A1's surface list omits them, **extend A1** (don't open a new entry) — A1 is the canonical reframe home.
+  - **→ Session 1 confirmed:** the contradicted wording is live at `CLAUDE.md:42` ("prove the win" + LC1-framed-as-pending) + `:44` ("cheaper is the answer"); A1's list (README + landing) omits it. README:92 + EXPLAINER are already safe-framed (A1's README/landing targets are partly stale). **A1 extended** this session.
+- **Session 1 outcomes for audit-06 (added to the carried-forward list above).** (d) **Model-version staleness** — `docs/MODELS.md` + `chapters/foundations/04a-model-tiers.md` both list **Opus 4.7** as current while the running model is **4.8** (date-rot, freshness sweep). (e) **`docs/evaluation/` location** — `REPORT-2026-05-28.md` + `STRESS-TEST.md` are point-in-time audits living outside `docs/archive/` (REPORT live-referenced by open A1–A12 → defensible until they close; `STRESS-TEST.md` lacks a date suffix) — archive-freshness candidate. (f) A **"CHANGELOG `Fixed` claims match disk"** check would have caught the 04a "replaced with pointers" overclaim — concrete addition to the `/discipline verify` self-lint idea (a)/A12.
+- **Session 1 outcome for the apply phase.** `A16` now carries **five** items, not four: PF2/PF3/PF4/PF5 **+ the rule-12/04a finding** (model-ID duplication vs rule-12 wording + CHANGELOG overclaim). PF2 remains the early-apply candidate the moment the phase closes.
 
 ## Pre-flagged findings (captured before Session 1 runs)
 
@@ -116,7 +119,7 @@ Per-rule check + known consolidation. ✎ = audit-05 owns fresh; ↻ = consolida
 
 ## Session 1 — Self-discipline sweep
 
-**Status**: `pending`
+**Status**: `done` (2026-05-29)
 
 **Goal**: Produce a triaged Findings artifact that — for the 12 anti-drift rules (scorecard, pass/fail/partial + `file:line`), the 8 anti-pattern chapters (does-the-spine-commit-it verdict), and PF1–PF5 (confirmed extent + fix locus) — records where "discipline taught" diverges from "discipline lived," **consolidating** audits 01–04's rule-relevant findings rather than re-discovering them. Plus the claim-#1 framing check and a magic-number triage. No code/chapter/global edits — findings are text; fixes are apply-time.
 
@@ -158,7 +161,68 @@ Per-rule check + known consolidation. ✎ = audit-05 owns fresh; ↻ = consolida
 
 ## Findings
 
-_(populated when Session 1 runs — PF1–PF5 confirmations + the 12-rule scorecard + the 18a–18h dogfooding table. Per the spine's token-discipline, verdicts record `file:line` evidence pointers, not recopied rule text.)_
+**Session 1 done 2026-05-29 — session-start commit `de9234d`.** Every verdict confirmed against disk before recording (PF1 methodology); ↻ rows cite the prior audit, ✎ rows show fresh evidence. **Headline: the spine lives most of its own discipline, but two fresh "taught ≠ lived" instances surfaced that the prior audits missed — and both reduce to the anti-pattern `18h` teaches, "letting CLAUDE.md drift":**
+
+1. **Rule 12 breached + CHANGELOG overclaim (fresh → A16).** `chapters/foundations/04a-model-tiers.md:9–11` duplicates date-bound model IDs (`claude-opus-4-7` / `claude-sonnet-4-6` / `claude-haiku-4-5-20251001`); rule 12 says "in `docs/MODELS.md` **only** … never duplicate names." It is a *sanctioned* mirror (`04a:13` + `MODELS.md:97–99` design it as a "registry-wins convenience read"), so the rule's **absolute wording contradicts the spine's own design**. Compounding: `CHANGELOG.md:106` ([0.11.0] Fixed) claims 04a's IDs were "replaced with pointers" — false; the table was kept and a pointer added. And both `04a` + `MODELS.md` list **Opus 4.7** as current while this very session runs on **Opus 4.8** — the exact date-rot rule 12 exists to prevent, already materialised in the duplicated copy.
+2. **Claim-#1 framing contradiction, now confirmed *inside* `CLAUDE.md` (→ extend A1).** `CLAUDE.md:42` ("`benchmarks/tokens/` exists to **prove the win** … an actual baseline run is the LC1 launch task in FIXES") + `:44` ("does this change make context **cheaper** …? Cheaper is the answer") carry the "spine saves tokens" framing audit-02 LC1 refutes (+75.9% input tokens; +28.6% cost/call) **and** are stale (LC1 *executed* in audit-02 — it is not a pending launch task). `FIXES.md` A1's reframe-surface list names only README + landing — it **omits `CLAUDE.md:42/44`**, the most load-bearing surface. (README:92 is already in the safe "starts lean / on-demand" framing; EXPLAINER carries no token-savings claim — so A1's README/landing targets are themselves partly stale.)
+
+PF1–PF5: **PF2 / PF3 / PF5 confirmed → `A16`; PF4 downgraded** (its cited instance self-resolved between `/prep` and now); **PF1 confirmed wired** (two deferred-by-design refinements remain).
+
+### PF1–PF5 confirmations
+
+| PF | Verdict | Evidence (`file:line`) | Fix locus |
+|---|---|---|---|
+| **PF1** (info) | **Confirmed wired** | `op-approach/SKILL.md` + `chapters/workflow/05k-work-shapes.md` exist; `op-prepare/SKILL.md:21` (When-NOT-to-fire) + `:42` (Siblings) cross-ref op-approach; INDEX Workflow annotation + 05k row present. (a) op-prepare↔op-approach overlap is **benign** — explicit "ALWAYS fires before op-prepare" boundary (audit-04 Table B); op-approach adds **no 3rd** planning collision (the blocking one is op-workflow↔op-prepare = A15.1, untouched). (b) `procedure.md` has **no** "call op-approach first" step; (c) `18g` has **no** work-shape-blindness sibling. | None — feature wired. (b)+(c) were Section-0-deferred → apply-candidate refinements, not gaps. |
+| **PF2** (drift) | **Confirmed** | `spine-writeback.sh:247` `CHANGED=$(… git status --porcelain …)` reads the **whole dirty tree**, not a per-turn delta. Live: this file's Session log 15:28/15:33 list `FIXES.md`/`PROJECT_PLAN.md`/`benchmarks/` not touched by audit-05; self-referential 15:33 mis-file. 2nd bug: cue-capture (`:326–346`) re-matches the hook's *own* prior `## Pending` notes (`DEFAULT_CUES` `:307`). | `spine-writeback.sh` — diff against a session-start tree snapshot keyed by `$SESSION_ID` (already available `:32`/`:366`); make cue-capture skip the Pending block's own lines. → A16. |
+| **PF3** (design gap) | **Confirmed** | `op-spine-active/SKILL.md` Step 2 handles 3 cases (missing field / missing file / `done`); **no** "status=`pending` + sketch-marker" case → on a stubbed section it announces from the sketch and builds. This cold-start is a live non-trigger (section now detailed → correctly proceeded). | `op-spine-active/SKILL.md` Step 2 — add a 4th bullet (pending + `to be detailed`/`Sketch:` → "run `/prep`; stop"). → A16. |
+| **PF4** (drift→polish) | **Downgraded — instance resolved** | Cited evidence `section-0-approach-feature.md:53` now reads `**Status**: \`done\`` (was `in-progress`; corrected per `PROJECT_PLAN` meta-prep + CHANGELOG). All section files' per-session statuses are correct (audit-01/03/04 = `done`). Residual: `done.md` Step 2.1 wording assumes an `in-progress` start (audit lifecycle is `pending`→`done`); the section-file-vs-PROGRESS status split is implicit. | `done.md` Step 2 — minor wording tweak. → A16 (low priority). |
+| **PF5** (drift/overreach) | **Confirmed** | `settings.json:113` `Read(**/*token*)` over-matches `docs/plans/audit-02-token-cost.md` (substring `token`); inconsistent with the sibling `Read(**/*_secret*)` (underscore-anchored). | `settings.json` — narrow to `Read(**/*_token*)` (the `-token-` hyphen won't match). Bonus: deny-list lacks `Read(**/.env.*)` (only `./.env.*` + `**/.env`) — low stakes; the `git add` hook is the primary env defense. → A16. |
+
+### Scorecard — the 12 anti-drift rules (`CLAUDE.md` § Anti-drift)
+
+✎ = audit-05 fresh · ↻ = consolidated from a prior audit (cited, not re-opened).
+
+| # | Rule | Verdict | Evidence | Src |
+|---|---|---|---|---|
+| 1 | FIXES = action queue | **PARTIAL** | Mostly queue-shaped, but `FIXES.md:40` A1 "LC1 EXECUTED…" is a ~15-line results/methodology/path-notes essay inside the action item = narrative creep (the detail already lives in audit-02 Findings F0–F5). Compress to action + pointer. | ✎ |
+| 2 | CHANGELOG = Keep-a-Changelog | **PASS** (mild verbosity) | `[Unreleased]`/`[0.11.0]`/`[0.10.0]` all Added/Changed/Fixed/Removed bullets, newest-first; no per-pillar essays. One accuracy ding: `:106` 04a "replaced with pointers" overclaim (→ rule 12). | ✎ |
+| 3 | RECONSTRUCTION frozen | **PASS** | `git log -- RECONSTRUCTION.md`: no content appends in the audit phase; latest edits = the pre-launch trim (housekeeping, acknowledged at `:3`). L11 "~80/<150" staleness = audit-01 F7 (polish). | ↻ F7 |
+| 4 | INDEX router; sections name skill | **FAIL (coverage)** | 84 chapter files on disk, **83** cited in INDEX; `signaling/11g-push-back-phrasing.md` row missing (grep: 0 mentions). Section skill-annotations all present ✓. | ↻ F4→A13 |
+| 5 | point-in-time audits → `docs/archive/` | **PASS (flag)** | `docs/archive/` all date-stamped; root + `docs/` clear. Flags: `docs/evaluation/{REPORT-2026-05-28.md, STRESS-TEST.md}` live *outside* archive (REPORT is live-referenced by open A1–A12 → defensible; STRESS-TEST.md lacks a date suffix); `docs/plans/audit-0*` live until the phase closes. → audit-06. | ✎ |
+| 6 | routers stay router-shaped | **PASS (bodies) / PARTIAL (descriptions)** | All 23 bodies router-shaped (audit-01). **Framing answer: rule 6 *should* extend to `description:`** — the every-session classifier surface — and there it is breached: `op-curate` desc recites apply/reject procedure (audit-04 F7); `op-approach:75–80` + `op-prepare:48–54` carry redundant TL;DRs (audit-01 F2/F3). | ↻ F7+F2/F3 |
+| 7 | chapters atomic | **PASS** | audit-01: max 155 lines (`12b`), top-8 one-concept-confirmed. Fresh: 18a–18h all tight single-concept (33–75 lines). | ✎+↻ |
+| 8 | templates stack-agnostic | **PASS** | `templates/*.md` agnostic; only worked example = `examples/web-saas-next-supabase/` (one-web-example = A4 incompleteness, not a rule-8 violation). | ↻ A4 |
+| 9 | no ad-hoc top-level MD | **PASS** | root = the 8 sanctioned docs; the audit phase added none (used `docs/plans/`). | ✎ |
+| 10 | no hardcoded magic numbers | **PARTIAL** | A2.5 confirmed persists — 3 `Prep*` surfaced-but-hardcoded (`procedure.md:53/102/115/159/201` + `prep.md:26`). The other 7 `## Spine defaults` thresholds genuinely wired (`spine-writeback.sh:78–79` + 5 bucket skills read `## Spine defaults`). No new unsurfaced violation (7 product-shape Qs / 15-section merge / 2–5 sessions = intrinsic heuristics). | ↻ A2.5 |
+| 11 | sweep count claims | **PARTIAL** | 23/84/10 consistent across primary surfaces + the `/explain` 9→10 ripple **complete** ✓. Two fresh "~80" residuals the sweeps missed: `CLAUDE.md:83` (architecture-diagram L2 box, live → should be 84) + `EXPLAINER.md:75` ("Around 80 short lessons", lay-doc, borderline). Same class as audit-01 F5/F6/F7. → CLAUDE.md:83 to A13. | ✎+↻ |
+| 12 | model IDs in `docs/MODELS.md` only | **PARTIAL (rule≠practice)** | Literal IDs only in `04a-model-tiers.md:9–11` — a *sanctioned* mirror (`04a:13` + `MODELS.md:97–99`), so rule 12's "only / never duplicate" wording contradicts the spine's own design. + CHANGELOG `:106` overclaim + live 4.7-vs-4.8 rot (Headline #1). | ✎ |
+
+### Dogfooding — does the spine commit the anti-patterns 18a–18h teach?
+
+| Ch | Anti-pattern taught | Commits? | Evidence |
+|---|---|---|---|
+| 18a | prompting (vagueness, bundling, padding) | **No** | Targets user→Claude prompting, not spine source artifacts. |
+| 18b | scope (one cohesive goal / session) | **No (exemplary)** | The audit phase *is* the discipline — one dimension per session; "Out of scope" names siblings by ID. |
+| 18c | context (load the slice, don't dump) | **No** | Audit sessions use orient lists; `op-spine-active` loads only the session's files; the hook's `cat` is the stdin-pipeline edge. |
+| 18d | tools (Write for small edits, subagents for trivial) | **No** | Audit writes use `Edit`; no subagent misuse. |
+| 18e | verification (claim done without seeing it) | **No (exemplary)** | PF1 "grep-verify before recording" = 18e applied to audit claims; read-only compliance checked via `git diff`. |
+| 18f | security (secrets, RLS, eval) | **No** | Docs repo, no secrets in source. Settings deny-list precision (PF5 over-match; the `**/.env.*` nested-read gap) is adjacent config-overreach, not a committed 18f anti-pattern; primary env defense = the unconditional `git add` hook. |
+| 18g | workflow (skip stages, defer docs, one big PR) | **Mild** | One instance = the A1 FIXES-narrative creep (= rule 1; cite, don't double-count). Gap: 18g lacks a work-shape-blindness sibling entry (PF1c). |
+| 18h | long-term (**letting CLAUDE.md drift**, kitchen-sink memory, casual deps) | **YES — committed** | "Letting CLAUDE.md drift" is live: `CLAUDE.md:42` (LC1 framed as a pending launch task — executed in audit-02) + `:44` ("cheaper is the answer" — LC1-contradicted) + `:83` ("~80 files" — now 84). The soul file carries the drift it warns against. (= claim-#1 + rule-11/12 findings; cite, don't double-count.) |
+
+### Claim-#1 framing · magic-number triage · FIXES/CHANGELOG shape
+
+- **Claim-#1 (build step 4a) — see Headline #2.** The contradicted "saves tokens / cheaper / prove the win" wording's clearest *live* surface is `CLAUDE.md:42` + `:44` (the "L34" in the Done criterion is approximate — the contradicted lines are 42/44), which A1's reframe list omits. README:92 + EXPLAINER are already in the safe framing → A1's README/landing targets are partly stale. → **extend A1**, don't open a new entry.
+- **Magic-number grep (build step 4b).** Confirmed only the A2.5 `Prep*` reverse-violation (cited). Profile `## Spine defaults` surfaces 10 thresholds; 7 wired, 3 (`Prep*`) hardcoded. No unsurfaced override-worthy threshold found.
+- **FIXES rule-1 shape (build step 5).** Queue-shaped except the A1 "LC1 EXECUTED" block (`:40`) — narrative creep (rule-1 row).
+- **CHANGELOG rule-2 shape.** Conformant Keep-a-Changelog; one accuracy ding (04a overclaim `:106`). No per-pillar essays.
+
+### Escalations (this session)
+
+- **Open `FIXES.md` A16** — audit-infrastructure + self-discipline bugs: **PF2** (heartbeat whole-tree + cue self-capture), **PF3** (op-spine-active stub handler), **PF5** (`Read(**/*token*)` over-match), **PF4** (done.md status wording — low-pri), **+ rule-12 / 04a** (model-ID duplication vs the rule's wording + CHANGELOG "replaced with pointers" overclaim).
+- **Extend `FIXES.md` A1** — add `CLAUDE.md:42/44` to the reframe-surface list; flag A1's own "LC1 EXECUTED" block as rule-1-over-long (compress when reframing); re-scope the README target (L92 already safe-framed).
+- **Cite, do not re-open:** A13 (rule 4 INDEX 11g) — **add** `CLAUDE.md:83` "~80" as a same-class one-line residual; A15 + audit-01 F2/F3 (rule 6 + the description-framing answer); A2.5 (rule 10 `Prep*`).
+- **For audit-06:** model-version staleness (`MODELS.md` + `04a` list Opus 4.7; running model is 4.8) → docs-freshness; `docs/evaluation/` location + `STRESS-TEST.md` naming → archive-freshness; a `/discipline verify` self-lint would auto-catch the rule-11/12 residuals (reaffirms the carried-forward A12 / `/trigger verify` pattern); a "CHANGELOG 'Fixed' claims match disk" check would catch the 04a overclaim.
 
 ## Session log
 
@@ -167,11 +231,8 @@ _(per-turn heartbeats appended automatically by `spine-writeback.sh` Stop hook �
 - session 1 @ 2026-05-29 15:28 — touched: FIXES.md docs/PROJECT_PLAN.md benchmarks/sessions/
 - session 1 @ 2026-05-29 15:33 — touched: benchmarks/sessions/
 - `/prep` pass (2026-05-29): stub (PF1–PF5 pre-flagged + a 6-step sketch) elaborated into a fully-detailed Session 1 entry. Scope = the 12 anti-drift rules (scorecard) + 18a–18h dogfooding + PF1–PF5 confirmation + magic-number grep + claim-#1 framing check. **Consolidation mandate** set: cite audits 01–04's rule-relevant findings (A13 rule 4; A15/audit-01 rule 6; A2.5 rule 10; audit-04/audit-01 rule 11), do not re-discover. Read-only widened to include `global/` (PF2–PF5 target it). `A16` reserved for the four audit-infra bugs; the claim-#1 finding extends A1. Cross-section notes carried forward from all four prior audits (PF1 methodology + A1 reframe load-bearing). Single-session shape with documented split. Writes confined to this file (+ a PROGRESS pointer refresh). Pre-flight rule 1 satisfied for audit-05.
+- **Session 1 done 2026-05-29 (session-start `de9234d`).** 12-rule scorecard (3 PASS / 6 PARTIAL / 1 FAIL = rule-4 INDEX 11g / 2 PASS-with-flag); 18a–18h dogfooded (7 clean-or-exemplary, **18h committed = CLAUDE.md drift**, 18g mild = rule-1, deduped); PF1–PF5 resolved (PF2/PF3/PF5 → A16, PF4 downgraded — cited instance self-resolved, PF1 confirmed wired). **Two fresh "taught ≠ lived" findings:** (1) rule-12 / 04a — model-ID duplication vs the rule's "only/never duplicate" wording + `CHANGELOG:106` "replaced with pointers" overclaim + live Opus-4.7-vs-4.8 rot → A16.5; (2) claim-#1 contradicted *in* `CLAUDE.md:42/44`, omitted from A1's reframe-surface list → **A1 extended**. Consolidations cited, not re-opened: A13 rule-4 (+ added `CLAUDE.md:83` "~80" residual), A15 + audit-01 F2/F3 rule-6 (incl. the answer: rule 6 extends to `description:`), A2.5 rule-10. Read-only verified via `git diff de9234d` — audit mutations confined to this file + `FIXES.md` (PROGRESS = prior `/prep` edit; `benchmarks/sessions/` untracked, not the audit's — live PF2 evidence). Pointer advance → `audit-06-tests-docs` deferred to `/done`.
 
-## Pending cross-session notes
+## Pending cross-session notes (reviewed + cleared at /done 2026-05-29)
 
-_Auto-captured by `spine-writeback.sh` from cue phrases in assistant turns. `/done` reviews this list and either promotes entries to **Cross-section notes** above or discards them. Hook is append-only; never edits this block once written._
-
-- (turn @ 2026-05-29 15:28) No `## Pending cross-session notes` block (Stop hook captured none). Cross-section notes for audit-05/06 + A1 written.
-- (turn @ 2026-05-29 15:33) (turn @ 15:28) No `## Pending cross-session notes` block (Stop hook captured none)...           ← self-referential junk
-- (turn @ 2026-05-29 15:45) **Live PF2 evidence.** While running this `/prep`, the Stop hook mis-filed a heartbeat under "Pending cross-session notes" and captured its *own* prior note (self-referential). I folded both into PF2's extent — good dogfooding, but it means this session's own trail is noisy.
+_All 4 auto-captured entries were dismissed as noise already folded into PF2 / A16.1 (two self-referential "no block captured" notes, the PF2-evidence note, a misfiled 16:09 heartbeat). Left as a one-line tombstone rather than fully deleted because the hook misfiling heartbeats + self-capturing into THIS block IS the live PF2 evidence the PF table records._
