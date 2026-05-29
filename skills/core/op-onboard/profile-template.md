@@ -62,6 +62,7 @@ For essentials-only runs (deep deferred), keep the deep section headings but wri
 
 ## Output format
 
+- **Explanation style:** {{always write "Standard (default)" — not asked in onboarding; preserve any existing value on re-run. Set anytime with /explain simple|standard|detailed.}}
 - **Code presentation:** {{E1, or "Diffs and snippets (default)"}}
 - **Comments / emojis:** {{E2, or "Minimal comments, no emojis (default)"}}
 

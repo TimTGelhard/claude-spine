@@ -34,7 +34,7 @@ Then **restart Claude Code**, open any session, and type **`/onboard`** — a 10
 
 After that you can:
 
-- Type **`/spine`** to see everything that's loaded (23 universal `op-*` skills + 1 `op-stack-flavor` skill when installed with `--stack=<name>`, 9 slash commands, 84 chapters).
+- Type **`/spine`** to see everything that's loaded (23 universal `op-*` skills + 1 `op-stack-flavor` skill when installed with `--stack=<name>`, 10 slash commands, 84 chapters).
 - **`cd` into a project** and type **`/prep`** to plan a feature.
 - **Just start chatting** — the right skill loads on demand.
 
@@ -61,11 +61,12 @@ macOS or Linux (Windows works inside WSL). `bash`, `jq` (for the env-leak hook),
 
 ## Slash commands
 
-Nine commands ship in `global/commands/`:
+Ten commands ship in `global/commands/`:
 
 | Command | What it does |
 |---|---|
 | `/onboard` | Ten-question essentials interview (≈3 min). Writes `~/.claude/claude-spine-profile.md`. `--deep` for the full ~28-question pass (+2 conditional follow-ups for UI apps). |
+| `/explain` | Set how plainly Claude explains its work — `/explain simple\|standard\|detailed`. Writes the Explanation style field in your profile and applies it immediately. Like `/effort`, but for output clarity. |
 | `/prep` | Planning pass for a new project or major new section. Step 0 auto-runs `init.sh` if `docs/` doesn't exist; then brief → architecture → first section plan. No code this session. |
 | `/done` | Close the active build session. Walks verify list, rolls up Stop-hook heartbeats, updates plan + `PROGRESS.md`, stages doc changes, suggests a commit message. The writeback command. |
 | `/suggest` | Capture a high-signal moment to `bucket/SUGGESTIONS.md`. Locked four-condition trigger. |
@@ -75,7 +76,7 @@ Nine commands ship in `global/commands/`:
 | `/spine` | One-shot discovery — prints the active op-* skills, slash commands, profile path, and INDEX locations. Read-only. |
 | `/hooks` | One-shot listing of every configured hook (event, matcher, script). Reads `~/.claude/settings.json` + any project-level `.claude/settings.json`. Read-only. |
 
-The plan-driven flow is `/prep` → (open Claude; `op-spine-active` auto-loads scope) → build → `/done` ([chapters/workflow/05h–05j](chapters/workflow/05h-multi-session-planning.md)); a Stop hook (`spine-writeback.sh`) logs per-turn heartbeats in between. For safety-critical sessions wanting a code-gate, use Claude Code's built-in plan mode (Shift+Tab Tab). `/onboard`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket` carry personalization ([chapters/personalization/19a–19e](chapters/personalization/19a-overview.md)).
+The plan-driven flow is `/prep` → (open Claude; `op-spine-active` auto-loads scope) → build → `/done` ([chapters/workflow/05h–05j](chapters/workflow/05h-multi-session-planning.md)); a Stop hook (`spine-writeback.sh`) logs per-turn heartbeats in between. For safety-critical sessions wanting a code-gate, use Claude Code's built-in plan mode (Shift+Tab Tab). `/onboard`, `/explain`, `/suggest`, `/curate`, `/add-skill`, `/refresh-bucket` carry personalization ([chapters/personalization/19a–19e](chapters/personalization/19a-overview.md)).
 
 ---
 

@@ -469,10 +469,10 @@ echo "==> claude-spine is installed."
 echo
 if [ -n "$STACK" ] && [ "$SKIP_SKILLS" -eq 0 ]; then
   echo "  What just happened: 22 universal op-* skills + 1 stack-flavor skill"
-  echo "  ($STACK), 9 slash commands, a thin stack-flavored global CLAUDE.md,"
+  echo "  ($STACK), 10 slash commands, a thin stack-flavored global CLAUDE.md,"
   echo "  settings, and safety hooks were linked into ~/.claude/."
 else
-  echo "  What just happened: 23 skills, 9 slash commands, a thin global"
+  echo "  What just happened: 23 skills, 10 slash commands, a thin global"
   echo "  CLAUDE.md, settings, and safety hooks were linked into ~/.claude/."
 fi
 echo "  Claude Code will pick them up on its next launch."

@@ -211,10 +211,10 @@ The spine teaches discipline. **It must follow its own.** Specifically:
 
 ---
 
-## Current state (2026-05-28)
+## Current state (2026-05-29)
 
 - v2 architecture shipped, all 6 pre-launch pillars + bias-audit rounds 1–7 + doc cleanup + post-launch trim landed.
-- Counts: **23 op-* skills, 9 slash commands, 6 hooks (4 default-on, 2 opt-in), 84 chapters, 10 essentials + 18 deep + up to 2 conditional + 2 hook prompts.**
+- Counts: **23 op-* skills, 10 slash commands, 6 hooks (4 default-on, 2 opt-in), 84 chapters, 10 essentials + 18 deep + up to 2 conditional + 2 hook prompts.**
 - Open queue is `FIXES.md` — currently LC1–LC6 (manual launch tasks) + BA3 (per-platform DEPLOY variants, pull-driven) + Pass-4 remaining (C-block, B10, P4).
 - Past 0.10.0; 0.11.0 cut; `[Unreleased]` carries the post-launch RECONSTRUCTION trim entry.
 

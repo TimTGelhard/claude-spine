@@ -28,7 +28,7 @@ Output exactly once, verbatim, at the very top of your first turn — before any
 
 > **Welcome to claude-spine.** This is your first session on this machine.
 >
-> claude-spine is an operating-discipline layer for Claude Code — 23 skills, 9 slash commands, and a chapter library that loads on demand. Everything is already linked into `~/.claude/`, ready to use.
+> claude-spine is an operating-discipline layer for Claude Code — 23 skills, 10 slash commands, and a chapter library that loads on demand. Everything is already linked into `~/.claude/`, ready to use.
 >
 > **One thing first:** run `/onboard` — a ~3-minute, 10-question interview. It calibrates me to your Claude subscription, your stack, your OS / VCS host / artifact shape, and how you like to work. Without it, every session falls back to generic defaults.
 >
