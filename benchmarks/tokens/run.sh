@@ -75,6 +75,40 @@ if ! command -v claude >/dev/null 2>&1; then
   echo "ERROR: 'claude' CLI not found in PATH. Install Claude Code first." >&2
   exit 1
 fi
+
+# Pin the claude binary at start and re-check it before every call. LC1 (2026-05-28)
+# was wiped when a mid-run auto-upgrade (2.1.153 -> 2.1.154) replaced the binary: the
+# spine-off batch ran 30/57 calls, then the remaining 27 off + all 57 on calls hit
+# exit 127 ('No such file or directory'). A silent mid-run swap also makes the off and
+# on batches run against *different* binaries — invalid even if no call errors. Abort
+# loudly instead. (The EXIT trap below still restores the spine on abort.)
+CLAUDE_BIN="$(command -v claude)"
+CLAUDE_REAL="$CLAUDE_BIN"
+if command -v readlink >/dev/null 2>&1; then
+  resolved="$(readlink -f "$CLAUDE_BIN" 2>/dev/null || true)"
+  [[ -n "$resolved" ]] && CLAUDE_REAL="$resolved"
+fi
+stat_mtime() { stat -c %Y "$1" 2>/dev/null || stat -f %m "$1" 2>/dev/null || echo 0; }
+CLAUDE_VERSION_START="$(claude --version 2>/dev/null || echo unknown)"
+CLAUDE_MTIME_START="$(stat_mtime "$CLAUDE_REAL")"
+echo "Preflight: claude '$CLAUDE_VERSION_START' at $CLAUDE_REAL (mtime $CLAUDE_MTIME_START)"
+
+assert_claude_unchanged() {
+  if [[ ! -x "$CLAUDE_REAL" && ! -x "$CLAUDE_BIN" ]]; then
+    echo "ERROR: claude binary vanished mid-run ($CLAUDE_REAL) — likely an auto-upgrade. Aborting." >&2
+    exit 3
+  fi
+  local now_mtime; now_mtime="$(stat_mtime "$CLAUDE_REAL")"
+  if [[ "$now_mtime" != "$CLAUDE_MTIME_START" ]]; then
+    local now_ver; now_ver="$(claude --version 2>/dev/null || echo unknown)"
+    echo "ERROR: claude binary changed mid-run." >&2
+    echo "       mtime  $CLAUDE_MTIME_START -> $now_mtime" >&2
+    echo "       version '$CLAUDE_VERSION_START' -> '$now_ver'" >&2
+    echo "       A mid-run upgrade invalidates the benchmark (off vs on would run against" >&2
+    echo "       different binaries). Re-run from a clean state. Aborting." >&2
+    exit 3
+  fi
+}
 if ! command -v jq >/dev/null 2>&1; then
   echo "ERROR: jq is required to inspect claude -p output." >&2
   exit 1
@@ -177,6 +211,8 @@ run_one() {
       >> "$SUMMARY"
     return 0
   fi
+
+  assert_claude_unchanged
 
   local rc=0
   if [[ -n "$TIMEOUT_CMD" ]]; then
