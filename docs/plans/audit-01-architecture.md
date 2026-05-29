@@ -10,13 +10,13 @@ Audit the project's structural integrity against its own 5-layer architecture (s
 
 ## Done criteria
 
-- [ ] Every `skills/core/op-*/SKILL.md` reviewed for router shape (content type, not just length).
-- [ ] Every `chapters/<topic>/*.md` file > 200 lines spot-checked for multi-concept content.
-- [ ] `INDEX.md` cross-checked against actual `chapters/` folders in both directions.
-- [ ] Count claims swept across CLAUDE.md, README.md, EXPLAINER.md, install.sh, INSTALL.md, landing/index.html, op-welcome/SKILL.md, op-onboard/SKILL.md, 19b-profile-and-onboarding.md.
-- [ ] All findings logged in the "Findings" table below with severity.
-- [ ] Blocking findings appended to `FIXES.md` under a new `A13+` cluster.
-- [ ] PROGRESS.md advanced to audit-02 at `/done`.
+- [x] Every `skills/core/op-*/SKILL.md` reviewed for router shape (content type, not just length). _All 23 opened individually; verify-list "22" was stale wording._
+- [x] Every `chapters/<topic>/*.md` file > 200 lines spot-checked for multi-concept content. _Zero files >200 lines (max 155); top-8 sampled for thoroughness._
+- [x] `INDEX.md` cross-checked against actual `chapters/` folders in both directions. _F4 logged (1 missing row)._
+- [x] Count claims swept across CLAUDE.md, README.md, EXPLAINER.md, install.sh, INSTALL.md, landing/index.html, op-welcome/SKILL.md, op-onboard/SKILL.md, 19b-profile-and-onboarding.md. _F5/F6/F7 logged._
+- [x] All findings logged in the "Findings" table below with severity.
+- [x] Blocking findings appended to `FIXES.md` under a new `A13+` cluster. _Zero blocking; the 4 drift items consolidated into a single A13 paragraph linking back here, per `docs/PROJECT_PLAN.md` L66 (apply order = FIXES severity)._
+- [x] PROGRESS.md advanced to audit-02 at `/done`.
 
 ## Out of scope (do not drift here)
 
@@ -48,7 +48,8 @@ Read in this order at session start. Stop after this list — do not pull additi
 
 Discoveries that affect later sections.
 
-_(populated as findings emerge during Session 1)_
+- **PF1 partially overstated.** PF1 declared the Section-0 count-claim sweep "complete and consistent." Session 1 found two residuals in README.md (L14 chapter-folder enumeration + L135–143 folder tree both omit `personalization/`) plus a stale `~80 atomic files (<150 lines each)` claim in RECONSTRUCTION.md L11 that contradicts L41–L42 of the same file. The sweep covered five files; README's folder-list surfaces and RECONSTRUCTION's "What v2 was" preamble were not part of the sweep. Captured as F5, F6, F7. Audit-05 (self-discipline) should treat the RECONSTRUCTION L11 inconsistency as a candidate for its rule-violation sweep.
+- **For audit-06 (tests + docs).** F8 (chapter 14b cites a non-existent op-onboard section heading) is a stale cross-reference. Audit-06's cross-reference sweep should look for similar broken anchor citations across chapters, not just bare file paths.
 
 ## Section-level open questions
 
@@ -58,7 +59,7 @@ _(populated as findings emerge during Session 1)_
 
 ## Session 1 — Architectural integrity sweep
 
-**Status**: `pending`
+**Status**: `done` (2026-05-28)
 
 **Goal**: Produce a triaged findings table naming every router-shape violation, multi-concept chapter, INDEX divergence, and count-claim drift. No code or content edits.
 
@@ -151,7 +152,32 @@ Additional files opened during the procedure (steps 1–7 below) are read on-dem
 
 ## Findings
 
-_(populated when Session 1 runs — table format: `| F# | Severity | File / Loc | Finding | Recommendation |`. Severities: `blocking` / `drift` / `polish`.)_
+Session 1 inventory (2026-05-28, session-start commit `f08b258`): **23 op-* SKILL.md files** (range 32–108 lines), **84 chapters** (range 33–155 lines, max `chapters/persistence/12b-claudemd.md`), **10 chapter folders**, **9 slash commands**, **6 hooks** (4 default-on per `global/settings.json` + 2 opt-in scripts on disk). All counts match the post-Section-0 baseline declared in `CLAUDE.md` L217.
+
+No chapter exceeds the 200-line spot-check threshold; Step 3's audit set is empty by spec. At max effort, the top 8 chapters (12b/155, 06/134, 10-visuals/131, 17b/124, 05k/123, 19f/122, 11-overview/121, 05j/119) were each spot-checked and confirmed one-concept-shaped per the RECONSTRUCTION L34–L40 decomposition rule.
+
+| F# | Severity | File / Loc | Finding | Recommendation |
+|---|---|---|---|---|
+| F1 | polish | `skills/core/op-onboard/SKILL.md` L31–50 + L52–85 | Two literal ~25-line preview text blocks embedded inline in the "How to run the interview" Step 1. The preview text is emit-payload (operational data), not routing logic. The skill already uses the adjacent-file pattern for every other payload (`questions-essential.md`, `questions-deep.md`, `profile-template.md`, `subscription-tune.md`, `hook-tune.md`, `extras-merge.md`, `handoff.md`); the previews are the lone inline exception and account for ~50 of the 108 lines that put this skill 43 over the 65-line guidance from RECONSTRUCTION L41. | Extract to `skills/core/op-onboard/preview.md` with two named blocks (`essentials-first-run`, `deep-first-run`); SKILL.md Step 1 reads the file and emits the matching block. Drops SKILL.md to ~60 lines. |
+| F2 | polish | `skills/core/op-approach/SKILL.md` L75–80 | Redundant TL;DR section. Restates the frontmatter description + the "Output shape" + the "Sibling skills" lines that already appear above. Pure additive content in a router. | Drop the TL;DR. |
+| F3 | polish | `skills/core/op-prepare/SKILL.md` L48–54 | Same pattern — redundant TL;DR restates "What to read first" + handoff behaviors already named above. | Drop the TL;DR. |
+| F4 | drift | `INDEX.md` (signaling section, L82–89) | `chapters/signaling/11g-push-back-phrasing.md` (98 lines, written 2026-05-28 in bias-audit round 6) exists on disk and is cited by `skills/core/op-signaling/SKILL.md` L22 + `skills/core/op-onboard/handoff.md` + `skills/core/op-spine-active/SKILL.md` L79 — but has no INDEX row. Bidirectional diff: 83 chapter entries in INDEX vs 84 files on disk; exactly this one is missing. | Append row under the Signaling section: `\| Push-back phrasing per Q4 — threshold + tone table, per-category examples \| chapters/signaling/11g-push-back-phrasing.md \| 11 \| written \|`. |
+| F5 | drift | `README.md` L14 | Chapter folder enumeration reads "foundations, workflow, prompting, signaling, persistence, tools, subagents, recovery, anti-patterns" — **9 folders, missing `personalization`**. Same drift as A8 (which fixed the equivalent in `landing/index.html` L105). Section-0's 5-file count-claim sweep included README.md but did not touch the topic-list surface. | Append `, personalization` to the comma list. |
+| F6 | drift | `README.md` L135–143 | Folder tree under `chapters/` shows 9 subfolders, missing `personalization/`. Tree marker `└──` is on `anti-patterns/`. Same root drift as F5, different surface. | Insert `│   ├── personalization/        # how the spine becomes personal per-user` and demote `anti-patterns/` from `└──` to `├──`; make `personalization/` the new `└──`. |
+| F7 | polish | `RECONSTRUCTION.md` L11 | "v2 breaks them into ~80 atomic files (<150 lines each)" carries two stale framings: the count (now 84) and the sizing ceiling (revised to "sized to the concept, not a number" at L41–L42 during pre-launch cleanup). Per CLAUDE.md anti-drift rule 3 RECONSTRUCTION is frozen build history, so the "~80" is defensible as a description of the v2 reconstruction snapshot — but the "<150 lines each" framing now directly contradicts L41–L42 within the same file. | Minimal-touch: append `(see L41–L42 for the revised sizing stance)` to the L11 sentence, or rephrase to `"v2 breaks them into ~80 atomic files at v2 freeze (now 84; sizing approach revised — see L41 below)"`. Frozen-history discipline says don't rewrite, so a one-clause forward-pointer is preferable. |
+| F8 | drift | `chapters/persistence/14b-hook-recipes.md` L55 | Cites `skills/core/op-onboard/SKILL.md \`## Hook tuning (deep mode only)\`` — that section heading does not exist in `op-onboard/SKILL.md`. Hook tuning is at Step 7 of the SKILL.md procedure list (line 94, `**If deep ran:** run the **Hook tuning** pass — load \`hook-tune.md\` and follow its flow`); the detailed procedure lives in the adjacent file `skills/core/op-onboard/hook-tune.md` (7137 bytes, written 2026-05-28). The chapter is referring to content that moved during the adjacent-file refactor. | Replace the citation with `skills/core/op-onboard/hook-tune.md` (the file that now holds the procedure). |
+
+**Severity totals:** 0 blocking, 4 drift (F4, F5, F6, F8), 4 polish (F1, F2, F3, F7).
+
+**Done-criteria checkbox basis:**
+
+- Router shape — every op-* SKILL.md opened individually; over-cap-five (op-onboard/108, op-spine-active/92, op-approach/80, op-suggest/71, op-bucket-router/70) given deepest scrutiny. None are content-shaped; the over-cap counts are operational-data inlines (F1) or workflow-encoder carve-outs per RECONSTRUCTION L41.
+- Chapter atomicity — zero files >200 lines (max 155); top-8 sample confirmed one-concept-shaped.
+- INDEX accuracy — bidirectional diff produced exactly F4 (1 missing row, 0 broken refs).
+- Count-claim sweep — 9 named files + RECONSTRUCTION cross-check; F5/F6/F7 are the residuals. PF1 partially overstated (see Cross-section notes).
+- Findings logged — table above.
+- Blocking findings to FIXES — zero blocking, so no `A13+` cluster created. Drift findings summarized in a single linking entry in `FIXES.md` so the apply pass can order against severity per `docs/PROJECT_PLAN.md` L66.
+- PROGRESS.md advance — deferred to `/done`.
 
 ---
 
@@ -161,5 +187,4 @@ _(per-turn heartbeats appended automatically by `spine-writeback.sh` Stop hook d
 
 ### 2026-05-28
 - Section drafted. Awaiting Session 1.
-
-- session 1 @ 2026-05-28 15:39 — touched: .gitignore CHANGELOG.md EXPLAINER.md FIXES.md INDEX.md README.md RECONSTRUCTION.md chapters/anti-patterns/18d-tools.md
+- Session 1 done. 8 findings (0 blocking, 4 drift, 4 polish); A13 cluster appended to `FIXES.md`. Writes confined to this section file + `FIXES.md`; no `chapters/`/`skills/core/`/code/templates edits this session. (Stop-hook heartbeats — 15:39 and 15:52 lines — reflected the whole-working-tree dirty list per pre-flight rule 3's caveat; actual mutations were 3 Edit calls on 2 files. The verification-method gap is captured in audit-05 PF-cluster territory.)
