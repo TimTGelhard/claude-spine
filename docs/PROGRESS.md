@@ -11,13 +11,13 @@
 ## Active section
 
 - **Section**: `audit-06-tests-docs` (from `docs/PROJECT_PLAN.md`)
-- **Plan file**: `docs/plans/audit-06-tests-docs.md` (**stub** — needs `/prep` before Session 1)
-- **Section status**: `planned` — stub; **the LAST audit.** When it's `done`, the all-six-before-apply gate lifts and the apply phase can begin.
+- **Plan file**: `docs/plans/audit-06-tests-docs.md` (**detailed** via `/prep` 2026-05-29 — Session 1 ready)
+- **Section status**: `planned` — Session 1 detailed (ready to run); **the LAST audit.** When it's `done`, the all-six-before-apply gate lifts and the apply phase can begin.
 
 ## Active session
 
-- **Session**: `1` — Tests + docs audit: test-coverage gaps, cross-reference validity, archive freshness (to be detailed via `/prep`).
-- **Status**: `pending` — **blocked on `/prep`** (the entry is a stub; per audit-05 PF3 the cold-start should halt here and ask for `/prep`)
+- **Session**: `1` — Test + docs freshness sweep + verify-command synthesis: 3 mechanical sweeps (coverage / cross-refs / archive) + the cross-audit "no self-lint" capstone. Detailed via `/prep`.
+- **Status**: `pending` — ready to run in a fresh session (detailed via `/prep`; the PF3 stub-halt no longer applies — the entry is full).
 
 ## Last session outcome
 
@@ -25,17 +25,17 @@
 
 ## Blockers
 
-- **Audit-06 needs `/prep`** — `docs/plans/audit-06-tests-docs.md` is still a stub. Per audit-05 PF3, the next cold-start should halt and ask for `/prep audit-06-tests-docs` rather than build from the sketch (`/done` offers to run it now).
-- **All-six-before-apply gate still holds.** Audit-06 is the sixth and last audit; no apply session (consuming `FIXES.md` A1 / A2.x / A13 / A15 / A16) runs until it is `done`. PF2 (heartbeat whole-tree, A16.1) is the early-apply candidate the moment the gate lifts — it pollutes every audit-trail heartbeat (live again this session: the section file's misfiled 16:09 heartbeat).
+- **None for audit-06 Session 1** — the `/prep` pass (2026-05-29) cleared the stub-halt; the entry is fully detailed and ready to run in a fresh session.
+- **All-six-before-apply gate still holds (audit-06 is the sixth).** No apply session (consuming `FIXES.md` A1 / A2.x / A13 / A15 / A16) runs until audit-06 is `done`. The moment it closes the gate lifts; PF2 (heartbeat whole-tree, A16.1) is the named early-apply candidate — it pollutes every audit-trail heartbeat (live again this session: the stray 16:22 heartbeat the `/prep` cleared from the audit-06 stub).
 
 ## Next session reading list
 
-**Audit-06-tests-docs is a stub — run `/prep audit-06-tests-docs` first.** The `/prep` pass details Session 1 + writes the authoritative orient list. Headline orient for that `/prep` (carried from the audit phase):
+**Audit-06-tests-docs is detailed (via `/prep` 2026-05-29) — Session 1 is ready to run.** The authoritative orient list is in `docs/plans/audit-06-tests-docs.md` § "Files to read for project understanding" (8 items). Headline:
 
-1. `docs/PROJECT_PLAN.md` § Constraints + § Audit-phase pre-flight protocol — the four conditions + the all-six-before-apply gate (audit-06 is the last one).
-2. The **audit-06 cross-section notes** prior audits accumulated: audit-05 § "Cross-section notes (this section's own)" (the `/discipline verify` self-lint; model-version + `docs/evaluation/` freshness; "CHANGELOG `Fixed` claims match disk"), audit-03/04 test-gap notes (no field→consumer test, the `claude -p` benchmark confound, the 5-skill eval-set gap), audit-01 broken-anchor cross-ref note.
-3. `tests/run.sh` + `tests/` sub-suites (coverage surface); `INDEX.md` + `docs/archive/` (cross-reference + archive-freshness surface).
-4. `FIXES.md` — A12 (`/profile verify`) + the audit-04/05 `/trigger verify` + `/discipline verify` proposals (audit-06 decides whether to consolidate them).
+1. `docs/PROJECT_PLAN.md` § Constraints (the all-six gate — audit-06 is the sixth) + § Audit-phase pre-flight protocol.
+2. `docs/plans/audit-06-tests-docs.md` § "Cross-section notes carried forward from audits 01–05" — the consolidated hand-off (the verify-command synthesis inputs + the cross-ref methodology).
+3. `tests/run.sh` + `ls tests/*/` + `tests/skill-triggers/README.md` (coverage); `INDEX.md` + the top-level docs (cross-refs); `docs/archive/` + `docs/evaluation/` (freshness).
+4. `FIXES.md` — A12 (`/profile verify`) + the `/trigger verify` (audit-04) + `/discipline verify` (audit-05) proposals to consolidate; next free cluster `A17`.
 
 ---
 
@@ -59,6 +59,7 @@ Append-only. One line per session. Prune past ~30 entries by moving older lines 
 - Audit-04-skill-triggers Session 1 done. 11 findings (1 blocking, 8 drift, 2 polish) across all 23 op-* descriptions. Blocking F1 = `op-workflow`↔`op-prepare` planning-misroute (collide on "new project / scope this out", no phrase-visible boundary). Overlap matrix: 7 harmful + 6 benign. Re-run recommendation = **NO-SPEND** (15/18 benchmarked descriptions byte-identical since 2026-05-27, git-verified; only op-onboard/op-persistence/op-signaling changed post-run; the 5 uncovered need eval-sets + the harness needs a `claude -p` confound fix → audit-06). Escalated to **`FIXES.md` A15** (F1 + F2–F9; F10–F11 polish stay in section file). Drift body-confirmed (all 23 bodies read, PF1). Read-only honored by authorship (concurrent `/explain` edits to `19g` + `explain.md` are not audit-04's; the staged audit-03 close is not audit-04's). Pointer → `audit-05-self-discipline` (stub — needs `/prep`).
 - Audit-05 `/prep` ran (2026-05-29). Stub elaborated into a fully-detailed Session 1 entry (12-rule scorecard + 18a–18h dogfooding + PF1–PF5 confirmation + magic-number grep + claim-#1 framing check). **Consolidation mandate** set: cite audits 01–04's rule-relevant findings (A13 rule 4 / A15+audit-01 rule 6 / A2.5 rule 10 / audit-04+audit-01 rule 11), don't re-discover. Read-only widened to `global/` (PF2–PF5 target it). `A16` reserved for the four audit-infra bugs; the claim-#1 finding extends A1. Single-session shape with a documented split. Writes confined to the section file + this pointer refresh. Pre-flight rule 1 satisfied for audit-05.
 - Audit-05-self-discipline Session 1 done. 12-rule scorecard (3 PASS / 6 PARTIAL / 1 FAIL = INDEX-11g / 2 PASS-flag); 18a–18h dogfooded (**18h committed** = CLAUDE.md drift); PF1–PF5 (PF2/PF3/PF5 → A16, PF4 downgraded — instance self-resolved, PF1 wired). **Two fresh findings:** rule-12/04a (model-ID dup vs rule wording + `CHANGELOG:106` overclaim + Opus 4.7-vs-4.8 rot → A16.5) + claim-#1 in `CLAUDE.md:42/44` (→ A1 extended). Consolidations cited (A13 + `CLAUDE.md:83`; A15 rule-6 framing answer; A2.5). FIXES: A16 opened + A1 extended. Read-only verified by authorship. Pointer → `audit-06-tests-docs` (stub — needs `/prep`; the final audit).
+- Audit-06 `/prep` ran (2026-05-29). Stub elaborated into a fully-detailed Session 1 entry — 3 mechanical sweeps (test-coverage map + untested paths + count reconcile; cross-ref + anchor validity; archive/freshness) + the **verify-command synthesis capstone** (consolidate A12 `/profile verify` + audit-04 `/trigger verify` + audit-05 `/discipline verify`; frame "no automated self-lint → silent inter-audit drift" as the meta-gap audits 03/04/05 each independently hit). Read-only widened to `tests/`. `A17` reserved (coverage gaps + the verify-command recommendation; synthesis extends A12). Cross-section notes carried forward from **all five** prior audits. Fresh seed: test-count claim drift (`CLAUDE.md` "~57/6 sub-suites" vs "6 suites/~65" vs run.sh's 7). Cleared a stray 16:22 PF2 heartbeat from the stub. Single-session shape with a documented split (Session 2 = synthesis, only if Session 1 balloons). Writes confined to the section file + this PROGRESS refresh. Pre-flight rule 1 satisfied for audit-06.
 
 ---
 
