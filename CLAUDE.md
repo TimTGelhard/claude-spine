@@ -39,9 +39,9 @@ Every loaded byte costs the user — in dollars and in context-window pressure. 
 - **Hooks split.** Default-on hooks are minimal and security-class (env-leak guards, writeback, notification). Heavy hooks (typecheck-after-edit, format-on-save) are opt-in via `/onboard --deep`.
 - **Subscription tune.** `autoCompactWindow` + `effortLevel` are sized to the user's plan in `op-onboard`'s subscription-tune step — Free users don't get Max-class defaults that burn their daily limit.
 
-`benchmarks/tokens/` exists to **prove the win**, not advertise it. The harness measures spine-on vs spine-off across an eval-set; an actual baseline run is the LC1 launch task in FIXES.
+`benchmarks/tokens/` **measures** the per-load cost — it does not advertise a saving. LC1 (Sonnet 4.6, 2026-05-28; see `benchmarks/tokens/REPORT.md`) refuted the naive "spine saves tokens" framing: spine-on used **+76.6 % more input tokens** than spine-off (+28.6 % cost/call). What holds under measurement is **bounded per-load cost** (heaviest single on-demand load ≈ 8.2k tokens = 4.1 % of Sonnet's 200k window — green-zone) plus **routing accuracy** (measured by `tests/skill-triggers/`, not this harness).
 
-When you edit anything, ask: *does this change make context cheaper or more expensive for the median user?* Cheaper is the answer.
+When you edit anything, ask: *does this keep each on-demand load within its bounded per-load budget, and does it sharpen routing so the right file loads on the right query?* Bounded + well-routed is the answer — not "cheaper than vanilla," which LC1 refuted.
 
 ### 2. Personalization is real, not decorative
 
