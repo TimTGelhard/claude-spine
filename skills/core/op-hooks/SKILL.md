@@ -1,6 +1,6 @@
 ---
 name: op-hooks
-description: Use when wiring an automatic behavior to a Claude Code event (typecheck after edit, block commit on test fail, notify on long completion), editing settings.json (global or project), troubleshooting why a hook didn't fire, deciding between hook / CLAUDE.md / skill for "from now on, when X, do Y", or setting up the starter automation set for a new machine. Routes to chapter 14 (hooks and automation) of claude-spine.
+description: Use when wiring an automatic, scripted behavior to a Claude Code event (typecheck after edit, block commit on test fail, notify on long completion), editing settings.json (global or project), troubleshooting why a hook didn't fire, or setting up the starter automation set for a new machine. For the hook-vs-CLAUDE.md-vs-skill decision ("from now on, when X, do Y" — where should it live?), op-persistence 12a is the front door. Routes to chapter 14 (hooks and automation) of claude-spine.
 ---
 
 # op-hooks — automation via settings.json

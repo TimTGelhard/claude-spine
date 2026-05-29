@@ -1,6 +1,6 @@
 ---
 name: op-workflow
-description: Use when starting a new project from scratch, scoping what to build before opening Claude Code, planning the prep / architecture / build / harden / ship sequence, sizing a feature for one session, choosing how to break a too-big feature, or deciding whether the current scope fits in one terminal. Routes to chapters 05 (the 7-stage workflow) and 06 (feature sizing) of claude-spine.
+description: Use when starting a new project from scratch, scoping what to build before opening Claude Code, planning the prep / architecture / build / harden / ship sequence, sizing a feature for one session, choosing how to break a too-big feature, or deciding whether the current scope fits in one terminal. For the planning *pass* that actually writes the plan files (brief → architecture → master plan → first section plan), use op-prepare; this skill teaches the 7-stage *concepts* and feature sizing, not the plan-authoring pass. Routes to chapters 05 (the 7-stage workflow) and 06 (feature sizing) of claude-spine.
 ---
 
 # op-workflow — the 7-stage project workflow + feature sizing
@@ -46,5 +46,6 @@ The manual has atomic files for each stage of the workflow and for sizing one fe
 
 ## Sibling skills
 
+- Writing the actual plan files for a multi-session build (the planning pass) → `op-prepare`.
 - Picking executor / reviewer / explainer / planner mode → `op-collaboration-modes`.
 - Inheriting code, returning to old project → `op-brownfield`.

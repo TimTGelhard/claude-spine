@@ -1,6 +1,6 @@
 ---
 name: op-bucket-router
-description: Use as the fallback router when the user's task isn't covered by any other core `op-*` skill — checks the user's personal bucket library (`~/.claude-spine/bucket/INDEX.md`, which has both a Skills table and a Chapters table) for a matching entry and loads only the matched file. Fires when another router would normally handle the task but no core chapter covers it (project-specific recipe, stack-specific pattern, user's personal convention, reference for their own architecture), or the user says "do this the way I usually do" / "use my X skill" / "check my bucket" / "is there anything in my chapters about this?". Never invents bucket entries — only routes to existing ones.
+description: Use as the fallback router when the user's task isn't covered by any other core `op-*` skill — checks the user's personal bucket library (`~/.claude-spine/bucket/INDEX.md`, which has both a Skills table and a Chapters table) for a matching entry and loads only the matched file. Fires when another router would normally handle the task but no core chapter covers it (project-specific recipe, stack-specific pattern, user's personal convention, reference for their own architecture), or the user says "do this the way I usually do" / "use my X skill" / "check my bucket" / "is there anything in my chapters about this?". Never invents bucket entries — only routes to existing ones — and never fires on the `/curate` or `/suggest` slash commands (those are op-curate / op-suggest).
 ---
 
 # op-bucket-router — personal library fallback

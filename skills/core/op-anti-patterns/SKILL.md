@@ -1,6 +1,6 @@
 ---
 name: op-anti-patterns
-description: Use BEFORE taking actions that match a known anti-pattern — about to add a new dependency, new abstraction, new helper "for future use", new chapter/skill/agent speculatively, "let me also add X while I'm here", "I'll write the docs after MVP works", merging a diff you haven't read, declaring UI done without browser-verifying, skipping a two-session RLS check, or extending the manual / skills / agents / hooks themselves. Also use when the user proposes one of those. Routes to chapter 18 (anti-patterns) of claude-spine.
+description: Use BEFORE taking actions that match a known anti-pattern — about to add a new dependency, new abstraction, new helper "for future use", new chapter/skill/agent speculatively, "let me also add X while I'm here", "I'll write the docs after MVP works", merging a diff you haven't read, declaring UI done without browser-verifying, skipping a two-session RLS check, or extending the manual / skills / agents / hooks themselves. Also use when the user proposes one of those — this routes the anti-pattern *catalog*; the proactive reviewer-mode *cadence* for the same proposal is op-signaling (11e meta-scope), and both intentionally fire. Routes to chapter 18 (anti-patterns) of claude-spine.
 ---
 
 # op-anti-patterns — read before doing the thing

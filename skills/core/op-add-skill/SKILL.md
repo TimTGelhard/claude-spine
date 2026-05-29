@@ -1,6 +1,6 @@
 ---
 name: op-add-skill
-description: Use to add a new skill to the user's personal `bucket/skills/` library. Fires when the user says "save this as a skill," "make this a skill," "I want a skill for X," "add this to my bucket," "remember how to do this next time" (recurring pattern, not a one-off), or invokes `/add-skill`. Walks the user through naming, the trigger description, and the body; writes the skill file under `~/.claude-spine/bucket/skills/`; appends a row to `~/.claude-spine/bucket/INDEX.md`. Refuses if the pattern isn't reach-for-it-3+-times-worthy — see chapter 13's library thesis.
+description: Use to add a new skill to the user's personal `bucket/skills/` library. Fires when the user says "save this as a skill," "make this a skill," "I want a skill for X," "add this to my bucket," "remember how to do this next time" (a recurring, reusable *procedure* — for a lightweight one-off note to revisit later, that's `/suggest` / op-suggest, not this), or invokes `/add-skill`. Walks the user through naming, the trigger description, and the body; writes the skill file under `~/.claude-spine/bucket/skills/`; appends a row to `~/.claude-spine/bucket/INDEX.md`. Refuses if the pattern isn't reach-for-it-3+-times-worthy — see chapter 13's library thesis.
 ---
 
 # op-add-skill — write a new bucket skill

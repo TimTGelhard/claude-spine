@@ -1,6 +1,6 @@
 ---
 name: op-collaboration-modes
-description: Use when deciding how to engage Claude for a task — whether to just say "build this" (executor), ask for an independent audit (reviewer), ask Claude to explain unfamiliar code before changing it (explainer), or get 2-3 design options with tradeoffs (planner). Also use when shifting modes mid-session (plan → build → review). Routes to chapter 07 (collaboration modes) of claude-spine.
+description: Use when deciding how to engage Claude for a task — whether to just say "build this" (executor), ask for an independent audit (reviewer), ask Claude to explain unfamiliar code before changing it (explainer), or get 2-3 design options with tradeoffs (planner). Also use when shifting modes mid-session (plan → build → review). For whether the *work itself* is audit-shaped or multi-session in shape (vs which engagement mode to take), that's op-approach. Routes to chapter 07 (collaboration modes) of claude-spine.
 ---
 
 # op-collaboration-modes — executor / reviewer / explainer / planner
