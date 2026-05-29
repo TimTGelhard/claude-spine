@@ -11,13 +11,13 @@
 ## Active section
 
 - **Section**: `audit-05-self-discipline` (from `docs/PROJECT_PLAN.md`)
-- **Plan file**: `docs/plans/audit-05-self-discipline.md` (**stub** with PF1–PF5 pre-flagged; needs `/prep audit-05-self-discipline` before Session 1, per the audit-phase pre-flight protocol)
-- **Section status**: `planned` — stub awaits `/prep` (pre-flight rule 1 NOT yet satisfied for audit-05)
+- **Plan file**: `docs/plans/audit-05-self-discipline.md` (**detailed** — `/prep` ran 2026-05-29; Session 1 fully specified; pre-flight rule 1 satisfied)
+- **Section status**: `planned` — detailed, ready for Session 1 (no apply session runs until all six audits `done`)
 
 ## Active session
 
-- **Session**: `1` — Self-discipline sweep (does the spine violate its own 12 anti-drift rules + anti-pattern chapters 18a–18h?); procedure to be specified by `/prep` (PF1–PF5 are pre-flagged seeds)
-- **Status**: `pending` — **blocked on `/prep audit-05-self-discipline`** (the stub carries PF1–PF5 + a 6-step sketch, but no detailed Session 1 build steps yet)
+- **Session**: `1` — Self-discipline sweep: score the 12 anti-drift rules + dogfood anti-pattern chapters 18a–18h against repo state, confirm + escalate PF1–PF5, consolidate (don't re-discover) audits 01–04's rule-relevant findings.
+- **Status**: `pending` — ready to execute (cold-start orients from the section file's "Files to read" list; the entry is fully detailed)
 
 ## Last session outcome
 
@@ -25,17 +25,18 @@
 
 ## Blockers
 
-- **`audit-05-self-discipline` needs `/prep` before Session 1.** The section file is a stub (PF1–PF5 pre-flagged + a 6-step sketch) with no detailed Session 1 build steps — pre-flight rule 1 not yet satisfied. Run `/prep audit-05-self-discipline` first; the next cold-start will otherwise halt cleanly on this (same pattern as audit-02/03/04). NB per audit-05 PF3 (unfixed): `op-spine-active` has no stub-handler, so without `/prep` it may try to build from the sketch — this Blockers note is the textual compensation.
-- **Concurrency / commit-hygiene note.** A concurrent `/explain` session is live in this working tree (touched `chapters/personalization/19g-field-effects.md` + `global/commands/explain.md` at 15:19; content currently == HEAD). The index also still carries the **staged-but-uncommitted audit-03 close**. The audit-04 commit therefore bundles audit-03-close + audit-04-prep + audit-04-findings unless un-tangled first — see the `/done` hand-back.
+- **`/prep` satisfied for audit-05** (ran 2026-05-29) — pre-flight rule 1 cleared; Session 1 is ready. NB per audit-05 PF3 (still unfixed): `op-spine-active` has no stub-handler, but the section file is now detailed, so the next cold-start orients from the real entry rather than building from a sketch.
+- **Concurrency / commit-hygiene note (grown).** The working tree carries the staged-but-uncommitted **audit-03 close + audit-04 close**, this audit-05 `/prep`'s edits (the section file + this pointer refresh), and concurrent `/explain` residue. A single commit would bundle all of them — un-tangle by path at commit time. The audit-05 `/prep` touched only `docs/plans/audit-05-self-discipline.md` + this file.
 
 ## Next session reading list
 
-Cold-start orient for `audit-05-self-discipline` Session 1 — **but `/prep audit-05-self-discipline` FIRST** (it's a stub). Pre-`/prep` orient:
+Cold-start orient for `audit-05-self-discipline` Session 1 — the section file is now **detailed** (`/prep` ran 2026-05-29). Read its § "Files to read for project understanding" (the authoritative 12-item orient list); headlines:
 
-1. `docs/PROJECT_PLAN.md` § Constraints + § **Audit-phase pre-flight protocol** — the four conditions (condition 1 = `/prep` NOT yet satisfied for audit-05) + heartbeat caveat.
-2. `docs/plans/audit-05-self-discipline.md` — the stub + its **PF1–PF5** pre-flagged findings (PF1 op-approach integration; PF2 heartbeat-hook whole-tree-dirty bug; PF3 op-spine-active stub-handler gap; PF4 /done section-status sweep; PF5 `Read(**/*token*)` deny overreach). Read its § "Before starting Session 1" pointer, then run `/prep`.
-3. `CLAUDE.md` § "Anti-drift — the discipline this project applies to itself" — the **12 rules** audit-05 checks the spine against.
-4. Cross-section notes carried forward → audit-05: **audit-04 F7** (`op-curate`'s *description* carries body procedure = a rule-6-applied-to-descriptions question) + **F2/F3** (the spine has no overlap-regression check — single-skill tightening missed the cross-skill collisions); audit-01 PF1 partial-overstatement + the RECONSTRUCTION L11 candidate.
+1. `docs/PROJECT_PLAN.md` § Constraints + § **Audit-phase pre-flight protocol** — the four conditions (rule 1 now satisfied) + the heartbeat caveat (PF2).
+2. `CLAUDE.md` § "Anti-drift" — the **12 rules** (the scorecard's measuring stick) + the three load-bearing claims (claim #1 = the L34 framing under audit).
+3. `chapters/anti-patterns/18a–18h` — the dogfooding target (does the spine commit the anti-patterns it teaches?).
+4. `FIXES.md` / `CHANGELOG.md` / `RECONSTRUCTION.md` / `INDEX.md` / `README.md` / `EXPLAINER.md` + `docs/archive/` — the discipline surfaces under audit.
+5. `docs/plans/audit-05-self-discipline.md` itself — PF1–PF5, the **Rule-check map**, and the **Cross-section notes carried forward from audits 01–04** (the consolidation mandate: cite A13 rule 4 / A15 rule 6 / A2.5 rule 10 / the `/explain` rule-11 ripple — do NOT re-discover).
 
 ---
 
@@ -57,6 +58,7 @@ Append-only. One line per session. Prune past ~30 entries by moving older lines 
 ### 2026-05-29
 - Audit-04 `/prep` ran. Section file `docs/plans/audit-04-skill-triggers.md` elaborated from the 56-line stub into a fully-detailed Session 1 entry (extract all 23 op-* descriptions → 13b-rubric verdict + overlap matrix + description↔body drift → proposed revisions in Findings + cost-gated re-run recommendation). Three decisions locked: **(1) coverage = all 23** (count corrected from the stub's stale "22"; Section 0's `op-approach` is repo-only / not installed this session — a live audit-02 F1 staleness instance; benchmark covered only 18). **(2) benchmark re-run = no-spend by default** with an authorize-branch at step 5 — the `claude -p` routing-skill confound (benchmark README § Caveats) means a naive re-run reproduces the prior 0–20% TP artifact (FP is the only reliable signal). **(3) harmful-overlap test** — single phrase matches both descriptions + no disambiguation = harmful; explicit boundary or ambient-party = benign. Cross-section notes carried forward: audit-01 PF1 methodology (load-bearing), audit-02 F1 staleness + A1 routing-accuracy reframe (load-bearing — this section audits the spine's post-LC1 headline value-add), audit-03 "nothing for audit-04" re field→description, + a concurrent-`/explain` coherence caveat (op-welcome/op-onboard have uncommitted description edits in the working tree). Seeded findings-to-expect: 5-skill eval-set gap + harness confound → audit-06; any router-shape drift → audit-05. No `chapters/`/`skills/core/`/`tests/`/code/template edits; writes confined to the section file + this PROGRESS pointer refresh. Pre-flight rule 1 satisfied for audit-04.
 - Audit-04-skill-triggers Session 1 done. 11 findings (1 blocking, 8 drift, 2 polish) across all 23 op-* descriptions. Blocking F1 = `op-workflow`↔`op-prepare` planning-misroute (collide on "new project / scope this out", no phrase-visible boundary). Overlap matrix: 7 harmful + 6 benign. Re-run recommendation = **NO-SPEND** (15/18 benchmarked descriptions byte-identical since 2026-05-27, git-verified; only op-onboard/op-persistence/op-signaling changed post-run; the 5 uncovered need eval-sets + the harness needs a `claude -p` confound fix → audit-06). Escalated to **`FIXES.md` A15** (F1 + F2–F9; F10–F11 polish stay in section file). Drift body-confirmed (all 23 bodies read, PF1). Read-only honored by authorship (concurrent `/explain` edits to `19g` + `explain.md` are not audit-04's; the staged audit-03 close is not audit-04's). Pointer → `audit-05-self-discipline` (stub — needs `/prep`).
+- Audit-05 `/prep` ran (2026-05-29). Stub elaborated into a fully-detailed Session 1 entry (12-rule scorecard + 18a–18h dogfooding + PF1–PF5 confirmation + magic-number grep + claim-#1 framing check). **Consolidation mandate** set: cite audits 01–04's rule-relevant findings (A13 rule 4 / A15+audit-01 rule 6 / A2.5 rule 10 / audit-04+audit-01 rule 11), don't re-discover. Read-only widened to `global/` (PF2–PF5 target it). `A16` reserved for the four audit-infra bugs; the claim-#1 finding extends A1. Single-session shape with a documented split. Writes confined to the section file + this pointer refresh. Pre-flight rule 1 satisfied for audit-05.
 
 ---
 
