@@ -108,9 +108,10 @@
       "Read(./.env)",
       "Read(./.env.*)",
       "Read(**/.env)",
+      "Read(**/.env.*)",
       "Read(**/credentials.json)",
       "Read(**/*_secret*)",
-      "Read(**/*token*)",
+      "Read(**/*_token*)",
       "Write(./.env)",
       "Write(**/.env)"
     ],

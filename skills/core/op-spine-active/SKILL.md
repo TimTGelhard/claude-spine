@@ -43,6 +43,7 @@ Do NOT pull `ARCHITECTURE.md`, `PROJECT_PLAN.md`, or unrelated repo files. The s
 - **`<progress-file>` missing active section field** → tell the user: *"No active section in `<progress-file>`. Run `/prep` to plan one before starting."* Stop here.
 - **Section file missing** → tell the user: *"Section `<name>` has no plan file at `<plans-dir>/<name>.md`. Run `/prep <name>` to plan it before starting."* Stop here.
 - **Session entry marked `done` already** → tell the user: *"Active session is marked `done`. Run `/done` to advance the pointer (or `/prep <next-section>` if the section finished)."* Stop here.
+- **Session entry status is `pending` but the body is still a stub** (a sketch marker like `to be detailed`, `(to be drafted via /prep)`, or a `Sketch:` heading — not a fleshed-out entry with build steps) → tell the user: *"Section `<name>` Session `<N>` is still a stub; run `/prep <name>` to detail it before building."* Stop here.
 
 ### Step 3 — Announce scope (3-4 lines max)
 

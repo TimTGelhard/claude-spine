@@ -7,10 +7,12 @@
 #   3. The four built-in conventions are the fallback.
 #   4. Malformed values at any level fall through to the next.
 #
+# Plus the A16.1 heartbeat behavior:
+#   5. Heartbeats report the per-turn delta, not the whole dirty tree.
+#   6. Cue-capture skips the hook's own `- (turn @ …)` Pending-entry lines.
+#
 # The hook reads stdin (Claude Code Stop event JSON), writes a heartbeat to
-# the section file if files changed, and emits a stdout line. We don't fake
-# a transcript here — that path is exercised by manual testing — but the
-# layout resolution is the FIXES A2.1 win, so that's what we cover.
+# the section file for files changed THIS turn, and emits a stdout line.
 #
 # Run from the repo root, or pass SPINE_DIR explicitly.
 
@@ -66,8 +68,9 @@ make_repo() {
 run_hook() {
   local repo="$1"
   local profile="$2"
+  local sid="${3:-test}"
   local input
-  input=$(jq -n --arg cwd "$repo" --arg sid "test" '{cwd:$cwd, session_id:$sid, transcript_path:""}')
+  input=$(jq -n --arg cwd "$repo" --arg sid "$sid" '{cwd:$cwd, session_id:$sid, transcript_path:""}')
   # Inject the test profile via HOME.
   local fake_home
   fake_home=$(mktemp -d)
@@ -78,6 +81,24 @@ run_hook() {
   printf '%s' "$input" | HOME="$fake_home" bash "$HOOK" 2>/dev/null || true
   rm -rf "$fake_home"
 }
+
+# A16.1 made the heartbeat a per-turn delta: the first hook run in a session only
+# baselines the working tree (no heartbeat); a later run reports what was dirtied
+# since. The layout-resolution cases therefore run the hook twice under one
+# session id — baseline, then a fresh change — and assert on the delta heartbeat.
+run_hook_delta() {
+  local repo="$1"
+  local profile="$2"
+  local sid="$3"
+  run_hook "$repo" "$profile" "$sid"           # turn 1: baseline only
+  echo "delta" > "$repo/.spine-delta-probe"     # a new file dirtied "this turn"
+  run_hook "$repo" "$profile" "$sid"           # turn 2: emits the delta heartbeat
+}
+
+# A16.1 snapshots + long-session markers live under $TMPDIR/spine-signals keyed
+# by session id. Use a per-run, per-case prefix so repeated suite runs (and the
+# cases within one run) never read each other's stale snapshots.
+SID_BASE="spinetest-$$"
 
 # ---------- Case 1: built-in `docs/plans/` + `docs/PROGRESS.md` ----------
 
@@ -94,7 +115,7 @@ cat > "$REPO1/docs/PROGRESS.md" <<'EOF'
 EOF
 echo "# audit-01-architecture" > "$REPO1/docs/plans/audit-01-architecture.md"
 
-run_hook "$REPO1" ""
+run_hook_delta "$REPO1" "" "${SID_BASE}-c1"
 
 if grep -q '^- session 1 ' "$REPO1/docs/plans/audit-01-architecture.md"; then
   ok "Case 1: built-in docs/plans/ + docs/PROGRESS.md resolves correctly"
@@ -128,7 +149,7 @@ cat > "$PROFILE2" <<'EOF'
 - **Plans dir:** roadmap/ + STATUS.md
 EOF
 
-run_hook "$REPO2" "$PROFILE2"
+run_hook_delta "$REPO2" "$PROFILE2" "${SID_BASE}-c2"
 
 if grep -q '^- session 1 ' "$REPO2/roadmap/phase-1.md"; then
   ok "Case 2: profile-set Plans dir resolves to custom roadmap/+STATUS.md"
@@ -171,7 +192,7 @@ cat > "$PROFILE3" <<'EOF'
 - **Plans dir:** wrong-plans/ + wrong-progress.md
 EOF
 
-run_hook "$REPO3" "$PROFILE3"
+run_hook_delta "$REPO3" "$PROFILE3" "${SID_BASE}-c3"
 
 if grep -q '^- session 1 ' "$REPO3/right-plans/correct.md" \
    && ! grep -q '^- session 1 ' "$REPO3/wrong-plans/should-not-fire.md"; then
@@ -204,7 +225,7 @@ cat > "$PROFILE4" <<'EOF'
 - **Plans dir:** does/not/exist/ + does-not-exist.md
 EOF
 
-run_hook "$REPO4" "$PROFILE4"
+run_hook_delta "$REPO4" "$PROFILE4" "${SID_BASE}-c4"
 
 if grep -q '^- session 1 ' "$REPO4/docs/plans/fallback.md"; then
   ok "Case 4: malformed profile field falls through to built-in docs/plans/"
@@ -234,7 +255,7 @@ cat > "$PROFILE5" <<'EOF'
 - **Plans dir:** (unfilled — run /onboard --deep to capture)
 EOF
 
-run_hook "$REPO5" "$PROFILE5"
+run_hook_delta "$REPO5" "$PROFILE5" "${SID_BASE}-c5"
 
 if grep -q '^- session 1 ' "$REPO5/docs/plans/unfilled-test.md"; then
   ok "Case 5: (unfilled) profile marker is ignored, built-in resolution applies"
@@ -244,6 +265,85 @@ else
 fi
 
 rm -rf "$WORK5"
+
+# ---------- Case 6: heartbeat reports only the per-turn delta (A16.1) ----------
+
+WORK6=$(mktemp -d -t spinetest6.XXXXXX)
+REPO6="$WORK6/repo"
+make_repo "$REPO6"   # pre-existing dirt: work.txt
+mkdir -p "$REPO6/docs/plans"
+cat > "$REPO6/docs/PROGRESS.md" <<'EOF'
+- **Section**: `delta-test` (from `docs/PROJECT_PLAN.md`)
+- **Session**: `1` — `per-turn delta`
+EOF
+echo "# delta-test" > "$REPO6/docs/plans/delta-test.md"
+SECTION6="$REPO6/docs/plans/delta-test.md"
+
+# Turn 1 only baselines the tree — pre-existing work.txt must NOT be logged.
+run_hook "$REPO6" "" "${SID_BASE}-c6"
+if grep -q '^- session 1 ' "$SECTION6"; then
+  notok "Case 6a: first turn baselines without a heartbeat" \
+        "a heartbeat was written for pre-existing dirt on the baseline turn"
+else
+  ok "Case 6a: first turn baselines the tree without a heartbeat"
+fi
+
+# Turn 2 dirties a NEW file — only it should appear in the heartbeat.
+echo "new" > "$REPO6/feature.txt"
+run_hook "$REPO6" "" "${SID_BASE}-c6"
+LAST6=$(grep '^- session 1 ' "$SECTION6" | tail -n1)
+if echo "$LAST6" | grep -q 'feature.txt' && ! echo "$LAST6" | grep -q 'work.txt'; then
+  ok "Case 6b: heartbeat lists only the per-turn delta (feature.txt, not pre-existing work.txt)"
+else
+  notok "Case 6b: heartbeat lists only the per-turn delta" \
+        "expected feature.txt and not work.txt in: '$LAST6'"
+fi
+
+rm -rf "$WORK6"
+
+# ---------- Case 7: cue-capture skips the hook's own Pending-entry lines (A16.1) ----------
+
+WORK7=$(mktemp -d -t spinetest7.XXXXXX)
+REPO7="$WORK7/repo"
+make_repo "$REPO7"
+mkdir -p "$REPO7/docs/plans"
+cat > "$REPO7/docs/PROGRESS.md" <<'EOF'
+- **Section**: `cue-test` (from `docs/PROJECT_PLAN.md`)
+- **Session**: `1` — `cue self-skip`
+EOF
+echo "# cue-test" > "$REPO7/docs/plans/cue-test.md"
+SECTION7="$REPO7/docs/plans/cue-test.md"
+
+# One assistant turn echoing (a) a line shaped like the hook's own Pending entry
+# (leads with "- (turn @ …" — must be skipped) and (b) a genuine new cue line.
+# The hook parses the transcript as JSONL (one compact object per line, via
+# awk /"type":"assistant"/) — so the fixture MUST be compact (jq -c), not the
+# pretty-printed default, or the awk record-grabber never matches.
+TRANSCRIPT7="$WORK7/transcript.jsonl"
+ASSISTANT_TEXT='- (turn @ 2026-01-01 00:00) follow-up: an already-captured note line
+follow-up: a brand new thing to remember next session'
+jq -c -n --arg t "$ASSISTANT_TEXT" \
+  '{type:"assistant", message:{content:[{type:"text", text:$t}]}}' > "$TRANSCRIPT7"
+
+INPUT7=$(jq -n --arg cwd "$REPO7" --arg sid "${SID_BASE}-c7" --arg tp "$TRANSCRIPT7" \
+  '{cwd:$cwd, session_id:$sid, transcript_path:$tp}')
+FAKE_HOME7=$(mktemp -d)
+mkdir -p "$FAKE_HOME7/.claude"
+printf '%s' "$INPUT7" | HOME="$FAKE_HOME7" bash "$HOOK" 2>/dev/null || true
+rm -rf "$FAKE_HOME7"
+
+if grep -q 'brand new thing to remember' "$SECTION7" \
+   && ! grep -q 'already-captured note line' "$SECTION7"; then
+  ok "Case 7: cue-capture keeps genuine cues and skips its own '- (turn @ …)' lines"
+else
+  notok "Case 7: cue-capture self-skip" \
+        "expected the new cue captured and the '(turn @' line skipped"
+fi
+
+rm -rf "$WORK7"
+
+# A16.1 snapshot/marker cleanup for this run.
+rm -f "${TMPDIR:-/tmp}/spine-signals/${SID_BASE}-"* 2>/dev/null || true
 
 # ---------- summary ----------
 

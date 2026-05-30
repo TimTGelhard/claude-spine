@@ -232,11 +232,24 @@ case "$SESSION" in *"<"*">"*) exit 0 ;; esac
 SECTION_FILE="$PLANS_DIR/${SECTION}.md"
 [ -f "$SECTION_FILE" ] || exit 0
 
-# ---------- compute changed files this turn ----------
+# ---------- compute changed files this turn (A16.1: per-turn delta) ----------
 #
-# Filter out PLANS_DIR + PROGRESS from the touched-files list so a turn that
-# only updates plan/progress isn't a noisy heartbeat. Paths are made repo-relative
-# (strip the CWD prefix) so the awk-printed paths match git status's repo-relative output.
+# A heartbeat should list only the files dirtied THIS turn, not the whole working
+# tree. We diff the current dirty set against a snapshot taken at the end of the
+# previous turn (keyed by $SESSION_ID under $SIGNAL_DIR — the same per-session
+# temp convention the long-session signal uses below) and refresh the snapshot
+# every turn. This stops pre-existing working-tree dirt from being re-reported as
+# "touched:" on every heartbeat (the PF2 / A16.1 bug).
+#
+#   - First turn of a session (no snapshot yet): the tree already holds this
+#     turn's edits plus any pre-existing dirt, and there is nothing to diff
+#     against, so we only establish the baseline and emit no heartbeat — better
+#     than mislabeling pre-existing dirt as touched-this-turn.
+#   - No $SESSION_ID (no jq / empty input): we can't key a snapshot, so we fall
+#     back to the prior whole-tree behavior.
+#
+# PLANS_DIR + PROGRESS are filtered out so a turn that only updates plan/progress
+# isn't a noisy heartbeat. Paths are repo-relative to match git status output.
 
 CHANGED=""
 if command -v git >/dev/null 2>&1 && [ -d "$CWD/.git" ]; then
@@ -244,13 +257,36 @@ if command -v git >/dev/null 2>&1 && [ -d "$CWD/.git" ]; then
   PROGRESS_REL="${PROGRESS#$CWD/}"
   PLANS_REL_ESC=$(printf '%s' "$PLANS_REL" | sed -E 's/[.[\*^$/]/\\&/g')
   PROGRESS_REL_ESC=$(printf '%s' "$PROGRESS_REL" | sed -E 's/[.[\*^$/]/\\&/g')
-  CHANGED=$(cd "$CWD" && git status --porcelain 2>/dev/null \
+
+  CURRENT_TREE=$(cd "$CWD" && git status --porcelain 2>/dev/null \
     | awk '{print $NF}' \
     | grep -Ev "^${PLANS_REL_ESC}/" \
     | grep -Ev "^${PROGRESS_REL_ESC}$" \
-    | head -n 8 \
-    | tr '\n' ' ' \
-    | sed -E 's/[[:space:]]+$//' || true)
+    | grep -v '^$' \
+    | sort -u || true)
+
+  if [ -n "$SESSION_ID" ]; then
+    SIGNAL_DIR="${TMPDIR:-/tmp}/spine-signals"
+    mkdir -p "$SIGNAL_DIR" 2>/dev/null
+    TREE_SNAPSHOT="${SIGNAL_DIR}/${SESSION_ID}.tree"
+    if [ -f "$TREE_SNAPSHOT" ]; then
+      # Delta: current dirty paths absent from the previous-turn snapshot.
+      CHANGED=$(printf '%s\n' "$CURRENT_TREE" \
+        | grep -v '^$' \
+        | grep -Fxv -f "$TREE_SNAPSHOT" \
+        | head -n 8 \
+        | tr '\n' ' ' \
+        | sed -E 's/[[:space:]]+$//' || true)
+    fi
+    # Refresh the snapshot for next turn's comparison (the first turn just baselines).
+    printf '%s\n' "$CURRENT_TREE" | grep -v '^$' > "$TREE_SNAPSHOT" 2>/dev/null || true
+  else
+    CHANGED=$(printf '%s\n' "$CURRENT_TREE" \
+      | grep -v '^$' \
+      | head -n 8 \
+      | tr '\n' ' ' \
+      | sed -E 's/[[:space:]]+$//' || true)
+  fi
 fi
 
 # Heartbeat is gated on file changes; cue-capture and long-session aren't.
@@ -325,6 +361,7 @@ if [ -n "$TRANSCRIPT_PATH" ] && [ -f "$TRANSCRIPT_PATH" ] && command -v jq >/dev
 
       CANDIDATES=$(printf '%s' "$LAST_ASSISTANT_TEXT" \
         | grep -iE "$CUES_RE" 2>/dev/null \
+        | grep -vE '^[[:space:]]*[-*]?[[:space:]]*[(]turn @ ' \
         | head -n 5 \
         | sed -E 's/^[[:space:]]*[-*]?[[:space:]]*//; s/[[:space:]]+$//' \
         || true)
