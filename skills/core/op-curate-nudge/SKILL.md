@@ -1,6 +1,6 @@
 ---
 name: op-curate-nudge
-description: Auto-fires once at the start of any conversation when the user's bucket has 5+ pending suggestions AND it's been >30 days since the last `/curate` run (or no `/curate` has ever run). Emits one quiet line at the top of the first turn suggesting `/curate`, then continues with the user's request. Silent otherwise — do not load the body when the conditions don't match.
+description: When the bucket loop is enabled (default-off since round 6), auto-fires once at the start of any conversation if the user's bucket has 5+ pending suggestions AND it's been >30 days since the last `/curate` run (or no `/curate` has ever run). Emits one quiet line at the top of the first turn suggesting `/curate`, then continues with the user's request. Silent otherwise — do not load the body when the conditions don't match.
 ---
 
 # op-curate-nudge — close the capture/curate loop
