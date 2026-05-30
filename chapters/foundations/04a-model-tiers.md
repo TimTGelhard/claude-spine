@@ -6,7 +6,7 @@ Picking the right model is the difference between paying for the reasoning you n
 
 | Model | ID | Context | Strengths | Cost class |
 |-------|-----|---------|-----------|------------|
-| Opus 4.7 | `claude-opus-4-7` | 1M (with `[1m]`) / 200K default | Hardest reasoning, best long-context, best multi-file refactors | Highest |
+| Opus 4.8 | `claude-opus-4-8` | 1M (with `[1m]`) / 200K default | Hardest reasoning, best long-context, best multi-file refactors | Highest |
 | Sonnet 4.6 | `claude-sonnet-4-6` | 200K | Workhorse — fast, capable, sufficient for most tasks | Mid |
 | Haiku 4.5 | `claude-haiku-4-5-20251001` | 200K | Fast and cheap for narrow, well-specified tasks | Low |
 

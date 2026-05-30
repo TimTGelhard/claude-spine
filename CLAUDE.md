@@ -63,7 +63,7 @@ The spine has strong opinions about how Claude Code should be used. But the defa
 - `global/stacks/<name>/CLAUDE.md.template` — opt-in via `--stack=<name>` flag (today: `ts-next-supabase`, `python-django`)
 - `templates/examples/<stack>/` — worked stack-specific examples; the main `templates/*.md` files are agnostic skeletons
 - `global/settings-extras/+*.json` — drop-in JSON fragments; `/onboard --deep` proposes merges based on Q3/Q8/Q9 answers, never silent-merges
-- `docs/MODELS.md` — single source of truth for Anthropic model IDs + plan tiers (chapters cite this, never duplicate names)
+- `docs/MODELS.md` — single source of truth for Anthropic model IDs + plan tiers (chapters cite this; a registry-citing convenience mirror like `04a` may reproduce the table, but the registry wins on conflict)
 
 **A user on a stack we don't ship gets the discipline; they fill in their own stack.** The spine's job is to teach the *shape*, not impose the *contents*.
 
@@ -171,7 +171,7 @@ The spine teaches discipline. **It must follow its own.** Specifically:
 9. **No new top-level Markdown files** without checking that FIXES / CHANGELOG / RECONSTRUCTION / INDEX / EXPLAINER / README / CONTRIBUTING / this file don't already cover the need.
 10. **Hard-coded magic numbers are a smell.** If a threshold matters to a user, surface it as a profile field under `## Spine defaults`.
 11. **When a question changes, sweep the count claims.** Counts live in README, EXPLAINER, install.sh, INSTALL.md, 19b, `/onboard` command description, `op-welcome`, `op-onboard/SKILL.md`. The single-source-of-truth pattern (e.g. `docs/MODELS.md`) is preferable to sweeping.
-12. **Date-bound model IDs go in `docs/MODELS.md` only.** Chapters cite the registry, never duplicate names.
+12. **Date-bound model IDs live in `docs/MODELS.md` — the registry.** Chapters cite it, never hard-code names. The one sanctioned exception is a registry-citing *convenience mirror* (today only `04a-model-tiers.md`) that may reproduce the table but must declare the registry wins on conflict. An *un-cited* duplicate is the anti-pattern.
 
 ---
 

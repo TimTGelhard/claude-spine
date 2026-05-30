@@ -12,7 +12,7 @@
 > in marketing-prose framing — runtime constants in scripts are scope-limited
 > to their script's purpose and can lag the registry by a release.
 
-Last updated: 2026-05-28.
+Last updated: 2026-05-30.
 
 ---
 
@@ -20,12 +20,12 @@ Last updated: 2026-05-28.
 
 | Model | ID | Context | Strengths | Cost class |
 |-------|-----|---------|-----------|------------|
-| Opus 4.7 | `claude-opus-4-7` | 1M (with `[1m]` flag) / 200K default | Hardest reasoning, best long-context, best multi-file refactors | Highest |
+| Opus 4.8 | `claude-opus-4-8` | 1M (with `[1m]` flag) / 200K default | Hardest reasoning, best long-context, best multi-file refactors | Highest |
 | Sonnet 4.6 | `claude-sonnet-4-6` | 200K | Workhorse — fast, capable, sufficient for most tasks | Mid |
 | Haiku 4.5 | `claude-haiku-4-5-20251001` | 200K | Fast and cheap for narrow, well-specified tasks | Low |
 
-**1M-context variant:** Opus 4.7 supports a 1M-token context via the `[1m]`
-suffix — `claude-opus-4-7[1m]`. The default 200K variant is what `claude -p`
+**1M-context variant:** Opus 4.8 supports a 1M-token context via the `[1m]`
+suffix — `claude-opus-4-8[1m]`. The default 200K variant is what `claude -p`
 loads unless asked otherwise.
 
 **Retired / older models:** when a version is retired, move its row to the
@@ -37,6 +37,7 @@ historical narrative.
 
 | Model | ID | Replaced by | Notes |
 |-------|----|-------------|-------|
+| Opus 4.7 | `claude-opus-4-7` | Opus 4.8 | 1M context; superseded by 4.8 |
 | Opus 4.6 | `claude-opus-4-6` | Opus 4.7 | 1M context introduced; superseded by 4.7 |
 | Sonnet 4.5 | `claude-sonnet-4-5` | Sonnet 4.6 | — |
 | Haiku 4 | `claude-haiku-4` | Haiku 4.5 | — |

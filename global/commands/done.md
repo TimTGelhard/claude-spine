@@ -32,10 +32,12 @@ If a critical check failed: stop. Don't write `done`. Either fix this session or
 
 Edit `docs/plans/<active-section>.md`:
 
-1. **Session status** — change from `in-progress` to:
+1. **Session entry status** — set the section file's Session N entry status (don't assume it started `in-progress`; the plan/audit lifecycle is often `pending`→`done` in a single session):
    - `done` — verify list passed.
    - `blocked` — with a one-line reason in the entry.
    - `in-progress` — if pausing mid-work; add a one-line "resume here" note.
+
+   This updates the **section file's** per-session status only. PROGRESS.md's active-session status is a separate pointer that Step 4 advances — the two are distinct, and both need updating (they momentarily disagree until Step 4 runs).
 2. **Cross-session notes** — anything discovered this session that affects later sessions in this section.
 3. **Pending cross-session notes** (auto-captured) — the Stop hook `spine-writeback.sh` appends turn-level cue-phrase matches to a `## Pending cross-session notes` block. If the block exists in this section file:
    - Read each entry to the user verbatim.
